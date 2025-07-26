@@ -20,4 +20,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataNotifications\DataNotifications.csproj" />
+    <ProjectReference Include="..\DataNotificator\DataNotificator.csproj" />
+  </ItemGroup>
+
 </Project>
