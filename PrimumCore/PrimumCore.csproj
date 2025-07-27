@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DataNotifications\DataNotifications.csproj" />
     <ProjectReference Include="..\DataNotificator\DataNotificator.csproj" />
-    <ProjectReference Include="..\PrimumCoreModels\PrimumCoreModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36310.24
+VisualStudioVersion = 17.14.36310.24 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimumCore", "PrimumCore\PrimumCore.csproj", "{397096DE-E782-4711-B713-46F9D6D6692F}"
 EndProject
@@ -18,10 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{A86284DD-05D7-497C-AFB4-E388152F7C18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataNotificator", "DataNotificator\DataNotificator.csproj", "{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{C842041B-1AF2-402F-9D70-7D903767DFA2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimumCoreModels", "PrimumCoreModels\PrimumCoreModels.csproj", "{255579BE-D3A0-4BF0-9E93-D577557D92DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +41,6 @@ Global
 		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{255579BE-D3A0-4BF0-9E93-D577557D92DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{255579BE-D3A0-4BF0-9E93-D577557D92DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{255579BE-D3A0-4BF0-9E93-D577557D92DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{255579BE-D3A0-4BF0-9E93-D577557D92DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,7 +50,6 @@ Global
 		{47B74E5D-FF9A-4362-8765-97F82A975E5A} = {58AC4219-4C10-4B15-B9FD-8D981403DE00}
 		{201C5581-7E94-46E8-8AD9-B92542666466} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6} = {A86284DD-05D7-497C-AFB4-E388152F7C18}
-		{255579BE-D3A0-4BF0-9E93-D577557D92DA} = {C842041B-1AF2-402F-9D70-7D903767DFA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AAF9660-D8D7-4198-B0FA-59002B2C2309}
