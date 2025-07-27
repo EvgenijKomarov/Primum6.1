@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataNotifications\DataNotifications.csproj" />
     <ProjectReference Include="..\DataNotificator\DataNotificator.csproj" />
+    <ProjectReference Include="..\DTO\DTO.csproj" />
   </ItemGroup>
 
 </Project>
