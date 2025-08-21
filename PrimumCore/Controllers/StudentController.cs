@@ -8,7 +8,7 @@ using System.Net.Http;
 namespace PrimumCore.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/student")]
     public class StudentController(IPrimumContext context) : PrimumController
     {
         [HttpGet("{id}")]
@@ -29,7 +29,7 @@ namespace PrimumCore.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegStudent(StudentDTO dto)
         {
             var user = new User
