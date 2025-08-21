@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PrimumCore.Services
 {
     public class LessonCheckerService(
-        DbContextFactory<IPrimumContext> _contextFactory,
+        IPrimumContext context,
         JitsiLinkCreationService _jitsiService,
         CoreNotificationService _notificationService,
         ILogger<LessonCheckerService>? _logger = null
@@ -30,8 +30,6 @@ namespace PrimumCore.Services
             _logger?.LogInformation("LessonCheckerService is iterating database...");
             try
             {
-                using var context = _contextFactory.CreateDbContext();
-
                 //prep notif
                 var lessonsForPreparationNotification = context.Set<Lesson>()
                     .Where(l => l.Status == LessonStatus.Waiting)

@@ -176,18 +176,4 @@ public partial class PrimumContext : DbContext, IPrimumContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-    public async Task<int> SaveChangesAsyncWithLock(CancellationToken cancellationToken = default)
-    {
-        await _semaphore.WaitAsync(cancellationToken);
-        try
-        {
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-        finally
-        {
-            _semaphore.Release();
-        }
-    }
 }

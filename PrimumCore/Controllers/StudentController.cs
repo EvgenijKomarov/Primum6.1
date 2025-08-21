@@ -7,14 +7,12 @@ using System.Net.Http;
 namespace PrimumCore.Controllers
 {
     [ApiController]
-    [Route("api/student/[controller]")]
-    public class StudentController(DbContextFactory<IPrimumContext> _contextFactory) : PrimumController
+    [Route("api/[controller]")]
+    public class StudentController(IPrimumContext context) : PrimumController
     {
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudent(int id)
         {
-            using var context = _contextFactory.CreateDbContext();
-
             var user = context.Set<User>().FirstOrDefault(x => x.Id == id);
             if (user is null) { return NotFound(); }
             if (user.StudentProfile is null) { return NotFound(); }
@@ -33,7 +31,6 @@ namespace PrimumCore.Controllers
         [HttpPost]
         public async Task<IActionResult> RegStudent(StudentDTO dto)
         {
-            using var context = _contextFactory.CreateDbContext();
             var user = new User
             {
                 Name = dto.Name,
@@ -44,7 +41,7 @@ namespace PrimumCore.Controllers
             };
 
             context.Set<User>().Add(user);
-            await _contextFactory.SafeSaveChangesAsync(context);
+            await context.SaveChangesAsync();
 
             return Ok(user.Id);
         }

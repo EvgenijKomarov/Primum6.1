@@ -1,8 +1,14 @@
+using Microsoft.AspNetCore.Mvc.Controllers;
+using PrimumCore.Extentions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
+builder.AddDI();
+builder.AddPrimumContext();
+builder.AddProjectControllers();
 
 var app = builder.Build();
 
@@ -21,7 +27,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+//app.MapRazorPages();
 app.MapControllers();
 
 app.Run();

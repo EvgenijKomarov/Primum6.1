@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace PrimumCore.Services
 {
     public class LessonCreationService(
-        DbContextFactory<IPrimumContext> _contextFactory, 
+        IPrimumContext context, 
         ConverterToDateTimeService _service,
         ILogger<LessonCreationService>? _logger = null
         )
@@ -28,7 +28,6 @@ namespace PrimumCore.Services
             _logger?.LogInformation("LessonCreationService is iterating database...");
             try
             {
-                using var context = _contextFactory.CreateDbContext();
                 var availableForProlongation = await context.Set<AbonementShedule>()
                     .Where(s => s.LastIteration.AddDays(7) <= DateTime.Now)
                     .ToArrayAsync();
@@ -57,7 +56,7 @@ namespace PrimumCore.Services
                     _logger?.LogInformation($"Created lesson with Id: {lesson.LessonId} for {lesson.AbonementId} at {lesson.DateTime}");
                 }
 
-                await _contextFactory.SafeSaveChangesAsync(context);
+                await context.SaveChangesAsync();
             }
             catch(Exception ex)
             {
