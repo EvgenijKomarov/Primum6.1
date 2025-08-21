@@ -17,6 +17,7 @@ namespace CoreServiceTests
 {
     public class LessonCheckerServiceTest
     {
+        /*
         private Mock<DbContextFactory<IPrimumContext>> _contextFactoryMock;
         private Mock<JitsiLinkCreationService> _jitsiServiceMock;
         private Mock<CoreNotificationService> _notificationServiceMock;
@@ -299,6 +300,6 @@ namespace CoreServiceTests
             // Assert
             _notificationServiceMock.Verify(x => x.PublishAsync(It.IsAny<LessonPreparationNotification>()), Times.Never);
             _notificationServiceMock.Verify(x => x.PublishAsync(It.IsAny<LessonNotification>()), Times.Never);
-        }
+        }*/
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumPlatformModel.Models.Enums;
 using System.Net.Http;
@@ -13,7 +14,7 @@ namespace PrimumCore.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudent(int id)
         {
-            var user = context.Set<User>().FirstOrDefault(x => x.Id == id);
+            var user = context.Set<User>().Include(u => u.StudentProfile).FirstOrDefault(x => x.Id == id);
             if (user is null) { return NotFound(); }
             if (user.StudentProfile is null) { return NotFound(); }
 

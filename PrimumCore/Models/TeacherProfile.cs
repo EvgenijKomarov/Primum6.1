@@ -10,6 +10,8 @@ public partial class TeacherProfile
 
     public string? About { get; set; }
 
+    public int UserId { get; set; }
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
 
     public User User { get; set; } = null!;

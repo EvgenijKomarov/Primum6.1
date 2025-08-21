@@ -8,6 +8,8 @@ public partial class AdminProfile
 {
     public int AdminId { get; set; }
 
+    public int UserId { get; set; }
+
     public string? Status { get; set; }
 
     public byte[] Permissions { get; set; } = null!;

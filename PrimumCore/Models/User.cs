@@ -15,12 +15,6 @@ public partial class User
 
     public string? Patronymic { get; set; }
 
-    public int? TeacherId { get; set; }
-
-    public int? StudentId { get; set; }
-
-    public int? AdminId { get; set; }
-
     public StudentProfile? StudentProfile { get; set; }
 
     public TeacherProfile? TeacherProfile { get; set; }

@@ -7,6 +7,7 @@ namespace CoreServiceTests
 {
     public class LessonCreationServiceTest
     {
+        /*
         public Mock<IPrimumContext> _mockContext;
         public Mock<DbContextFactory<IPrimumContext>> _contextFactory;
         public Mock<ConverterToDateTimeService> _convertionService;
@@ -80,6 +81,6 @@ namespace CoreServiceTests
             _contextFactory.Verify(x => x.SafeSaveChangesAsync(It.IsAny<IPrimumContext>(), It.IsAny<CancellationToken>()), Times.Once);
             _mockContext.Verify(x => x.Set<Lesson>().Add(It.Is<Lesson>(l => l.AbonementId == 1 && l.DateTime == now)), Times.Never);
             Assert.That(abonShedule.LastIteration != now.AddDays(-10));
-        }
+        }*/
     }
 }

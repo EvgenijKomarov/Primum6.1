@@ -37,10 +37,6 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     DatabaseFacade IPrimumContext.Database => base.Database;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlite("Data Source=primumDB.db")
-       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Abonement>(entity =>
@@ -84,6 +80,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasIndex(e => e.AdminId, "IX_AdminProfiles_AdminId").IsUnique();
 
             entity.Property(e => e.Permissions).HasDefaultValueSql("0");
+            entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<Course>(entity =>
@@ -127,6 +124,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
                   .HasDefaultValueSql("0");
 
             entity.HasIndex(e => e.StudentId, "IX_StudentProfiles_StudentId").IsUnique();
+            entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<TeacherProfile>(entity =>
@@ -139,6 +137,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
                   .HasDefaultValueSql("0");
 
             entity.HasIndex(e => e.TeacherId, "IX_TeacherProfiles_TeacherId").IsUnique();
+            entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<TeacherShedule>(entity =>
@@ -167,9 +166,9 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
             entity.HasIndex(e => e.Id, "IX_Users_Id").IsUnique();
 
-            entity.HasOne(u => u.TeacherProfile).WithOne(p => p.User).HasForeignKey<TeacherProfile>(p => p.TeacherId).OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(u => u.AdminProfile).WithOne(p => p.User).HasForeignKey<AdminProfile>(p => p.AdminId).OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(u => u.StudentProfile).WithOne(p => p.User).HasForeignKey<StudentProfile>(p => p.StudentId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(u => u.TeacherProfile).WithOne(p => p.User).HasForeignKey<TeacherProfile>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(u => u.AdminProfile).WithOne(p => p.User).HasForeignKey<AdminProfile>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(u => u.StudentProfile).WithOne(p => p.User).HasForeignKey<StudentProfile>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
         });
 
         OnModelCreatingPartial(modelBuilder);
