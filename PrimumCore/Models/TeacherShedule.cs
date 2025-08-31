@@ -9,7 +9,7 @@ public partial class TeacherShedule
 
     public int TeacherId { get; set; }
 
-    public string DayOfWeek { get; set; } = null!;
+    public DayOfWeek DayOfWeek { get; set; }
 
     public int Time { get; set; }
 

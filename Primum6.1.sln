@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{A86284
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataNotificator", "DataNotificator\DataNotificator.csproj", "{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{841BF182-76C3-4B20-8270-15A76D0AF55F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreConnection", "DTO\CoreConnection.csproj", "{841BF182-76C3-4B20-8270-15A76D0AF55F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -49,7 +49,7 @@ namespace PrimumCore.Services
                     var lesson = new Lesson()
                     {
                         AbonementId = s.AbonementId,
-                        DateTime = _service.GetNextFreeSuitableDate(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time)
+                        //todo DateTime = _service.GetNextFreeSuitableDate(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time)
                     };
                     context.Set<Lesson>()
                         .Add(lesson);

@@ -1,4 +1,6 @@
-﻿using DTO;
+﻿using CoreConnection.DTOs;
+using DTO.DTOs;
+using DTO.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
@@ -8,43 +10,106 @@ using System.Net.Http;
 namespace PrimumCore.Controllers
 {
     [ApiController]
-    [Route("api/student")]
+    [Route("api/student/{userId}")]
     public class StudentController(IPrimumContext context) : PrimumController
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudent(int id)
+        [HttpGet("lessons")]
+        public async Task<IActionResult> GetLessons(int userId)
         {
-            var user = context.Set<User>().Include(u => u.StudentProfile).FirstOrDefault(x => x.Id == id);
-            if (user is null) { return NotFound(); }
-            if (user.StudentProfile is null) { return NotFound(); }
+            var user = context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(a => a.Lessons)
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(a => a.Course)
+                .ThenInclude(c => c.Teacher)
+                .FirstOrDefault(x => x.Id == userId);
+            if (user is null || user.StudentProfile is null) { return NotFound(); }
 
-            return Ok(new StudentDTO
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                Password = user.Password,
-                IsApproved = user.StudentProfile.ApproveStatus == ApproveStatus.Approved
-            });
+            return Ok(user
+                .StudentProfile
+                .Abonements
+                .SelectMany(x => x.Lessons)
+                .Select(l => new LessonDto
+                {
+                    DateTime = l.DateTime,
+                    CourseName = l.Abonement.Course.Name,
+                    CourseId = l.Abonement.CourseId,
+                    AbonementId = l.AbonementId,
+                    LessonLink = l.StudentLink ?? string.Empty,
+                    TeacherName = l.Abonement.Course.Teacher.User.DisplayName,
+                    LessonStatus = (LessonStatusDto)l.Status
+                })
+            );
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> RegStudent(StudentDTO dto)
+        [HttpGet("abonements")]
+        public async Task<IActionResult> GetAbonements(int userId)
         {
-            var user = new User
+            var user = context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(a => a.Course)
+                .ThenInclude(c => c.Teacher)
+                .FirstOrDefault(x => x.Id == userId);
+            if (user is null || user.StudentProfile is null) { return NotFound(); }
+
+            return Ok(user
+                .StudentProfile
+                .Abonements
+                .Select(a => new AbonementDto
+                {
+                    StudentName = user.DisplayName,
+                    TeacherName = a.Course.Teacher.User.DisplayName,
+                    CourseName = a.Course.Name,
+                    CourseId = a.CourseId,
+                    PricePerLesson = a.PricePerLesson,
+                    PaidLessons = a.PaidLessons,
+                    AbonementStatus = (AbonementStatusDto)a.AbonementStatus
+                }));
+        }
+
+        [HttpPost("subscribe-to-course/{courseId}")]
+        public async Task<IActionResult> RegToCourse(int userId, int courseId, [FromBody] SheduleDto teacherSheduleDto)
+        {
+            var user = context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .FirstOrDefault(x => x.Id == userId);
+            if (user is null || user.StudentProfile is null) { return NotFound(); }
+
+            var abonement = user.StudentProfile.Abonements.FirstOrDefault(x => x.CourseId == courseId);
+            var course = context.Set<Course>()
+                .Include(x => x.Teacher)
+                .First(x => x.CourseId == courseId);
+            if (abonement is null) 
             {
-                Name = dto.Name,
-                Surname = dto.Surname,
-                Patronymic = dto.Patronymic,
-                Password = dto.Password,
-                StudentProfile = new StudentProfile()
-            };
+                abonement = new Abonement
+                {
+                    CourseId = courseId,
+                    PricePerLesson = course.Price,
+                    StudentId = user.StudentProfile.StudentId
+                };
+                context.Set<Abonement>().Add(abonement);
+            }
 
-            context.Set<User>().Add(user);
+            var teacherShedule = context.Set<TeacherShedule>()
+                .Include(x => x.AbonementShedule)
+                .First(x =>
+                x.TeacherId == course.TeacherId &&
+                x.DayOfWeek == teacherSheduleDto.DayOfWeek &&
+                x.Time == teacherSheduleDto.Time);
+
+            if(teacherShedule.AbonementShedule is not null) {
+                teacherShedule.AbonementShedule = new AbonementShedule
+                {
+                    AbonementId = abonement.AbonementId
+                };
+            }
+
             await context.SaveChangesAsync();
-
-            return Ok(user.Id);
+            return Ok();
         }
     }
 }

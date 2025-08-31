@@ -20,4 +20,6 @@ public partial class User
     public TeacherProfile? TeacherProfile { get; set; }
 
     public AdminProfile? AdminProfile { get; set; }
+
+    public string DisplayName => $"{Surname} {Name}";
 }

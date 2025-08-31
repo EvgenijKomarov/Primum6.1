@@ -10,6 +10,10 @@ public partial class Lesson
 
     public int AbonementId { get; set; }
 
+    public string? StudentLink { get; set; }
+
+    public string? TeacherLink { get; set; }
+
     public DateTime DateTime { get; set; }
 
     public LessonStatus Status { get; set; } = LessonStatus.Waiting;

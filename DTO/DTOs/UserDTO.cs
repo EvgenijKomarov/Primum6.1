@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO
+namespace DTO.DTOs
 {
-    public class StudentDTO
+    public class UserDTO
     {
         public int Id { get; set; }
 
@@ -18,6 +18,8 @@ namespace DTO
 
         public string? Patronymic { get; set; }
 
-        public bool IsApproved { get; set; }
+        public bool? IsApprovedStudent { get; set; }
+        public bool? IsApprovedTeacher { get; set; }
+        public bool? IsApprovedAdmin { get; set; }
     }
 }

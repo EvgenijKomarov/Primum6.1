@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrimumCore.Models;
 
@@ -10,9 +11,11 @@ using PrimumCore.Models;
 namespace PrimumCore.Migrations
 {
     [DbContext(typeof(PrimumContext))]
-    partial class PrimumContextModelSnapshot : ModelSnapshot
+    [Migration("20250829113515_AddedLessonLinksToTable")]
+    partial class AddedLessonLinksToTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -166,9 +169,11 @@ namespace PrimumCore.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentLink")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TeacherLink")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("LessonId")
@@ -239,8 +244,9 @@ namespace PrimumCore.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValueSql("0");
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DayOfWeek")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("INTEGER");
