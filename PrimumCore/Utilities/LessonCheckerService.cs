@@ -27,7 +27,7 @@ namespace PrimumCore.Services
 
         public async Task IterateAsync()
         {
-            _logger?.LogInformation("LessonCheckerService is iterating database...");
+            /*_logger?.LogInformation("LessonCheckerService is iterating database...");
             try
             {
                 //prep notif
@@ -53,7 +53,7 @@ namespace PrimumCore.Services
                         DateTime = lesson.DateTime,
                         StudentUserId = lesson.Abonement.StudentId,
                         TeacherUserId = lesson.Abonement.Course.TeacherId,
-                        IsEnoughPaidLessons = lesson.Abonement.PaidLessons > 0
+                        //IsEnoughPaidLessons = lesson.Abonement.PaidLessons > 0
                     });
                     _logger?.LogInformation($"Lesson {lesson.LessonId} warned");
                 }
@@ -119,7 +119,7 @@ namespace PrimumCore.Services
             catch(Exception ex)
             {
                 _logger?.LogError(ex, $"LessonCheckerService failed to iterate");
-            }
+            }*/
         }
     }
 }

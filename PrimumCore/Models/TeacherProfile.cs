@@ -10,6 +10,8 @@ public partial class TeacherProfile
 
     public string? About { get; set; }
 
+    public float EarningMultiplier { get; set; } = 0.5f;
+
     public int UserId { get; set; }
 
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;

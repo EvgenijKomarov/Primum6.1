@@ -18,9 +18,13 @@ public partial class Course
 
     public int FreeLessons { get; set; }
 
+    public int CourseThemeId { get; set; }
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
 
     public virtual ICollection<Abonement> Abonements { get; set; } = new List<Abonement>();
 
     public virtual TeacherProfile Teacher { get; set; } = null!;
+
+    public virtual CourseTheme CourseTheme { get; set; } = null!;
 }

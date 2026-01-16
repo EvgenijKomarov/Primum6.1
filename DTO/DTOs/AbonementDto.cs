@@ -15,7 +15,7 @@ namespace DTO.DTOs
 
         public string CourseName { get; set; }
 
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
 
         public int PricePerLesson { get; set; }
 

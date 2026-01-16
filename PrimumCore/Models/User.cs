@@ -15,6 +15,10 @@ public partial class User
 
     public string? Patronymic { get; set; }
 
+    public long Cash { get; set; }
+
+    public bool IsActive { get; set; }
+
     public StudentProfile? StudentProfile { get; set; }
 
     public TeacherProfile? TeacherProfile { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PrimumCore.Controllers;
 using PrimumCore.Models;
+using PrimumCore.Services;
 
 namespace PrimumCore.Extentions
 {
@@ -8,6 +9,8 @@ namespace PrimumCore.Extentions
     {
         public static WebApplicationBuilder AddDI(this WebApplicationBuilder builder)
         {
+            builder.Services.AddScoped<StudentIterator>();
+            builder.Services.AddScoped<TeacherIterator>();
 
             return builder;
         }
@@ -26,7 +29,7 @@ namespace PrimumCore.Extentions
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<PrimumContext>(options =>
-                options.UseSqlite(connectionString));
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IPrimumContext>(provider =>
                 provider.GetRequiredService<PrimumContext>());

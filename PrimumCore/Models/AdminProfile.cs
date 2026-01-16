@@ -12,7 +12,7 @@ public partial class AdminProfile
 
     public string? Status { get; set; }
 
-    public byte[] Permissions { get; set; } = null!;
+    public int Permissions { get; set; }
 
     public User User { get; set; } = null!;
 }
