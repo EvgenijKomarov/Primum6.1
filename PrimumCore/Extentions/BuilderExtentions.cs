@@ -23,7 +23,8 @@ namespace PrimumCore.Extentions
         {
             builder.Services.AddScoped<StudentController>();
             builder.Services.AddScoped<UserController>();
-
+            builder.Services.AddScoped<TeacherController>();
+            builder.Services.AddScoped<AdminController>();
 
             return builder;
         }

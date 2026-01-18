@@ -21,22 +21,22 @@ namespace PrimumCore.Controllers
         [HttpGet("shedules")]
         public async Task<IActionResult> GetShedules(int userId) => Ok(await iterator.GetShedules(userId));
 
-        [HttpGet("course/edit")]
+        [HttpPut("course/edit")]
         public async Task<IActionResult> EditCourse(int userId, [FromBody] CourseDto courseDto) => Ok(await iterator.EditCourse(userId, courseDto));
 
-        [HttpGet("course/create")]
+        [HttpPost("course/create")]
         public async Task<IActionResult> CreateCourse(int userId, [FromBody] CourseDto courseDto) => Ok(await iterator.CreateCourse(userId, courseDto));
 
-        [HttpGet("course/activate")]
+        [HttpPatch("course/activate")]
         public async Task<IActionResult> ActivateCourse(int userId, [FromBody] int courseId) => Ok(await iterator.ActivateCourse(userId, courseId));
 
-        [HttpGet("course/deactivate")]
+        [HttpPatch("course/deactivate")]
         public async Task<IActionResult> DeactivateCourse(int userId, [FromBody] int courseId) => Ok(await iterator.DeactivateCourse(userId, courseId));
 
-        [HttpGet("shedule/create")]
+        [HttpPost("shedule/create")]
         public async Task<IActionResult> CreateShedule(int userId, [FromBody] TeacherSheduleDto sheduleDto) => Ok(await iterator.CreateShedule(userId, sheduleDto));
 
-        [HttpGet("shedule/delete")]
+        [HttpDelete("shedule/delete")]
         public async Task<IActionResult> DeleteShedule(int userId, [FromBody] int sheduleId) => Ok(await iterator.DeleteShedule(userId, sheduleId));
 
         [HttpGet("abonements")]

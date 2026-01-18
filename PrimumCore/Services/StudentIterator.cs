@@ -151,6 +151,8 @@ namespace PrimumCore.Services
                 await context.Set<Abonement>().AddAsync(abonement);
             }
 
+            if (course.MaxLessons >= abonement.AbonementShedules.Count) { throw new Exception("Can't create more shedules than course's maximum shedules per week"); }
+
             var abonementShedule = new AbonementShedule
             {
                 AbonementId = abonement.AbonementId,
