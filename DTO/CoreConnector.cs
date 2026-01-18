@@ -45,7 +45,7 @@ namespace CoreConnection
             }) ?? new List<AbonementDto>();
         }
 
-        public async Task<bool> SubscribeToCourseAsync(int userId, int courseId, SheduleDto teacherSheduleDto)
+        public async Task<bool> SubscribeToCourseAsync(int userId, int courseId, TeacherSheduleDto teacherSheduleDto)
         {
             var json = JsonSerializer.Serialize(teacherSheduleDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -97,19 +97,19 @@ namespace CoreConnection
             return null;
         }
 
-        public async Task<List<SheduleDto>> GetTeacherShedulesAsync(int userId)
+        public async Task<List<TeacherSheduleDto>> GetTeacherShedulesAsync(int userId)
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/api/teacher/{userId}/shedules");
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<SheduleDto>>(content, new JsonSerializerOptions
+            return JsonSerializer.Deserialize<List<TeacherSheduleDto>>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
-            }) ?? new List<SheduleDto>();
+            }) ?? new List<TeacherSheduleDto>();
         }
 
-        public async Task<int?> RegisterSheduleAsync(int userId, SheduleDto newShedule)
+        public async Task<int?> RegisterSheduleAsync(int userId, TeacherSheduleDto newShedule)
         {
             var json = JsonSerializer.Serialize(newShedule);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

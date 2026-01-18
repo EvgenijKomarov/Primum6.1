@@ -13,9 +13,13 @@ namespace DTO.DTOs
 
         public string CourseName { get; set; }
 
-        public string TeacherName { get; set; }
+        public string TeacherDisplayName { get; set; }
 
-        public string StudentName { get; set; }
+        public int TeacherId { get; set; }
+
+        public string StudentDisplayName { get; set; }
+
+        public int StudentId { get; set; }
 
         public string LessonLink { get; set; }
 

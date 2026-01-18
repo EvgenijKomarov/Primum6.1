@@ -2,6 +2,7 @@
 using PrimumCore.Controllers;
 using PrimumCore.Models;
 using PrimumCore.Services;
+using PrimumCore.Utilities;
 
 namespace PrimumCore.Extentions
 {
@@ -11,6 +12,9 @@ namespace PrimumCore.Extentions
         {
             builder.Services.AddScoped<StudentIterator>();
             builder.Services.AddScoped<TeacherIterator>();
+            builder.Services.AddScoped<UserIterator>();
+            builder.Services.AddScoped<PasswordHasher>();
+            
 
             return builder;
         }

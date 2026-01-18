@@ -13,13 +13,17 @@ namespace PrimumCore.Controllers
     public class UserController(UserIterator iterator) : PrimumController
     {
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id) => Ok(iterator.GetUser(id));
+        public async Task<IActionResult> GetUser(int id) => Ok(await iterator.GetUser(id));
+
+        [HttpGet("login")]
+        public async Task<IActionResult> Login([FromBody] string login, [FromBody] string password) => Ok(await iterator.Login(login, password));
 
         [HttpPost("reg-teacher")]
-        public async Task<IActionResult> RegTeacher([FromBody] UserDTO dto, [FromBody] string about) => Ok(iterator.RegTeacher(dto, about));
+        public async Task<IActionResult> RegTeacher([FromBody] UserDTO dto, [FromBody] string about, [FromBody] string login, [FromBody] string password)
+            => Ok(await iterator.RegTeacher(login, password, dto, about));
 
-
-        [HttpPost("reg-user")]
-        public async Task<IActionResult> RegStudent([FromBody] UserDTO dto) => Ok(iterator.RegStudent(dto));
+        [HttpPost("reg-student")]
+        public async Task<IActionResult> RegStudent([FromBody] UserDTO dto, [FromBody] string login, [FromBody] string password)
+            => Ok(await iterator.RegStudent(login, password, dto));
     }
 }

@@ -15,6 +15,10 @@ namespace DTO.DTOs
 
         public string TeacherName { get; set; }
 
+        public string CourseThemeName { get; set; }
+
+        public int CourseThemeId {  get; set; }
+
         public int TeacherId {  get; set; }
 
         public int Price { get; set; }
@@ -22,7 +26,10 @@ namespace DTO.DTOs
         public int MaxLessons { get; set; }
 
         public int FreeLessons { get; set; }
+
         public string TeacherAbout { get; set; }
+
+        public bool IsActive { get; set; }
 
         public ApproveStatusDto ApproveStatus { get; set; }
     }

@@ -20,6 +20,8 @@ public partial class Course
 
     public int CourseThemeId { get; set; }
 
+    public bool IsActive { get; set; } = true;
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
 
     public virtual ICollection<Abonement> Abonements { get; set; } = new List<Abonement>();
@@ -27,4 +29,6 @@ public partial class Course
     public virtual TeacherProfile Teacher { get; set; } = null!;
 
     public virtual CourseTheme CourseTheme { get; set; } = null!;
+
+    public bool IsAvailable => this.ApproveStatus == ApproveStatus.Approved && this.IsActive;
 }

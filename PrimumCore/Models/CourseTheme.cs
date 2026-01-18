@@ -4,7 +4,7 @@
     {
         public int CourseThemeId { get; set; }
 
-        public string ThemeName { get; set; }
+        public string ThemeName { get; set; } = null!;
 
         public bool IsActive { get; set; }
 

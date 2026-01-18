@@ -8,7 +8,7 @@ public partial class TeacherProfile
 {
     public int TeacherId { get; set; }
 
-    public string? About { get; set; }
+    public string About { get; set; } = null!;
 
     public float EarningMultiplier { get; set; } = 0.5f;
 

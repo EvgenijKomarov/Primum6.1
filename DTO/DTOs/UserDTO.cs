@@ -10,16 +10,10 @@ namespace DTO.DTOs
     {
         public int Id { get; set; }
 
-        public string Password { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string? Name { get; set; }
+        public string Surname { get; set; } = null!;
 
-        public string? Surname { get; set; }
-
-        public string? Patronymic { get; set; }
-
-        public bool? IsApprovedStudent { get; set; }
-        public bool? IsApprovedTeacher { get; set; }
-        public bool? IsApprovedAdmin { get; set; }
+        public string Patronymic { get; set; } = null!;
     }
 }

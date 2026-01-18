@@ -9,17 +9,25 @@ namespace DTO.DTOs
 {
     public class AbonementDto
     {
-        public string StudentName { get; set; }
+        public string StudentDisplayName { get; set; } = null!;
 
-        public string TeacherName { get; set; }
+        public int StudentId { get; set; }
 
-        public string CourseName { get; set; }
+        public string TeacherDisplayName { get; set; } = null!;
+
+        public int TeacherId { get; set; }
+
+        public string CourseName { get; set; } = null!;
 
         public int? CourseId { get; set; }
 
-        public int PricePerLesson { get; set; }
+        public string CourseThemeName { get; set; } = null!;
 
-        public int PaidLessons { get; set; }
+        public int AbonementId { get; set; }
+
+        public int CourseThemeId { get; set; }
+
+        public int PricePerLesson { get; set; }
 
         public AbonementStatusDto AbonementStatus { get; set; }
     }
