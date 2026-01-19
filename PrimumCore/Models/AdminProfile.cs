@@ -1,6 +1,8 @@
-﻿using PrimumPlatformModel.Models.Enums;
+﻿using PrimumCore.Models.Enums;
+using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
+using System.Security;
 
 namespace PrimumCore.Models;
 
@@ -12,7 +14,11 @@ public partial class AdminProfile
 
     public string? Status { get; set; }
 
-    public int Permissions { get; set; }
-
     public User User { get; set; } = null!;
+
+    public virtual ICollection<AdminPermission> Permissions {  get; set; } = new List<AdminPermission>();
+
+    public virtual ICollection<AdminPermission> GivenPermissions { get; set; } = new List<AdminPermission>();
+
+    public bool CheckPermissions(Permission permission) => Permissions.Any(x => x.Permission == permission);
 }

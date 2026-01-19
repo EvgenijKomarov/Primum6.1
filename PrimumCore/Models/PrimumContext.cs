@@ -37,6 +37,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     public virtual DbSet<CourseTheme> CourseThemes {  get; set; }
 
+    public virtual DbSet<AdminPermission> Permissions { get; set; }
+
     DatabaseFacade IPrimumContext.Database => base.Database;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -77,7 +79,6 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasIndex(e => e.AdminId).IsUnique();
             entity.Property(e => e.AdminId).ValueGeneratedOnAdd();
 
-            entity.Property(e => e.Permissions).HasDefaultValue(0);
             entity.Property(e => e.UserId).IsRequired();
         });
 
@@ -147,6 +148,22 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasKey(e => e.CourseThemeId);
             entity.HasIndex(e => e.CourseThemeId).IsUnique();
             entity.Property(e => e.CourseThemeId).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<AdminPermission>(entity =>
+        {
+            entity.HasKey(e => e.AdminPermissionId);
+            entity.HasIndex(e => e.AdminPermissionId).IsUnique();
+            entity.Property(e => e.AdminPermissionId).ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.AdminProfile)
+                .WithMany(e => e.Permissions)
+                .HasForeignKey(e => e.AdminProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.PromoterAdminProfile)
+                .WithMany(e => e.GivenPermissions)
+                .HasForeignKey(e => e.PromoterAdminProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<User>(entity =>

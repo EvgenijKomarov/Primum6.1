@@ -20,6 +20,7 @@ namespace PrimumCore.Models
         DbSet<TeacherShedule> TeacherShedules { get; set; }
         DbSet<User> Users { get; set; }
         DbSet<CourseTheme> CourseThemes { get; set; }
+        DbSet<AdminPermission> Permissions { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

@@ -3,6 +3,7 @@ using DTO.DTOs;
 using DTO.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services
 {
@@ -17,6 +18,7 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Lessons)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .TeacherProfile
@@ -47,6 +49,7 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Teacher)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .TeacherProfile
@@ -74,6 +77,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -97,6 +102,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             var course = new Course
             {
@@ -119,6 +126,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -138,6 +147,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -157,6 +168,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.TeacherShedules)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) { throw new Exception("Shedule already exists"); }
 
@@ -187,6 +200,7 @@ namespace PrimumCore.Services
                 .ThenInclude(x => x.Course)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .TeacherProfile
@@ -211,6 +225,8 @@ namespace PrimumCore.Services
                 .ThenInclude(e => e.AbonementShedule)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
+            if (user.TeacherProfile.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
             if (shedule is null) { throw new Exception("Shedule not found"); }
@@ -233,8 +249,8 @@ namespace PrimumCore.Services
                 .ThenInclude(a => a.Courses)
                 .ThenInclude(a => a.CourseTheme)
                 .FirstOrDefaultAsync(x => x.Id == userId);
-
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .TeacherProfile
