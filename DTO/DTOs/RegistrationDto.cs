@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class UserDto
+    public class RegistrationDto
     {
-        public int Id { get; set; }
-
         public string Name { get; set; } = null!;
 
         public string Surname { get; set; } = null!;
 
         public string Patronymic { get; set; } = null!;
+
+        public string Login {  get; set; } = null!;
+
+        public string Password { get; set; } = null!;
+
+        public string? About { get; set; }
     }
 }

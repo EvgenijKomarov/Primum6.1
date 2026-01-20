@@ -83,7 +83,38 @@ namespace PrimumCore.Services
             return adminPermissionToTake.AdminPermissionId;
         }
 
+        public async Task<int> CreateAdminProfile(int userId, int objUserId, string status)
+        {
+            var iteratingUser = await CheckIteratingUser(userId, Permission.CreateAdminProfiles);
 
+            var user = await context.Set<User>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.Permissions)
+                .FirstOrDefaultAsync(x => x.Id == objUserId);
+            if (user is null) { throw new Exception("User not found"); }
+            if (user.AdminProfile is not null) { throw new Exception("AdminProfile already exists"); }
+
+            user.AdminProfile = new AdminProfile { Status = status };
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+
+        public async Task<int> DeleteAdminProfile(int userId, int objUserId)
+        {
+            var iteratingUser = await CheckIteratingUser(userId, Permission.CreateAdminProfiles);
+
+            var user = await context.Set<User>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.Permissions)
+                .FirstOrDefaultAsync(x => x.Id == objUserId);
+            if (user is null) { throw new Exception("User not found"); }
+            if (user.AdminProfile is null) { throw new Exception("AdminProfile not exists"); }
+
+            context.Set<AdminPermission>().RemoveRange(user.AdminProfile.Permissions);
+            context.Set<AdminProfile>().Remove(user.AdminProfile);
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
 
         private async Task<User> CheckIteratingUser(int id, Permission permission)
         {

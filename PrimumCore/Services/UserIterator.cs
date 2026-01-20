@@ -1,4 +1,4 @@
-﻿using DTO.DTOs;
+﻿using CoreConnection.DTOs;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumCore.Utilities;
@@ -19,7 +19,7 @@ namespace PrimumCore.Services
 
             return new
             {
-                UserDTO = new UserDTO
+                UserDTO = new UserDto
                 {
                     Id = user.Id,
                     Name = user.Name,
@@ -44,17 +44,17 @@ namespace PrimumCore.Services
             return user.Id;
         }
 
-        public async Task<int> RegStudent(string login, string password, UserDTO dto)
+        public async Task<int> RegStudent(RegistrationDto dto)
         {
-            if (await context.Set<User>().AnyAsync(x => x.Login == login)) { throw new Exception("User with the same login already exists"); }
+            if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
 
             var user = new User
             {
                 Name = dto.Name,
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
-                Login = login,
-                Password = passwordHasher.HashPassword(password),
+                Login = dto.Login,
+                Password = passwordHasher.HashPassword(dto.Password),
                 StudentProfile = new StudentProfile()
             };
 
@@ -64,20 +64,20 @@ namespace PrimumCore.Services
             return user.Id;
         }
 
-        public async Task<int> RegTeacher(string login, string password, UserDTO dto, string about)
+        public async Task<int> RegTeacher(RegistrationDto dto)
         {
-            if (await context.Set<User>().AnyAsync(x => x.Login == login)) { throw new Exception("User with the same login already exists"); }
+            if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
 
             var user = new User
             {
                 Name = dto.Name,
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
-                Login = login,
-                Password = passwordHasher.HashPassword(password),
+                Login = dto.Login,
+                Password = passwordHasher.HashPassword(dto.Password),
                 TeacherProfile = new TeacherProfile
                 {
-                    About = about
+                    About = dto.About
                 }
             };
 
