@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumPlatformModel.Models.Enums;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Iterators
 {
     public class StudentIterator(IPrimumContext context)
     {
@@ -252,42 +252,6 @@ namespace PrimumCore.Services
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
             await context.SaveChangesAsync();
             return abonementShedule.AbonementSheduleId;
-        }
-
-        public async Task<IEnumerable<TeacherSheduleDto>> GetAvailableTeacherShedules(int userId, int teacherId)
-        {
-            var student = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(s => s.AbonementShedules)
-                .ThenInclude(s => s.TeacherShedule)
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (student is null || student.StudentProfile is null) { throw new Exception("Student not found"); }
-
-            var teacher = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(s => s.TeacherShedules)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (teacher is null || teacher.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-
-            var studentShedules = student
-                .StudentProfile
-                .Abonements
-                .SelectMany(x => x.AbonementShedules)
-                .ToArray();
-
-            return teacher
-                .TeacherProfile
-                .TeacherShedules
-                .Where(x => !x.IsBusy)
-                .Where(x => !studentShedules.Any(y => y.TeacherShedule.DayOfWeek == x.DayOfWeek && y.TeacherShedule.Time == x.Time))
-                .Select(x => new TeacherSheduleDto
-                {
-                    DayOfWeek = x.DayOfWeek,
-                    Time = x.Time,
-                    IsBusy = x.IsBusy
-                })
-                .ToArray();
         }
     }
 }

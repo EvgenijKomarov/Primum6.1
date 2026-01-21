@@ -4,7 +4,7 @@ using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Utilities;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Iterators
 {
     public class AdminIterator(IPrimumContext context)
     {

@@ -4,7 +4,7 @@ using PrimumCore.Models;
 using PrimumCore.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Iterators
 {
     public class UserIterator(IPrimumContext context, PasswordHasher passwordHasher)
     {

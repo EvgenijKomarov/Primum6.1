@@ -1,17 +1,19 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Iterators
 {
     public class CommonIterator(IPrimumContext context)
     {
-        public async Task<IEnumerable<TeacherProfileDto>> GetTeachers()
+        public async Task<IEnumerable<TeacherProfileDto>> GetTeachers(bool isOnlyAvailable)
         {
             return await context.Set<User>()
                 .Include(x => x.TeacherProfile)
                 .Where(x => x.TeacherProfile != null)
+                .WhereIf(isOnlyAvailable, x => x.TeacherProfile.IsAvailable)
                 .Select(x => new TeacherProfileDto
                 {
                     DisplayName = x.DisplayName,
@@ -40,16 +42,17 @@ namespace PrimumCore.Services
             return user;
         }
 
-        public async Task<IEnumerable<CourseDto>> GetCoursesByTeacher(int userId)
+        public async Task<IEnumerable<CourseDto>> GetCoursesByTeacher(int userId, bool isOnlyAvailable)
         {
             var user = await context.Set<User>()
                 .Include(x => x.TeacherProfile)
                 .ThenInclude(x => x.Courses)
+                .ThenInclude(x => x.Teacher)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
 
             return user.TeacherProfile.Courses
-                .Where(x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
                 .Select(x => new CourseDto
                 {
                     CourseId = x.CourseId,
@@ -68,7 +71,7 @@ namespace PrimumCore.Services
                 .ToArray();
         }
 
-        public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int userId)
+        public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int userId, bool isOnlyAvailable)
         {
             var user = await context.Set<User>()
                 .Include(x => x.TeacherProfile)
@@ -87,6 +90,7 @@ namespace PrimumCore.Services
 
             return user.TeacherProfile
                 .TeacherShedules
+                .WhereIf(isOnlyAvailable, x => !x.IsBusy)
                 .Select(x => new TeacherSheduleDto
                 {
                     DayOfWeek = x.DayOfWeek,
@@ -101,13 +105,13 @@ namespace PrimumCore.Services
                 .ToArray();
         }
 
-        public async Task<IEnumerable<CourseThemeDto>> GetThemes()
+        public async Task<IEnumerable<CourseThemeDto>> GetThemes(bool isOnlyAvailable)
         {
             return await context.Set<CourseTheme>()
                 .Include(x => x.Courses)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .Where(x => x.IsActive)
+                .WhereIf(isOnlyAvailable,x => x.IsActive)
                 .Select(x => new CourseThemeDto
                 {
                     CourseThemeId = x.CourseThemeId,
@@ -164,13 +168,13 @@ namespace PrimumCore.Services
             return course;
         }
 
-        public async Task<IEnumerable<CourseDto>> GetCourses()
+        public async Task<IEnumerable<CourseDto>> GetCourses(bool isOnlyAvailable)
         {
             return await context.Set<Course>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Include(x => x.CourseTheme)
-                .Where(x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
                 .Select(x => new CourseDto
                 {
                     CourseId = x.CourseId,
@@ -189,7 +193,7 @@ namespace PrimumCore.Services
                 .ToArrayAsync();
         }
 
-        public async Task<IEnumerable<CourseDto>> GetCoursesByTheme(int themeId)
+        public async Task<IEnumerable<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable)
         {
             var theme = await GetTheme(themeId);
 
@@ -197,7 +201,7 @@ namespace PrimumCore.Services
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Include(x => x.CourseTheme)
-                .Where(x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
                 .Where(x => x.CourseThemeId == theme.CourseThemeId)
                 .Select(x => new CourseDto
                 {
