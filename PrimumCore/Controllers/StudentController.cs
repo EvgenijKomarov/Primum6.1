@@ -5,7 +5,9 @@ namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/student/{userId}")]
-    public class StudentController(StudentIterator studentIterator) : PrimumController
+    public class StudentController(
+        StudentIterator studentIterator,
+        CommonIterator commonIterator) : PrimumController
     {
         [HttpGet("lessons")]
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
@@ -16,8 +18,16 @@ namespace PrimumCore.Controllers
             => Ok(await studentIterator.GetAbonements(userId));
 
         [HttpGet("shedules")]
-        public async Task<IActionResult> GetShedules([FromRoute] int userId) 
+        public async Task<IActionResult> GetShedules([FromRoute] int userId)
             => Ok(await studentIterator.GetShedules(userId));
+
+        [HttpGet("abonement/{abonementId}/shedules")]
+        public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await commonIterator.GetAbonementShedules(userId));
+
+        [HttpGet("abonement/{abonementId}/lessons")]
+        public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await commonIterator.GetAbonementLessons(userId, true));
 
         [HttpPatch("abonement/activate")]
         public async Task<IActionResult> ActivateAbonement([FromRoute] int userId, [FromQuery] int abonementId) 

@@ -23,7 +23,7 @@ namespace CoreConnection.DTOs
 
         public int StudentId { get; set; }
 
-        public string LessonLink { get; set; }
+        public string? LessonLink { get; set; }
 
         public int AbonementId { get; set; }
 

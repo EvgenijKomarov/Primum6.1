@@ -12,7 +12,6 @@ namespace PrimumCore.Extentions
         {
             builder.Services.AddScoped<StudentIterator>();
             builder.Services.AddScoped<TeacherIterator>();
-            builder.Services.AddScoped<StaffIterator>();
             builder.Services.AddScoped<AdminIterator>();
             builder.Services.AddScoped<UserIterator>();
             builder.Services.AddScoped<PasswordHasher>();
@@ -28,7 +27,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<UserController>();
             builder.Services.AddScoped<TeacherController>();
             builder.Services.AddScoped<AdminController>();
-            builder.Services.AddScoped<CommonController>();
+            builder.Services.AddScoped<PublicController>();
 
             return builder;
         }

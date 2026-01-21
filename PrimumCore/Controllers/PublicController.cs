@@ -5,25 +5,29 @@ namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/common")]
-    public class CommonController(CommonIterator iterator) : PrimumController
+    public class PublicController(CommonIterator iterator) : PrimumController
     {
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await iterator.GetUser(userId));
+
         [HttpGet("teacher/{teacherid}")]
         public async Task<IActionResult> GetTeacher([FromRoute] int teacherId) => Ok(await iterator.GetTeacher(teacherId));
 
         [HttpGet("teachers")]
-        public async Task<IActionResult> GetTeachers() => Ok(await iterator.GetTeachers());
+        public async Task<IActionResult> GetTeachers() => Ok(await iterator.GetTeachers(true));
 
         [HttpGet("courses-by-teacher/{teacherId}")]
         public async Task<IActionResult> GetCoursesByTeacher([FromRoute] int teacherId) 
-            => Ok(await iterator.GetCoursesByTeacher(teacherId));
+            => Ok(await iterator.GetCoursesByTeacher(teacherId, true));
 
         [HttpGet("teacher-shedules/{teacherId}")]
         public async Task<IActionResult> GetTeacherShedules([FromRoute] int teacherId)
-            => Ok(await iterator.GetTeacherShedules(teacherId));
+            => Ok(await iterator.GetTeacherShedules(teacherId, true));
 
         [HttpGet("themes")]
         public async Task<IActionResult> GetThemes()
-            => Ok(await iterator.GetThemes());
+            => Ok(await iterator.GetThemes(true));
 
         [HttpGet("theme/{themeId}")]
         public async Task<IActionResult> GetTheme([FromRoute] int themeId)
@@ -35,10 +39,10 @@ namespace PrimumCore.Controllers
 
         [HttpGet("courses")]
         public async Task<IActionResult> GetCourses()
-            => Ok(await iterator.GetCourses());
+            => Ok(await iterator.GetCourses(true));
 
         [HttpGet("courses-by-theme/{themeId}")]
         public async Task<IActionResult> GetCoursesByTheme([FromRoute] int themeId)
-            => Ok(await iterator.GetCoursesByTheme(themeId));
+            => Ok(await iterator.GetCoursesByTheme(themeId, true));
     }
 }

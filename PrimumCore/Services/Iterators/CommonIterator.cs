@@ -3,11 +3,38 @@ using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
+using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
     public class CommonIterator(IPrimumContext context)
     {
+        public async Task<object> GetUser(int id)
+        {
+            var user = await context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .Include(u => u.TeacherProfile)
+                .Include(u => u.AdminProfile)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (user is null) { throw new Exception("User not found"); }
+
+            return new
+            {
+                UserDTO = new UserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Patronymic = user.Patronymic
+                },
+                IsApprovedStudent = user.StudentProfile is not null ?
+                    user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsApprovedTeacher = user.TeacherProfile is not null ?
+                    user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsAdmin = user.AdminProfile is not null
+            };
+        }
+
         public async Task<IEnumerable<TeacherProfileDto>> GetTeachers(bool isOnlyAvailable)
         {
             return await context.Set<User>()
@@ -219,6 +246,56 @@ namespace PrimumCore.Services.Iterators
                     ApproveStatus = (ApproveStatusDto)x.ApproveStatus
                 })
                 .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<StudentSheduleDto>> GetAbonementShedules(int abonementId)
+        {
+            var abonement = await context.Set<Abonement>()
+                .Include(x => x.AbonementShedules)
+                .ThenInclude(x => x.TeacherShedule)
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.AbonementId == abonementId);
+            if (abonement is null) { throw new Exception("Abonement not found"); }
+
+            return abonement.AbonementShedules.Select(x => new StudentSheduleDto
+            {
+                DayOfWeek = x.TeacherShedule.DayOfWeek,
+                Time = x.TeacherShedule.Time,
+                CourseName = x.Abonement.Course.Name,
+                CourseId = x.Abonement.Course.CourseId,
+                TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
+                TeacherId = x.Abonement.Course.Teacher.User.Id
+            });
+        }
+
+        public async Task<IEnumerable<LessonDto>> GetAbonementLessons(int abonementId, bool isStudent)
+        {
+            var abonement = await context.Set<Abonement>()
+                .Include(x => x.Lessons)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.AbonementId == abonementId);
+            if (abonement is null) { throw new Exception("Abonement not found"); }
+
+            return abonement.Lessons.Select(x => new LessonDto
+            {
+                DateTime = x.DateTime,
+                CourseName = x.Abonement.Course.Name,
+                CourseId = x.Abonement.Course.CourseId,
+                TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
+                TeacherId = x.Abonement.Course.Teacher.User.Id,
+                StudentDisplayName = x.Abonement.Student.User.DisplayName,
+                StudentId = x.Abonement.Student.User.Id,
+                LessonLink = isStudent ? x.StudentLink : x.TeacherLink,
+                AbonementId = x.Abonement.AbonementId,
+                Price = x.Price,
+                LessonStatus = (LessonStatusDto)x.Status
+            });
         }
     }
 }

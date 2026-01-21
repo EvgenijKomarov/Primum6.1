@@ -26,6 +26,14 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetAbonements([FromRoute] int userId)
             => Ok(await teacherIterator.GetAbonements(userId, userId));
 
+        [HttpGet("abonement/{abonementId}/shedules")]
+        public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await commonIterator.GetAbonementShedules(userId));
+
+        [HttpGet("abonement/{abonementId}/lessons")]
+        public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await commonIterator.GetAbonementLessons(userId, false));
+
         [HttpPut("course/edit")]
         public async Task<IActionResult> EditCourse([FromRoute] int userId, [FromBody] CourseDto courseDto) 
             => Ok(await teacherIterator.EditCourse(userId, courseDto));

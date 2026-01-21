@@ -8,32 +8,6 @@ namespace PrimumCore.Services.Iterators
 {
     public class UserIterator(IPrimumContext context, PasswordHasher passwordHasher)
     {
-        public async Task<object> GetUser(int id)
-        {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .Include(u => u.TeacherProfile)
-                .Include(u => u.AdminProfile)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (user is null) { throw new Exception("User not found"); }
-
-            return new
-            {
-                UserDTO = new UserDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Patronymic = user.Patronymic
-                },
-                IsApprovedStudent = user.StudentProfile is not null ?
-                    user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsApprovedTeacher = user.TeacherProfile is not null ?
-                    user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsAdmin = user.AdminProfile is not null
-            };
-        }
-
         public async Task<int> Login(string login, string password)
         {
             var user = await context.Set<User>()

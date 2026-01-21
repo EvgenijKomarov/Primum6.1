@@ -8,9 +8,6 @@ namespace PrimumCore.Controllers
     [Route("api/user")]
     public class UserController(UserIterator iterator) : PrimumController
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id) => Ok(await iterator.GetUser(id));
-
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] string login, [FromQuery] string password) => Ok(await iterator.Login(login, password));
 
