@@ -14,12 +14,16 @@ namespace PrimumCore.Controllers
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] string login, [FromQuery] string password) => Ok(await iterator.Login(login, password));
 
-        [HttpPost("reg-teacher")]
-        public async Task<IActionResult> RegTeacher([FromBody] RegistrationDto dto)
-            => Ok(await iterator.RegTeacher(dto));
+        [HttpPost("register")]
+        public async Task<IActionResult> RegUser([FromBody] RegistrationDto dto)
+            => Ok(await iterator.RegUser(dto));
 
-        [HttpPost("reg-student")]
-        public async Task<IActionResult> RegStudent([FromBody] RegistrationDto dto)
-            => Ok(await iterator.RegStudent(dto));
+        [HttpPost("create-teacher-profile/{userId}")]
+        public async Task<IActionResult> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
+            => Ok(await iterator.CreateTeacherProfile(userId, about));
+
+        [HttpPost("create-student-profile/{userId}")]
+        public async Task<IActionResult> CreateStudentProfile([FromRoute] int userId)
+            => Ok(await iterator.CreateStudentProfile(userId));
     }
 }

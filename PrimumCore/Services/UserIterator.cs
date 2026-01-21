@@ -44,7 +44,7 @@ namespace PrimumCore.Services
             return user.Id;
         }
 
-        public async Task<int> RegStudent(RegistrationDto dto)
+        public async Task<int> RegUser(RegistrationDto dto)
         {
             if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
 
@@ -54,8 +54,7 @@ namespace PrimumCore.Services
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
                 Login = dto.Login,
-                Password = passwordHasher.HashPassword(dto.Password),
-                StudentProfile = new StudentProfile()
+                Password = passwordHasher.HashPassword(dto.Password)
             };
 
             context.Set<User>().Add(user);
@@ -64,24 +63,34 @@ namespace PrimumCore.Services
             return user.Id;
         }
 
-        public async Task<int> RegTeacher(RegistrationDto dto)
+        public async Task<int> CreateTeacherProfile(int userId, string about)
         {
-            if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
+            var user = await context.Set<User>()
+                .Include(u => u.TeacherProfile)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+            if (user.TeacherProfile is not null) { throw new Exception("User is already teacher"); }
 
-            var user = new User
+            user.TeacherProfile = new TeacherProfile
             {
-                Name = dto.Name,
-                Surname = dto.Surname,
-                Patronymic = dto.Patronymic,
-                Login = dto.Login,
-                Password = passwordHasher.HashPassword(dto.Password),
-                TeacherProfile = new TeacherProfile
-                {
-                    About = dto.About
-                }
+                About = about
             };
 
-            context.Set<User>().Add(user);
+            await context.SaveChangesAsync();
+
+            return user.Id;
+        }
+
+        public async Task<int> CreateStudentProfile(int userId)
+        {
+            var user = await context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+            if (user.StudentProfile is not null) { throw new Exception("User is already student"); }
+
+            user.StudentProfile = new StudentProfile();
+
             await context.SaveChangesAsync();
 
             return user.Id;
