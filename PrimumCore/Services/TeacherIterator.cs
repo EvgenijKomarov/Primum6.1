@@ -31,13 +31,15 @@ namespace PrimumCore.Services
                     CourseName = l.Abonement.Course.Name,
                     CourseId = l.Abonement.CourseId,
                     AbonementId = l.AbonementId,
+                    Price = l.Price,
                     LessonLink = l.TeacherLink ?? string.Empty,
                     StudentDisplayName = l.Abonement.Student.User.DisplayName,
                     StudentId = l.Abonement.Student.User.Id,
                     TeacherDisplayName = user.DisplayName,
                     TeacherId = user.Id,
                     LessonStatus = (LessonStatusDto)l.Status
-                });
+                })
+                .ToArray();
         }
 
         public async Task<IEnumerable<CourseDto>> GetCourses(int userId)
@@ -58,6 +60,7 @@ namespace PrimumCore.Services
                     CourseId = c.CourseId,
                     Name = c.Name,
                     TeacherName = c.Teacher.User.DisplayName,
+                    TeacherId = c.Teacher.User.Id,
                     Price = c.Price,
                     CourseThemeName = c.CourseTheme.ThemeName,
                     CourseThemeId = c.CourseTheme.CourseThemeId,
@@ -66,7 +69,8 @@ namespace PrimumCore.Services
                     TeacherAbout = c.Teacher.About,
                     ApproveStatus = (ApproveStatusDto)c.ApproveStatus,
                     IsActive = c.IsActive
-                });
+                })
+                .ToArray();
         }
 
         public async Task<int> EditCourse(int userId, CourseDto courseDto)
@@ -268,7 +272,8 @@ namespace PrimumCore.Services
                     CourseThemeId = a.Course.CourseTheme.CourseThemeId,
                     PricePerLesson = a.PricePerLesson,
                     AbonementStatus = (AbonementStatusDto)a.AbonementStatus
-                });
+                })
+                .ToArray();
         }
     }
 }

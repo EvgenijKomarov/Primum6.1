@@ -10,6 +10,8 @@ public partial class Lesson
 
     public int AbonementId { get; set; }
 
+    public int Price { get; set; }
+
     public string? StudentLink { get; set; }
 
     public string? TeacherLink { get; set; }

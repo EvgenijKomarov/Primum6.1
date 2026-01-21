@@ -13,7 +13,5 @@ namespace CoreConnection.DTOs
         public string ThemeName { get; set; } = null!;
 
         public bool IsActive { get; set; }
-
-        public IEnumerable<CourseDto> Courses { get; set; }
     }
 }

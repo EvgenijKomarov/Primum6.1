@@ -13,6 +13,8 @@ namespace CoreConnection.DTOs
 
         public string CourseName { get; set; }
 
+        public int CourseId { get; set; }
+
         public string TeacherDisplayName { get; set; }
 
         public int TeacherId { get; set; }
@@ -25,7 +27,7 @@ namespace CoreConnection.DTOs
 
         public int AbonementId { get; set; }
 
-        public int CourseId { get; set; }
+        public int Price { get; set; }
 
         public LessonStatusDto LessonStatus { get; set; }
     }

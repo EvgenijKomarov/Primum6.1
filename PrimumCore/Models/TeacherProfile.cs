@@ -21,4 +21,6 @@ public partial class TeacherProfile
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 
     public virtual ICollection<TeacherShedule> TeacherShedules { get; set; } = new List<TeacherShedule>();
+
+    public bool IsAvailable => ApproveStatus == ApproveStatus.Approved;
 }

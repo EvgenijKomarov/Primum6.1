@@ -36,6 +36,7 @@ namespace PrimumCore.Services
                     TeacherDisplayName = l.Abonement.Course.Teacher.User.DisplayName,
                     StudentDisplayName = user.DisplayName,
                     StudentId = user.Id,
+                    Price = l.Price,
                     TeacherId = l.Abonement.Course.Teacher.User.Id,
                     LessonStatus = (LessonStatusDto)l.Status
                 })
