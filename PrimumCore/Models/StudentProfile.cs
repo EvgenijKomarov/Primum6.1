@@ -10,6 +10,8 @@ public partial class StudentProfile
 
     public int UserId { get; set; }
 
+    public int Coins { get; set; }
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
 
     public User User { get; set; } = null!;

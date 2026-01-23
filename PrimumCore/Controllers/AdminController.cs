@@ -12,7 +12,7 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetIncendents([FromRoute] int userId) => Ok(await iterator.GetIncedents(userId));
 
         [HttpGet("admins")]
-        public async Task<IActionResult> GetAdmins([FromRoute] int userId) => Ok(await iterator.GetAdmins());
+        public async Task<IActionResult> GetAdmins() => Ok(await iterator.GetAdmins());
 
         [HttpGet("admin")]
         public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
@@ -27,7 +27,7 @@ namespace PrimumCore.Controllers
             => Ok(await iterator.AddCash(userId, objectUserId, cash));
 
         [HttpPatch("edit-permissions")]
-        public async Task<IActionResult> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] Dictionary<string, bool> permissions)
+        public async Task<IActionResult> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromBody] Dictionary<string, bool> permissions)
             => Ok(await iterator.EditPermissions(userId, objectUserId, permissions));
 
         [HttpPut("create-admin-profile")]

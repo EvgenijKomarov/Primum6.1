@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataNotifications
+namespace CoreConnection.Notifications
 {
-    public class LessonPreparationNotification
+    public class NewAbonementSheduleNotification
     {
         public required string StudentName { get; set; }
 
@@ -20,10 +20,10 @@ namespace DataNotifications
 
         public required int AbonementId { get; set; }
 
-        public required int LessonId { get; set; }
+        public required int AbonementSheduleId { get; set; }
 
-        public required DateTime DateTime { get; set; }
+        public required string DayOfWeek { get; set; }
 
-        public required bool IsEnoughMoney { get; set; }
+        public required int Time {  get; set; }
     }
 }

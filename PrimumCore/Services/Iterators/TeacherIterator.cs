@@ -35,7 +35,7 @@ namespace PrimumCore.Services.Iterators
                     StudentId = l.Abonement.Student.User.Id,
                     TeacherDisplayName = user.DisplayName,
                     TeacherId = user.Id,
-                    LessonStatus = (LessonStatusDto)l.Status
+                    LessonStatus = l.Status.ToString()
                 })
                 .ToArray();
         }
@@ -70,7 +70,7 @@ namespace PrimumCore.Services.Iterators
                     CourseThemeName = a.Course.CourseTheme.ThemeName,
                     CourseThemeId = a.Course.CourseTheme.CourseThemeId,
                     PricePerLesson = a.PricePerLesson,
-                    AbonementStatus = (AbonementStatusDto)a.AbonementStatus
+                    AbonementStatus = a.AbonementStatus.ToString()
                 })
                 .ToArray();
         }
@@ -176,12 +176,13 @@ namespace PrimumCore.Services.Iterators
             if (!user.IsActive) { throw new Exception("User is not active"); }
             if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
-            if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) { throw new Exception("Shedule already exists"); }
+            if (Enum.TryParse(sheduleDto.DayOfWeek, out DayOfWeek dtoDayofWeek)) { throw new Exception("Can't parse day of week"); }
+            if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == dtoDayofWeek && s.Time == sheduleDto.Time)) { throw new Exception("Shedule already exists"); }
 
             var shedule = new TeacherShedule
             {
                 Time = sheduleDto.Time,
-                DayOfWeek = sheduleDto.DayOfWeek,
+                DayOfWeek = dtoDayofWeek,
             };
 
             user.TeacherProfile.TeacherShedules.Add(shedule);

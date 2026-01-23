@@ -15,5 +15,9 @@ namespace CoreConnection.DTOs
         public string Surname { get; set; } = null!;
 
         public string Patronymic { get; set; } = null!;
+
+        public string DisplayName { get; set; } = null!;
+
+        public long Cash {  get; set; }
     }
 }

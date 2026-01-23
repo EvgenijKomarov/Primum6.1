@@ -29,6 +29,6 @@ namespace CoreConnection.DTOs
 
         public int Price { get; set; }
 
-        public LessonStatusDto LessonStatus { get; set; }
+        public string LessonStatus { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using DataNotifications;
+﻿using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
@@ -34,6 +34,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     lesson.Abonement.AbonementStatus == AbonementStatus.Active)//Занятие произошло
                 {
                     lesson.Abonement.Student.User.Cash -= lesson.Price;
+                    lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.EarningMultiplier);
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(

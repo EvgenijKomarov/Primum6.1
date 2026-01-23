@@ -1,13 +1,15 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
+using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService)
+    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, IPublisher publisher)
     {
         public async Task<IEnumerable<LessonDto>> GetLessons(int userId)
         {
@@ -39,7 +41,7 @@ namespace PrimumCore.Services.Iterators
                     StudentId = user.Id,
                     Price = l.Price,
                     TeacherId = l.Abonement.Course.Teacher.User.Id,
-                    LessonStatus = (LessonStatusDto)l.Status
+                    LessonStatus = l.Status.ToString()
                 })
                 .ToArray();
         }
@@ -75,7 +77,7 @@ namespace PrimumCore.Services.Iterators
                     CourseThemeId = a.Course.CourseTheme.CourseThemeId,
                     AbonementId = a.AbonementId,
                     PricePerLesson = a.PricePerLesson,
-                    AbonementStatus = (AbonementStatusDto)a.AbonementStatus
+                    AbonementStatus = a.AbonementStatus.ToString()
                 })
                 .ToArray();
         }
@@ -102,7 +104,7 @@ namespace PrimumCore.Services.Iterators
                 .SelectMany(a => a.AbonementShedules)
                 .Select(x => new StudentSheduleDto
                 {
-                    DayOfWeek = x.TeacherShedule.DayOfWeek,
+                    DayOfWeek = x.TeacherShedule.DayOfWeek.ToString(),
                     Time = x.TeacherShedule.Time,
                     TeacherId = x.Abonement.Course.Teacher.User.Id,
                     CourseId = x.Abonement.Course.CourseId,
@@ -197,6 +199,19 @@ namespace PrimumCore.Services.Iterators
 
             await context.SaveChangesAsync();
 
+            await publisher.PublishAsync(new NewAbonementSheduleNotification
+            {
+                StudentName = user.DisplayName,
+                StudentUserId = user.Id,
+                TeacherName = teacherShedule.Teacher.User.DisplayName,
+                TeacherUserId = teacherShedule.Teacher.User.Id,
+                CourseName = course.Name,
+                AbonementId = abonement.AbonementId,
+                AbonementSheduleId = abonementShedule.AbonementSheduleId,
+                DayOfWeek = teacherShedule.DayOfWeek.ToString(),
+                Time = teacherShedule.Time
+            });
+
             return abonementShedule.AbonementSheduleId;
         }
 
@@ -245,6 +260,9 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Course)
+                .ThenInclude(s => s.Teacher)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
             if (!user.IsActive) { throw new Exception("User is not active"); }
@@ -257,6 +275,17 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Active;
             await context.SaveChangesAsync();
+            await publisher.PublishAsync(new AbonementChangeStatusNotification
+            {
+                StudentName = user.DisplayName,
+                StudentUserId = user.Id,
+                TeacherName = abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = abonement.Course.Teacher.User.Id,
+                CourseName = abonement.Course.Name,
+                AbonementId = abonement.AbonementId,
+                AbonementStatus = abonement.AbonementStatus.ToString()
+            });
+
             return abonement.AbonementId;
         }
 
@@ -265,8 +294,13 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Course)
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
                 .ThenInclude(s => s.AbonementShedules)
-                .ThenInclude(s => s.Abonement)
+                .ThenInclude(s => s.TeacherShedule)
+                .ThenInclude(s => s.Teacher)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
             if (!user.IsActive) { throw new Exception("User is not active"); }
@@ -279,6 +313,20 @@ namespace PrimumCore.Services.Iterators
 
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
             await context.SaveChangesAsync();
+
+            await publisher.PublishAsync(new DeleteAbonementSheduleNotification
+            {
+                StudentName = user.DisplayName,
+                StudentUserId = user.Id,
+                TeacherName = abonementShedule.TeacherShedule.Teacher.User.DisplayName,
+                TeacherUserId = abonementShedule.TeacherShedule.Teacher.User.Id,
+                CourseName = abonementShedule.Abonement.Course.Name,
+                AbonementId = abonementShedule.Abonement.AbonementId,
+                AbonementSheduleId = abonementShedule.AbonementSheduleId,
+                DayOfWeek = abonementShedule.TeacherShedule.DayOfWeek.ToString(),
+                Time = abonementShedule.TeacherShedule.Time
+            });
+
             return abonementShedule.AbonementSheduleId;
         }
     }

@@ -1,4 +1,4 @@
-﻿using DataNotifications;
+﻿using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;

@@ -12,7 +12,7 @@ namespace CoreConnection.DTOs
 
         public string About { get; set; }
 
-        public int TeacherId { get; set; }
+        public int UserId { get; set; }
 
         public bool IsAvailable { get; set; }
     }

@@ -25,7 +25,9 @@ namespace PrimumCore.Services.Iterators
                     Id = user.Id,
                     Name = user.Name,
                     Surname = user.Surname,
-                    Patronymic = user.Patronymic
+                    Patronymic = user.Patronymic,
+                    DisplayName = user.DisplayName,
+                    Cash = user.Cash,
                 },
                 IsApprovedStudent = user.StudentProfile is not null ?
                     user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
@@ -45,7 +47,7 @@ namespace PrimumCore.Services.Iterators
                 {
                     DisplayName = x.DisplayName,
                     About = x.TeacherProfile.About,
-                    TeacherId = x.Id,
+                    UserId = x.Id,
                     IsAvailable = x.TeacherProfile.IsAvailable
                 })
                 .ToArrayAsync();
@@ -60,10 +62,10 @@ namespace PrimumCore.Services.Iterators
                 {
                     DisplayName = x.DisplayName,
                     About = x.TeacherProfile.About,
-                    TeacherId = x.Id,
+                    UserId = x.Id,
                     IsAvailable = x.TeacherProfile.IsAvailable
                 })
-                .FirstOrDefaultAsync(x => x.TeacherId == userId);
+                .FirstOrDefaultAsync(x => x.UserId == userId);
             if (user is null) { throw new Exception("Teacher not found"); }
 
             return user;
@@ -93,7 +95,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (ApproveStatusDto)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus.ToString()
                 })
                 .ToArray();
         }
@@ -120,7 +122,7 @@ namespace PrimumCore.Services.Iterators
                 .WhereIf(isOnlyAvailable, x => !x.IsBusy)
                 .Select(x => new TeacherSheduleDto
                 {
-                    DayOfWeek = x.DayOfWeek,
+                    DayOfWeek = x.DayOfWeek.ToString(),
                     Time = x.Time,
                     IsBusy = x.IsBusy,
                     StudentName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.DisplayName : null,
@@ -186,7 +188,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (ApproveStatusDto)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus.ToString()
                 })
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
 
@@ -215,7 +217,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (ApproveStatusDto)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus.ToString()
                 })
                 .ToArrayAsync();
         }
@@ -243,7 +245,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (ApproveStatusDto)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus.ToString()
                 })
                 .ToArrayAsync();
         }
@@ -261,7 +263,7 @@ namespace PrimumCore.Services.Iterators
 
             return abonement.AbonementShedules.Select(x => new StudentSheduleDto
             {
-                DayOfWeek = x.TeacherShedule.DayOfWeek,
+                DayOfWeek = x.TeacherShedule.DayOfWeek.ToString(),
                 Time = x.TeacherShedule.Time,
                 CourseName = x.Abonement.Course.Name,
                 CourseId = x.Abonement.Course.CourseId,
@@ -294,7 +296,7 @@ namespace PrimumCore.Services.Iterators
                 LessonLink = isStudent ? x.StudentLink : x.TeacherLink,
                 AbonementId = x.Abonement.AbonementId,
                 Price = x.Price,
-                LessonStatus = (LessonStatusDto)x.Status
+                LessonStatus = x.Status.ToString()
             });
         }
     }

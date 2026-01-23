@@ -1,6 +1,12 @@
-﻿namespace DataNotifications
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CoreConnection.Notifications
 {
-    public class LessonNotification()
+    public class LessonPreparationNotification
     {
         public required string StudentName { get; set; }
 
@@ -18,8 +24,6 @@
 
         public required DateTime DateTime { get; set; }
 
-        public required string TeacherLink { get; set; }
-
-        public required string StudentLink { get; set; }
+        public required bool IsEnoughMoney { get; set; }
     }
 }
