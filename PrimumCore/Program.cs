@@ -11,6 +11,7 @@ builder.AddProjectControllers();
 builder.AddPeriodWorkers();
 builder.AddSettings();
 builder.AddPublishers();
+builder.AddLogging();
 
 var app = builder.Build();
 

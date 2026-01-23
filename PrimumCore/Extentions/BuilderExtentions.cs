@@ -9,6 +9,7 @@ using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
 using RabbitMQ.Client;
+using Serilog;
 
 namespace PrimumCore.Extentions
 {
@@ -79,6 +80,14 @@ namespace PrimumCore.Extentions
                 builder.Services.AddScoped<IPublisher>(provider =>
                     provider.GetRequiredService<RabbitMQMessagePublisher>());
             }
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration));
 
             return builder;
         }
