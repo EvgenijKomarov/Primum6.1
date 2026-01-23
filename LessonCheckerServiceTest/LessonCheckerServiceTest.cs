@@ -1,5 +1,4 @@
 ﻿using DataNotifications;
-using DataNotificator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;

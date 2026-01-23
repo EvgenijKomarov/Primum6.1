@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
+using System.Security;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -14,6 +15,41 @@ namespace PrimumCore.Services.Iterators
             IncendentCollector collector = new IncendentCollector(context);
 
             return await collector.GetIncedents(userPermissions);
+        }
+
+        public async Task<IEnumerable<AdminProfileDto>> GetAdmins()
+        {
+            return await context.Set<User>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.Permissions)
+                .Where(x => x.AdminProfile != null)
+                .Select(x => new AdminProfileDto
+                {
+                    DisplayName = x.DisplayName,
+                    UserId = x.Id,
+                    Status = x.AdminProfile.Status,
+                    Permissions = GetAllPermissions(x.AdminProfile)
+                })
+                .ToArrayAsync();
+        }
+
+        public async Task<AdminProfileDto> GetAdmin(int userId)
+        {
+            var admin = await context.Set<User>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.Permissions)
+                .Where(x => x.AdminProfile != null)
+                .Select(x => new AdminProfileDto
+                {
+                    DisplayName = x.DisplayName,
+                    UserId = x.Id,
+                    Status = x.AdminProfile.Status,
+                    Permissions = GetAllPermissions(x.AdminProfile)
+                })
+                .FirstOrDefaultAsync(x => x.UserId == userId);
+            if (admin == null) { throw new Exception("Admin not found"); }
+
+            return admin;
         }
 
         public async Task<int> SolveIncedent(int userId, IncendentDecisionInputDto dto)
@@ -37,7 +73,7 @@ namespace PrimumCore.Services.Iterators
             return objUserId;
         }
 
-        public async Task<int> GivePermission(int userId, int objUserId, string permissionIndex)
+        public async Task<int> EditPermissions(int userId, int objUserId, Dictionary<string, bool> editedPermissions)
         {
             var iteratingUser = await CheckIteratingUser(userId, Permission.GivePermissions);
 
@@ -47,40 +83,42 @@ namespace PrimumCore.Services.Iterators
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
             if (user is null || user.AdminProfile is null) { throw new Exception("User not found"); }
 
-            if (Enum.TryParse(permissionIndex, out Permission permission)) { throw new Exception("Invalid index of permission"); }
-            if (user.AdminProfile.Permissions.Any(x => x.Permission == permission)) { throw new Exception("User already have this permission"); }
+            var adminPermissions = GetAllPermissions(user.AdminProfile);
+            Permission[] permissionsToTake = adminPermissions
+                .Where(kvp => kvp.Value == true && editedPermissions.TryGetValue(kvp.Key, out bool val) && val == false)
+                .Select(kvp =>
+                {
+                    Enum.TryParse(kvp.Key, out Permission permission);
+                    return permission;
+                })
+                .ToArray();
+            Permission[] permissionsToGive = editedPermissions
+                .Where(kvp => kvp.Value == true && adminPermissions.TryGetValue(kvp.Key, out bool val) && val == false)
+                .Select(kvp =>
+                {
+                    Enum.TryParse(kvp.Key, out Permission permission);
+                    return permission;
+                })
+                .ToArray();
 
-            var adminPermissionToGive = new AdminPermission
+            foreach (var newPermission in permissionsToGive) 
             {
-                AdminProfile = iteratingUser.AdminProfile,
-                PromoterAdminProfile = user.AdminProfile,
-                PromotionDate = DateTime.Now,
-                Permission = permission
-            };
-            user.AdminProfile.Permissions.Add(adminPermissionToGive);
+                user.AdminProfile.Permissions.Add(new AdminPermission
+                {
+                    AdminProfile = iteratingUser.AdminProfile,
+                    PromoterAdminProfile = user.AdminProfile,
+                    PromotionDate = DateTime.Now,
+                    Permission = newPermission
+                });
+            }
+            foreach(var permissionToTake in permissionsToTake)
+            {
+                user.AdminProfile.Permissions
+                    .Remove(user.AdminProfile.Permissions.FirstOrDefault(x => x.Permission == permissionToTake));
+            }
 
             await context.SaveChangesAsync();
-            return adminPermissionToGive.AdminPermissionId;
-        }
-
-        public async Task<int> TakeBackPermission(int userId, int objUserId, string permissionIndex)
-        {
-            var iteratingUser = await CheckIteratingUser(userId, Permission.GivePermissions);
-
-            var user = await context.Set<User>()
-                .Include(x => x.AdminProfile)
-                .ThenInclude(x => x.Permissions)
-                .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null || user.AdminProfile is null) { throw new Exception("User not found"); }
-
-            if (Enum.TryParse(permissionIndex, out Permission permission)) { throw new Exception("Invalid index of permission"); }
-            var adminPermissionToTake = user.AdminProfile.Permissions.FirstOrDefault(x => x.Permission == permission);
-            if (adminPermissionToTake is null) { throw new Exception("User don't have this permission"); }
-
-            user.AdminProfile.Permissions.Remove(adminPermissionToTake);
-
-            await context.SaveChangesAsync();
-            return adminPermissionToTake.AdminPermissionId;
+            return user.Id;
         }
 
         public async Task<int> CreateAdminProfile(int userId, int objUserId, string status)
@@ -135,6 +173,16 @@ namespace PrimumCore.Services.Iterators
             if (user is null || user.AdminProfile is null) { throw new Exception("Iterator admin not found"); }
             if (!user.IsActive) { throw new Exception("User is not active"); }
             return user;
+        }
+
+        private Dictionary<string, bool> GetAllPermissions(AdminProfile admin)
+        {
+            return Enum.GetValues(typeof(Permission))
+                .Cast<Permission>()
+                .ToDictionary(
+                            perm => perm.ToString(),
+                            hpermission => admin.Permissions.Select(p => p.Permission).Contains(hpermission)
+                            );
         }
     }
 }

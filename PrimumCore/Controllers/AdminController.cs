@@ -11,6 +11,13 @@ namespace PrimumCore.Controllers
         [HttpGet("incendents")]
         public async Task<IActionResult> GetIncendents([FromRoute] int userId) => Ok(await iterator.GetIncedents(userId));
 
+        [HttpGet("admins")]
+        public async Task<IActionResult> GetAdmins([FromRoute] int userId) => Ok(await iterator.GetAdmins());
+
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
+            => Ok(await iterator.GetAdmin(objectUserId));
+
         [HttpPut("solve")]
         public async Task<IActionResult> SolveIncedent([FromRoute] int userId, [FromBody] IncendentDecisionInputDto dto) 
             => Ok(await iterator.SolveIncedent(userId, dto));
@@ -19,13 +26,9 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> AddCash([FromRoute] int userId, [FromQuery] int cash, [FromQuery] int objectUserId) 
             => Ok(await iterator.AddCash(userId, objectUserId, cash));
 
-        [HttpPatch("give-permission")]
-        public async Task<IActionResult> GivePermission([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] string permissionIndex)
-            => Ok(await iterator.GivePermission(userId, objectUserId, permissionIndex));
-
-        [HttpPatch("take-back-permission")]
-        public async Task<IActionResult> TakeBackPermission([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] string permissionIndex)
-            => Ok(await iterator.TakeBackPermission(userId, objectUserId, permissionIndex));
+        [HttpPatch("edit-permissions")]
+        public async Task<IActionResult> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] Dictionary<string, bool> permissions)
+            => Ok(await iterator.EditPermissions(userId, objectUserId, permissions));
 
         [HttpPut("create-admin-profile")]
         public async Task<IActionResult> CreateAdminProfile([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] string status)

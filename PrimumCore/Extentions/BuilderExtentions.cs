@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using PrimumCore.BackgroundWorkers;
 using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
@@ -8,7 +7,6 @@ using PrimumCore.Options;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
-using RabbitMQ.Client;
 using Serilog;
 
 namespace PrimumCore.Extentions
