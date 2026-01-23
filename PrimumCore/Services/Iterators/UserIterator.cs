@@ -1,7 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
-using PrimumCore.Utilities;
+using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators

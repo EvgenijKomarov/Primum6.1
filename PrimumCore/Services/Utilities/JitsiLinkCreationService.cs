@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Utilities
 {
     public class JitsiLinkCreationService(ILogger<JitsiLinkCreationService>? _logger = null)
     {

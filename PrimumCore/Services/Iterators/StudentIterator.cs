@@ -2,11 +2,12 @@
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(IPrimumContext context)
+    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService)
     {
         public async Task<IEnumerable<LessonDto>> GetLessons(int userId)
         {
@@ -118,6 +119,9 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(x => x.AbonementShedules)
                 .ThenInclude(x => x.TeacherShedule)
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Course)
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
             if (!user.IsActive) { throw new Exception("User is not active"); }
@@ -135,7 +139,7 @@ namespace PrimumCore.Services.Iterators
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
             if (teacherShedule is null) { throw new Exception("Shedule not found"); }
             if (teacherShedule.IsBusy) { throw new Exception("Shedule is busy"); }
-            if (teacherShedule.Teacher.User.Id == userId) { throw new Exception("Student cant subscribe on himself"); }
+            if (teacherShedule.Teacher.User.Id == userId) { throw new Exception("Student can't subscribe on himself"); }
             if (user
                 .StudentProfile
                 .Abonements
@@ -156,17 +160,41 @@ namespace PrimumCore.Services.Iterators
                     PricePerLesson = course.Price
                 };
                 await context.Set<Abonement>().AddAsync(abonement);
+            } else if (abonement.AbonementStatus == AbonementStatus.Deleted)
+            {
+                abonement.AbonementStatus = AbonementStatus.Active;
             }
 
-            if (course.MaxLessons >= abonement.AbonementShedules.Count) { throw new Exception("Can't create more shedules than course's maximum shedules per week"); }
+            if (course.MaxLessons >= abonement.AbonementShedules.Count)
+            {
+                throw new Exception("Can't create more shedules than course's maximum shedules per week");
+            }
+            if (user
+                .StudentProfile
+                .Abonements
+                .SelectMany(x => x.AbonementShedules)
+                .Any(x => x.TeacherShedule.Time == teacherShedule.Time && x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek))
+            {
+                throw new Exception("There is a same shedule in student profile");
+            }
 
+            var suitableDate = dateTimeService.GetNextFreeSuitableDateThisWeek(teacherShedule.DayOfWeek, teacherShedule.Time);
             var abonementShedule = new AbonementShedule
             {
-                AbonementId = abonement.AbonementId,
-                TeacherSheduleId = teacherSheduleId
+                Abonement = abonement,
+                TeacherShedule = teacherShedule,
+                LastIteration = suitableDate,
             };
 
             await context.Set<AbonementShedule>().AddAsync(abonementShedule);
+            await context.Set<Lesson>().AddAsync(new Lesson
+            {
+                Abonement = abonement,
+                Price = abonement.Course.FreeLessons >= abonement.Lessons.Count() ? 0 : abonement.PricePerLesson,
+                DateTime = suitableDate,
+                Status = LessonStatus.Waiting
+            });
+
             await context.SaveChangesAsync();
 
             return abonementShedule.AbonementSheduleId;

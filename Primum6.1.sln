@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataNotifications", "DataNo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LessonCheckerServiceTest", "LessonCheckerServiceTest\LessonCheckerServiceTest.csproj", "{201C5581-7E94-46E8-8AD9-B92542666466}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataNotificator", "DataNotificator\DataNotificator.csproj", "{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreConnection", "DTO\CoreConnection.csproj", "{841BF182-76C3-4B20-8270-15A76D0AF55F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbilitiesTest", "TeacherAbilitiesTest\AbilitiesTest.csproj", "{0D576401-F00A-45F0-8149-9A21EF7C858C}"
@@ -39,10 +37,6 @@ Global
 		{201C5581-7E94-46E8-8AD9-B92542666466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{201C5581-7E94-46E8-8AD9-B92542666466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{201C5581-7E94-46E8-8AD9-B92542666466}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5E9D34F-9FB9-4DEE-B0F0-75F6D9DEB7E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{841BF182-76C3-4B20-8270-15A76D0AF55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{841BF182-76C3-4B20-8270-15A76D0AF55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{841BF182-76C3-4B20-8270-15A76D0AF55F}.Release|Any CPU.ActiveCfg = Release|Any CPU

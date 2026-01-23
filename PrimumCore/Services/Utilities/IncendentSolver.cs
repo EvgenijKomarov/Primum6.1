@@ -5,7 +5,7 @@ using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumPlatformModel.Models.Enums;
 
-namespace PrimumCore.Utilities
+namespace PrimumCore.Services.Utilities
 {
     public class IncendentSolver(IPrimumContext context)
     {

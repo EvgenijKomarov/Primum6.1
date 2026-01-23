@@ -1,8 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using PrimumCore.BackgroundWorkers;
+using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
 using PrimumCore.Models;
+using PrimumCore.Options;
+using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
-using PrimumCore.Utilities;
+using PrimumCore.Services.Utilities;
+using RabbitMQ.Client;
 
 namespace PrimumCore.Extentions
 {
@@ -16,6 +22,8 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<UserIterator>();
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<CommonIterator>();
+            builder.Services.AddScoped<ConverterToDateTimeService>();
+            builder.Services.AddScoped<CoreNotificationService>();
 
 
             return builder;
@@ -28,6 +36,49 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<TeacherController>();
             builder.Services.AddScoped<AdminController>();
             builder.Services.AddScoped<PublicController>();
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPeriodWorkers(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddHostedService<LessonWarningWorker>();
+            builder.Services.AddHostedService<LessonIteratorWorker>();
+            builder.Services.AddHostedService<LessonCreatingWorker>();
+
+            //executors
+            builder.Services.AddSingleton<LessonWarningExecutor>();
+            builder.Services.AddSingleton<LessonIteratorExecutor>();
+            builder.Services.AddSingleton<LessonCreatingExecutor>();
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddSettings(this WebApplicationBuilder builder)
+        {
+            builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
+        {
+            var rabbitMqSection = builder.Configuration.GetSection("RabbitMQ");
+            var isFake = rabbitMqSection.GetValue<bool>("IsFake");
+
+            if (isFake)
+            {
+                builder.Services.AddScoped<FakePublisher>();
+                builder.Services.AddScoped<IPublisher>(provider =>
+                    provider.GetRequiredService<FakePublisher>());
+            }
+            else
+            {
+                builder.Services.AddSingleton<RabbitMQConnection>();
+                builder.Services.AddScoped<RabbitMQMessagePublisher>();
+                builder.Services.AddScoped<IPublisher>(provider =>
+                    provider.GetRequiredService<RabbitMQMessagePublisher>());
+            }
 
             return builder;
         }

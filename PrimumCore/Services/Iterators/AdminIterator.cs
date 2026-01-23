@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
-using PrimumCore.Utilities;
+using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {

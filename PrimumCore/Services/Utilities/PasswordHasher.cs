@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace PrimumCore.Utilities
+namespace PrimumCore.Services.Utilities
 {
     public class PasswordHasher
     {

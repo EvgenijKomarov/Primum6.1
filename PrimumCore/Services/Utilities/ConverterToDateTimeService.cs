@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimumCore.Services
+namespace PrimumCore.Services.Utilities
 {
-    public class ConverterToDateTimeService(int blockedDays = 0, ILogger<ConverterToDateTimeService>? _logger = null)
+    public class ConverterToDateTimeService(IConfiguration _configuration)
     {
+        private int blockedDays = _configuration.GetValue<int>("Constants:BlockedDaysForLessonCreation");
         private Dictionary<string, DayOfWeek> weekDays = new Dictionary<string, DayOfWeek>()
         {
             ["Понедельник"] = DayOfWeek.Monday,
@@ -34,32 +35,28 @@ namespace PrimumCore.Services
         public DayOfWeek GetDayOfWeek(string rusDOW)
         {
             var dow = weekDays[rusDOW];
-            _logger?.LogInformation($"Converted {rusDOW} to {dow}");
             return dow;
         }
 
         public string GetRusTranslation(DayOfWeek dow)
         {
             var translation = weekDays.First(x => x.Value == dow).Key;
-            _logger?.LogInformation($"Translated {dow} to {translation}");
             return translation;
         }
 
-        public DateTime GetNextSuitableDateThisWeek(string rusDOW, int hours)
+        public DateTime GetNextSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
-            DayOfWeek dow = weekDays[rusDOW];
             DateTime now = DateTime.Now;
-            var date = now.Date.AddDays(rusOrder[dow] - rusOrder[now.DayOfWeek]).AddHours(hours);
-            _logger?.LogInformation($"Next suitable date in this week for {rusDOW}, {hours} is {date.ToString("HH.mm dd.MM.yyyy")}");
+            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
             return date;
         }
 
-        public virtual DateTime GetNextFreeSuitableDate(string rusDOW, int hours)
+        public DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
-            var date = GetNextSuitableDateThisWeek(rusDOW, hours);
-            var foundDate = (date - DateTime.Now).Days > blockedDays ? date : date.AddDays(7);
-            _logger?.LogInformation($"Next suitable date in this week for {rusDOW}, {hours} is {foundDate.ToString("HH.mm dd.MM.yyyy")}");
-            return foundDate;
+            DateTime now = DateTime.Now;
+            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
+            date = (date - DateTime.Now).Days > blockedDays ? date : date.AddDays(7);
+            return date;
         }
     }
 }
