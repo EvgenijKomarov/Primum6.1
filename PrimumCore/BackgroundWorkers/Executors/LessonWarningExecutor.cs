@@ -1,6 +1,7 @@
 ﻿using DataNotifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
@@ -12,7 +13,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
-            var notificationService = scope.ServiceProvider.GetRequiredService<CoreNotificationService>();
+            var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
 
             var lessonsForPreparation = context.Set<Lesson>()
                 .Include(x => x.Abonement)
@@ -26,20 +27,10 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(l => l.DateTime <= DateTime.Now.AddDays(1))
                 .ToArray();
 
-            if (lessonsForPreparation.Length > 0)
-            {
-                logger?.LogInformation($"Found lessons for prepare notifications: " +
-                    $"{lessonsForPreparation.Select(x => x.LessonId).ToArray()}");
-            }
-            else
-            {
-                logger?.LogInformation($"Found no lessons for prepare notifications");
-            }
-
             foreach (var lesson in lessonsForPreparation)
             {
                 lesson.Status = LessonStatus.Warned;
-                await notificationService.PublishAsync(new LessonPreparationNotification()
+                await publisher.PublishAsync(new LessonPreparationNotification()
                 {
                     StudentName = lesson.Abonement.Student.User.DisplayName,
                     StudentUserId = lesson.Abonement.Student.User.Id,

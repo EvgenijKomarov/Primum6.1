@@ -20,16 +20,6 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.Now)
                 .ToArrayAsync();
 
-            if (availableForProlongation.Length > 0)
-            {
-                logger?.LogInformation($"Found AbonementShedules for prolongation: " +
-                    $"{availableForProlongation.Select(x => x.AbonementSheduleId).ToArray()}");
-            }
-            else
-            {
-                logger?.LogInformation($"Found no AbonementShedules for prolongation");
-            }
-
             foreach (var s in availableForProlongation)
             {
                 var freeDateTime = datetimeService.GetNextSuitableDateThisWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);

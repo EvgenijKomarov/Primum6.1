@@ -1,6 +1,7 @@
 ﻿using DataNotifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
 
@@ -12,7 +13,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
-            var notificationService = scope.ServiceProvider.GetRequiredService<CoreNotificationService>();
+            var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
             var jitsiService = new JitsiLinkCreationService();
 
             var lessonsForIteration = context.Set<Lesson>()
@@ -27,16 +28,6 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(l => l.DateTime <= DateTime.Now.AddMinutes(30))
                 .ToArray();
 
-            if (lessonsForIteration.Length > 0)
-            {
-                logger?.LogInformation($"Found lessons for iteration: " +
-                    $"{lessonsForIteration.Select(x => x.LessonId).ToArray()}");
-            }
-            else
-            {
-                logger?.LogInformation($"Found no lessons for iteration");
-            }
-
             foreach (var lesson in lessonsForIteration)
             {
                 if (lesson.Abonement.Student.User.Cash >= lesson.Price &&
@@ -49,7 +40,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                         DateTime.Now.ToString() + lesson.AbonementId.ToString());
                     lesson.StudentLink = tuple.guestLink;
                     lesson.TeacherLink = tuple.adminLink;
-                    await notificationService.PublishAsync(new LessonNotification()
+                    await publisher.PublishAsync(new LessonNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,
@@ -70,7 +61,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
                     context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
-                    await notificationService.PublishAsync(new LessonFailureNotification()
+                    await publisher.PublishAsync(new LessonFailureNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,

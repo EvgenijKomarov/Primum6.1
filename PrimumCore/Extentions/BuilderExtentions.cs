@@ -24,7 +24,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<CommonIterator>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
-            builder.Services.AddScoped<CoreNotificationService>();
 
 
             return builder;

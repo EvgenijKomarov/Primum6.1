@@ -14,8 +14,6 @@
             {
                 try
                 {
-                    logger?.LogInformation($"{name} is iterating database...");
-
                     await task;
                 }
                 catch (Exception ex)
