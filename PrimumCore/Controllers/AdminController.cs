@@ -6,10 +6,10 @@ namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/admin/{userId}")]
-    public class AdminController(AdminIterator iterator): PrimumController
+    public class AdminController(AdminIterator iterator, IncendentIterator incendentIterator) : PrimumController
     {
         [HttpGet("incendents")]
-        public async Task<IActionResult> GetIncendents([FromRoute] int userId) => Ok(await iterator.GetIncedents(userId));
+        public async Task<IActionResult> GetIncendents([FromRoute] int userId) => Ok(await incendentIterator.GetIncedents(userId));
 
         [HttpGet("admins")]
         public async Task<IActionResult> GetAdmins() => Ok(await iterator.GetAdmins());
@@ -20,19 +20,19 @@ namespace PrimumCore.Controllers
 
         [HttpGet("incendent-logs")]
         public async Task<IActionResult> GetIncendentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned) 
-            => Ok(await iterator.GetIncendentLogs(userId, OnlyUnrevisioned));
+            => Ok(await incendentIterator.GetIncendentLogs(userId, OnlyUnrevisioned));
 
         [HttpGet("incendent-log/{logId}")]
         public async Task<IActionResult> GetIncendentLog([FromRoute] int userId, [FromQuery] int logId)
-            => Ok(await iterator.GetIncendentLog(userId, logId));
+            => Ok(await incendentIterator.GetIncendentLog(userId, logId));
 
         [HttpGet("revise-incendent-log/{logId}")]
         public async Task<IActionResult> RevisionIncendentLog([FromRoute] int userId, [FromQuery] int logId)
-            => Ok(await iterator.RevisionIncendentLog(userId, logId));
+            => Ok(await incendentIterator.RevisionIncendentLog(userId, logId));
 
         [HttpPut("solve")]
         public async Task<IActionResult> SolveIncedent([FromRoute] int userId, [FromBody] IncendentDecisionInputDto dto) 
-            => Ok(await iterator.SolveIncedent(userId, dto));
+            => Ok(await incendentIterator.SolveIncedent(userId, dto));
 
         [HttpPatch("add-cash")]
         public async Task<IActionResult> AddCash([FromRoute] int userId, [FromQuery] int cash, [FromQuery] int objectUserId) 
