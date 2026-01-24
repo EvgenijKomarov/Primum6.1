@@ -8,12 +8,12 @@ namespace CoreConnection.DTOs
 {
     public class AdminProfileDto
     {
-        public string DisplayName { get; set; } = null!;
+        public required string DisplayName { get; set; }
 
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
 
-        public string Status {  get; set; } = null!;
+        public required string Status {  get; set; }
 
-        public Dictionary<string, bool> Permissions { get; set; } = [];
+        public required Dictionary<string, bool> Permissions { get; set; } = [];
     }
 }

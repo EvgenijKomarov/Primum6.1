@@ -8,12 +8,12 @@ namespace CoreConnection.DTOs
 {
     public class TeacherProfileDto
     {
-        public string DisplayName { get; set; } = null!;
+        public required string DisplayName { get; set; }
 
-        public string About { get; set; }
+        public required string About { get; set; }
 
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public required bool IsAvailable { get; set; }
     }
 }

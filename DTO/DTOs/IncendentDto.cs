@@ -9,14 +9,14 @@ namespace CoreConnection.DTOs
 {
     public class IncendentDto
     {
-        public int ObjectId {  get; set; }
+        public required int ObjectId {  get; set; }
 
-        public string CommonInfo { get; set; } = null!;
+        public required string CommonInfo { get; set; }
 
-        public IncendentStatusDto Status { get; set; } = IncendentStatusDto.Unknown;
+        public required IncendentStatusDto Status { get; set; }
 
-        public IncendentMeaningDto Meaning { get; set; } = IncendentMeaningDto.Unknown;
+        public required IncendentMeaningDto Meaning { get; set; }
 
-        public IEnumerable<IncendentDecisionDto> Decisions { get; set; } = new List<IncendentDecisionDto>();
+        public required IEnumerable<IncendentDecisionDto> Decisions { get; set; }
     }
 }

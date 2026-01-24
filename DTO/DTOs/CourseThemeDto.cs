@@ -8,10 +8,10 @@ namespace CoreConnection.DTOs
 {
     public class CourseThemeDto
     {
-        public int CourseThemeId { get; set; }
+        public required int CourseThemeId { get; set; }
 
-        public string ThemeName { get; set; } = null!;
+        public required string ThemeName { get; set; }
 
-        public bool IsActive { get; set; }
+        public required bool IsActive { get; set; }
     }
 }

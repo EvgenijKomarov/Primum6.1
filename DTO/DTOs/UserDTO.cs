@@ -8,16 +8,16 @@ namespace CoreConnection.DTOs
 {
     public class UserDto
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
 
-        public string Surname { get; set; } = null!;
+        public required string Surname { get; set; }
 
-        public string Patronymic { get; set; } = null!;
+        public required string Patronymic { get; set; }
 
-        public string DisplayName { get; set; } = null!;
+        public required string DisplayName { get; set; }
 
-        public long Cash {  get; set; }
+        public required long Cash {  get; set; }
     }
 }

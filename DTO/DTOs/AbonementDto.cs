@@ -8,26 +8,26 @@ namespace CoreConnection.DTOs
 {
     public class AbonementDto
     {
-        public string StudentDisplayName { get; set; } = null!;
+        public required string StudentDisplayName { get; set; }
 
-        public int StudentId { get; set; }
+        public required int StudentId { get; set; }
 
-        public string TeacherDisplayName { get; set; } = null!;
+        public required string TeacherDisplayName { get; set; }
 
-        public int TeacherId { get; set; }
+        public required int TeacherId { get; set; }
 
-        public string CourseName { get; set; } = null!;
+        public required string CourseName { get; set; }
 
-        public int? CourseId { get; set; }
+        public required int? CourseId { get; set; }
 
-        public string CourseThemeName { get; set; } = null!;
+        public required string CourseThemeName { get; set; }
 
-        public int AbonementId { get; set; }
+        public required int AbonementId { get; set; }
 
-        public int CourseThemeId { get; set; }
+        public required int CourseThemeId { get; set; }
 
-        public int PricePerLesson { get; set; }
+        public required int PricePerLesson { get; set; }
 
-        public string AbonementStatus { get; set; }
+        public required string AbonementStatus { get; set; }
     }
 }

@@ -8,11 +8,11 @@ namespace CoreConnection.DTOs
 {
     public class TeacherSheduleDto
     {
-        public string DayOfWeek { get; set; }
+        public required string DayOfWeek { get; set; }
 
-        public int Time { get; set; }
+        public required int Time { get; set; }
 
-        public bool IsBusy { get; set; }
+        public required bool IsBusy { get; set; }
 
         public string? StudentName { get; set; }
 
