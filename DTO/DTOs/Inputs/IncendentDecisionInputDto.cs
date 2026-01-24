@@ -14,5 +14,7 @@ namespace CoreConnection.DTOs.Inputs
         public IncendentMeaningDto Meaning { get; set; } = IncendentMeaningDto.Unknown;
 
         public IncendentDecisionDto Decision { get; set; }
+
+        public string IncendentInfo { get; set; }
     }
 }

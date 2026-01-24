@@ -21,6 +21,7 @@ namespace PrimumCore.Models
         DbSet<User> Users { get; set; }
         DbSet<CourseTheme> CourseThemes { get; set; }
         DbSet<AdminPermission> Permissions { get; set; }
+        DbSet<IncendentLog> IncendentLogs { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

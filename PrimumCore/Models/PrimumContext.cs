@@ -39,6 +39,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     public virtual DbSet<AdminPermission> Permissions { get; set; }
 
+    public virtual DbSet<IncendentLog> IncendentLogs { get; set; }
+
     DatabaseFacade IPrimumContext.Database => base.Database;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -163,6 +165,18 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasOne(e => e.PromoterAdminProfile)
                 .WithMany(e => e.GivenPermissions)
                 .HasForeignKey(e => e.PromoterAdminProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<IncendentLog>(entity =>
+        {
+            entity.HasKey(e => e.LogId);
+            entity.HasIndex(e => e.LogId).IsUnique();
+            entity.Property(e => e.LogId).ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.AdminProfile)
+                .WithMany(e => e.IncendentLogs)
+                .HasForeignKey(e => e.AdminProfileId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 

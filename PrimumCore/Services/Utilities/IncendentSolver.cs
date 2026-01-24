@@ -41,21 +41,17 @@ namespace PrimumCore.Services.Utilities
                     {
                         case IncendentDecisionDto.SendToAdministrator:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.SendToManager:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedManagerReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Approve:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Delete:
                             context.Set<TeacherShedule>().RemoveRange(user.TeacherProfile.TeacherShedules);
                             context.Set<Course>().RemoveRange(user.TeacherProfile.Courses);
                             context.Set<TeacherProfile>().Remove(user.TeacherProfile);
-                            await context.SaveChangesAsync();
                             break;
                     }
                     return user.Id;
@@ -77,18 +73,15 @@ namespace PrimumCore.Services.Utilities
                     {
                         case IncendentDecisionDto.SendToAdministrator:
                             user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Approve:
                             user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Delete:
                             context.Set<AbonementShedule>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.AbonementShedules));
                             context.Set<Lesson>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.Lessons));
                             context.Set<Abonement>().RemoveRange(user.StudentProfile.Abonements);
                             context.Set<StudentProfile>().Remove(user.StudentProfile);
-                            await context.SaveChangesAsync();
                             break;
                     }
                     return user.Id;
@@ -110,22 +103,18 @@ namespace PrimumCore.Services.Utilities
                     {
                         case IncendentDecisionDto.SendToAdministrator:
                             course.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Approve:
                             course.ApproveStatus = ApproveStatus.NeedAdministratorReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.SendToManager:
                             course.ApproveStatus = ApproveStatus.NeedManagerReview;
-                            await context.SaveChangesAsync();
                             break;
                         case IncendentDecisionDto.Delete:
                             context.Set<AbonementShedule>().RemoveRange(course.Abonements.SelectMany(x => x.AbonementShedules));
                             context.Set<Lesson>().RemoveRange(course.Abonements.SelectMany(x => x.Lessons));
                             context.Set<Abonement>().RemoveRange(course.Abonements);
                             context.Set<Course>().Remove(course);
-                            await context.SaveChangesAsync();
                             break;
                     }
                     return course.CourseId;
@@ -143,7 +132,6 @@ namespace PrimumCore.Services.Utilities
                     {
                         case IncendentDecisionDto.Delete:
                             context.Set<Lesson>().RemoveRange(lesson);
-                            await context.SaveChangesAsync();
                             break;
                     }
                     return lesson.LessonId;

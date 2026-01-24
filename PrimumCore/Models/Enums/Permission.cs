@@ -35,5 +35,6 @@ namespace PrimumCore.Models.Enums
         [AvailableIncendent(IncendentMeaningDto.Lesson, IncendentDecisionDto.Delete)]
         InspectMissedLessons = 12,
         CreateAdminProfiles = 13,
+        InspectIncendentLogs = 14
     }
 }

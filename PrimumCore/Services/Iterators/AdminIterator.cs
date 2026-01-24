@@ -53,23 +53,97 @@ namespace PrimumCore.Services.Iterators
             return admin;
         }
 
+        public async Task<IEnumerable<IncendentLogDto>> GetIncendentLogs(int userId)
+        {
+            await CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+
+            return await context.Set<IncendentLog>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.User)
+                .Where(x => x.AdminProfile != null)
+                .Select(x => new IncendentLogDto
+                {
+                    LogId = x.LogId,
+                    AdminUserId = x.AdminProfile.User.Id,
+                    AdminDisplayName = x.AdminProfile.User.DisplayName,
+                    Description = x.Description
+                })
+                .ToArrayAsync();
+        }
+
+        public async Task<IncendentLogDto> GetIncendentLog(int userId, int logId)
+        {
+            await CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+
+            var log = await context.Set<IncendentLog>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.User)
+                .Where(x => x.AdminProfile != null)
+                .Where(x => !x.IsRevisioned)
+                .Select(x => new IncendentLogDto
+                {
+                    LogId = x.LogId,
+                    AdminUserId = x.AdminProfile.User.Id,
+                    AdminDisplayName = x.AdminProfile.User.DisplayName,
+                    Description = x.Description
+                })
+                .FirstOrDefaultAsync(x => x.LogId == logId);
+            if (log is null) { throw new Exception("Log not found"); }
+
+            return log;
+        }
+
+        public async Task<int> RevisionIncendentLog(int userId, int logId)
+        {
+            var user = await CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+
+            var log = await context.Set<IncendentLog>()
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.User)
+                .Where(x => x.AdminProfile != null)
+                .FirstOrDefaultAsync(x => x.LogId == logId);
+            if (log is null) { throw new Exception("Log not found"); }
+            log.IsRevisioned = true;
+
+            await context.SaveChangesAsync();
+            return log.LogId;
+        }
+
         public async Task<int> SolveIncedent(int userId, IncendentDecisionInputDto dto)
         {
-            Permission[] userPermissions = (await GetIteratingUser(userId)).AdminProfile.Permissions.Select(x => x.Permission).ToArray();
+            var iteratingUserAdminProfile = (await GetIteratingUser(userId)).AdminProfile;
+            Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
             IncendentSolver solver = new IncendentSolver(context);
 
-            return await solver.SolveIncendent(userPermissions, dto);
+            var subjectId = await solver.SolveIncendent(userPermissions, dto);
+            iteratingUserAdminProfile.IncendentLogs.Add(new IncendentLog
+            {
+                AdminProfileId = iteratingUserAdminProfile.AdminId,
+                Description = $"Info:\n" +
+                $"{dto.IncendentInfo}\n" +
+                $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
+                $"Decision: {dto.Decision.ToString()}"
+            });
+
+            await context.SaveChangesAsync();
+            return subjectId;
         }
 
         public async Task<int> AddCash(int userId, int objUserId, int cash)
         {
-            await CheckIteratingUser(userId, Permission.AddCash);
+            var iteratingUser = await CheckIteratingUser(userId, Permission.AddCash);
 
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
             if (user is null) { throw new Exception("User not found"); }
 
             user.Cash += cash;
+
+            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description = $"Added cash ({cash} to userId {objUserId})"
+            });
             await context.SaveChangesAsync();
             return objUserId;
         }
@@ -118,6 +192,14 @@ namespace PrimumCore.Services.Iterators
                     .Remove(user.AdminProfile.Permissions.FirstOrDefault(x => x.Permission == permissionToTake));
             }
 
+            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description = 
+                $"Given permissions: {permissionsToGive.ToString()}\n" +
+                $"Taken permissions: {permissionsToTake.ToString()}"
+            });
+
             await context.SaveChangesAsync();
             return user.Id;
         }
@@ -134,6 +216,13 @@ namespace PrimumCore.Services.Iterators
             if (user.AdminProfile is not null) { throw new Exception("AdminProfile already exists"); }
 
             user.AdminProfile = new AdminProfile { Status = status };
+
+            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description =
+                $"Created AdminProfile to {objUserId}"
+            });
             await context.SaveChangesAsync();
             return user.Id;
         }
@@ -151,6 +240,13 @@ namespace PrimumCore.Services.Iterators
 
             context.Set<AdminPermission>().RemoveRange(user.AdminProfile.Permissions);
             context.Set<AdminProfile>().Remove(user.AdminProfile);
+
+            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description =
+                $"Deleted AdminProfile to {objUserId}"
+            });
             await context.SaveChangesAsync();
             return user.Id;
         }
