@@ -12,7 +12,7 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> Login([FromQuery] string login, [FromQuery] string password) => Ok(await iterator.Login(login, password));
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegUser([FromBody] RegistrationDto dto)
+        public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)
             => Ok(await iterator.RegUser(dto));
 
         [HttpPost("create-teacher-profile/{userId}")]

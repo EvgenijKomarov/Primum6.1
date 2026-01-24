@@ -18,7 +18,7 @@ namespace PrimumCore.Services.Iterators
             return user.Id;
         }
 
-        public async Task<int> RegUser(RegistrationDto dto)
+        public async Task<int> RegUser(RegistrationInputDto dto)
         {
             if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
 

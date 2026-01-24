@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class RegistrationDto
+    public class RegistrationInputDto
     {
         public string Name { get; set; } = null!;
 

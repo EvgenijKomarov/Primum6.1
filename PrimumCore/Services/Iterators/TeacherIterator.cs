@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
@@ -75,7 +76,7 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
-        public async Task<int> EditCourse(int userId, CourseDto courseDto)
+        public async Task<int> EditCourse(int userId, int courseId, CourseInputDto courseDto)
         {
             var user = await context.Set<User>()
                 .Include(u => u.TeacherProfile)
@@ -88,10 +89,9 @@ namespace PrimumCore.Services.Iterators
             var course = user
                 .TeacherProfile
                 .Courses
-                .FirstOrDefault(c => c.CourseId == courseDto.CourseId);
+                .FirstOrDefault(c => c.CourseId == courseId);
             if (course is null) { throw new Exception("Course not found"); }
 
-            course.Name = courseDto.Name;
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
             course.FreeLessons = courseDto.FreeLessons;
@@ -100,7 +100,7 @@ namespace PrimumCore.Services.Iterators
             return course.CourseId;
         }
 
-        public async Task<int> CreateCourse(int userId, CourseDto courseDto)
+        public async Task<int> CreateCourse(int userId, CourseInputDto courseDto)
         {
             var user = await context.Set<User>()
                 .Include(u => u.TeacherProfile)
@@ -166,7 +166,7 @@ namespace PrimumCore.Services.Iterators
             return course.CourseId;
         }
 
-        public async Task<int> CreateShedule(int userId, TeacherSheduleDto sheduleDto)
+        public async Task<int> CreateShedule(int userId, TeacherSheduleInputDto sheduleDto)
         {
             var user = await context.Set<User>()
                 .Include(u => u.TeacherProfile)

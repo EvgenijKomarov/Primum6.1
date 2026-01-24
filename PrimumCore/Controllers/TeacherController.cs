@@ -1,4 +1,4 @@
-﻿using CoreConnection.DTOs;
+﻿using CoreConnection.DTOs.Inputs;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
@@ -35,11 +35,11 @@ namespace PrimumCore.Controllers
             => Ok(await commonIterator.GetAbonementLessons(userId, false));
 
         [HttpPut("course/edit")]
-        public async Task<IActionResult> EditCourse([FromRoute] int userId, [FromBody] CourseDto courseDto) 
-            => Ok(await teacherIterator.EditCourse(userId, courseDto));
+        public async Task<IActionResult> EditCourse([FromRoute] int userId, [FromQuery] int courseId, [FromBody] CourseInputDto courseDto) 
+            => Ok(await teacherIterator.EditCourse(userId, courseId, courseDto));
 
         [HttpPost("course/create")]
-        public async Task<IActionResult> CreateCourse([FromRoute] int userId, [FromBody] CourseDto courseDto) 
+        public async Task<IActionResult> CreateCourse([FromRoute] int userId, [FromBody] CourseInputDto courseDto) 
             => Ok(await teacherIterator.CreateCourse(userId, courseDto));
 
         [HttpPatch("course/activate")]
@@ -51,7 +51,7 @@ namespace PrimumCore.Controllers
             => Ok(await teacherIterator.DeactivateCourse(userId, courseId));
 
         [HttpPost("shedule/create")]
-        public async Task<IActionResult> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleDto sheduleDto) 
+        public async Task<IActionResult> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleInputDto sheduleDto) 
             => Ok(await teacherIterator.CreateShedule(userId, sheduleDto));
 
         [HttpDelete("shedule/delete")]

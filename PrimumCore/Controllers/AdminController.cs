@@ -1,4 +1,4 @@
-﻿using CoreConnection.DTOs;
+﻿using CoreConnection.DTOs.Inputs;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 

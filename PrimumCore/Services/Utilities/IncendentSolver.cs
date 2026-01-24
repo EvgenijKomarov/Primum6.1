@@ -1,4 +1,4 @@
-﻿using CoreConnection.DTOs;
+﻿using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;

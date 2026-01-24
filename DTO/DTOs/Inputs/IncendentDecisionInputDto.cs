@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreConnection.DTOs
+namespace CoreConnection.DTOs.Inputs
 {
     public class IncendentDecisionInputDto
     {
