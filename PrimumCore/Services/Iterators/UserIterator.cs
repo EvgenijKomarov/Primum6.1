@@ -8,14 +8,14 @@ namespace PrimumCore.Services.Iterators
 {
     public class UserIterator(IPrimumContext context, PasswordHasher passwordHasher)
     {
-        public async Task<int> Login(string login, string password)
+        public async Task<(int?, string)> Login(string login, string password)
         {
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Login == login);
-            if (user is null) { throw new Exception("Wrong login"); }
+            if (user is null) { return (null, "Unknown login"); }
 
-            if (!passwordHasher.VerifyPassword(password, user.Password)) { throw new Exception("Wrong password"); }
-            return user.Id;
+            if (!passwordHasher.VerifyPassword(password, user.Password)) { return (null, "Wrong password"); }
+            return (user.Id, string.Empty);
         }
 
         public async Task<int> RegUser(RegistrationInputDto dto)
