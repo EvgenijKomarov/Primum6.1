@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
@@ -53,7 +54,7 @@ namespace PrimumCore.Services.Iterators
             return admin;
         }
 
-        public async Task<IEnumerable<IncendentLogDto>> GetIncendentLogs(int userId)
+        public async Task<IEnumerable<IncendentLogDto>> GetIncendentLogs(int userId, bool OnlyUnrevisioned)
         {
             await CheckIteratingUser(userId, Permission.InspectIncendentLogs);
 
@@ -61,6 +62,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
+                .WhereIf(OnlyUnrevisioned, x => !x.IsRevisioned)
                 .Select(x => new IncendentLogDto
                 {
                     LogId = x.LogId,
@@ -79,7 +81,6 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
-                .Where(x => !x.IsRevisioned)
                 .Select(x => new IncendentLogDto
                 {
                     LogId = x.LogId,
