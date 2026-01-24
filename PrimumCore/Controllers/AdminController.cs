@@ -18,6 +18,17 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
             => Ok(await iterator.GetAdmin(objectUserId));
 
+        [HttpGet("incendent-logs")]
+        public async Task<IActionResult> GetIncendentLogs([FromRoute] int userId) => Ok(await iterator.GetIncendentLogs(userId));
+
+        [HttpGet("incendent-log/{logId}")]
+        public async Task<IActionResult> GetIncendentLog([FromRoute] int userId, [FromQuery] int logId)
+            => Ok(await iterator.GetIncendentLog(userId, logId));
+
+        [HttpGet("revise-incendent-log/{logId}")]
+        public async Task<IActionResult> RevisionIncendentLog([FromRoute] int userId, [FromQuery] int logId)
+            => Ok(await iterator.RevisionIncendentLog(userId, logId));
+
         [HttpPut("solve")]
         public async Task<IActionResult> SolveIncedent([FromRoute] int userId, [FromBody] IncendentDecisionInputDto dto) 
             => Ok(await iterator.SolveIncedent(userId, dto));
