@@ -20,8 +20,12 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<AdminIterator>();
             builder.Services.AddScoped<UserIterator>();
             builder.Services.AddScoped<IncendentIterator>();
+            builder.Services.AddScoped<CourseIterator>();
+            builder.Services.AddScoped<SheduleIterator>();
+            builder.Services.AddScoped<LessonIterator>();
+            builder.Services.AddScoped<ThemeIterator>();
+            builder.Services.AddScoped<AbonementIterator>();
             builder.Services.AddScoped<PasswordHasher>();
-            builder.Services.AddScoped<CommonIterator>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
 
 
