@@ -14,12 +14,12 @@ namespace CoreConnection.DTOs
 
         public required bool IsBusy { get; set; }
 
-        public string? StudentName { get; set; }
+        public required string? StudentName { get; set; }
 
-        public int? StudentId { get; set; }
+        public required int? StudentId { get; set; }
 
-        public string? CourseName { get; set; }
+        public required string? CourseName { get; set; }
 
-        public int? CourseId { get; set; }
+        public required int? CourseId { get; set; }
     }
 }

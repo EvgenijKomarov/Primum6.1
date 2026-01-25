@@ -12,7 +12,8 @@ namespace PrimumCore.Controllers
         SheduleIterator sheduleIterator,
         ThemeIterator themeIterator,
         LessonIterator lessonIterator,
-        AbonementIterator abonementIterator) : PrimumController
+        AbonementIterator abonementIterator,
+        GradingIterator gradingIterator) : PrimumController
     {
         [HttpGet("lessons")]
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
@@ -57,6 +58,10 @@ namespace PrimumCore.Controllers
         [HttpPost("shedule/create")]
         public async Task<IActionResult> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleInputDto sheduleDto) 
             => Ok(await sheduleIterator.CreateTeacherShedule(userId, sheduleDto));
+
+        [HttpPost("lessons/grade")]
+        public async Task<IActionResult> GradeLesson([FromRoute] int userId, [FromQuery] int lessonId, [FromBody] GradingInputDto gradingDto)
+            => Ok(await gradingIterator.GradeLesson(userId, lessonId, gradingDto));
 
         [HttpDelete("shedule/delete")]
         public async Task<IActionResult> DeleteShedule([FromRoute] int userId, [FromQuery] int sheduleId) 

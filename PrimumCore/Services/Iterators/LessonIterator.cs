@@ -10,6 +10,7 @@ namespace PrimumCore.Services.Iterators
         {
             var abonement = await context.Set<Abonement>()
                 .Include(x => x.Lessons)
+                .ThenInclude(x => x.Grading)
                 .Include(x => x.Student)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Course)
@@ -30,7 +31,8 @@ namespace PrimumCore.Services.Iterators
                 LessonLink = isStudentLink ? x.StudentLink : x.TeacherLink,
                 AbonementId = x.Abonement.AbonementId,
                 Price = x.Price,
-                LessonStatus = x.Status.ToString()
+                LessonStatus = x.Status.ToString(),
+                Grade = x.Grading is null ? null : x.Grading.GetFinalGrade()
             });
         }
 
@@ -41,6 +43,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(t => t.Courses)
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(a => a.Lessons)
+                .ThenInclude(l => l.Grading)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
 
@@ -62,7 +65,8 @@ namespace PrimumCore.Services.Iterators
                     StudentId = l.Abonement.Student.User.Id,
                     TeacherDisplayName = user.DisplayName,
                     TeacherId = user.Id,
-                    LessonStatus = l.Status.ToString()
+                    LessonStatus = l.Status.ToString(),
+                    Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();
         }
@@ -73,6 +77,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(a => a.Lessons)
+                .ThenInclude(a => a.Grading)
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(a => a.Course)
@@ -97,7 +102,8 @@ namespace PrimumCore.Services.Iterators
                     StudentId = user.Id,
                     Price = l.Price,
                     TeacherId = l.Abonement.Course.Teacher.User.Id,
-                    LessonStatus = l.Status.ToString()
+                    LessonStatus = l.Status.ToString(),
+                    Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();
         }

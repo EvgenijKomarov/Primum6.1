@@ -9,7 +9,9 @@ namespace PrimumCore.Controllers
         StudentIterator studentIterator,
         SheduleIterator sheduleIterator,
         LessonIterator lessonIterator,
-        AbonementIterator abonementIterator) : PrimumController
+        AbonementIterator abonementIterator,
+        PromocodeIterator promocodeIterator
+        ) : PrimumController
     {
         [HttpGet("lessons")]
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
@@ -31,6 +33,10 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await lessonIterator.GetAbonementLessons(userId, true));
 
+        [HttpGet("promocodes")]
+        public async Task<IActionResult> GetStudentPromocodes([FromRoute] int userId)
+            => Ok(await promocodeIterator.GetStudentPromocodes(userId));
+
         [HttpPatch("abonement/activate")]
         public async Task<IActionResult> ActivateAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
             => Ok(await abonementIterator.ActivateAbonement(userId, abonementId));
@@ -46,6 +52,10 @@ namespace PrimumCore.Controllers
         [HttpPost("course/subscribe")]
         public async Task<IActionResult> SubscribeToCourse([FromRoute] int userId, [FromQuery] int courseId, [FromQuery] int teacherSheduleId)
             => Ok(await studentIterator.SubscribeToCourse(userId, courseId, teacherSheduleId));
+
+        [HttpPost("buy-promocode")]
+        public async Task<IActionResult> BuyPromocode([FromRoute] int userId, [FromQuery] int promocodeId)
+            => Ok(await promocodeIterator.BuyPromocode(userId, promocodeId));
 
         [HttpDelete("shedule/delete")]
         public async Task<IActionResult> DeleteShedule([FromRoute] int userId, [FromQuery] int abonementSheduleId) 

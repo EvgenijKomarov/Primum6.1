@@ -17,4 +17,6 @@ public partial class StudentProfile
     public User User { get; set; } = null!;
 
     public virtual ICollection<Abonement> Abonements { get; set; } = new List<Abonement>();
+
+    public virtual ICollection<Promocode> Promocodes { get; set; } = new List<Promocode>();
 }

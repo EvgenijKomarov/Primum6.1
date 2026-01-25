@@ -41,6 +41,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     public virtual DbSet<IncendentLog> IncendentLogs { get; set; }
 
+    public virtual DbSet<Promocode> Promocodes { get; set; }
+
     DatabaseFacade IPrimumContext.Database => base.Database;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -191,6 +193,18 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.IncendentLogs)
                 .HasForeignKey(e => e.AdminProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Promocode>(entity =>
+        {
+            entity.HasKey(e => e.PromocodeId);
+            entity.HasIndex(e => e.PromocodeId).IsUnique();
+            entity.Property(e => e.PromocodeId).ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.Student)
+                .WithMany(e => e.Promocodes)
+                .HasForeignKey(e => e.StudentId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 

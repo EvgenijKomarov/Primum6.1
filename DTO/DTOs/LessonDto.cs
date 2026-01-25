@@ -23,12 +23,14 @@ namespace CoreConnection.DTOs
 
         public required int StudentId { get; set; }
 
-        public string? LessonLink { get; set; }
+        public required string? LessonLink { get; set; }
 
         public required int AbonementId { get; set; }
 
         public required int Price { get; set; }
 
         public required string LessonStatus { get; set; }
+
+        public required float? Grade { get; set; }
     }
 }

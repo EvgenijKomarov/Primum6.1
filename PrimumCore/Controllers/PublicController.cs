@@ -10,7 +10,8 @@ namespace PrimumCore.Controllers
         TeacherIterator teacherIterator,
         CourseIterator courseIterator,
         SheduleIterator sheduleIterator,
-        ThemeIterator themeIterator
+        ThemeIterator themeIterator,
+        PromocodeIterator promocodeIterator
         ) : PrimumController
     {
 
@@ -50,5 +51,13 @@ namespace PrimumCore.Controllers
         [HttpGet("courses-by-theme/{themeId}")]
         public async Task<IActionResult> GetCoursesByTheme([FromRoute] int themeId)
             => Ok(await courseIterator.GetCoursesByTheme(themeId, true));
+
+        [HttpGet("available-promocodes")]
+        public async Task<IActionResult> GetPromocodes()
+            => Ok(await promocodeIterator.GetPromocodes(true));
+
+        [HttpGet("promocode/{promocodeId}")]
+        public async Task<IActionResult> GetPromocode([FromRoute] int promocodeId)
+            => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
     }
 }
