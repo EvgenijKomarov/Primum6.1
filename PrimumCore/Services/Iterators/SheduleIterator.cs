@@ -32,7 +32,7 @@ namespace PrimumCore.Services.Iterators
                 .WhereIf(isOnlyAvailable, x => !x.IsBusy)
                 .Select(x => new TeacherSheduleDto
                 {
-                    DayOfWeek = x.DayOfWeek.ToString(),
+                    DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
                     IsBusy = x.IsBusy,
                     StudentName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.DisplayName : null,
@@ -57,7 +57,7 @@ namespace PrimumCore.Services.Iterators
 
             return abonement.AbonementShedules.Select(x => new StudentSheduleDto
             {
-                DayOfWeek = x.TeacherShedule.DayOfWeek.ToString(),
+                DayOfWeek = x.TeacherShedule.DayOfWeek,
                 Time = x.TeacherShedule.Time,
                 CourseName = x.Abonement.Course.Name,
                 CourseId = x.Abonement.Course.CourseId,
@@ -132,7 +132,7 @@ namespace PrimumCore.Services.Iterators
                 .SelectMany(a => a.AbonementShedules)
                 .Select(x => new StudentSheduleDto
                 {
-                    DayOfWeek = x.TeacherShedule.DayOfWeek.ToString(),
+                    DayOfWeek = x.TeacherShedule.DayOfWeek,
                     Time = x.TeacherShedule.Time,
                     TeacherId = x.Abonement.Course.Teacher.User.Id,
                     CourseId = x.Abonement.Course.CourseId,

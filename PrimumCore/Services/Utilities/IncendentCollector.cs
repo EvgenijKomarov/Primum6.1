@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumPlatformModel.Models.Enums;

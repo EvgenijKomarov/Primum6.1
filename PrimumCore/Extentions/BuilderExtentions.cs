@@ -30,7 +30,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
 
-
             return builder;
         }
 

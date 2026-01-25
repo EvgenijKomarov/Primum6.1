@@ -1,8 +1,10 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
+using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -32,7 +34,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus.ToString()
+                    ApproveStatus = (StatusApprove)x.ApproveStatus
                 })
                 .ToArray();
         }
@@ -57,7 +59,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus.ToString()
+                    ApproveStatus = (StatusApprove)x.ApproveStatus
                 })
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
 
@@ -86,7 +88,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus.ToString()
+                    ApproveStatus = (StatusApprove)x.ApproveStatus
                 })
                 .ToArrayAsync();
         }
@@ -113,7 +115,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus.ToString()
+                    ApproveStatus = (StatusApprove)x.ApproveStatus
                 })
                 .ToArrayAsync();
         }

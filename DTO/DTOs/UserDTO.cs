@@ -19,5 +19,11 @@ namespace CoreConnection.DTOs
         public required string DisplayName { get; set; }
 
         public required long Cash {  get; set; }
+
+        public required bool? IsApprovedStudent { get; set; }
+
+        public required bool? IsApprovedTeacher { get; set; }
+
+        public required bool? IsAdmin {get; set; }
     }
 }

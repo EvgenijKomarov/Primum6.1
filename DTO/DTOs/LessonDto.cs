@@ -29,7 +29,7 @@ namespace CoreConnection.DTOs
 
         public required int Price { get; set; }
 
-        public required string LessonStatus { get; set; }
+        public required StatusLesson LessonStatus { get; set; }
 
         public required float? Grade { get; set; }
     }

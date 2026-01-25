@@ -1,6 +1,7 @@
 ﻿using PrimumCore.Models.Attributes;
+using PrimumCore.Models.Enums;
 
-namespace PrimumCore.Models.Enums
+namespace PrimumCore.Extentions
 {
     public static class PermissionExtention
     {

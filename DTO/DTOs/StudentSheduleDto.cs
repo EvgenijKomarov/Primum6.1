@@ -8,7 +8,7 @@ namespace CoreConnection.DTOs
 {
     public class StudentSheduleDto
     {
-        public required string DayOfWeek { get; set; }
+        public required DayOfWeek DayOfWeek { get; set; }
 
         public required int Time { get; set; }
 

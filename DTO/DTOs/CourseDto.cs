@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreConnection.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,6 @@ namespace CoreConnection.DTOs
 
         public required bool IsActive { get; set; }
 
-        public required string ApproveStatus { get; set; }
+        public required StatusApprove ApproveStatus { get; set; }
     }
 }
