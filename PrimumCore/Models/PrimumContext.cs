@@ -102,12 +102,22 @@ public partial class PrimumContext : DbContext, IPrimumContext
         modelBuilder.Entity<Lesson>(entity =>
         {
             entity.HasKey(e => e.LessonId);
+            entity.HasIndex(e => e.LessonId).IsUnique();
             entity.Property(e => e.LessonId).ValueGeneratedOnAdd();
 
             entity.Property(e => e.DateTime).HasColumnType("datetime2");
 
             entity.HasOne(d => d.Abonement).WithMany(a => a.Lessons).HasForeignKey(d => d.AbonementId)
                 .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(d => d.Grading).WithOne(a => a.Lesson).HasForeignKey<StudentGrading>(d => d.LessonId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<StudentGrading>(entity =>
+        {
+            entity.HasKey(e => e.StudentGradingId);
+            entity.HasIndex(e => e.StudentGradingId).IsUnique();
+            entity.Property(e => e.StudentGradingId).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<StudentProfile>(entity =>
@@ -158,6 +168,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasIndex(e => e.AdminPermissionId).IsUnique();
             entity.Property(e => e.AdminPermissionId).ValueGeneratedOnAdd();
 
+            entity.Property(e => e.PromotionDate).HasColumnType("datetime2");
+
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.Permissions)
                 .HasForeignKey(e => e.AdminProfileId)
@@ -173,6 +185,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasKey(e => e.LogId);
             entity.HasIndex(e => e.LogId).IsUnique();
             entity.Property(e => e.LogId).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.DecisionDate).HasColumnType("datetime2");
 
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.IncendentLogs)

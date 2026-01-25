@@ -61,7 +61,8 @@ namespace PrimumCore.Services.Iterators
             iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
-                Description = $"Added cash ({cash} to userId {objUserId})"
+                Description = $"Added cash ({cash} to userId {objUserId})",
+                DecisionDate = DateTime.Now
             });
             await context.SaveChangesAsync();
             return objUserId;
@@ -116,7 +117,8 @@ namespace PrimumCore.Services.Iterators
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description = 
                 $"Given permissions: {permissionsToGive.ToString()}\n" +
-                $"Taken permissions: {permissionsToTake.ToString()}"
+                $"Taken permissions: {permissionsToTake.ToString()}",
+                DecisionDate = DateTime.Now
             });
 
             await context.SaveChangesAsync();
@@ -140,7 +142,8 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description =
-                $"Created AdminProfile to {objUserId}"
+                $"Created AdminProfile to {objUserId}",
+                DecisionDate = DateTime.Now
             });
             await context.SaveChangesAsync();
             return user.Id;
@@ -164,7 +167,8 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description =
-                $"Deleted AdminProfile to {objUserId}"
+                $"Deleted AdminProfile to {objUserId}",
+                DecisionDate = DateTime.Now
             });
             await context.SaveChangesAsync();
             return user.Id;

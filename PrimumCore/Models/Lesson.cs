@@ -21,4 +21,6 @@ public partial class Lesson
     public LessonStatus Status { get; set; } = LessonStatus.Waiting;
 
     public virtual Abonement Abonement { get; set; } = null!;
+
+    public virtual StudentGrading? Grading { get; set; }
 }

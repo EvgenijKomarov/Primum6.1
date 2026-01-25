@@ -34,6 +34,7 @@ namespace PrimumCore.Services.Iterators
                     LogId = x.LogId,
                     AdminUserId = x.AdminProfile.User.Id,
                     AdminDisplayName = x.AdminProfile.User.DisplayName,
+                    DateTime = x.DecisionDate,
                     Description = x.Description
                 })
                 .ToArrayAsync();
@@ -52,6 +53,7 @@ namespace PrimumCore.Services.Iterators
                     LogId = x.LogId,
                     AdminUserId = x.AdminProfile.User.Id,
                     AdminDisplayName = x.AdminProfile.User.DisplayName,
+                    DateTime = x.DecisionDate,
                     Description = x.Description
                 })
                 .FirstOrDefaultAsync(x => x.LogId == logId);
@@ -89,7 +91,8 @@ namespace PrimumCore.Services.Iterators
                 Description = $"Info:\n" +
                 $"{dto.IncendentInfo}\n" +
                 $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
-                $"Decision: {dto.Decision.ToString()}"
+                $"Decision: {dto.Decision.ToString()}",
+                DecisionDate = DateTime.Now
             });
 
             await context.SaveChangesAsync();
