@@ -21,6 +21,14 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)
             => Ok(await iterator.RegUser(dto));
 
+        [HttpPatch("deposit/{userId}")]
+        public async Task<IActionResult> DepositMoney([FromRoute] int userId, [FromQuery] long cash)
+            => Ok(await iterator.AddMoney(userId, cash));
+
+        [HttpPatch("withdrawn/{userId}")]
+        public async Task<IActionResult> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash)
+            => Ok(await iterator.GetMoney(userId, cash));
+
         [HttpPost("send-email-verification/{userId}")]
         public async Task<IActionResult> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
             => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));

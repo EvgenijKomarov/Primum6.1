@@ -15,6 +15,10 @@ namespace PrimumCore.Controllers
         AbonementIterator abonementIterator,
         GradingIterator gradingIterator) : PrimumController
     {
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetTeacherProfile([FromRoute] int userId)
+            => Ok(await teacherIterator.GetTeacher(userId));
+
         [HttpGet("lessons")]
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
             => Ok(await lessonIterator.GetTeacherLessons(userId));

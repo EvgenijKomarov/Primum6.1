@@ -13,6 +13,10 @@ namespace PrimumCore.Controllers
         PromocodeIterator promocodeIterator
         ) : PrimumController
     {
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetStudentProfile([FromRoute] int userId)
+            => Ok(await studentIterator.GetStudentProfile(userId));
+
         [HttpGet("lessons")]
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
             => Ok(await lessonIterator.GetStudentLessons(userId));

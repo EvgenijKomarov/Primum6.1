@@ -11,6 +11,20 @@ namespace PrimumCore.Services.Iterators
 {
     public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, IPublisher publisher)
     {
+        public async Task<StudentProfileDto> GetStudentProfile(int studentId)
+        {
+            var user = await context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .FirstOrDefaultAsync(x => x.Id == studentId);
+            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+
+            return new StudentProfileDto 
+            { 
+                DisplayName = user.Name,
+                UserId = user.Id
+            };
+        }
+
         public async Task<int> SubscribeToCourse(int studentId, int courseId, int teacherSheduleId)
         {
             var user = await context.Set<User>()

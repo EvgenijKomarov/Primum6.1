@@ -24,7 +24,7 @@ namespace PrimumCore.Services.Iterators
             return (user.Id, string.Empty);
         }
 
-        public async Task<int> AddMoney(int userId, int cash)
+        public async Task<long> AddMoney(int userId, long cash)
         {
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == userId);
@@ -33,7 +33,20 @@ namespace PrimumCore.Services.Iterators
             user.Cash += cash;
 
             await context.SaveChangesAsync();
-            return user.Id;
+            return user.Cash;
+        }
+
+        public async Task<long> GetMoney(int userId, long cash)
+        {
+            var user = await context.Set<User>()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            if (user.Cash < cash) { cash = user.Cash; }
+            user.Cash -= cash;
+
+            await context.SaveChangesAsync();
+            return cash;
         }
 
         public async Task<int> RegUser(RegistrationInputDto dto)
