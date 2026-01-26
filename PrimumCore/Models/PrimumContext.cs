@@ -43,6 +43,8 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     public virtual DbSet<Promocode> Promocodes { get; set; }
 
+    public virtual DbSet<VerificationToken> VerificationTokens { get; set; }
+
     DatabaseFacade IPrimumContext.Database => base.Database;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -206,6 +208,18 @@ public partial class PrimumContext : DbContext, IPrimumContext
                 .WithMany(e => e.Promocodes)
                 .HasForeignKey(e => e.StudentId)
                 .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<VerificationToken>(entity =>
+        {
+            entity.HasKey(e => e.TokenId);
+            entity.HasIndex(e => e.TokenId).IsUnique();
+            entity.Property(e => e.TokenId).ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.User)
+                .WithMany(e => e.VerificationTokens)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<User>(entity =>

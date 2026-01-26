@@ -85,7 +85,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(c => c.Teacher)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .StudentProfile

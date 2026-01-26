@@ -73,7 +73,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.TeacherShedules)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
             if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             if (Enum.TryParse(sheduleDto.DayOfWeek, out DayOfWeek dtoDayofWeek)) { throw new Exception("Can't parse day of week"); }
@@ -98,7 +97,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(e => e.AbonementShedule)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
             if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
@@ -124,7 +122,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .StudentProfile
@@ -156,7 +153,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             var abonementShedule = user
                 .StudentProfile

@@ -14,7 +14,7 @@ namespace CoreConnection.DTOs
 
         public string Patronymic { get; set; } = null!;
 
-        public string Login {  get; set; } = null!;
+        public string MailAdress {  get; set; } = null!;
 
         public string Password { get; set; } = null!;
     }

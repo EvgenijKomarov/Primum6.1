@@ -59,7 +59,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.CourseTheme)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             return user
                 .StudentProfile
@@ -88,7 +87,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             var abonement = user
                 .StudentProfile
@@ -108,7 +106,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             var abonement = user
                 .StudentProfile
@@ -131,7 +128,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
 
             var abonement = user
                 .StudentProfile

@@ -9,7 +9,7 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public string Login { get; set; } = null!;
+    public string MailAdress { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
@@ -19,7 +19,9 @@ public partial class User
 
     public long Cash { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool IsBanned { get; set; } = false;
+
+    public bool IsMailChecked { get; set; } = false;
 
     public StudentProfile? StudentProfile { get; set; }
 
@@ -27,5 +29,9 @@ public partial class User
 
     public AdminProfile? AdminProfile { get; set; }
 
-    public string DisplayName => $"{Surname} {Name}";
+    public virtual ICollection<VerificationToken> VerificationTokens { get; set; } = new List<VerificationToken>();
+
+    public string DisplayName => $"{Surname} {Name} {Patronymic}";
+
+    public bool IsAvailable => !IsBanned && IsMailChecked;
 }

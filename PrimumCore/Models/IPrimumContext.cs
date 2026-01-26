@@ -23,6 +23,7 @@ namespace PrimumCore.Models
         DbSet<AdminPermission> Permissions { get; set; }
         DbSet<IncendentLog> IncendentLogs { get; set; }
         DbSet<Promocode> Promocodes { get; set; }
+        DbSet<VerificationToken> VerificationTokens { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

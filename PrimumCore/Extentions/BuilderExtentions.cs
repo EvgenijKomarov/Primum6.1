@@ -29,6 +29,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<AbonementIterator>();
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
+            builder.Services.AddScoped<RandomStringGenerator>();
 
             return builder;
         }

@@ -38,7 +38,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.Login}\n" +
+                        $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}"
                     })
                     .ToList()
@@ -58,7 +58,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.Login}"
+                        $"Login: {x.MailAdress}"
                     })
                     .ToList()
             },
@@ -119,7 +119,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.Login}\n" +
+                        $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}"
                     })
                     .ToList()
@@ -139,7 +139,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.Login}"
+                        $"Mail: {x.MailAdress}"
                     })
                     .ToList()
             },
@@ -179,7 +179,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.Login}\n" +
+                        $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}"
                     })
                     .ToList()

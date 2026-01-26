@@ -1,17 +1,24 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
+using PrimumCore.Models.Enums;
+using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(IPrimumContext context, PasswordHasher passwordHasher)
+    public class UserIterator(IPrimumContext context, 
+        PasswordHasher passwordHasher, 
+        IPublisher publisher,
+        RandomStringGenerator randomGenerator)
     {
-        public async Task<(int?, string)> Login(string login, string password)
+        public async Task<(int?, string)> Login(string mailAdress, string password)
         {
             var user = await context.Set<User>()
-                .FirstOrDefaultAsync(x => x.Login == login);
+                .FirstOrDefaultAsync(x => x.MailAdress == mailAdress);
             if (user is null) { return (null, "Unknown login"); }
 
             if (!passwordHasher.VerifyPassword(password, user.Password)) { return (null, "Wrong password"); }
@@ -20,20 +27,76 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> RegUser(RegistrationInputDto dto)
         {
-            if (await context.Set<User>().AnyAsync(x => x.Login == dto.Login)) { throw new Exception("User with the same login already exists"); }
+            if (!new EmailAddressAttribute().IsValid(dto.MailAdress)) 
+            { throw new Exception("Adress not valid"); }
+
+            if (await context.Set<User>()
+                .AnyAsync(x => x.MailAdress == dto.MailAdress)) 
+            { throw new Exception("User with the same adress already exists"); }
 
             var user = new User
             {
                 Name = dto.Name,
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
-                Login = dto.Login,
-                Password = passwordHasher.HashPassword(dto.Password)
+                MailAdress = dto.MailAdress,
+                Password = passwordHasher.HashPassword(dto.Password),
+                Cash = 0
             };
-
             context.Set<User>().Add(user);
             await context.SaveChangesAsync();
 
+            return user.Id;
+        }
+
+        public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
+        {
+            var user = await context.Set<User>()
+                .Include(x => x.VerificationTokens)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            if(correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
+
+            var token = new VerificationToken
+            {
+                User = user,
+                Token = randomGenerator.GenerateRandomString(),
+                LifeTime = DateTime.Now.AddHours(12),
+                Meaning = TokenMeaning.EmailVerification
+            };
+            context.Set<VerificationToken>().Add(token);
+
+            await publisher.PublishAsync(new UserVerificationNotification
+            {
+                EmailAdress = user.MailAdress,
+                VerificationHash = token.Token,
+                Userid = user.Id
+            });
+
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+
+        public async Task<int> ConfirmToken(int userId, string inputToken)
+        {
+            var user = await context.Set<User>()
+                .Include(x => x.VerificationTokens)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);
+            if (token is null) { throw new Exception("Token not found"); }
+            if (token.LifeTime < DateTime.Now) { throw new Exception("Token expired"); }
+            if (token.IsUsed) { throw new Exception("Token is used"); }
+
+            token.IsUsed = true;
+            switch (token.Meaning) {
+                case TokenMeaning.EmailVerification:
+                    user.IsMailChecked = true;
+                    break;
+            }
+            await context.SaveChangesAsync();
             return user.Id;
         }
 

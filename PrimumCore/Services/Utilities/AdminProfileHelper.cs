@@ -23,7 +23,6 @@ namespace PrimumCore.Services.Utilities
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (user is null || user.AdminProfile is null) { throw new Exception("Iterator admin not found"); }
-            if (!user.IsActive) { throw new Exception("User is not active"); }
             return user;
         }
 
