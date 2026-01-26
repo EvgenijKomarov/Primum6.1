@@ -1,0 +1,68 @@
+﻿using CoreConnection.Notifications;
+using Microsoft.EntityFrameworkCore;
+using PrimumCore.Models;
+using PrimumCore.Models.Enums;
+using PrimumCore.Services.Connectors;
+using PrimumCore.Services.Utilities;
+
+namespace PrimumCore.Services.Iterators
+{
+    public class TokenIterator(IPrimumContext context,
+        RandomStringGenerator randomGenerator,
+        IPublisher publisher)
+    {
+        public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
+        {
+            var user = await context.Set<User>()
+                .Include(x => x.VerificationTokens)
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
+
+            var token = new VerificationToken
+            {
+                User = user,
+                Token = randomGenerator.GenerateRandomString(),
+                LifeTime = DateTime.Now.AddHours(12),
+                Meaning = TokenMeaning.EmailVerification
+            };
+            context.Set<VerificationToken>().Add(token);
+
+            await publisher.PublishAsync(new UserVerificationNotification
+            {
+                EmailAdress = user.MailAdress,
+                VerificationHash = token.Token,
+                Userid = user.Id
+            });
+
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+
+        public async Task<int> ConfirmToken(int userId, string inputToken)
+        {
+            var user = await context.Set<User>()
+                .Include(x => x.VerificationTokens)
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);
+            if (token is null) { throw new Exception("Token not found"); }
+            if (token.LifeTime < DateTime.Now) { throw new Exception("Token expired"); }
+            if (token.IsUsed) { throw new Exception("Token is used"); }
+
+            token.IsUsed = true;
+            switch (token.Meaning)
+            {
+                case TokenMeaning.EmailVerification:
+                    user.IsMailChecked = true;
+                    break;
+            }
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+    }
+}

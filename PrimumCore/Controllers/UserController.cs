@@ -7,7 +7,7 @@ namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class UserController(UserIterator iterator) : PrimumController
+    public class UserController(UserIterator iterator, TokenIterator tokenIterator) : PrimumController
     {
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] string mailAdress, [FromQuery] string password)
@@ -23,11 +23,11 @@ namespace PrimumCore.Controllers
 
         [HttpPost("send-email-verification/{userId}")]
         public async Task<IActionResult> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
-            => Ok(await iterator.SendEmailVerification(userId, correctiveMail));
+            => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));
 
         [HttpPost("confirm-email/{userId}")]
         public async Task<IActionResult> ConfirmEmail([FromRoute] int userId, [FromQuery] string token)
-            => Ok(await iterator.ConfirmToken(userId, token));
+            => Ok(await tokenIterator.ConfirmToken(userId, token));
 
         [HttpPost("create-teacher-profile/{userId}")]
         public async Task<IActionResult> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
