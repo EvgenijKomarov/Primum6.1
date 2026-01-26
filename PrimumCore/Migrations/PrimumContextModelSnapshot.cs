@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrimumCore.Models;
 
@@ -15,39 +16,40 @@ namespace PrimumCore.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("PrimumCore.Models.Abonement", b =>
                 {
                     b.Property<int>("AbonementId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonementId"));
 
                     b.Property<int>("AbonementStatus")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("CourseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PaidLessons")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("PricePerLesson")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("AbonementId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("AbonementId");
+
+                    b.HasIndex("AbonementId")
+                        .IsUnique();
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex(new[] { "AbonementId" }, "IX_Abonements_AbonementId")
-                        .IsUnique();
 
                     b.ToTable("Abonements");
                 });
@@ -56,20 +58,22 @@ namespace PrimumCore.Migrations
                 {
                     b.Property<int>("AbonementSheduleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonementSheduleId"));
 
                     b.Property<int>("AbonementId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastIteration")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("TeacherSheduleId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("AbonementSheduleId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("AbonementSheduleId");
+
+                    b.HasIndex("AbonementId");
 
                     b.HasIndex("TeacherSheduleId")
                         .IsUnique();
@@ -77,32 +81,58 @@ namespace PrimumCore.Migrations
                     b.ToTable("AbonementShedules");
                 });
 
+            modelBuilder.Entity("PrimumCore.Models.AdminPermission", b =>
+                {
+                    b.Property<int>("AdminPermissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminPermissionId"));
+
+                    b.Property<int>("AdminProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Permission")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PromoterAdminProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PromotionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("AdminPermissionId");
+
+                    b.HasIndex("AdminPermissionId")
+                        .IsUnique();
+
+                    b.HasIndex("AdminProfileId");
+
+                    b.HasIndex("PromoterAdminProfileId");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("PrimumCore.Models.AdminProfile", b =>
                 {
                     b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
 
-                    b.Property<byte[]>("Permissions")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("BLOB")
-                        .HasDefaultValueSql("0");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
 
                     b.Property<string>("Status")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("AdminId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("AdminId");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("AdminId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "AdminId" }, "IX_AdminProfiles_AdminId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("AdminProfiles");
@@ -112,93 +142,234 @@ namespace PrimumCore.Migrations
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseThemeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("FreeLessons")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasDefaultValue(1);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MaxLessons")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasDefaultValue(1);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("CourseId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("CourseId");
+
+                    b.HasIndex("CourseId")
+                        .IsUnique();
+
+                    b.HasIndex("CourseThemeId");
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex(new[] { "CourseId" }, "IX_Courses_CourseId")
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.CourseTheme", b =>
+                {
+                    b.Property<int>("CourseThemeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseThemeId"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ThemeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourseThemeId");
+
+                    b.HasIndex("CourseThemeId")
                         .IsUnique();
 
-                    b.ToTable("Courses");
+                    b.ToTable("CourseThemes");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.IncendentLog", b =>
+                {
+                    b.Property<int>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"));
+
+                    b.Property<int>("AdminProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DecisionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRevisioned")
+                        .HasColumnType("bit");
+
+                    b.HasKey("LogId");
+
+                    b.HasIndex("AdminProfileId");
+
+                    b.HasIndex("LogId")
+                        .IsUnique();
+
+                    b.ToTable("IncendentLogs");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Lesson", b =>
                 {
                     b.Property<int>("LessonId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LessonId"));
 
                     b.Property<int>("AbonementId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("StudentLink")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeacherLink")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LessonId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("LessonId");
 
                     b.HasIndex("AbonementId");
 
+                    b.HasIndex("LessonId")
+                        .IsUnique();
+
                     b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.Promocode", b =>
+                {
+                    b.Property<int>("PromocodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromocodeId"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CoinsPrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PromocodeId");
+
+                    b.HasIndex("PromocodeId")
+                        .IsUnique();
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Promocodes");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.StudentGrading", b =>
+                {
+                    b.Property<int>("StudentGradingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentGradingId"));
+
+                    b.Property<int>("HomeworkGrade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LessonActivityGrade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RepetitionOfMaterialGrade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudyInitiativeGrade")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentGradingId");
+
+                    b.HasIndex("LessonId")
+                        .IsUnique();
+
+                    b.HasIndex("StudentGradingId")
+                        .IsUnique();
+
+                    b.ToTable("StudentGrading");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.StudentProfile", b =>
                 {
                     b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    b.Property<int>("Coins")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("StudentId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("StudentId");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("StudentId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "StudentId" }, "IX_StudentProfiles_StudentId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("StudentProfiles");
@@ -208,25 +379,29 @@ namespace PrimumCore.Migrations
                 {
                     b.Property<int>("TeacherId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
 
                     b.Property<string>("About")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    b.Property<float>("EarningMultiplier")
+                        .HasColumnType("real");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("TeacherId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("TeacherId");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("TeacherId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "TeacherId" }, "IX_TeacherProfiles_TeacherId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("TeacherProfiles");
@@ -236,24 +411,24 @@ namespace PrimumCore.Migrations
                 {
                     b.Property<int>("TeacherSheduleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherSheduleId"));
 
                     b.Property<int>("DayOfWeek")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Time")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.HasKey("TeacherSheduleId")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("TeacherSheduleId");
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex(new[] { "TeacherSheduleId" }, "IX_TeacherShedules_TeacherSheduleId")
+                    b.HasIndex("TeacherSheduleId")
                         .IsUnique();
 
                     b.ToTable("TeacherShedules");
@@ -263,29 +438,81 @@ namespace PrimumCore.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("0");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("Cash")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMailChecked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MailAdress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Patronymic")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id")
-                        .HasAnnotation("Sqlite:Autoincrement", true);
+                    b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "IX_Users_Id")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.VerificationToken", b =>
+                {
+                    b.Property<int>("TokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TokenId"));
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LifeTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Meaning")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TokenId");
+
+                    b.HasIndex("TokenId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("VerificationTokens");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Abonement", b =>
@@ -293,13 +520,13 @@ namespace PrimumCore.Migrations
                     b.HasOne("PrimumCore.Models.Course", "Course")
                         .WithMany("Abonements")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PrimumCore.Models.StudentProfile", "Student")
                         .WithMany("Abonements")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -311,14 +538,14 @@ namespace PrimumCore.Migrations
                 {
                     b.HasOne("PrimumCore.Models.Abonement", "Abonement")
                         .WithMany("AbonementShedules")
-                        .HasForeignKey("AbonementSheduleId")
+                        .HasForeignKey("AbonementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PrimumCore.Models.TeacherShedule", "TeacherShedule")
                         .WithOne("AbonementShedule")
                         .HasForeignKey("PrimumCore.Models.AbonementShedule", "TeacherSheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Abonement");
@@ -326,12 +553,30 @@ namespace PrimumCore.Migrations
                     b.Navigation("TeacherShedule");
                 });
 
+            modelBuilder.Entity("PrimumCore.Models.AdminPermission", b =>
+                {
+                    b.HasOne("PrimumCore.Models.AdminProfile", "AdminProfile")
+                        .WithMany("Permissions")
+                        .HasForeignKey("AdminProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrimumCore.Models.AdminProfile", "PromoterAdminProfile")
+                        .WithMany("GivenPermissions")
+                        .HasForeignKey("PromoterAdminProfileId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("AdminProfile");
+
+                    b.Navigation("PromoterAdminProfile");
+                });
+
             modelBuilder.Entity("PrimumCore.Models.AdminProfile", b =>
                 {
                     b.HasOne("PrimumCore.Models.User", "User")
                         .WithOne("AdminProfile")
                         .HasForeignKey("PrimumCore.Models.AdminProfile", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -339,13 +584,32 @@ namespace PrimumCore.Migrations
 
             modelBuilder.Entity("PrimumCore.Models.Course", b =>
                 {
+                    b.HasOne("PrimumCore.Models.CourseTheme", "CourseTheme")
+                        .WithMany("Courses")
+                        .HasForeignKey("CourseThemeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PrimumCore.Models.TeacherProfile", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("CourseTheme");
+
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.IncendentLog", b =>
+                {
+                    b.HasOne("PrimumCore.Models.AdminProfile", "AdminProfile")
+                        .WithMany("IncendentLogs")
+                        .HasForeignKey("AdminProfileId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AdminProfile");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Lesson", b =>
@@ -353,10 +617,31 @@ namespace PrimumCore.Migrations
                     b.HasOne("PrimumCore.Models.Abonement", "Abonement")
                         .WithMany("Lessons")
                         .HasForeignKey("AbonementId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Abonement");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.Promocode", b =>
+                {
+                    b.HasOne("PrimumCore.Models.StudentProfile", "Student")
+                        .WithMany("Promocodes")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.StudentGrading", b =>
+                {
+                    b.HasOne("PrimumCore.Models.Lesson", "Lesson")
+                        .WithOne("Grading")
+                        .HasForeignKey("PrimumCore.Models.StudentGrading", "LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.StudentProfile", b =>
@@ -364,7 +649,7 @@ namespace PrimumCore.Migrations
                     b.HasOne("PrimumCore.Models.User", "User")
                         .WithOne("StudentProfile")
                         .HasForeignKey("PrimumCore.Models.StudentProfile", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -375,7 +660,7 @@ namespace PrimumCore.Migrations
                     b.HasOne("PrimumCore.Models.User", "User")
                         .WithOne("TeacherProfile")
                         .HasForeignKey("PrimumCore.Models.TeacherProfile", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -392,6 +677,17 @@ namespace PrimumCore.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("PrimumCore.Models.VerificationToken", b =>
+                {
+                    b.HasOne("PrimumCore.Models.User", "User")
+                        .WithMany("VerificationTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PrimumCore.Models.Abonement", b =>
                 {
                     b.Navigation("AbonementShedules");
@@ -399,14 +695,35 @@ namespace PrimumCore.Migrations
                     b.Navigation("Lessons");
                 });
 
+            modelBuilder.Entity("PrimumCore.Models.AdminProfile", b =>
+                {
+                    b.Navigation("GivenPermissions");
+
+                    b.Navigation("IncendentLogs");
+
+                    b.Navigation("Permissions");
+                });
+
             modelBuilder.Entity("PrimumCore.Models.Course", b =>
                 {
                     b.Navigation("Abonements");
                 });
 
+            modelBuilder.Entity("PrimumCore.Models.CourseTheme", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("PrimumCore.Models.Lesson", b =>
+                {
+                    b.Navigation("Grading");
+                });
+
             modelBuilder.Entity("PrimumCore.Models.StudentProfile", b =>
                 {
                     b.Navigation("Abonements");
+
+                    b.Navigation("Promocodes");
                 });
 
             modelBuilder.Entity("PrimumCore.Models.TeacherProfile", b =>
@@ -428,6 +745,8 @@ namespace PrimumCore.Migrations
                     b.Navigation("StudentProfile");
 
                     b.Navigation("TeacherProfile");
+
+                    b.Navigation("VerificationTokens");
                 });
 #pragma warning restore 612, 618
         }

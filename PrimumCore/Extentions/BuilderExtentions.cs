@@ -1,6 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PrimumCore.BackgroundWorkers;
+using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
 using PrimumCore.Models;
+using PrimumCore.Options;
+using PrimumCore.Services.Connectors;
+using PrimumCore.Services.Iterators;
+using PrimumCore.Services.Utilities;
+using Serilog;
 
 namespace PrimumCore.Extentions
 {
@@ -8,6 +15,22 @@ namespace PrimumCore.Extentions
     {
         public static WebApplicationBuilder AddDI(this WebApplicationBuilder builder)
         {
+            builder.Services.AddScoped<StudentIterator>();
+            builder.Services.AddScoped<TeacherIterator>();
+            builder.Services.AddScoped<AdminIterator>();
+            builder.Services.AddScoped<UserIterator>();
+            builder.Services.AddScoped<IncendentIterator>();
+            builder.Services.AddScoped<CourseIterator>();
+            builder.Services.AddScoped<SheduleIterator>();
+            builder.Services.AddScoped<LessonIterator>();
+            builder.Services.AddScoped<ThemeIterator>();
+            builder.Services.AddScoped<GradingIterator>();
+            builder.Services.AddScoped<PromocodeIterator>();
+            builder.Services.AddScoped<AbonementIterator>();
+            builder.Services.AddScoped<PasswordHasher>();
+            builder.Services.AddScoped<ConverterToDateTimeService>();
+            builder.Services.AddScoped<RandomStringGenerator>();
+            builder.Services.AddScoped<TokenIterator>();
 
             return builder;
         }
@@ -16,7 +39,60 @@ namespace PrimumCore.Extentions
         {
             builder.Services.AddScoped<StudentController>();
             builder.Services.AddScoped<UserController>();
+            builder.Services.AddScoped<TeacherController>();
+            builder.Services.AddScoped<AdminController>();
+            builder.Services.AddScoped<PublicController>();
 
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPeriodWorkers(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddHostedService<LessonWarningWorker>();
+            builder.Services.AddHostedService<LessonIteratorWorker>();
+            builder.Services.AddHostedService<LessonCreatingWorker>();
+
+            //executors
+            builder.Services.AddSingleton<LessonWarningExecutor>();
+            builder.Services.AddSingleton<LessonIteratorExecutor>();
+            builder.Services.AddSingleton<LessonCreatingExecutor>();
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddSettings(this WebApplicationBuilder builder)
+        {
+            builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
+        {
+            var rabbitMqSection = builder.Configuration.GetSection("RabbitMQ");
+            var isFake = rabbitMqSection.GetValue<bool>("IsFake");
+
+            if (isFake)
+            {
+                builder.Services.AddScoped<FakePublisher>();
+                builder.Services.AddScoped<IPublisher>(provider =>
+                    provider.GetRequiredService<FakePublisher>());
+            }
+            else
+            {
+                builder.Services.AddSingleton<RabbitMQConnection>();
+                builder.Services.AddScoped<RabbitMQMessagePublisher>();
+                builder.Services.AddScoped<IPublisher>(provider =>
+                    provider.GetRequiredService<RabbitMQMessagePublisher>());
+            }
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration));
 
             return builder;
         }
@@ -26,7 +102,7 @@ namespace PrimumCore.Extentions
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<PrimumContext>(options =>
-                options.UseSqlite(connectionString));
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IPrimumContext>(provider =>
                 provider.GetRequiredService<PrimumContext>());

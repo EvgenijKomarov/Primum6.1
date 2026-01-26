@@ -8,7 +8,9 @@ public partial class TeacherProfile
 {
     public int TeacherId { get; set; }
 
-    public string? About { get; set; }
+    public string About { get; set; } = null!;
+
+    public float EarningMultiplier { get; set; } = 0.5f;
 
     public int UserId { get; set; }
 
@@ -19,4 +21,6 @@ public partial class TeacherProfile
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 
     public virtual ICollection<TeacherShedule> TeacherShedules { get; set; } = new List<TeacherShedule>();
+
+    public bool IsAvailable => ApproveStatus == ApproveStatus.Approved;
 }

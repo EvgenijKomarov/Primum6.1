@@ -1,79 +1,48 @@
-﻿using DTO;
-using DTO.DTOs;
+﻿using CoreConnection.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PrimumCore.Models;
-using PrimumPlatformModel.Models.Enums;
+using PrimumCore.Services.Iterators;
+using Serilog;
 
 namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class UserController(IPrimumContext context) : PrimumController
+    public class UserController(UserIterator iterator, TokenIterator tokenIterator) : PrimumController
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        [HttpGet("login")]
+        public async Task<IActionResult> Login([FromQuery] string mailAdress, [FromQuery] string password)
         {
-            var user = context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .Include(u => u.TeacherProfile)
-                .Include(u => u.AdminProfile)
-                .FirstOrDefault(x => x.Id == id);
-            if (user is null) { return NotFound(); }
-
-            return Ok(new UserDTO
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                Password = user.Password,
-                IsApprovedStudent = user.StudentProfile is not null ? 
-                    user.StudentProfile.ApproveStatus == ApproveStatus.Approved : null,
-                IsApprovedTeacher = user.TeacherProfile is not null ? 
-                    user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : null,
-                IsApprovedAdmin = user.AdminProfile is not null
-            });
+            var result = await iterator.Login(mailAdress, password);
+            if (result.Item1 is null) { return Unauthorized(result.Item2); }
+            return Ok(result.Item1);
         }
 
-        [HttpPost("reg-teacher")]
-        public async Task<IActionResult> RegTeacher([FromBody] UserDTO dto, [FromBody] string about)
-        {
-            var user = new User
-            {
-                Name = dto.Name,
-                Surname = dto.Surname,
-                Patronymic = dto.Patronymic,
-                Password = dto.Password,
-                TeacherProfile = new TeacherProfile
-                {
-                    About = about
-                }
-            };
+        [HttpPost("register")]
+        public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)
+            => Ok(await iterator.RegUser(dto));
 
-            context.Set<User>().Add(user);
-            await context.SaveChangesAsync();
+        [HttpPatch("deposit/{userId}")]
+        public async Task<IActionResult> DepositMoney([FromRoute] int userId, [FromQuery] long cash)
+            => Ok(await iterator.AddMoney(userId, cash));
 
-            return Ok(user.Id);
-        }
+        [HttpPatch("withdrawn/{userId}")]
+        public async Task<IActionResult> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash)
+            => Ok(await iterator.GetMoney(userId, cash));
 
+        [HttpPost("send-email-verification/{userId}")]
+        public async Task<IActionResult> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
+            => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));
 
-        [HttpPost("reg-user")]
-        public async Task<IActionResult> RegStudent([FromBody] UserDTO dto)
-        {
-            var user = new User
-            {
-                Name = dto.Name,
-                Surname = dto.Surname,
-                Patronymic = dto.Patronymic,
-                Password = dto.Password,
-                StudentProfile = new StudentProfile()
-            };
+        [HttpPost("confirm-email/{userId}")]
+        public async Task<IActionResult> ConfirmEmail([FromRoute] int userId, [FromQuery] string token)
+            => Ok(await tokenIterator.ConfirmToken(userId, token));
 
-            context.Set<User>().Add(user);
-            await context.SaveChangesAsync();
+        [HttpPost("create-teacher-profile/{userId}")]
+        public async Task<IActionResult> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
+            => Ok(await iterator.CreateTeacherProfile(userId, about));
 
-            return Ok(user.Id);
-        }
+        [HttpPost("create-student-profile/{userId}")]
+        public async Task<IActionResult> CreateStudentProfile([FromRoute] int userId)
+            => Ok(await iterator.CreateStudentProfile(userId));
     }
 }

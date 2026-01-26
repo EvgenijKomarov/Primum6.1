@@ -14,8 +14,6 @@ public partial class Abonement
 
     public int PricePerLesson { get; set; }
 
-    public int PaidLessons { get; set; }
-
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 
     public virtual Course Course { get; set; } = null!;
@@ -25,4 +23,6 @@ public partial class Abonement
     public virtual ICollection<AbonementShedule> AbonementShedules { get; set; } = new List<AbonementShedule>();
 
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
+
+    public bool IsAvailable => AbonementStatus == AbonementStatus.Active;
 }

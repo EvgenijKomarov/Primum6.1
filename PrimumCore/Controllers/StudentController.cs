@@ -1,115 +1,68 @@
-﻿using CoreConnection.DTOs;
-using DTO.DTOs;
-using DTO.Enums;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PrimumCore.Models;
-using PrimumPlatformModel.Models.Enums;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Mvc;
+using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/student/{userId}")]
-    public class StudentController(IPrimumContext context) : PrimumController
+    public class StudentController(
+        StudentIterator studentIterator,
+        SheduleIterator sheduleIterator,
+        LessonIterator lessonIterator,
+        AbonementIterator abonementIterator,
+        PromocodeIterator promocodeIterator
+        ) : PrimumController
     {
-        [HttpGet("lessons")]
-        public async Task<IActionResult> GetLessons(int userId)
-        {
-            var user = context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(a => a.Lessons)
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(a => a.Course)
-                .ThenInclude(c => c.Teacher)
-                .FirstOrDefault(x => x.Id == userId);
-            if (user is null || user.StudentProfile is null) { return NotFound(); }
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetStudentProfile([FromRoute] int userId)
+            => Ok(await studentIterator.GetStudentProfile(userId));
 
-            return Ok(user
-                .StudentProfile
-                .Abonements
-                .SelectMany(x => x.Lessons)
-                .Select(l => new LessonDto
-                {
-                    DateTime = l.DateTime,
-                    CourseName = l.Abonement.Course.Name,
-                    CourseId = l.Abonement.CourseId,
-                    AbonementId = l.AbonementId,
-                    LessonLink = l.StudentLink ?? string.Empty,
-                    TeacherName = l.Abonement.Course.Teacher.User.DisplayName,
-                    LessonStatus = (LessonStatusDto)l.Status
-                })
-            );
-        }
+        [HttpGet("lessons")]
+        public async Task<IActionResult> GetLessons([FromRoute] int userId) 
+            => Ok(await lessonIterator.GetStudentLessons(userId));
 
         [HttpGet("abonements")]
-        public async Task<IActionResult> GetAbonements(int userId)
-        {
-            var user = context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(a => a.Course)
-                .ThenInclude(c => c.Teacher)
-                .FirstOrDefault(x => x.Id == userId);
-            if (user is null || user.StudentProfile is null) { return NotFound(); }
+        public async Task<IActionResult> GetAbonements([FromRoute] int userId) 
+            => Ok(await abonementIterator.GetStudentAbonements(userId));
 
-            return Ok(user
-                .StudentProfile
-                .Abonements
-                .Select(a => new AbonementDto
-                {
-                    StudentName = user.DisplayName,
-                    TeacherName = a.Course.Teacher.User.DisplayName,
-                    CourseName = a.Course.Name,
-                    CourseId = a.CourseId,
-                    PricePerLesson = a.PricePerLesson,
-                    PaidLessons = a.PaidLessons,
-                    AbonementStatus = (AbonementStatusDto)a.AbonementStatus
-                }));
-        }
+        [HttpGet("shedules")]
+        public async Task<IActionResult> GetShedules([FromRoute] int userId)
+            => Ok(await sheduleIterator.GetStudentShedules(userId));
 
-        [HttpPost("subscribe-to-course/{courseId}")]
-        public async Task<IActionResult> RegToCourse(int userId, int courseId, [FromBody] SheduleDto teacherSheduleDto)
-        {
-            var user = context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .FirstOrDefault(x => x.Id == userId);
-            if (user is null || user.StudentProfile is null) { return NotFound(); }
+        [HttpGet("abonement/{abonementId}/shedules")]
+        public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await sheduleIterator.GetAbonementShedules(userId));
 
-            var abonement = user.StudentProfile.Abonements.FirstOrDefault(x => x.CourseId == courseId);
-            var course = context.Set<Course>()
-                .Include(x => x.Teacher)
-                .First(x => x.CourseId == courseId);
-            if (abonement is null) 
-            {
-                abonement = new Abonement
-                {
-                    CourseId = courseId,
-                    PricePerLesson = course.Price,
-                    StudentId = user.StudentProfile.StudentId
-                };
-                context.Set<Abonement>().Add(abonement);
-            }
+        [HttpGet("abonement/{abonementId}/lessons")]
+        public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await lessonIterator.GetAbonementLessons(userId, true));
 
-            var teacherShedule = context.Set<TeacherShedule>()
-                .Include(x => x.AbonementShedule)
-                .First(x =>
-                x.TeacherId == course.TeacherId &&
-                x.DayOfWeek == teacherSheduleDto.DayOfWeek &&
-                x.Time == teacherSheduleDto.Time);
+        [HttpGet("promocodes")]
+        public async Task<IActionResult> GetStudentPromocodes([FromRoute] int userId)
+            => Ok(await promocodeIterator.GetStudentPromocodes(userId));
 
-            if(teacherShedule.AbonementShedule is not null) {
-                teacherShedule.AbonementShedule = new AbonementShedule
-                {
-                    AbonementId = abonement.AbonementId
-                };
-            }
+        [HttpPatch("abonement/activate")]
+        public async Task<IActionResult> ActivateAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
+            => Ok(await abonementIterator.ActivateAbonement(userId, abonementId));
 
-            await context.SaveChangesAsync();
-            return Ok();
-        }
+        [HttpPatch("abonement/freeze")]
+        public async Task<IActionResult> FreezeAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
+            => Ok(await abonementIterator.FreezeAbonement(userId, abonementId));
+
+        [HttpDelete("abonement/delete")]
+        public async Task<IActionResult> DeleteAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
+            => Ok(await abonementIterator.DeleteAbonement(userId, abonementId));
+
+        [HttpPost("course/subscribe")]
+        public async Task<IActionResult> SubscribeToCourse([FromRoute] int userId, [FromQuery] int courseId, [FromQuery] int teacherSheduleId)
+            => Ok(await studentIterator.SubscribeToCourse(userId, courseId, teacherSheduleId));
+
+        [HttpPost("buy-promocode")]
+        public async Task<IActionResult> BuyPromocode([FromRoute] int userId, [FromQuery] int promocodeId)
+            => Ok(await promocodeIterator.BuyPromocode(userId, promocodeId));
+
+        [HttpDelete("shedule/delete")]
+        public async Task<IActionResult> DeleteShedule([FromRoute] int userId, [FromQuery] int abonementSheduleId) 
+            => Ok(await sheduleIterator.DeleteStudentShedule(userId, abonementSheduleId));
     }
 }

@@ -4,11 +4,17 @@ using PrimumCore.Extentions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.AddDI();
 builder.AddPrimumContext();
 builder.AddProjectControllers();
+builder.AddPeriodWorkers();
+builder.AddSettings();
+builder.AddPublishers();
+builder.AddLogging();
 
 var app = builder.Build();
 
@@ -20,14 +26,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
 
-//app.MapRazorPages();
 app.MapControllers();
 
 app.Run();

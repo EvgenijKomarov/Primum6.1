@@ -4,22 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.DTOs
+namespace CoreConnection.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
 
-        public string Password { get; set; }
+        public required string Name { get; set; }
 
-        public string? Name { get; set; }
+        public required string Surname { get; set; }
 
-        public string? Surname { get; set; }
+        public required string Patronymic { get; set; }
 
-        public string? Patronymic { get; set; }
+        public required string DisplayName { get; set; }
 
-        public bool? IsApprovedStudent { get; set; }
-        public bool? IsApprovedTeacher { get; set; }
-        public bool? IsApprovedAdmin { get; set; }
+        public required long Cash { get; set; }
+
+        public required bool IsBanned { get; set; }
+
+        public required bool MailConfirmed { get; set; }
+
+        public required bool? IsApprovedStudent { get; set; }
+
+        public required bool? IsApprovedTeacher { get; set; }
+
+        public required bool? IsAdmin {get; set; }
     }
 }

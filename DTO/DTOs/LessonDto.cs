@@ -1,28 +1,36 @@
-﻿using DTO.Enums;
+﻿using CoreConnection.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.DTOs
+namespace CoreConnection.DTOs
 {
     public class LessonDto
     {
-        public DateTime DateTime {  get; set; }
+        public required DateTime DateTime {  get; set; }
 
-        public string CourseName { get; set; }
+        public required string CourseName { get; set; }
 
-        public string TeacherName { get; set; }
+        public required int CourseId { get; set; }
 
-        public string StudentName { get; set; }
+        public required string TeacherDisplayName { get; set; }
 
-        public string LessonLink { get; set; }
+        public required int TeacherId { get; set; }
 
-        public int AbonementId { get; set; }
+        public required string StudentDisplayName { get; set; }
 
-        public int CourseId { get; set; }
+        public required int StudentId { get; set; }
 
-        public LessonStatusDto LessonStatus { get; set; }
+        public required string? LessonLink { get; set; }
+
+        public required int AbonementId { get; set; }
+
+        public required int Price { get; set; }
+
+        public required StatusLesson LessonStatus { get; set; }
+
+        public required float? Grade { get; set; }
     }
 }

@@ -10,6 +10,8 @@ public partial class Lesson
 
     public int AbonementId { get; set; }
 
+    public int Price { get; set; }
+
     public string? StudentLink { get; set; }
 
     public string? TeacherLink { get; set; }
@@ -19,4 +21,6 @@ public partial class Lesson
     public LessonStatus Status { get; set; } = LessonStatus.Waiting;
 
     public virtual Abonement Abonement { get; set; } = null!;
+
+    public virtual StudentGrading? Grading { get; set; }
 }
