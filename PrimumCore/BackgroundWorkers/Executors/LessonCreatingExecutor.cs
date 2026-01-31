@@ -30,7 +30,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 {
                     AbonementId = s.Abonement.AbonementId,
                     DateTime = freeDateTime,
-                    Price = s.Abonement.Course.FreeLessons >= s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
+                    Price = s.Abonement.Course.FreeLessons > s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
                     Status = LessonStatus.Waiting
                 };
                 context.Set<Lesson>().Add(lesson);

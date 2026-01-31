@@ -34,26 +34,26 @@ namespace PrimumCore.Services.Utilities
 
         protected virtual DateTime GetCurrentTime() => DateTime.Now;
 
-        public DayOfWeek GetDayOfWeek(string rusDOW)
+        public virtual DayOfWeek GetDayOfWeek(string rusDOW)
         {
             var dow = weekDays[rusDOW];
             return dow;
         }
 
-        public string GetRusTranslation(DayOfWeek dow)
+        public virtual string GetRusTranslation(DayOfWeek dow)
         {
             var translation = weekDays.First(x => x.Value == dow).Key;
             return translation;
         }
 
-        public DateTime GetNextSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
+        public virtual DateTime GetNextSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
             DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
             return date;
         }
 
-        public DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
+        public virtual DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
             DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
