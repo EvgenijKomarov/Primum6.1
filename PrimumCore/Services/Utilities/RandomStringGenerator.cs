@@ -4,7 +4,7 @@ namespace PrimumCore.Services.Utilities
 {
     public class RandomStringGenerator
     {
-        public string GenerateRandomString(int length = 10)
+        public virtual string GenerateRandomString(int length = 10)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz";
             var random = new Random();

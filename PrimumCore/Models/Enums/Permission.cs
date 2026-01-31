@@ -8,7 +8,7 @@ namespace PrimumCore.Models.Enums
         GivePermissions = 0,
         AddCash = 1,
         DeleteLessons = 2,
-        [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.SendToManager)]
+        [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.Approve)]
         [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.Delete)]
         [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.SendToAdministrator)]
         ModerateStudents = 3,
@@ -20,7 +20,7 @@ namespace PrimumCore.Models.Enums
         [AvailableIncendent(IncendentMeaningDto.Course, IncendentDecisionDto.Delete)]
         [AvailableIncendent(IncendentMeaningDto.Course, IncendentDecisionDto.SendToAdministrator)]
         ModerateCourses = 5,
-        [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.SendToManager)]
+        [AvailableIncendent(IncendentMeaningDto.Student, IncendentDecisionDto.Approve)]
         AdministrateStudents = 6,
         [AvailableIncendent(IncendentMeaningDto.Course, IncendentDecisionDto.SendToManager)] 
         AdministrateCourses = 7,

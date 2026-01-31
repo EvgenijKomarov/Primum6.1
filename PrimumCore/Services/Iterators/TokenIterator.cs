@@ -28,7 +28,7 @@ namespace PrimumCore.Services.Iterators
                 LifeTime = DateTime.Now.AddHours(12),
                 Meaning = TokenMeaning.EmailVerification
             };
-            context.Set<VerificationToken>().Add(token);
+            user.VerificationTokens.Add(token);
 
             await publisher.PublishAsync(new UserVerificationNotification
             {

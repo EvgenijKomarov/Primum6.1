@@ -12,11 +12,13 @@ namespace PrimumCore.Services.Utilities
     {
         public async Task<IEnumerable<IncendentDto>> GetIncedents(Permission[] permissions)
         {
-            IEnumerable<IncendentDto> incidents = new List<IncendentDto>();
+            var incidents = new List<IncendentDto>();
             foreach (var permission in permissions)
             {
-                if(!collectionRules.TryGetValue(permission, out Func<IEnumerable<IncendentDto>> rule)) { continue; }
-                incidents.Concat(rule.Invoke());
+                if(collectionRules.TryGetValue(permission, out var rule))
+                {
+                    incidents.AddRange(rule.Invoke());
+                }
             }
             return incidents;
         }

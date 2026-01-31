@@ -32,6 +32,8 @@ namespace PrimumCore.Services.Utilities
             [DayOfWeek.Sunday] = 6
         };
 
+        protected virtual DateTime GetCurrentTime() => DateTime.Now;
+
         public DayOfWeek GetDayOfWeek(string rusDOW)
         {
             var dow = weekDays[rusDOW];
@@ -46,16 +48,16 @@ namespace PrimumCore.Services.Utilities
 
         public DateTime GetNextSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
             return date;
         }
 
         public DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
-            date = (date - DateTime.Now).Days > blockedDays ? date : date.AddDays(7);
+            date = (date - GetCurrentTime()).Days > blockedDays ? date : date.AddDays(7);
             return date;
         }
     }

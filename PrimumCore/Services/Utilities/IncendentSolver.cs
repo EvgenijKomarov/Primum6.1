@@ -11,16 +11,29 @@ namespace PrimumCore.Services.Utilities
     public class IncendentSolver(IPrimumContext context)
     {
         //User should be identified
-        public async Task<int> SolveIncendent(Permission[] permissions, IncendentDecisionInputDto dto)
+        public async Task<int> SolveIncendent(int adminProfileId, Permission[] permissions, IncendentDecisionInputDto dto)
         {
             if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncendentDecisionDto, Task<int>> rule)) { throw new Exception("Unknown incindent"); }
-            if(permissions
+            if(!permissions
                 .Any(x => x.GetAvailableIncendentsAttributes()
                     .Any(y => y.Meaning == dto.Meaning && y.Decision == dto.Decision)
                     )
                 ) { throw new Exception("User haven't needed permissions"); }
 
-            return await rule.Invoke(dto.ObjectId, dto.Decision);
+            context.Set<IncendentLog>().Add(new IncendentLog
+            {
+                AdminProfileId = adminProfileId,
+                Description = $"Info:\n" +
+                $"{dto.IncendentInfo}\n" +
+                $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
+                $"Decision: {dto.Decision.ToString()}",
+                DecisionDate = DateTime.Now
+            });
+
+            var ruleResult = await rule.Invoke(dto.ObjectId, dto.Decision);
+            await context.SaveChangesAsync();
+
+            return ruleResult;
         }
 
         private Dictionary<IncendentMeaningDto, Func<int, IncendentDecisionDto, Task<int>>> solvingRules
@@ -47,7 +60,7 @@ namespace PrimumCore.Services.Utilities
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
                         case IncendentDecisionDto.Approve:
-                            user.TeacherProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
+                            user.TeacherProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncendentDecisionDto.Delete:
                             context.Set<TeacherShedule>().RemoveRange(user.TeacherProfile.TeacherShedules);
@@ -76,7 +89,7 @@ namespace PrimumCore.Services.Utilities
                             user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
                         case IncendentDecisionDto.Approve:
-                            user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
+                            user.StudentProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncendentDecisionDto.Delete:
                             context.Set<AbonementShedule>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.AbonementShedules));
@@ -106,7 +119,7 @@ namespace PrimumCore.Services.Utilities
                             course.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
                         case IncendentDecisionDto.Approve:
-                            course.ApproveStatus = ApproveStatus.NeedAdministratorReview;
+                            course.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncendentDecisionDto.SendToManager:
                             course.ApproveStatus = ApproveStatus.NeedManagerReview;
@@ -132,7 +145,7 @@ namespace PrimumCore.Services.Utilities
                     switch(decision)
                     {
                         case IncendentDecisionDto.Delete:
-                            context.Set<Lesson>().RemoveRange(lesson);
+                            context.Set<Lesson>().Remove(lesson);
                             break;
                     }
                     return lesson.LessonId;

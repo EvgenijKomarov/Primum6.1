@@ -84,18 +84,7 @@ namespace PrimumCore.Services.Iterators
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
             IncendentSolver solver = new IncendentSolver(context);
 
-            var subjectId = await solver.SolveIncendent(userPermissions, dto);
-            iteratingUserAdminProfile.IncendentLogs.Add(new IncendentLog
-            {
-                AdminProfileId = iteratingUserAdminProfile.AdminId,
-                Description = $"Info:\n" +
-                $"{dto.IncendentInfo}\n" +
-                $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
-                $"Decision: {dto.Decision.ToString()}",
-                DecisionDate = DateTime.Now
-            });
-
-            await context.SaveChangesAsync();
+            var subjectId = await solver.SolveIncendent(iteratingUserAdminProfile.AdminId, userPermissions, dto);
             return subjectId;
         }
     }
