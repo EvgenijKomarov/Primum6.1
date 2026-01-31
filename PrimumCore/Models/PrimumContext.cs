@@ -39,7 +39,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
 
     public virtual DbSet<AdminPermission> Permissions { get; set; }
 
-    public virtual DbSet<IncendentLog> IncendentLogs { get; set; }
+    public virtual DbSet<IncidentLog> IncidentLogs { get; set; }
 
     public virtual DbSet<Promocode> Promocodes { get; set; }
 
@@ -184,7 +184,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
-        modelBuilder.Entity<IncendentLog>(entity =>
+        modelBuilder.Entity<IncidentLog>(entity =>
         {
             entity.HasKey(e => e.LogId);
             entity.HasIndex(e => e.LogId).IsUnique();
@@ -193,7 +193,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.Property(e => e.DecisionDate).HasColumnType("datetime2");
 
             entity.HasOne(e => e.AdminProfile)
-                .WithMany(e => e.IncendentLogs)
+                .WithMany(e => e.IncidentLogs)
                 .HasForeignKey(e => e.AdminProfileId)
                 .OnDelete(DeleteBehavior.NoAction);
         });

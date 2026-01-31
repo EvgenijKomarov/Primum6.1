@@ -2,7 +2,7 @@
 
 namespace PrimumCore.Models
 {
-    public class IncendentLog
+    public class IncidentLog
     {
         public int LogId { get; set; }
 

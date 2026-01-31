@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace UnitTests.Utilities
 {
-    public class IncendentCollectorTests
+    public class IncidentCollectorTests
     {
         private Mock<IPrimumContext> _mockContext;
-        private IncendentCollector _collector;
+        private IncidentCollector _collector;
 
         [SetUp]
         public void Setup()
         {
             _mockContext = new Mock<IPrimumContext>();
-            _collector = new IncendentCollector(_mockContext.Object);
+            _collector = new IncidentCollector(_mockContext.Object);
         }
 
         #region ModerateTeachers
@@ -55,8 +55,8 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(101));
-            Assert.That(incident.Meaning, Is.EqualTo(IncendentMeaningDto.Teacher));
-            Assert.That(incident.Status, Is.EqualTo(IncendentStatusDto.NeedModeration));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Teacher));
+            Assert.That(incident.Status, Is.EqualTo(IncidentStatusDto.NeedModeration));
             Assert.That(incident.CommonInfo, Does.Contain("Иванов"));
             Assert.That(incident.Decisions, Is.Not.Empty);
         }
@@ -89,7 +89,7 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(201));
-            Assert.That(incident.Meaning, Is.EqualTo(IncendentMeaningDto.Student));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Student));
             Assert.That(incident.CommonInfo, Does.Contain("Петрова"));
         }
 
@@ -132,7 +132,7 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(501));
-            Assert.That(incident.Meaning, Is.EqualTo(IncendentMeaningDto.Lesson));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Lesson));
             Assert.That(incident.CommonInfo, Does.Contain("15:00 27:01:2026"));
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class IncendentLogDto
+    public class IncidentLogDto
     {
         public required int LogId { get; set; }
 

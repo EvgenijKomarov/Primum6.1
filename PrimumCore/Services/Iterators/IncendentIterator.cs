@@ -8,28 +8,28 @@ using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class IncendentIterator(IPrimumContext context)
+    public class IncidentIterator(IPrimumContext context)
     {
         private AdminProfileHelper helper = new AdminProfileHelper(context);
 
-        public async Task<IEnumerable<IncendentDto>> GetIncedents(int userId)
+        public async Task<IEnumerable<IncidentDto>> GetIncedents(int userId)
         {
             Permission[] userPermissions = (await helper.GetIteratingUser(userId)).AdminProfile.Permissions.Select(x => x.Permission).ToArray();
-            IncendentCollector collector = new IncendentCollector(context);
+            IncidentCollector collector = new IncidentCollector(context);
 
             return await collector.GetIncedents(userPermissions);
         }
 
-        public async Task<IEnumerable<IncendentLogDto>> GetIncendentLogs(int userId, bool OnlyUnrevisioned)
+        public async Task<IEnumerable<IncidentLogDto>> GetIncidentLogs(int userId, bool OnlyUnrevisioned)
         {
-            await helper.CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+            await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            return await context.Set<IncendentLog>()
+            return await context.Set<IncidentLog>()
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
                 .WhereIf(OnlyUnrevisioned, x => !x.IsRevisioned)
-                .Select(x => new IncendentLogDto
+                .Select(x => new IncidentLogDto
                 {
                     LogId = x.LogId,
                     AdminUserId = x.AdminProfile.User.Id,
@@ -40,15 +40,15 @@ namespace PrimumCore.Services.Iterators
                 .ToArrayAsync();
         }
 
-        public async Task<IncendentLogDto> GetIncendentLog(int userId, int logId)
+        public async Task<IncidentLogDto> GetIncidentLog(int userId, int logId)
         {
-            await helper.CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+            await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            var log = await context.Set<IncendentLog>()
+            var log = await context.Set<IncidentLog>()
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
-                .Select(x => new IncendentLogDto
+                .Select(x => new IncidentLogDto
                 {
                     LogId = x.LogId,
                     AdminUserId = x.AdminProfile.User.Id,
@@ -62,11 +62,11 @@ namespace PrimumCore.Services.Iterators
             return log;
         }
 
-        public async Task<int> RevisionIncendentLog(int userId, int logId)
+        public async Task<int> RevisionIncidentLog(int userId, int logId)
         {
-            var user = await helper.CheckIteratingUser(userId, Permission.InspectIncendentLogs);
+            var user = await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            var log = await context.Set<IncendentLog>()
+            var log = await context.Set<IncidentLog>()
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
@@ -78,13 +78,13 @@ namespace PrimumCore.Services.Iterators
             return log.LogId;
         }
 
-        public async Task<int> SolveIncedent(int userId, IncendentDecisionInputDto dto)
+        public async Task<int> SolveIncedent(int userId, IncidentDecisionInputDto dto)
         {
             var iteratingUserAdminProfile = (await helper.GetIteratingUser(userId)).AdminProfile;
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
-            IncendentSolver solver = new IncendentSolver(context);
+            IncidentSolver solver = new IncidentSolver(context);
 
-            var subjectId = await solver.SolveIncendent(iteratingUserAdminProfile.AdminId, userPermissions, dto);
+            var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto);
             return subjectId;
         }
     }

@@ -8,7 +8,7 @@ namespace PrimumCore.Services.Utilities
         private const int KeySize = 256 / 8;       // 256 бит = 32 байта
         private const int Iterations = 100_000;    // Рекомендуется не менее 100 000
 
-        public string HashPassword(string password)
+        public virtual string HashPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("Password cannot be null or empty.", nameof(password));
@@ -25,7 +25,7 @@ namespace PrimumCore.Services.Utilities
             return $"{Iterations}:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
         }
 
-        public bool VerifyPassword(string password, string hashedPassword)
+        public virtual bool VerifyPassword(string password, string hashedPassword)
         {
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hashedPassword))
                 return false;

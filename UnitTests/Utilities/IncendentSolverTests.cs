@@ -14,46 +14,46 @@ using System.Threading.Tasks;
 
 namespace UnitTests.Utilities
 {
-    public class IncendentSolverTests
+    public class IncidentSolverTests
     {
         private Mock<IPrimumContext> _mockContext;
-        private IncendentSolver _solver;
+        private IncidentSolver _solver;
         private const int AdminProfileId = 999;
 
         [SetUp]
         public void Setup()
         {
             _mockContext = new Mock<IPrimumContext>();
-            _solver = new IncendentSolver(_mockContext.Object);
-            _mockContext.Setup(x => x.Set<IncendentLog>())
-                .ReturnsDbSet(new List<IncendentLog>());
+            _solver = new IncidentSolver(_mockContext.Object);
+            _mockContext.Setup(x => x.Set<IncidentLog>())
+                .ReturnsDbSet(new List<IncidentLog>());
         }
 
         #region Course Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.SendToAdministrator,
+            IncidentDecisionDto.SendToAdministrator,
             Permission.ModerateCourses,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncendentDecisionDto.SendToManager,
+            IncidentDecisionDto.SendToManager,
             Permission.AdministrateCourses,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.SendToManager,
+            IncidentDecisionDto.SendToManager,
             Permission.ModerateCourses,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedManagerReview,
-            IncendentDecisionDto.Approve,
+            IncidentDecisionDto.Approve,
             Permission.ApproveCourses,
             ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.Delete,
+            IncidentDecisionDto.Delete,
             Permission.ModerateCourses,
             null)] // удаление — статус не меняется (сущность удаляется)
-        public async Task SolveIncendent_Course_HandlesAllDecisions(
+        public async Task SolveIncident_Course_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncendentDecisionDto decision,
+            IncidentDecisionDto decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -74,15 +74,15 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<AbonementShedule>())
                 .ReturnsDbSet(abonementShedules);
 
-            var dto = new IncendentDecisionInputDto
+            var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncendentMeaningDto.Course,
+                Meaning = IncidentMeaningDto.Course,
                 Decision = decision,
                 ObjectId = 301,
-                IncendentInfo = "Test course"
+                IncidentInfo = "Test course"
             };
 
-            var result = await _solver.SolveIncendent(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
 
             Assert.That(result, Is.EqualTo(301));
 
@@ -92,7 +92,7 @@ namespace UnitTests.Utilities
             }
 
             // Проверка удаления
-            if (decision == IncendentDecisionDto.Delete)
+            if (decision == IncidentDecisionDto.Delete)
             {
                 _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(abonementShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Lesson>().RemoveRange(lessons), Times.Once);
@@ -101,7 +101,7 @@ namespace UnitTests.Utilities
             }
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockContext.Verify(x => x.Set<IncendentLog>().Add(It.Is<IncendentLog>(log =>
+            _mockContext.Verify(x => x.Set<IncidentLog>().Add(It.Is<IncidentLog>(log =>
                 log.AdminProfileId == AdminProfileId &&
                 log.Description.Contains("Course") &&
                 log.Description.Contains(decision.ToString()))), Times.Once);
@@ -112,24 +112,24 @@ namespace UnitTests.Utilities
         #region Teacher Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.SendToAdministrator,
+            IncidentDecisionDto.SendToAdministrator,
             Permission.ModerateTeachers,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.SendToManager,
+            IncidentDecisionDto.SendToManager,
             Permission.ModerateTeachers,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncendentDecisionDto.SendToManager,
+            IncidentDecisionDto.SendToManager,
             Permission.AdministrateTeachers,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.Delete,
+            IncidentDecisionDto.Delete,
             Permission.ModerateTeachers,
             null)]
-        public async Task SolveIncendent_Teacher_HandlesAllDecisions(
+        public async Task SolveIncident_Teacher_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncendentDecisionDto decision,
+            IncidentDecisionDto decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -156,15 +156,15 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<TeacherProfile>())
                 .ReturnsDbSet(new List<TeacherProfile> { tProfile });
 
-            var dto = new IncendentDecisionInputDto
+            var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncendentMeaningDto.Teacher,
+                Meaning = IncidentMeaningDto.Teacher,
                 Decision = decision,
                 ObjectId = 101,
-                IncendentInfo = "Test teacher"
+                IncidentInfo = "Test teacher"
             };
 
-            var result = await _solver.SolveIncendent(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
 
             Assert.That(result, Is.EqualTo(101));
 
@@ -173,7 +173,7 @@ namespace UnitTests.Utilities
                 Assert.That(user.TeacherProfile.ApproveStatus, Is.EqualTo(expectedStatus.Value));
             }
 
-            if (decision == IncendentDecisionDto.Delete)
+            if (decision == IncidentDecisionDto.Delete)
             {
                 _mockContext.Verify(x => x.Set<TeacherShedule>().RemoveRange(teacherShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Course>().RemoveRange(courses), Times.Once);
@@ -181,7 +181,7 @@ namespace UnitTests.Utilities
             }
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockContext.Verify(x => x.Set<IncendentLog>().Add(It.Is<IncendentLog>(log =>
+            _mockContext.Verify(x => x.Set<IncidentLog>().Add(It.Is<IncidentLog>(log =>
                 log.AdminProfileId == AdminProfileId &&
                 log.Description.Contains("Teacher") &&
                 log.Description.Contains(decision.ToString()))), Times.Once);
@@ -192,20 +192,20 @@ namespace UnitTests.Utilities
         #region Student Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.SendToAdministrator,
+            IncidentDecisionDto.SendToAdministrator,
             Permission.ModerateStudents,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncendentDecisionDto.Approve,
+            IncidentDecisionDto.Approve,
             Permission.AdministrateStudents,
             ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncendentDecisionDto.Delete,
+            IncidentDecisionDto.Delete,
             Permission.ModerateStudents,
             null)]
-        public async Task SolveIncendent_Student_HandlesAllDecisions(
+        public async Task SolveIncident_Student_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncendentDecisionDto decision,
+            IncidentDecisionDto decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -240,15 +240,15 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<StudentProfile>())
                 .ReturnsDbSet(new List<StudentProfile> { user.StudentProfile });
 
-            var dto = new IncendentDecisionInputDto
+            var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncendentMeaningDto.Student,
+                Meaning = IncidentMeaningDto.Student,
                 Decision = decision,
                 ObjectId = 201,
-                IncendentInfo = "Test student"
+                IncidentInfo = "Test student"
             };
 
-            var result = await _solver.SolveIncendent(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
 
             Assert.That(result, Is.EqualTo(201));
 
@@ -257,7 +257,7 @@ namespace UnitTests.Utilities
                 Assert.That(user.StudentProfile.ApproveStatus, Is.EqualTo(expectedStatus.Value));
             }
 
-            if (decision == IncendentDecisionDto.Delete)
+            if (decision == IncidentDecisionDto.Delete)
             {
                 _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(abonementShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Lesson>().RemoveRange(lessons), Times.Once);
@@ -266,7 +266,7 @@ namespace UnitTests.Utilities
             }
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockContext.Verify(x => x.Set<IncendentLog>().Add(It.Is<IncendentLog>(log =>
+            _mockContext.Verify(x => x.Set<IncidentLog>().Add(It.Is<IncidentLog>(log =>
                 log.AdminProfileId == AdminProfileId &&
                 log.Description.Contains("Student") &&
                 log.Description.Contains(decision.ToString()))), Times.Once);
@@ -276,29 +276,29 @@ namespace UnitTests.Utilities
 
         #region Lesson Cases (только Delete)
 
-        [TestCase(IncendentDecisionDto.Delete, Permission.InspectMissedLessons)]
-        public async Task SolveIncendent_Lesson_HandlesDelete(
-            IncendentDecisionDto decision,
+        [TestCase(IncidentDecisionDto.Delete, Permission.InspectMissedLessons)]
+        public async Task SolveIncident_Lesson_HandlesDelete(
+            IncidentDecisionDto decision,
             Permission requiredPermission)
         {
             var lesson = new Lesson { LessonId = 401 };
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new List<Lesson> { lesson });
 
-            var dto = new IncendentDecisionInputDto
+            var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncendentMeaningDto.Lesson,
+                Meaning = IncidentMeaningDto.Lesson,
                 Decision = decision,
                 ObjectId = 401,
-                IncendentInfo = "Missed lesson"
+                IncidentInfo = "Missed lesson"
             };
 
-            var result = await _solver.SolveIncendent(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
 
             Assert.That(result, Is.EqualTo(401));
             _mockContext.Verify(x => x.Set<Lesson>().Remove(It.Is<Lesson>(l => l.LessonId == 401)), Times.Once);
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockContext.Verify(x => x.Set<IncendentLog>().Add(It.Is<IncendentLog>(log =>
+            _mockContext.Verify(x => x.Set<IncidentLog>().Add(It.Is<IncidentLog>(log =>
                 log.AdminProfileId == AdminProfileId &&
                 log.Description.Contains("Lesson") &&
                 log.Description.Contains("Delete"))), Times.Once);
@@ -309,25 +309,25 @@ namespace UnitTests.Utilities
         #region Permission Validation (общий кейс)
 
         [Test]
-        public void SolveIncendent_WithoutRequiredPermission_ThrowsException()
+        public void SolveIncident_WithoutRequiredPermission_ThrowsException()
         {
             var course = new Course { CourseId = 301, ApproveStatus = ApproveStatus.NeedModeratorReview };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new List<Course> { course });
 
-            var dto = new IncendentDecisionInputDto
+            var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncendentMeaningDto.Course,
-                Decision = IncendentDecisionDto.SendToAdministrator,
+                Meaning = IncidentMeaningDto.Course,
+                Decision = IncidentDecisionDto.SendToAdministrator,
                 ObjectId = 301,
-                IncendentInfo = "test"
+                IncidentInfo = "test"
             };
 
             // Нет нужного разрешения
             var permissions = new[] { Permission.GivePermissions };
 
             Assert.ThrowsAsync<Exception>(async () =>
-                await _solver.SolveIncendent(AdminProfileId, permissions, dto),
+                await _solver.SolveIncident(AdminProfileId, permissions, dto),
                 "User hasn't needed permissions");
         }
 

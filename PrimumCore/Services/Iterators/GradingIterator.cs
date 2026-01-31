@@ -37,7 +37,7 @@ namespace PrimumCore.Services.Iterators
             return lesson.LessonId;
         }
 
-        private int CoinFormula(float finalGrade, int lessonCost)
+        public int CoinFormula(float finalGrade, int lessonCost)
         {
             const float maximumCashback = 0.1f;
             const int maximumGradeValue = 5;

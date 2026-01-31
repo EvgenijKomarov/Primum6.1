@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.Enums
 {
-    public enum IncendentDecisionDto
+    public enum IncidentDecisionDto
     {
         Approve = 0,
         Delete = 1,

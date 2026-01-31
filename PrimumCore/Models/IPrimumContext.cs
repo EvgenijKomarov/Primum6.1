@@ -21,7 +21,7 @@ namespace PrimumCore.Models
         DbSet<User> Users { get; set; }
         DbSet<CourseTheme> CourseThemes { get; set; }
         DbSet<AdminPermission> Permissions { get; set; }
-        DbSet<IncendentLog> IncendentLogs { get; set; }
+        DbSet<IncidentLog> IncidentLogs { get; set; }
         DbSet<Promocode> Promocodes { get; set; }
         DbSet<VerificationToken> VerificationTokens { get; set; }
 

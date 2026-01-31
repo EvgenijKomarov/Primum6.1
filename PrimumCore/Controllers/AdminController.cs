@@ -8,12 +8,12 @@ namespace PrimumCore.Controllers
     [Route("api/admin/{userId}")]
     public class AdminController(
         AdminIterator iterator, 
-        IncendentIterator incendentIterator,
+        IncidentIterator IncidentIterator,
         PromocodeIterator promocodeIterator
         ) : PrimumController
     {
-        [HttpGet("incendents")]
-        public async Task<IActionResult> GetIncendents([FromRoute] int userId) => Ok(await incendentIterator.GetIncedents(userId));
+        [HttpGet("Incidents")]
+        public async Task<IActionResult> GetIncidents([FromRoute] int userId) => Ok(await IncidentIterator.GetIncedents(userId));
 
         [HttpGet("admins")]
         public async Task<IActionResult> GetAdmins() => Ok(await iterator.GetAdmins());
@@ -22,17 +22,17 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
             => Ok(await iterator.GetAdmin(objectUserId));
 
-        [HttpGet("incendent-logs")]
-        public async Task<IActionResult> GetIncendentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned) 
-            => Ok(await incendentIterator.GetIncendentLogs(userId, OnlyUnrevisioned));
+        [HttpGet("Incident-logs")]
+        public async Task<IActionResult> GetIncidentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned) 
+            => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned));
 
-        [HttpGet("incendent-log/{logId}")]
-        public async Task<IActionResult> GetIncendentLog([FromRoute] int userId, [FromQuery] int logId)
-            => Ok(await incendentIterator.GetIncendentLog(userId, logId));
+        [HttpGet("Incident-log/{logId}")]
+        public async Task<IActionResult> GetIncidentLog([FromRoute] int userId, [FromQuery] int logId)
+            => Ok(await IncidentIterator.GetIncidentLog(userId, logId));
 
-        [HttpGet("revise-incendent-log/{logId}")]
-        public async Task<IActionResult> RevisionIncendentLog([FromRoute] int userId, [FromQuery] int logId)
-            => Ok(await incendentIterator.RevisionIncendentLog(userId, logId));
+        [HttpGet("revise-Incident-log/{logId}")]
+        public async Task<IActionResult> RevisionIncidentLog([FromRoute] int userId, [FromQuery] int logId)
+            => Ok(await IncidentIterator.RevisionIncidentLog(userId, logId));
 
         [HttpGet("available-promocodes")]
         public async Task<IActionResult> GetPromocodes()
@@ -43,8 +43,8 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
 
         [HttpPut("solve")]
-        public async Task<IActionResult> SolveIncedent([FromRoute] int userId, [FromBody] IncendentDecisionInputDto dto) 
-            => Ok(await incendentIterator.SolveIncedent(userId, dto));
+        public async Task<IActionResult> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto) 
+            => Ok(await IncidentIterator.SolveIncedent(userId, dto));
 
         [HttpPatch("add-cash")]
         public async Task<IActionResult> AddCash([FromRoute] int userId, [FromQuery] int cash, [FromQuery] int objectUserId) 

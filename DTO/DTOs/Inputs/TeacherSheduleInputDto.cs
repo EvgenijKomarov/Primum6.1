@@ -10,6 +10,6 @@ namespace CoreConnection.DTOs.Inputs
     {
         public int Time {  get; set; }
 
-        public string DayOfWeek { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
     }
 }

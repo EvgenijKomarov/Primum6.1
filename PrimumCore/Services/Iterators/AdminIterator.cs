@@ -58,7 +58,7 @@ namespace PrimumCore.Services.Iterators
 
             user.Cash += cash;
 
-            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description = $"Added cash ({cash} to userId {objUserId})",
@@ -112,7 +112,7 @@ namespace PrimumCore.Services.Iterators
                     .Remove(user.AdminProfile.Permissions.FirstOrDefault(x => x.Permission == permissionToTake));
             }
 
-            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description = 
@@ -138,7 +138,7 @@ namespace PrimumCore.Services.Iterators
 
             user.AdminProfile = new AdminProfile { Status = status };
 
-            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description =
@@ -163,7 +163,7 @@ namespace PrimumCore.Services.Iterators
             context.Set<AdminPermission>().RemoveRange(user.AdminProfile.Permissions);
             context.Set<AdminProfile>().Remove(user.AdminProfile);
 
-            iteratingUser.AdminProfile.IncendentLogs.Add(new IncendentLog
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description =

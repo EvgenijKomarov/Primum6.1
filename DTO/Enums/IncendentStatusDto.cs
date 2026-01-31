@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.Enums
 {
-    public enum IncendentStatusDto
+    public enum IncidentStatusDto
     {
         Unknown = 0,
         NeedModeration = 1,

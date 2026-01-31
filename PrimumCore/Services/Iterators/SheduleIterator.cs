@@ -73,15 +73,15 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.TeacherShedules)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
-            if (Enum.TryParse(sheduleDto.DayOfWeek, out DayOfWeek dtoDayofWeek)) { throw new Exception("Can't parse day of week"); }
-            if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == dtoDayofWeek && s.Time == sheduleDto.Time)) { throw new Exception("Shedule already exists"); }
+            if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) 
+                { throw new Exception("Shedule already exists"); }
 
             var shedule = new TeacherShedule
             {
                 Time = sheduleDto.Time,
-                DayOfWeek = dtoDayofWeek,
+                DayOfWeek = sheduleDto.DayOfWeek,
             };
 
             user.TeacherProfile.TeacherShedules.Add(shedule);
@@ -97,7 +97,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(e => e.AbonementShedule)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
             if (shedule is null) { throw new Exception("Shedule not found"); }

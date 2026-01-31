@@ -127,7 +127,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -150,7 +150,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var course = new Course
             {
@@ -173,7 +173,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -193,7 +193,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile

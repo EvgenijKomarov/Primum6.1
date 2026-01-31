@@ -20,7 +20,7 @@ public partial class AdminProfile
 
     public virtual ICollection<AdminPermission> GivenPermissions { get; set; } = new List<AdminPermission>();
 
-    public virtual ICollection<IncendentLog> IncendentLogs { get; set; } = new List<IncendentLog>();
+    public virtual ICollection<IncidentLog> IncidentLogs { get; set; } = new List<IncidentLog>();
 
     public bool CheckPermissions(Permission permission) => Permissions.Any(x => x.Permission == permission);
 }

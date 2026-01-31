@@ -3,12 +3,12 @@
 namespace PrimumCore.Models.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    public class AvailableIncendent : Attribute
+    public class AvailableIncident : Attribute
     {
-        public IncendentMeaningDto Meaning { get; }
-        public IncendentDecisionDto Decision { get; }
+        public IncidentMeaningDto Meaning { get; }
+        public IncidentDecisionDto Decision { get; }
 
-        public AvailableIncendent(IncendentMeaningDto meaning, IncendentDecisionDto decision)
+        public AvailableIncident(IncidentMeaningDto meaning, IncidentDecisionDto decision)
         {
             Meaning = meaning;
             Decision = decision;

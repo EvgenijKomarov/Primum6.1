@@ -17,5 +17,5 @@ public partial class TeacherShedule
 
     public virtual AbonementShedule? AbonementShedule { get; set; }
 
-    public bool IsBusy => this.AbonementShedule is null;
+    public bool IsBusy => this.AbonementShedule is not null;
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrimumCore.Models;
 
@@ -11,9 +12,11 @@ using PrimumCore.Models;
 namespace PrimumCore.Migrations
 {
     [DbContext(typeof(PrimumContext))]
-    partial class PrimumContextModelSnapshot : ModelSnapshot
+    [Migration("20260131111922_Incident_Renaming")]
+    partial class Incident_Renaming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

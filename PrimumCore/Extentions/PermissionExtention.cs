@@ -5,14 +5,14 @@ namespace PrimumCore.Extentions
 {
     public static class PermissionExtention
     {
-        public static IEnumerable<AvailableIncendent> GetAvailableIncendentsAttributes(this Permission permission)
+        public static IEnumerable<AvailableIncident> GetAvailableIncidentsAttributes(this Permission permission)
         {
             var field = typeof(Permission).GetField(permission.ToString());
             if (field == null)
-                return Array.Empty<AvailableIncendent>();
+                return Array.Empty<AvailableIncident>();
 
-            var attributes = field.GetCustomAttributes(typeof(AvailableIncendent), inherit: false)
-                                  .Cast<AvailableIncendent>()
+            var attributes = field.GetCustomAttributes(typeof(AvailableIncident), inherit: false)
+                                  .Cast<AvailableIncident>()
                                   .ToArray();
 
             return attributes;

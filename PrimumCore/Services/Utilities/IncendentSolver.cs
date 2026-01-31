@@ -8,23 +8,23 @@ using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncendentSolver(IPrimumContext context)
+    public class IncidentSolver(IPrimumContext context)
     {
         //User should be identified
-        public async Task<int> SolveIncendent(int adminProfileId, Permission[] permissions, IncendentDecisionInputDto dto)
+        public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto)
         {
-            if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncendentDecisionDto, Task<int>> rule)) { throw new Exception("Unknown incindent"); }
+            if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncidentDecisionDto, Task<int>> rule)) { throw new Exception("Unknown incindent"); }
             if(!permissions
-                .Any(x => x.GetAvailableIncendentsAttributes()
+                .Any(x => x.GetAvailableIncidentsAttributes()
                     .Any(y => y.Meaning == dto.Meaning && y.Decision == dto.Decision)
                     )
                 ) { throw new Exception("User haven't needed permissions"); }
 
-            context.Set<IncendentLog>().Add(new IncendentLog
+            context.Set<IncidentLog>().Add(new IncidentLog
             {
                 AdminProfileId = adminProfileId,
                 Description = $"Info:\n" +
-                $"{dto.IncendentInfo}\n" +
+                $"{dto.IncidentInfo}\n" +
                 $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
                 $"Decision: {dto.Decision.ToString()}",
                 DecisionDate = DateTime.Now
@@ -36,11 +36,11 @@ namespace PrimumCore.Services.Utilities
             return ruleResult;
         }
 
-        private Dictionary<IncendentMeaningDto, Func<int, IncendentDecisionDto, Task<int>>> solvingRules
-            = new Dictionary<IncendentMeaningDto, Func<int, IncendentDecisionDto, Task<int>>>
+        private Dictionary<IncidentMeaningDto, Func<int, IncidentDecisionDto, Task<int>>> solvingRules
+            = new Dictionary<IncidentMeaningDto, Func<int, IncidentDecisionDto, Task<int>>>
         {
             {
-                IncendentMeaningDto.Teacher,
+                IncidentMeaningDto.Teacher,
                 async (id, decision) =>
                 {
                     var user = context.Set<User>()
@@ -53,16 +53,16 @@ namespace PrimumCore.Services.Utilities
 
                     switch(decision) 
                     {
-                        case IncendentDecisionDto.SendToAdministrator:
+                        case IncidentDecisionDto.SendToAdministrator:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
-                        case IncendentDecisionDto.SendToManager:
+                        case IncidentDecisionDto.SendToManager:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
-                        case IncendentDecisionDto.Approve:
+                        case IncidentDecisionDto.Approve:
                             user.TeacherProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
-                        case IncendentDecisionDto.Delete:
+                        case IncidentDecisionDto.Delete:
                             context.Set<TeacherShedule>().RemoveRange(user.TeacherProfile.TeacherShedules);
                             context.Set<Course>().RemoveRange(user.TeacherProfile.Courses);
                             context.Set<TeacherProfile>().Remove(user.TeacherProfile);
@@ -72,7 +72,7 @@ namespace PrimumCore.Services.Utilities
                 }
             },
             {
-                IncendentMeaningDto.Student,
+                IncidentMeaningDto.Student,
                 async (id, decision) =>
                 {
                     var user = context.Set<User>()
@@ -85,13 +85,13 @@ namespace PrimumCore.Services.Utilities
 
                     switch(decision)
                     {
-                        case IncendentDecisionDto.SendToAdministrator:
+                        case IncidentDecisionDto.SendToAdministrator:
                             user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
-                        case IncendentDecisionDto.Approve:
+                        case IncidentDecisionDto.Approve:
                             user.StudentProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
-                        case IncendentDecisionDto.Delete:
+                        case IncidentDecisionDto.Delete:
                             context.Set<AbonementShedule>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.AbonementShedules));
                             context.Set<Lesson>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.Lessons));
                             context.Set<Abonement>().RemoveRange(user.StudentProfile.Abonements);
@@ -102,7 +102,7 @@ namespace PrimumCore.Services.Utilities
                 }
             },
             {
-                IncendentMeaningDto.Course,
+                IncidentMeaningDto.Course,
                 async (id, decision) =>
                 {
                     var course = context.Set<Course>()
@@ -115,16 +115,16 @@ namespace PrimumCore.Services.Utilities
 
                     switch(decision)
                     {
-                        case IncendentDecisionDto.SendToAdministrator:
+                        case IncidentDecisionDto.SendToAdministrator:
                             course.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
-                        case IncendentDecisionDto.Approve:
+                        case IncidentDecisionDto.Approve:
                             course.ApproveStatus = ApproveStatus.Approved;
                             break;
-                        case IncendentDecisionDto.SendToManager:
+                        case IncidentDecisionDto.SendToManager:
                             course.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
-                        case IncendentDecisionDto.Delete:
+                        case IncidentDecisionDto.Delete:
                             context.Set<AbonementShedule>().RemoveRange(course.Abonements.SelectMany(x => x.AbonementShedules));
                             context.Set<Lesson>().RemoveRange(course.Abonements.SelectMany(x => x.Lessons));
                             context.Set<Abonement>().RemoveRange(course.Abonements);
@@ -135,7 +135,7 @@ namespace PrimumCore.Services.Utilities
                 }
             },
             {
-                IncendentMeaningDto.Lesson,
+                IncidentMeaningDto.Lesson,
                 async (id, decision) =>
                 {
                     var lesson = context.Set<Lesson>()
@@ -144,7 +144,7 @@ namespace PrimumCore.Services.Utilities
 
                     switch(decision)
                     {
-                        case IncendentDecisionDto.Delete:
+                        case IncidentDecisionDto.Delete:
                             context.Set<Lesson>().Remove(lesson);
                             break;
                     }

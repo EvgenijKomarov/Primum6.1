@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs.Inputs
 {
-    public class IncendentDecisionInputDto
+    public class IncidentDecisionInputDto
     {
         public int ObjectId { get; set; }
 
-        public IncendentMeaningDto Meaning { get; set; } = IncendentMeaningDto.Unknown;
+        public IncidentMeaningDto Meaning { get; set; } = IncidentMeaningDto.Unknown;
 
-        public IncendentDecisionDto Decision { get; set; }
+        public IncidentDecisionDto Decision { get; set; }
 
-        public string IncendentInfo { get; set; }
+        public string IncidentInfo { get; set; }
     }
 }

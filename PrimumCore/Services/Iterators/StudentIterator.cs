@@ -48,8 +48,8 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.User)
                 .Where(x => !x.IsBusy)
                 .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId);
-            if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
             if (teacherShedule is null) { throw new Exception("Shedule not found"); }
+            if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
             if (teacherShedule.IsBusy) { throw new Exception("Shedule is busy"); }
             if (teacherShedule.Teacher.User.Id == studentId) { throw new Exception("Student can't subscribe on himself"); }
             if (user
@@ -67,17 +67,17 @@ namespace PrimumCore.Services.Iterators
             {
                 abonement = new Abonement
                 {
-                    CourseId = courseId,
-                    StudentId = studentId,
+                    Course = course,
                     PricePerLesson = course.Price
                 };
+                user.StudentProfile.Abonements.Add(abonement);
                 await context.Set<Abonement>().AddAsync(abonement);
             } else if (abonement.AbonementStatus == AbonementStatus.Deleted)
             {
                 abonement.AbonementStatus = AbonementStatus.Active;
             }
 
-            if (course.MaxLessons >= abonement.AbonementShedules.Count)
+            if (course.MaxLessons <= abonement.AbonementShedules.Count)
             {
                 throw new Exception("Can't create more shedules than course's maximum shedules per week");
             }
@@ -93,10 +93,10 @@ namespace PrimumCore.Services.Iterators
             var suitableDate = dateTimeService.GetNextFreeSuitableDateThisWeek(teacherShedule.DayOfWeek, teacherShedule.Time);
             var abonementShedule = new AbonementShedule
             {
-                Abonement = abonement,
                 TeacherShedule = teacherShedule,
                 LastIteration = suitableDate,
             };
+            abonement.AbonementShedules.Add(abonementShedule);
 
             await context.Set<AbonementShedule>().AddAsync(abonementShedule);
             await context.Set<Lesson>().AddAsync(new Lesson
