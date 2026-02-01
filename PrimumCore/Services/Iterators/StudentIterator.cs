@@ -20,7 +20,7 @@ namespace PrimumCore.Services.Iterators
 
             return new StudentProfileDto 
             { 
-                DisplayName = user.Name,
+                DisplayName = user.DisplayName,
                 UserId = user.Id
             };
         }
