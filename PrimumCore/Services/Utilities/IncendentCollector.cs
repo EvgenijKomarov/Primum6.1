@@ -102,7 +102,7 @@ namespace PrimumCore.Services.Utilities
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
-                        $"Free lessons: {x}"
+                        $"Free lessons: {x.FreeLessons}"
                     })
                     .ToList()
             },

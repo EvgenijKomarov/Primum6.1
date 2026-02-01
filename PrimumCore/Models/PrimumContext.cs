@@ -244,7 +244,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
                 .HasForeignKey<StudentProfile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasQueryFilter(e => e.IsBanned && e.IsMailChecked);
+            entity.HasQueryFilter(e => !e.IsBanned && e.IsMailChecked);
         });
 
         OnModelCreatingPartial(modelBuilder);

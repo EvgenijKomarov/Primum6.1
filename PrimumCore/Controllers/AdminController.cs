@@ -12,7 +12,7 @@ namespace PrimumCore.Controllers
         PromocodeIterator promocodeIterator
         ) : PrimumController
     {
-        [HttpGet("Incidents")]
+        [HttpGet("incidents")]
         public async Task<IActionResult> GetIncidents([FromRoute] int userId) => Ok(await IncidentIterator.GetIncedents(userId));
 
         [HttpGet("admins")]
@@ -22,11 +22,11 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
             => Ok(await iterator.GetAdmin(objectUserId));
 
-        [HttpGet("Incident-logs")]
+        [HttpGet("incident-logs")]
         public async Task<IActionResult> GetIncidentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned) 
             => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned));
 
-        [HttpGet("Incident-log/{logId}")]
+        [HttpGet("incident-log/{logId}")]
         public async Task<IActionResult> GetIncidentLog([FromRoute] int userId, [FromQuery] int logId)
             => Ok(await IncidentIterator.GetIncidentLog(userId, logId));
 

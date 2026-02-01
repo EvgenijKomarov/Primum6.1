@@ -51,7 +51,7 @@ namespace PrimumCore.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Abonements");
+                    b.ToTable("Abonements", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.AbonementShedule", b =>
@@ -78,7 +78,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("TeacherSheduleId")
                         .IsUnique();
 
-                    b.ToTable("AbonementShedules");
+                    b.ToTable("AbonementShedules", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.AdminPermission", b =>
@@ -110,7 +110,7 @@ namespace PrimumCore.Migrations
 
                     b.HasIndex("PromoterAdminProfileId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.AdminProfile", b =>
@@ -135,7 +135,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("AdminProfiles");
+                    b.ToTable("AdminProfiles", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Course", b =>
@@ -184,7 +184,7 @@ namespace PrimumCore.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.CourseTheme", b =>
@@ -207,7 +207,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("CourseThemeId")
                         .IsUnique();
 
-                    b.ToTable("CourseThemes");
+                    b.ToTable("CourseThemes", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.IncidentLog", b =>
@@ -238,7 +238,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("LogId")
                         .IsUnique();
 
-                    b.ToTable("IncidentLogs");
+                    b.ToTable("IncidentLogs", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Lesson", b =>
@@ -274,7 +274,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Promocode", b =>
@@ -310,7 +310,7 @@ namespace PrimumCore.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Promocodes");
+                    b.ToTable("Promocodes", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.StudentGrading", b =>
@@ -344,7 +344,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("StudentGradingId")
                         .IsUnique();
 
-                    b.ToTable("StudentGrading");
+                    b.ToTable("StudentGrading", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.StudentProfile", b =>
@@ -372,7 +372,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("StudentProfiles");
+                    b.ToTable("StudentProfiles", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.TeacherProfile", b =>
@@ -404,7 +404,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("TeacherProfiles");
+                    b.ToTable("TeacherProfiles", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.TeacherShedule", b =>
@@ -431,7 +431,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("TeacherSheduleId")
                         .IsUnique();
 
-                    b.ToTable("TeacherShedules");
+                    b.ToTable("TeacherShedules", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.User", b =>
@@ -478,7 +478,7 @@ namespace PrimumCore.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.VerificationToken", b =>
@@ -512,7 +512,7 @@ namespace PrimumCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VerificationTokens");
+                    b.ToTable("VerificationTokens", (string)null);
                 });
 
             modelBuilder.Entity("PrimumCore.Models.Abonement", b =>

@@ -116,8 +116,8 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingUser.AdminProfile.AdminId,
                 Description = 
-                $"Given permissions: {permissionsToGive.ToString()}\n" +
-                $"Taken permissions: {permissionsToTake.ToString()}",
+                $"Given permissions: [{string.Join(", ", permissionsToGive)}]\n" +
+                $"Taken permissions: [{string.Join(", ", permissionsToTake)}]",
                 DecisionDate = DateTime.Now
             });
 
