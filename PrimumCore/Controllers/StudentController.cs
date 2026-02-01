@@ -41,6 +41,14 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetStudentPromocodes([FromRoute] int userId)
             => Ok(await promocodeIterator.GetStudentPromocodes(userId));
 
+        [HttpGet("available-promocodes")]
+        public async Task<IActionResult> GetPromocodes()
+            => Ok(await promocodeIterator.GetPromocodes(true));
+
+        [HttpGet("promocode/{promocodeId}")]
+        public async Task<IActionResult> GetPromocode([FromRoute] int promocodeId)
+            => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
+
         [HttpPatch("abonement/activate")]
         public async Task<IActionResult> ActivateAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
             => Ok(await abonementIterator.ActivateAbonement(userId, abonementId));

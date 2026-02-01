@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.Notifications
 {
-    public class UserVerificationNotification: INotification
+    public class UserVerifiedEmailNotification : INotification
     {
         public required string EmailAdress { get; set; }
-
-        public required string VerificationHash { get; set; }
 
         public required int Userid { get; set; }
     }

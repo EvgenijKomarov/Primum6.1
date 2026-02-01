@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using CoreConnection.Notifications;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
 
@@ -6,7 +7,7 @@ namespace PrimumCore.Services.Connectors
 {
     public class FakePublisher(ILogger<FakePublisher>? logger): IPublisher
     {
-        public async Task PublishAsync<TNotification>(TNotification message)
+        public async Task PublishAsync<TNotification>(TNotification message) where TNotification : INotification
         {
             string queueName = typeof(TNotification).Name;
             string jsonMessage = JsonSerializer.Serialize(message);

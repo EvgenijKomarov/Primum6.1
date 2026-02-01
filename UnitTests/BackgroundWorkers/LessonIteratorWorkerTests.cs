@@ -60,7 +60,7 @@ namespace UnitTests.BackgroundWorkers
             await executor.Execute(_mockLogger.Object);
 
             // Assert
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<object>()), Times.Never);
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
         }
 
@@ -247,7 +247,7 @@ namespace UnitTests.BackgroundWorkers
             Assert.That(studentUser.Cash, Is.EqualTo(1000));
             Assert.That(teacherUser.Cash, Is.EqualTo(2000));
 
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<object>()), Times.Never);
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
             _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(It.IsAny<IEnumerable<AbonementShedule>>()), Times.Never);
 
             _mockLogger.Verify(
@@ -281,7 +281,7 @@ namespace UnitTests.BackgroundWorkers
 
             // Assert: ничего не должно произойти
             Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Warned));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<object>()), Times.Never);
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
     }
 }

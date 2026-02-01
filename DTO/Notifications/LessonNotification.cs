@@ -1,6 +1,6 @@
 ﻿namespace CoreConnection.Notifications
 {
-    public class LessonNotification()
+    public class LessonNotification : INotification
     {
         public required string StudentName { get; set; }
 

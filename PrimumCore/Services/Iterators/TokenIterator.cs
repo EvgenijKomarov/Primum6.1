@@ -59,6 +59,11 @@ namespace PrimumCore.Services.Iterators
             {
                 case TokenMeaning.EmailVerification:
                     user.IsMailChecked = true;
+                    await publisher.PublishAsync(new UserVerifiedEmailNotification
+                    {
+                        EmailAdress = user.MailAdress,
+                        Userid = user.Id
+                    });
                     break;
             }
             await context.SaveChangesAsync();

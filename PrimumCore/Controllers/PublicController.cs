@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreConnection.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
@@ -14,6 +15,17 @@ namespace PrimumCore.Controllers
         PromocodeIterator promocodeIterator
         ) : PrimumController
     {
+        [HttpGet("login")]
+        public async Task<IActionResult> Login([FromQuery] string mailAdress, [FromQuery] string password)
+        {
+            var result = await userIterator.Login(mailAdress, password);
+            if (result.Item1 is null) { return Unauthorized(result.Item2); }
+            return Ok(result.Item1);
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)
+            => Ok(await userIterator.RegUser(dto));
 
         [HttpGet("user/{id}")]
         public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId));

@@ -60,7 +60,7 @@ namespace UnitTests.BackgroundWorkers
             await executor.Execute(_mockLogger.Object);
 
             // Assert
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<object>()), Times.Never);
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
         }
 
@@ -200,7 +200,7 @@ namespace UnitTests.BackgroundWorkers
 
             // Assert
             Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Waiting)); // не изменён
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<object>()), Times.Never);
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         [Test]

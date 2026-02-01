@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.Notifications
 {
-    public class DeleteAbonementSheduleNotification
+    public class DeleteAbonementSheduleNotification : INotification
     {
         public required string StudentName { get; set; }
 

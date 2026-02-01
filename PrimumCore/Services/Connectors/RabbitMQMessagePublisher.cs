@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using CoreConnection.Notifications;
+using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
@@ -7,7 +8,7 @@ namespace PrimumCore.Services.Connectors
 {
     public class RabbitMQMessagePublisher(RabbitMQConnection connectionSingleton, ILogger<RabbitMQMessagePublisher>? logger) : IPublisher
     {
-        public async Task PublishAsync<TNotification>(TNotification message)
+        public async Task PublishAsync<TNotification>(TNotification message) where TNotification : INotification
         {
             var connection = await connectionSingleton.GetConnectionAsync();
             string queueName = typeof(TNotification).Name;

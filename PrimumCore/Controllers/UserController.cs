@@ -6,42 +6,33 @@ using Serilog;
 namespace PrimumCore.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/user/{userId}")]
     public class UserController(UserIterator iterator, TokenIterator tokenIterator) : PrimumController
     {
-        [HttpGet("login")]
-        public async Task<IActionResult> Login([FromQuery] string mailAdress, [FromQuery] string password)
-        {
-            var result = await iterator.Login(mailAdress, password);
-            if (result.Item1 is null) { return Unauthorized(result.Item2); }
-            return Ok(result.Item1);
-        }
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await iterator.GetUser(userId));
 
-        [HttpPost("register")]
-        public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)
-            => Ok(await iterator.RegUser(dto));
-
-        [HttpPatch("deposit/{userId}")]
+        [HttpPatch("deposit")]
         public async Task<IActionResult> DepositMoney([FromRoute] int userId, [FromQuery] long cash)
             => Ok(await iterator.AddMoney(userId, cash));
 
-        [HttpPatch("withdrawn/{userId}")]
+        [HttpPatch("withdrawn")]
         public async Task<IActionResult> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash)
             => Ok(await iterator.GetMoney(userId, cash));
 
-        [HttpPost("send-email-verification/{userId}")]
+        [HttpPost("send-email-verification")]
         public async Task<IActionResult> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
             => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));
 
-        [HttpPost("confirm-email/{userId}")]
+        [HttpPost("confirm-email")]
         public async Task<IActionResult> ConfirmEmail([FromRoute] int userId, [FromQuery] string token)
             => Ok(await tokenIterator.ConfirmToken(userId, token));
 
-        [HttpPost("create-teacher-profile/{userId}")]
+        [HttpPost("create-teacher-profile")]
         public async Task<IActionResult> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
             => Ok(await iterator.CreateTeacherProfile(userId, about));
 
-        [HttpPost("create-student-profile/{userId}")]
+        [HttpPost("create-student-profile")]
         public async Task<IActionResult> CreateStudentProfile([FromRoute] int userId)
             => Ok(await iterator.CreateStudentProfile(userId));
     }

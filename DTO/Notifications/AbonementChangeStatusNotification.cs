@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.Notifications
 {
-    public class AbonementChangeStatusNotification
+    public class AbonementChangeStatusNotification : INotification
     {
         public required string StudentName { get; set; }
 

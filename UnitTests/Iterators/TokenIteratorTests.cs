@@ -127,6 +127,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
                 await _service.SendEmailVerification(999, null));
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         #endregion
@@ -166,6 +167,9 @@ namespace UnitTests.Iterators
             Assert.That(result, Is.EqualTo(userId));
             Assert.That(user.IsMailChecked, Is.True);
             Assert.That(user.VerificationTokens.First().IsUsed, Is.True);
+            _mockPublisher.Verify(x => x.PublishAsync(It.Is<UserVerifiedEmailNotification>(n =>
+                n.EmailAdress == user.MailAdress &&
+                n.Userid == userId)), Times.Once);
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -180,6 +184,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
                 await _service.ConfirmToken(999, "any"));
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         [Test]
@@ -197,6 +202,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
                 await _service.ConfirmToken(123, "nonexistent"));
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         [Test]
@@ -223,6 +229,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
                 await _service.ConfirmToken(123, "old_token"));
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         [Test]
@@ -249,6 +256,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
                 await _service.ConfirmToken(123, "used_token"));
+            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
 
         #endregion
