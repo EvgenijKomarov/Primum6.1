@@ -14,6 +14,8 @@ public partial class Abonement
 
     public int PricePerLesson { get; set; }
 
+    public int FreeLessons { get; set; }
+
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 
     public virtual Course Course { get; set; } = null!;

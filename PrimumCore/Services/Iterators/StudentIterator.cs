@@ -72,10 +72,10 @@ namespace PrimumCore.Services.Iterators
                 abonement = new Abonement
                 {
                     Course = course,
-                    PricePerLesson = course.Price
+                    PricePerLesson = course.Price,
+                    FreeLessons = course.FreeLessons
                 };
                 user.StudentProfile.Abonements.Add(abonement);
-                await context.Set<Abonement>().AddAsync(abonement);
             } else if (abonement.AbonementStatus == AbonementStatus.Deleted)
             {
                 abonement.AbonementStatus = AbonementStatus.Active;
