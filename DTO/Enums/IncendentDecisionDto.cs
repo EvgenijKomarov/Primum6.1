@@ -12,6 +12,6 @@ namespace CoreConnection.Enums
         Delete = 1,
         SendToAdministrator = 2,
         SendToManager = 3,
-
+        Revisioned = 4
     }
 }

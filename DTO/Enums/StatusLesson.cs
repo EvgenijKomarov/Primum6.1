@@ -11,6 +11,7 @@ namespace CoreConnection.Enums
         Waiting = 0,
         Warned = 1,
         Happened = 2,
-        Missed = 3
+        Missed = 3,
+        MissedWithoutReason = 4
     }
 }

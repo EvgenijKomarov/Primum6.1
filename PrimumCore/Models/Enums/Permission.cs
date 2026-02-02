@@ -33,6 +33,7 @@ namespace PrimumCore.Models.Enums
         [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.Delete)]
         ApproveTeachers = 11,
         [AvailableIncident(IncidentMeaningDto.Lesson, IncidentDecisionDto.Delete)]
+        [AvailableIncident(IncidentMeaningDto.Lesson, IncidentDecisionDto.Revisioned)]
         InspectMissedLessons = 12,
         CreateAdminProfiles = 13,
         InspectIncidentLogs = 14,

@@ -274,14 +274,16 @@ namespace UnitTests.Utilities
 
         #endregion
 
-        #region Lesson Cases (только Delete)
+        #region Lesson Cases
 
-        [TestCase(IncidentDecisionDto.Delete, Permission.InspectMissedLessons)]
+        [TestCase(IncidentDecisionDto.Delete, Permission.InspectMissedLessons, null)]
+        [TestCase(IncidentDecisionDto.Revisioned, Permission.InspectMissedLessons, LessonStatus.MissedWithoutReason)]
         public async Task SolveIncident_Lesson_HandlesDelete(
             IncidentDecisionDto decision,
-            Permission requiredPermission)
+            Permission requiredPermission,
+            LessonStatus? expectedStatus)
         {
-            var lesson = new Lesson { LessonId = 401 };
+            var lesson = new Lesson { LessonId = 401, Status = LessonStatus.Missed };
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new List<Lesson> { lesson });
 
@@ -296,12 +298,19 @@ namespace UnitTests.Utilities
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
 
             Assert.That(result, Is.EqualTo(401));
-            _mockContext.Verify(x => x.Set<Lesson>().Remove(It.Is<Lesson>(l => l.LessonId == 401)), Times.Once);
+            if (decision is IncidentDecisionDto.Delete)
+            {
+                _mockContext.Verify(x => x.Set<Lesson>().Remove(It.Is<Lesson>(l => l.LessonId == 401)), Times.Once);
+            }
+            if(expectedStatus is not null)
+            {
+                Assert.That(lesson.Status, Is.EqualTo(expectedStatus));
+            }
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             _mockContext.Verify(x => x.Set<IncidentLog>().Add(It.Is<IncidentLog>(log =>
                 log.AdminProfileId == AdminProfileId &&
                 log.Description.Contains("Lesson") &&
-                log.Description.Contains("Delete"))), Times.Once);
+                log.Description.Contains(decision.ToString()))), Times.Once);
         }
 
         #endregion

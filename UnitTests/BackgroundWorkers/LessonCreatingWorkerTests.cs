@@ -78,12 +78,13 @@ namespace UnitTests.BackgroundWorkers
         public async Task Execute_WithEligibleAbonementShedules_CreatesLessonsAndUpdatesLastIteration()
         {
             // Arrange
-            var course = new Course { CourseId = 10, FreeLessons = 2 };
+            var course = new Course { CourseId = 10 };
             var abonement = new Abonement
             {
                 AbonementId = 20,
                 Course = course,
                 PricePerLesson = 500,
+                FreeLessons = 2,
                 Lessons = new List<Lesson>() // пока нет уроков
             };
             var teacherShedule = new TeacherShedule

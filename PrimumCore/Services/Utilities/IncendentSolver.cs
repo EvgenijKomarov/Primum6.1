@@ -149,6 +149,9 @@ namespace PrimumCore.Services.Utilities
                         case IncidentDecisionDto.Delete:
                             context.Set<Lesson>().Remove(lesson);
                             break;
+                        case IncidentDecisionDto.Revisioned:
+                            lesson.Status = LessonStatus.MissedWithoutReason;
+                            break;
                     }
                     return lesson.LessonId;
                 }
