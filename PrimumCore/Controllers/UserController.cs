@@ -10,7 +10,7 @@ namespace PrimumCore.Controllers
     public class UserController(UserIterator iterator, TokenIterator tokenIterator) : PrimumController
     {
         [HttpGet("profile")]
-        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await iterator.GetUser(userId));
+        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await iterator.GetUser(userId, false));
 
         [HttpPatch("deposit")]
         public async Task<IActionResult> DepositMoney([FromRoute] int userId, [FromQuery] long cash)

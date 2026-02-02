@@ -11,5 +11,7 @@ namespace CoreConnection.DTOs
         public required string DisplayName { get; set; }
 
         public required int UserId { get; set; }
+
+        public required int Coins { get; set; }
     }
 }

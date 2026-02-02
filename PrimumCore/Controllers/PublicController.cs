@@ -28,9 +28,9 @@ namespace PrimumCore.Controllers
             => Ok(await userIterator.RegUser(dto));
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId));
+        public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, true));
 
-        [HttpGet("teacher/{teacherid}")]
+        [HttpGet("teacher/{teacherId}")]
         public async Task<IActionResult> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId));
 
         [HttpGet("teachers")]

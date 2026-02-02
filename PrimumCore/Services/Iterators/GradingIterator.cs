@@ -20,7 +20,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Student)
                 .FirstOrDefaultAsync(x => x.LessonId == lessonId);
             if (lesson == null) { throw new Exception("Lesson not found"); }
-            if (lesson.Abonement.Course.Teacher.User.Id == teacherId) { throw new Exception("Teacher can't grade this lesson"); }
+            if (lesson.Abonement.Student.User.Id == teacherId) { throw new Exception("Teacher can't grade this lesson"); }
             if (lesson.Grading is not null) { throw new Exception("Lesson already gradet"); }
             if (lesson.Status != LessonStatus.Happened) { throw new Exception("Lesson doesn't happened"); }
 

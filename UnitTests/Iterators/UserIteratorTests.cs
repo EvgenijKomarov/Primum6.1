@@ -405,7 +405,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { user });
 
             // Act
-            var dto = await _iterator.GetUser(501);
+            var dto = await _iterator.GetUser(501, false);
 
             // Assert
             Assert.Multiple(() =>
@@ -427,7 +427,113 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetUser(999));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetUser(999, false));
+        }
+
+        [Test]
+        public void GetUser_WhenNotEnable_ThrowsException()
+        {
+            var user = new User
+            {
+                Id = 501,
+                Name = "Анна",
+                Surname = "Петрова",
+                Patronymic = "Сергеевна",
+                Cash = 2500,
+                IsBanned = true,
+                IsMailChecked = false,
+                StudentProfile = new StudentProfile { ApproveStatus = ApproveStatus.Approved },
+                TeacherProfile = null,
+                AdminProfile = new AdminProfile()
+            };
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { user });
+
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetUser(999, true));
+        }
+
+        #endregion
+
+        #region GetUsers
+
+        [Test]
+        public async Task GetUsers_WhenAll_ReturnsMappedDto()
+        {
+            // Arrange
+            var user1 = new User
+            {
+                Id = 501,
+                Name = "Анна",
+                Surname = "Петрова",
+                Patronymic = "Сергеевна",
+                Cash = 2500,
+                IsBanned = false,
+                IsMailChecked = true,
+                StudentProfile = new StudentProfile { ApproveStatus = ApproveStatus.Approved },
+                TeacherProfile = null,
+                AdminProfile = new AdminProfile()
+            };
+            var user2 = new User
+            {
+                Id = 501,
+                Name = "Анна",
+                Surname = "Петрова",
+                Patronymic = "Сергеевна",
+                Cash = 2500,
+                IsBanned = true,
+                IsMailChecked = false,
+                StudentProfile = new StudentProfile { ApproveStatus = ApproveStatus.Approved },
+                TeacherProfile = null,
+                AdminProfile = new AdminProfile()
+            };
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { user1, user2 });
+
+            // Act
+            var dtos = await _iterator.GetUsers(false);
+
+            // Assert
+            Assert.That(dtos.Count() == 2);
+        }
+
+        [Test]
+        public async Task GetUsers_WhenOnlyAvailable_ReturnsNothing()
+        {
+            // Arrange
+            var user1 = new User
+            {
+                Id = 501,
+                Name = "Анна",
+                Surname = "Петрова",
+                Patronymic = "Сергеевна",
+                Cash = 2500,
+                IsBanned = false,
+                IsMailChecked = true,
+                StudentProfile = new StudentProfile { ApproveStatus = ApproveStatus.Approved },
+                TeacherProfile = null,
+                AdminProfile = new AdminProfile()
+            };
+            var user2 = new User
+            {
+                Id = 501,
+                Name = "Анна",
+                Surname = "Петрова",
+                Patronymic = "Сергеевна",
+                Cash = 2500,
+                IsBanned = true,
+                IsMailChecked = false,
+                StudentProfile = new StudentProfile { ApproveStatus = ApproveStatus.Approved },
+                TeacherProfile = null,
+                AdminProfile = new AdminProfile()
+            };
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { user1, user2 });
+
+            // Act
+            var dtos = await _iterator.GetUsers(true);
+
+            // Assert
+            Assert.That(dtos.Count() == 1);
         }
 
         #endregion

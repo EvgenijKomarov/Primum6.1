@@ -9,14 +9,22 @@ namespace PrimumCore.Controllers
     public class AdminController(
         AdminIterator iterator, 
         IncidentIterator IncidentIterator,
-        PromocodeIterator promocodeIterator
+        PromocodeIterator promocodeIterator,
+        UserIterator userIterator
         ) : PrimumController
     {
+        [HttpGet("get-user/{objectUserId}")]
+        public async Task<IActionResult> GetUser([FromRoute] int userId, [FromRoute] int objectUserId) 
+            => Ok(await userIterator.GetUser(objectUserId, false));
+
+        [HttpGet("get-users")]
+        public async Task<IActionResult> GetUsers([FromRoute] int userId) => Ok(await userIterator.GetUsers(false));
+
         [HttpGet("incidents")]
         public async Task<IActionResult> GetIncidents([FromRoute] int userId) => Ok(await IncidentIterator.GetIncedents(userId));
 
         [HttpGet("admins")]
-        public async Task<IActionResult> GetAdmins() => Ok(await iterator.GetAdmins());
+        public async Task<IActionResult> GetAdmins([FromRoute] int userId) => Ok(await iterator.GetAdmins());
 
         [HttpGet("admin")]
         public async Task<IActionResult> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
@@ -27,15 +35,15 @@ namespace PrimumCore.Controllers
             => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned));
 
         [HttpGet("incident-log/{logId}")]
-        public async Task<IActionResult> GetIncidentLog([FromRoute] int userId, [FromQuery] int logId)
+        public async Task<IActionResult> GetIncidentLog([FromRoute] int userId, [FromRoute] int logId)
             => Ok(await IncidentIterator.GetIncidentLog(userId, logId));
 
         [HttpGet("revise-incident-log/{logId}")]
-        public async Task<IActionResult> RevisionIncidentLog([FromRoute] int userId, [FromQuery] int logId)
+        public async Task<IActionResult> RevisionIncidentLog([FromRoute] int userId, [FromRoute] int logId)
             => Ok(await IncidentIterator.RevisionIncidentLog(userId, logId));
 
-        [HttpGet("available-promocodes")]
-        public async Task<IActionResult> GetPromocodes()
+        [HttpGet("all-promocodes")]
+        public async Task<IActionResult> GetPromocodes([FromRoute] int userId)
             => Ok(await promocodeIterator.GetPromocodes(false));
 
         [HttpGet("promocode/{promocodeId}")]

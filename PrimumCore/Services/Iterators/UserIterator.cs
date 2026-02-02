@@ -113,15 +113,17 @@ namespace PrimumCore.Services.Iterators
             return user.Id;
         }
 
-        public async Task<UserDto> GetUser(int id)
+        public async Task<UserDto> GetUser(int id, bool isOnlyAvailable)
         {
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .Include(u => u.TeacherProfile)
                 .Include(u => u.AdminProfile)
                 .IgnoreQueryFilters()
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (user is null) { throw new Exception("User not found"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
 
             return new UserDto
             {
@@ -139,6 +141,33 @@ namespace PrimumCore.Services.Iterators
                 IsBanned = user.IsBanned,
                 MailConfirmed = user.IsMailChecked
             };
+        }
+
+        public async Task<IEnumerable<UserDto>> GetUsers(bool isOnlyAvailable)
+        {
+            return await context.Set<User>()
+                .Include(u => u.StudentProfile)
+                .Include(u => u.TeacherProfile)
+                .Include(u => u.AdminProfile)
+                .IgnoreQueryFilters()
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
+                .Select(user => new UserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Patronymic = user.Patronymic,
+                    DisplayName = user.DisplayName,
+                    Cash = user.Cash,
+                    IsApprovedStudent = user.StudentProfile != null ?
+                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                    IsApprovedTeacher = user.TeacherProfile != null ?
+                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                    IsAdmin = user.AdminProfile != null,
+                    IsBanned = user.IsBanned,
+                    MailConfirmed = user.IsMailChecked
+                })
+                .ToArrayAsync();
         }
     }
 }

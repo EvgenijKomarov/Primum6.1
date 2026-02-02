@@ -23,5 +23,8 @@ namespace PrimumCore.Constants
 
         public static Expression<Func<Abonement, bool>> IsAbonementAvailable =>
             u => u.AbonementStatus == AbonementStatus.Active;
+
+        public static Expression<Func<Abonement, bool>> IsAbonementAlive =>
+            u => u.AbonementStatus != AbonementStatus.Deleted;
     }
 }

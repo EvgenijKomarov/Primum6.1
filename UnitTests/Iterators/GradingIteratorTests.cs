@@ -32,7 +32,7 @@ namespace UnitTests.Iterators
         public async Task GradeLesson_WithValidData_GradesLessonAndAddsCoins()
         {
             // Arrange
-            var studentProfile = new StudentProfile { Coins = 100 };
+            var studentProfile = new StudentProfile { Coins = 100, User = new User { Id = 998 } };
             var course = new Course
             {
                 Teacher = new TeacherProfile
@@ -147,7 +147,8 @@ namespace UnitTests.Iterators
                     Course = new Course
                     {
                         Teacher = new TeacherProfile { User = new User { Id = 301 } }
-                    }
+                    },
+                    Student = new StudentProfile { Coins = 100, User = new User { Id = 998 } }
                 },
                 Status = LessonStatus.Happened,
                 Grading = new StudentGrading() // уже оценён
@@ -174,7 +175,8 @@ namespace UnitTests.Iterators
                     Course = new Course
                     {
                         Teacher = new TeacherProfile { User = new User { Id = 302 } }
-                    }
+                    },
+                    Student = new StudentProfile { Coins = 100, User = new User { Id = 998 } }
                 },
                 Status = LessonStatus.Waiting // не Happened
             };

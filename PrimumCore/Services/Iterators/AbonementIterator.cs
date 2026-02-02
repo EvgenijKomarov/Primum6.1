@@ -2,9 +2,12 @@
 using CoreConnection.Enums;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumPlatformModel.Models.Enums;
+using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -28,6 +31,7 @@ namespace PrimumCore.Services.Iterators
                 .TeacherProfile
                 .Courses
                 .SelectMany(x => x.Abonements)
+                .Where(AvailabilityExpressions.IsAbonementAlive.GetCompiled())
                 .Select(a => new AbonementDto
                 {
                     StudentId = a.Student.User.Id,
