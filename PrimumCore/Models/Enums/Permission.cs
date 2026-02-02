@@ -5,7 +5,7 @@ namespace PrimumCore.Models.Enums
 {
     public enum Permission
     {
-        GivePermissions = 0,
+        EditPermissions = 0,
         AddCash = 1,
         DeleteLessons = 2,
         [AvailableIncident(IncidentMeaningDto.Student, IncidentDecisionDto.Approve)]
@@ -38,5 +38,7 @@ namespace PrimumCore.Models.Enums
         InspectIncidentLogs = 14,
         AddPromocodes = 15,
         DeletePromocodes = 16,
+        BanUsers = 17,
+        UnbanUsers = 19
     }
 }

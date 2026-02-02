@@ -70,7 +70,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> EditPermissions(int userId, int objUserId, Dictionary<string, bool> editedPermissions)
         {
-            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.GivePermissions);
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.EditPermissions);
 
             var user = await context.Set<User>()
                 .Include(x => x.AdminProfile)
@@ -170,6 +170,32 @@ namespace PrimumCore.Services.Iterators
                 $"Deleted AdminProfile to {objUserId}",
                 DecisionDate = DateTime.Now
             });
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+
+        public async Task<int> BanUser(int userId, int objUserId)
+        {
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.BanUsers);
+
+            var user = await context.Set<User>()
+                .FirstOrDefaultAsync(x => x.Id == objUserId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            user.IsBanned = true;
+            await context.SaveChangesAsync();
+            return user.Id;
+        }
+
+        public async Task<int> UnbanUser(int userId, int objUserId)
+        {
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.UnbanUsers);
+
+            var user = await context.Set<User>()
+                .FirstOrDefaultAsync(x => x.Id == objUserId);
+            if (user is null) { throw new Exception("User not found"); }
+
+            user.IsBanned = false;
             await context.SaveChangesAsync();
             return user.Id;
         }

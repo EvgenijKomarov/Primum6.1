@@ -106,7 +106,7 @@ namespace UnitTests.Utilities
                 {
                     Permissions = new List<AdminPermission>
                 {
-                    new() { Permission = Permission.GivePermissions }
+                    new() { Permission = Permission.EditPermissions }
                 },
                     GivenPermissions = new List<AdminPermission>()
                 }
@@ -150,7 +150,7 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(Enum.GetValues<Permission>().Length));
             Assert.That(result[nameof(Permission.AddCash)], Is.True);
             Assert.That(result[nameof(Permission.DeleteLessons)], Is.True);
-            Assert.That(result[nameof(Permission.GivePermissions)], Is.False);
+            Assert.That(result[nameof(Permission.EditPermissions)], Is.False);
         }
 
         [Test]

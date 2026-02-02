@@ -324,7 +324,7 @@ namespace UnitTests.Utilities
             };
 
             // Нет нужного разрешения
-            var permissions = new[] { Permission.GivePermissions };
+            var permissions = new[] { Permission.EditPermissions };
 
             Assert.ThrowsAsync<Exception>(async () =>
                 await _solver.SolveIncident(AdminProfileId, permissions, dto),

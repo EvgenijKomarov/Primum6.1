@@ -87,7 +87,7 @@ namespace UnitTests.Iterators
                     Status = "Lead",
                     Permissions = new List<AdminPermission>
                 {
-                    new() { Permission = Permission.GivePermissions }
+                    new() { Permission = Permission.EditPermissions }
                 }
                 }
             };
@@ -100,7 +100,7 @@ namespace UnitTests.Iterators
 
             // Assert
             Assert.That(result.UserId, Is.EqualTo(201));
-            Assert.That(result.Permissions["GivePermissions"], Is.True);
+            Assert.That(result.Permissions["EditPermissions"], Is.True);
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace UnitTests.Iterators
             var iteratingAdminProfile = new AdminProfile
             {
                 AdminId = 1,
-                Permissions = new List<AdminPermission> { new() { Permission = Permission.GivePermissions } },
+                Permissions = new List<AdminPermission> { new() { Permission = Permission.EditPermissions } },
                 IncidentLogs = new List<IncidentLog>()
             };
             var iteratingUser = new User { Id = 300, AdminProfile = iteratingAdminProfile };
@@ -253,7 +253,7 @@ namespace UnitTests.Iterators
                 Id = 301,
                 AdminProfile = new AdminProfile
                 {
-                    Permissions = new List<AdminPermission> { new() { Permission = Permission.GivePermissions } }
+                    Permissions = new List<AdminPermission> { new() { Permission = Permission.EditPermissions } }
                 }
             };
             var nonAdmin = new User { Id = 401, AdminProfile = null };
@@ -388,6 +388,108 @@ namespace UnitTests.Iterators
 
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteAdminProfile(701, 801));
+        }
+
+        #endregion
+
+        #region BanUser
+
+        [Test]
+        public void BanUser_WhenNoUser_ThrowsException()
+        {
+            // Arrange
+            var iteratingUser = new User
+            {
+                Id = 701,
+                AdminProfile = new AdminProfile
+                {
+                    Permissions = new List<AdminPermission> { new() { Permission = Permission.BanUsers } }
+                }
+            };
+            var user = new User { Id = 800, IsBanned = false };
+
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { iteratingUser, user });
+
+            // Act & Assert
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.BanUser(701, 801));
+            _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Never);
+        }
+
+        [Test]
+        public async Task BanUser_WhenUserExists_UserBanned()
+        {
+            // Arrange
+            var iteratingUser = new User
+            {
+                Id = 701,
+                AdminProfile = new AdminProfile
+                {
+                    Permissions = new List<AdminPermission> { new() { Permission = Permission.BanUsers } }
+                }
+            };
+            var user = new User { Id = 801, IsBanned = false };
+
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { iteratingUser, user });
+
+            // Act 
+            await _iterator.BanUser(701, 801);
+
+            //Assert
+            _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
+            Assert.That(user.IsBanned == true);
+        }
+
+        #endregion
+
+        #region UnbanUser
+
+        [Test]
+        public void UnbanUser_WhenNoUser_ThrowsException()
+        {
+            // Arrange
+            var iteratingUser = new User
+            {
+                Id = 701,
+                AdminProfile = new AdminProfile
+                {
+                    Permissions = new List<AdminPermission> { new() { Permission = Permission.UnbanUsers } }
+                }
+            };
+            var user = new User { Id = 801, IsBanned = true };
+
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { iteratingUser, user });
+
+            // Act & Assert
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.UnbanUser(701, 800));
+            _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Never);
+        }
+
+        [Test]
+        public async Task UnbanUser_WhenUserExists_UserUnbanned()
+        {
+            // Arrange
+            var iteratingUser = new User
+            {
+                Id = 701,
+                AdminProfile = new AdminProfile
+                {
+                    Permissions = new List<AdminPermission> { new() { Permission = Permission.UnbanUsers } }
+                }
+            };
+            var user = new User { Id = 801, IsBanned = true };
+
+            _mockContext.Setup(x => x.Set<User>())
+                .ReturnsDbSet(new[] { iteratingUser, user });
+
+            // Act 
+            await _iterator.UnbanUser(701, 801);
+
+            //Assert
+            _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
+            Assert.That(user.IsBanned == false);
         }
 
         #endregion

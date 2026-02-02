@@ -50,6 +50,14 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> AddCash([FromRoute] int userId, [FromQuery] int cash, [FromQuery] int objectUserId) 
             => Ok(await iterator.AddCash(userId, objectUserId, cash));
 
+        [HttpPatch("ban")]
+        public async Task<IActionResult> BanUser([FromRoute] int userId, [FromQuery] int objectUserId)
+            => Ok(await iterator.BanUser(userId, objectUserId));
+
+        [HttpPatch("unban")]
+        public async Task<IActionResult> UnbanUser([FromRoute] int userId, [FromQuery] int objectUserId)
+            => Ok(await iterator.UnbanUser(userId, objectUserId));
+
         [HttpPatch("edit-permissions")]
         public async Task<IActionResult> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromBody] Dictionary<string, bool> permissions)
             => Ok(await iterator.EditPermissions(userId, objectUserId, permissions));

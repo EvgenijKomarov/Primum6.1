@@ -144,7 +144,7 @@ namespace UnitTests.Utilities
         public async Task GetIncedents_WithUnsupportedPermission_IgnoresIt()
         {
             // Допустим, GivePermissions не в collectionRules
-            var result = await _collector.GetIncedents(new[] { Permission.GivePermissions });
+            var result = await _collector.GetIncedents(new[] { Permission.EditPermissions });
 
             Assert.That(result, Is.Empty);
         }
