@@ -60,7 +60,7 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Login: {x.MailAdress}"
+                        $"Mail: {x.MailAdress}"
                     })
                     .ToList()
             },
