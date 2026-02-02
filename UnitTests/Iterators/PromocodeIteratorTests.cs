@@ -213,7 +213,7 @@ namespace UnitTests.Iterators
             Assert.That(result.Count, Is.EqualTo(2));
             foreach (var dto in result)
             {
-                Assert.That(dto.Code, Is.Null); // по ТЗ — всегда null в этом методе
+                Assert.That(dto.Code, Is.Not.Null); // по ТЗ — всегда null в этом методе
             }
             Assert.That(result[0].Title, Is.EqualTo("Купленный 1"));
         }

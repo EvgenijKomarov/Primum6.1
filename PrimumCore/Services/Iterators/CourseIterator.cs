@@ -125,7 +125,6 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
         {
             var user = await context.Set<User>()
-                .Where(AvailabilityExpressions.IsTeacherAvailable)
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);

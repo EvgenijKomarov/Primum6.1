@@ -50,11 +50,10 @@ namespace PrimumCore.Services.Iterators
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .Where(AvailabilityExpressions.IsTeacherSheduleAvailable.Not())
                 .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId);
             if (teacherShedule is null) { throw new Exception("Shedule not found"); }
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
-            if (AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new Exception("Shedule is busy"); }
+            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new Exception("Shedule is busy"); }
             if (teacherShedule.Teacher.User.Id == studentId) { throw new Exception("Student can't subscribe on himself"); }
             if (user
                 .StudentProfile

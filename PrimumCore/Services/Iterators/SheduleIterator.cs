@@ -35,7 +35,7 @@ namespace PrimumCore.Services.Iterators
                 {
                     DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
-                    IsBusy = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
+                    IsBusy = !AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
                     StudentName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.DisplayName : null,
                     StudentId = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.Id : null,
                     CourseName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Course.Name : null,

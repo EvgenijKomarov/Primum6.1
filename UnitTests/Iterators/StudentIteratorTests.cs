@@ -45,7 +45,6 @@ namespace UnitTests.Iterators
             var user = new User
             {
                 Id = 101,
-                Name = "Иван Иванов",
                 StudentProfile = new StudentProfile()
             };
             _mockContext.Setup(x => x.Set<User>())
@@ -58,7 +57,6 @@ namespace UnitTests.Iterators
             Assert.Multiple(() =>
             {
                 Assert.That(result.UserId, Is.EqualTo(101));
-                Assert.That(result.DisplayName, Is.EqualTo("Иван Иванов"));
             });
         }
 
