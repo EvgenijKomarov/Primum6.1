@@ -32,6 +32,4 @@ public partial class User
     public virtual ICollection<VerificationToken> VerificationTokens { get; set; } = new List<VerificationToken>();
 
     public string DisplayName => $"{Surname} {Name} {Patronymic}";
-
-    public bool IsAvailable => !IsBanned && IsMailChecked;
 }

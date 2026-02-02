@@ -2,6 +2,7 @@
 using CoreConnection.DTOs.Inputs;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
@@ -29,12 +30,12 @@ namespace PrimumCore.Services.Iterators
 
             return user.TeacherProfile
                 .TeacherShedules
-                .WhereIf(isOnlyAvailable, x => !x.IsBusy)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherSheduleAvailable)
                 .Select(x => new TeacherSheduleDto
                 {
                     DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
-                    IsBusy = x.IsBusy,
+                    IsBusy = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
                     StudentName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.DisplayName : null,
                     StudentId = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.Id : null,
                     CourseName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Course.Name : null,
@@ -73,7 +74,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.TeacherShedules)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new Exception("Teacher is not approved"); }
 
             if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) 
                 { throw new Exception("Shedule already exists"); }
@@ -97,7 +98,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(e => e.AbonementShedule)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new Exception("Teacher is not approved"); }
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
             if (shedule is null) { throw new Exception("Shedule not found"); }

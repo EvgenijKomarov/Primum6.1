@@ -23,6 +23,4 @@ public partial class Abonement
     public virtual ICollection<AbonementShedule> AbonementShedules { get; set; } = new List<AbonementShedule>();
 
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
-
-    public bool IsAvailable => AbonementStatus == AbonementStatus.Active;
 }

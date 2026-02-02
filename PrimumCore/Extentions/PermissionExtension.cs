@@ -3,7 +3,7 @@ using PrimumCore.Models.Enums;
 
 namespace PrimumCore.Extentions
 {
-    public static class PermissionExtention
+    public static class PermissionExtension
     {
         public static IEnumerable<AvailableIncident> GetAvailableIncidentsAttributes(this Permission permission)
         {

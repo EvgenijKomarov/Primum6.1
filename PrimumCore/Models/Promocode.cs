@@ -1,4 +1,6 @@
-﻿namespace PrimumCore.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PrimumCore.Models
 {
     public class Promocode
     {
@@ -15,7 +17,5 @@
         public string Description { get; set; } = null!;
 
         public StudentProfile? Student {  get; set; }
-
-        public bool IsAvailable => Student == null;
     }
 }

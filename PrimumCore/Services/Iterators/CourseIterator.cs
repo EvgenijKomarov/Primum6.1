@@ -2,9 +2,11 @@
 using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumPlatformModel.Models.Enums;
+using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -20,7 +22,7 @@ namespace PrimumCore.Services.Iterators
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
 
             return user.TeacherProfile.Courses
-                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
                 .Select(x => new CourseDto
                 {
                     CourseId = x.CourseId,
@@ -45,7 +47,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Include(x => x.CourseTheme)
-                .Where(x => x.IsAvailable)
+                .Where(AvailabilityExpressions.IsCourseAvailable)
                 .Select(x => new CourseDto
                 {
                     CourseId = x.CourseId,
@@ -74,7 +76,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Include(x => x.CourseTheme)
-                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
                 .Select(x => new CourseDto
                 {
                     CourseId = x.CourseId,
@@ -100,7 +102,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .SelectMany(x => x.Courses)
-                .WhereIf(isOnlyAvailable, x => x.IsAvailable)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
                 .Where(x => x.CourseThemeId == themeId)
                 .Select(x => new CourseDto
                 {
@@ -123,11 +125,13 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
         {
             var user = await context.Set<User>()
+                .Where(AvailabilityExpressions.IsTeacherAvailable)
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
+                { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -150,7 +154,8 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
+                { throw new Exception("Teacher is not approved"); }
 
             var course = new Course
             {
@@ -173,7 +178,8 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
+                { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile
@@ -193,7 +199,8 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!user.TeacherProfile.IsAvailable) { throw new Exception("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
+                { throw new Exception("Teacher is not approved"); }
 
             var course = user
                 .TeacherProfile

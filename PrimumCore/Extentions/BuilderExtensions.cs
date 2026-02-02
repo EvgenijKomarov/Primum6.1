@@ -11,7 +11,7 @@ using Serilog;
 
 namespace PrimumCore.Extentions
 {
-    public static class BuilderExtentions
+    public static class BuilderExtensions
     {
         public static WebApplicationBuilder AddDI(this WebApplicationBuilder builder)
         {

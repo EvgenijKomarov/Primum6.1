@@ -1,11 +1,15 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
 using CoreConnection.Notifications;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
+using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -39,18 +43,18 @@ namespace PrimumCore.Services.Iterators
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
 
             var course = await context.Set<Course>()
-                .Where(x => x.IsAvailable)
+                .Where(AvailabilityExpressions.IsCourseAvailable)
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
             if (course is null) { throw new Exception("Course not found"); }
 
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .Where(x => !x.IsBusy)
+                .Where(AvailabilityExpressions.IsTeacherSheduleAvailable.Not())
                 .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId);
             if (teacherShedule is null) { throw new Exception("Shedule not found"); }
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
-            if (teacherShedule.IsBusy) { throw new Exception("Shedule is busy"); }
+            if (AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new Exception("Shedule is busy"); }
             if (teacherShedule.Teacher.User.Id == studentId) { throw new Exception("Student can't subscribe on himself"); }
             if (user
                 .StudentProfile

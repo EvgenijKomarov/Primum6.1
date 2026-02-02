@@ -29,6 +29,4 @@ public partial class Course
     public virtual TeacherProfile Teacher { get; set; } = null!;
 
     public virtual CourseTheme CourseTheme { get; set; } = null!;
-
-    public bool IsAvailable => this.ApproveStatus == ApproveStatus.Approved && this.IsActive;
 }

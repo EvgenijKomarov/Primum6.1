@@ -2,6 +2,7 @@
 using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 
@@ -14,13 +15,13 @@ namespace PrimumCore.Services.Iterators
             return await context.Set<User>()
                 .Include(x => x.TeacherProfile)
                 .Where(x => x.TeacherProfile != null)
-                .WhereIf(isOnlyAvailable, x => x.TeacherProfile.IsAvailable)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherAvailable)
                 .Select(x => new TeacherProfileDto
                 {
                     DisplayName = x.DisplayName,
                     About = x.TeacherProfile.About,
                     UserId = x.Id,
-                    IsAvailable = x.TeacherProfile.IsAvailable
+                    IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
                 })
                 .ToArrayAsync();
         }
@@ -35,7 +36,7 @@ namespace PrimumCore.Services.Iterators
                     DisplayName = x.DisplayName,
                     About = x.TeacherProfile.About,
                     UserId = x.Id,
-                    IsAvailable = x.TeacherProfile.IsAvailable
+                    IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
                 })
                 .FirstOrDefaultAsync(x => x.UserId == teacherId);
             if (user is null) { throw new Exception("Teacher not found"); }

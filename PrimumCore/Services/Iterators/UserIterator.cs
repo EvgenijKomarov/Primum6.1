@@ -1,6 +1,8 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
+using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
@@ -82,7 +84,7 @@ namespace PrimumCore.Services.Iterators
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null) { throw new Exception("User not found"); }
             if (user.TeacherProfile is not null) { throw new Exception("User is already teacher"); }
-            if (!user.IsAvailable) { throw new Exception("User is not enabled"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
 
             user.TeacherProfile = new TeacherProfile
             {
@@ -102,7 +104,7 @@ namespace PrimumCore.Services.Iterators
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null) { throw new Exception("User not found"); }
             if (user.StudentProfile is not null) { throw new Exception("User is already student"); }
-            if (!user.IsAvailable) { throw new Exception("User is not enabled"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
 
             user.StudentProfile = new StudentProfile();
 

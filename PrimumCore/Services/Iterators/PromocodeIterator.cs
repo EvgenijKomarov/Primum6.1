@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -16,7 +17,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await context.Set<Promocode>()
                 .Include(x => x.Student)
-                .WhereIf(OnlyAvailable, x => x.IsAvailable)
+                .WhereIf(OnlyAvailable, AvailabilityExpressions.IsPromocodeAvailable)
                 .Select(x => new PromocodeDto
                 {
                     PromocodeId = x.PromocodeId,
@@ -25,7 +26,7 @@ namespace PrimumCore.Services.Iterators
                     CoinsPrice = x.CoinsPrice,
                     Title = x.Title,
                     Description = x.Description,
-                    IsAvailable = x.IsAvailable
+                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
                 })
                 .ToArrayAsync();
         }
@@ -34,7 +35,7 @@ namespace PrimumCore.Services.Iterators
         {
             var code = await context.Set<Promocode>()
                 .Include(x => x.Student)
-                .WhereIf(OnlyAvailable, x => x.IsAvailable)
+                .WhereIf(OnlyAvailable, AvailabilityExpressions.IsPromocodeAvailable)
                 .Select(x => new PromocodeDto
                 {
                     PromocodeId = x.PromocodeId,
@@ -43,7 +44,7 @@ namespace PrimumCore.Services.Iterators
                     CoinsPrice = x.CoinsPrice,
                     Title = x.Title,
                     Description = x.Description,
-                    IsAvailable = x.IsAvailable
+                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
                 })
                 .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId);
             if (code is null) { throw new Exception("Promocode not found"); }
@@ -55,7 +56,7 @@ namespace PrimumCore.Services.Iterators
         {
             var code = context.Set<Promocode>()
                 .Include(x => x.Student)
-                .Where(x => x.IsAvailable)
+                .Where(AvailabilityExpressions.IsPromocodeAvailable)
                 .FirstOrDefault(x => x.PromocodeId == promocodeId);
             if (code is null) { throw new Exception("Promocode not found"); }
 
@@ -77,7 +78,7 @@ namespace PrimumCore.Services.Iterators
                 CoinsPrice = code.CoinsPrice,
                 Title = code.Title,
                 Description = code.Description,
-                IsAvailable = code.IsAvailable
+                IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)
             };
         }
 
@@ -94,11 +95,11 @@ namespace PrimumCore.Services.Iterators
                 {
                     PromocodeId = x.PromocodeId,
                     StudentId = x.StudentId,
-                    Code = null,
+                    Code = x.Code,
                     CoinsPrice = x.CoinsPrice,
                     Title = x.Title,
                     Description = x.Description,
-                    IsAvailable = x.IsAvailable
+                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
                 })
                 .ToArray();
         }
@@ -128,7 +129,8 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Student)
                 .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId);
             if (code is null) { throw new Exception("Promocode not found"); }
-            if (!code.IsAvailable) { throw new Exception("Promocode was sold"); }
+            if (!AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)) 
+                { throw new Exception("Promocode was sold"); }
 
             context.Set<Promocode>().Remove(code);
             await context.SaveChangesAsync();

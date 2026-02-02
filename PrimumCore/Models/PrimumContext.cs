@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using PrimumCore.Constants;
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace PrimumCore.Models;
 
@@ -76,6 +77,11 @@ public partial class PrimumContext : DbContext, IPrimumContext
             entity.HasOne(d => d.Abonement)
                 .WithMany(a => a.AbonementShedules)
                 .HasForeignKey(d => d.AbonementId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.TeacherShedule)
+                .WithOne()
+                .HasForeignKey<AbonementShedule>(d => d.TeacherSheduleId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -152,11 +158,6 @@ public partial class PrimumContext : DbContext, IPrimumContext
                 .WithMany(p => p.TeacherShedules)
                 .HasForeignKey(d => d.TeacherId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.AbonementShedule)
-                .WithOne(a => a.TeacherShedule)
-                .HasForeignKey<AbonementShedule>(d => d.TeacherSheduleId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<CourseTheme>(entity =>
@@ -244,7 +245,7 @@ public partial class PrimumContext : DbContext, IPrimumContext
                 .HasForeignKey<StudentProfile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasQueryFilter(e => !e.IsBanned && e.IsMailChecked);
+            entity.HasQueryFilter(AvailabilityExpressions.IsUserAvailable);
         });
 
         OnModelCreatingPartial(modelBuilder);
