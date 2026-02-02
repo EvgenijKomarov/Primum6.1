@@ -33,6 +33,7 @@ namespace PrimumCore.Services.Iterators
                 .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherSheduleAvailable)
                 .Select(x => new TeacherSheduleDto
                 {
+                    TeacherSheduleId = x.TeacherSheduleId,
                     DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
                     IsBusy = !AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),

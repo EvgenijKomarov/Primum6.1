@@ -8,6 +8,8 @@ namespace CoreConnection.DTOs
 {
     public class TeacherSheduleDto
     {
+        public required int TeacherSheduleId {  get; set; }
+
         public required DayOfWeek DayOfWeek { get; set; }
 
         public required int Time { get; set; }

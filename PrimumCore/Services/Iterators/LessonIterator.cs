@@ -32,6 +32,7 @@ namespace PrimumCore.Services.Iterators
                 LessonLink = isStudentLink ? x.StudentLink : x.TeacherLink,
                 AbonementId = x.Abonement.AbonementId,
                 Price = x.Price,
+                LessonId = x.LessonId,
                 LessonStatus = (StatusLesson)x.Status,
                 Grade = x.Grading is null ? null : x.Grading.GetFinalGrade()
             });
@@ -45,6 +46,11 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(a => a.Lessons)
                 .ThenInclude(l => l.Grading)
+                .Include(u => u.TeacherProfile)
+                .ThenInclude(t => t.Courses)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Student)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
 
@@ -56,6 +62,7 @@ namespace PrimumCore.Services.Iterators
                 .Where(l => l.DateTime >= DateTime.Now)
                 .Select(l => new LessonDto
                 {
+                    LessonId = l.LessonId,
                     DateTime = l.DateTime,
                     CourseName = l.Abonement.Course.Name,
                     CourseId = l.Abonement.CourseId,
@@ -83,6 +90,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(a => a.Course)
                 .ThenInclude(c => c.Teacher)
+                .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
 
@@ -92,6 +100,7 @@ namespace PrimumCore.Services.Iterators
                 .SelectMany(x => x.Lessons)
                 .Select(l => new LessonDto
                 {
+                    LessonId = l.LessonId,
                     DateTime = l.DateTime,
                     CourseName = l.Abonement.Course.Name,
                     CourseId = l.Abonement.CourseId,

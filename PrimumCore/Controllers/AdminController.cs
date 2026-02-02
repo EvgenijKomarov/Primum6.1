@@ -30,7 +30,7 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetIncidentLog([FromRoute] int userId, [FromQuery] int logId)
             => Ok(await IncidentIterator.GetIncidentLog(userId, logId));
 
-        [HttpGet("revise-Incident-log/{logId}")]
+        [HttpGet("revise-incident-log/{logId}")]
         public async Task<IActionResult> RevisionIncidentLog([FromRoute] int userId, [FromQuery] int logId)
             => Ok(await IncidentIterator.RevisionIncidentLog(userId, logId));
 

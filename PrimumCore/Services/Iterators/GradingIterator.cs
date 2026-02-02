@@ -34,6 +34,9 @@ namespace PrimumCore.Services.Iterators
             lesson.Grading = lessonGrading;
             lesson.Abonement.Student.Coins += CoinFormula(lessonGrading.GetFinalGrade(), lesson.Price);
 
+            context.Set<StudentGrading>().Add(lessonGrading);
+            await context.SaveChangesAsync();
+
             return lesson.LessonId;
         }
 

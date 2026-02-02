@@ -102,13 +102,19 @@ namespace PrimumCore.Services.Iterators
             abonement.AbonementShedules.Add(abonementShedule);
 
             await context.Set<AbonementShedule>().AddAsync(abonementShedule);
-            await context.Set<Lesson>().AddAsync(new Lesson
+
+            if (!context.Set<Lesson>()
+                .Include(x => x.Abonement)
+                .Any(x => x.DateTime == suitableDate && x.Abonement.AbonementId == abonement.AbonementId))
             {
-                Abonement = abonement,
-                Price = abonement.Course.FreeLessons >= abonement.Lessons.Count() ? 0 : abonement.PricePerLesson,
-                DateTime = suitableDate,
-                Status = LessonStatus.Waiting
-            });
+                await context.Set<Lesson>().AddAsync(new Lesson
+                {
+                    Abonement = abonement,
+                    Price = abonement.Course.FreeLessons >= abonement.Lessons.Count() ? 0 : abonement.PricePerLesson,
+                    DateTime = suitableDate,
+                    Status = LessonStatus.Waiting
+                });
+            }
 
             await context.SaveChangesAsync();
 

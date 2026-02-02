@@ -37,11 +37,11 @@ namespace PrimumCore.Controllers
 
         [HttpGet("abonement/{abonementId}/shedules")]
         public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await sheduleIterator.GetAbonementShedules(userId));
+            => Ok(await sheduleIterator.GetAbonementShedules(abonementId));
 
         [HttpGet("abonement/{abonementId}/lessons")]
         public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await lessonIterator.GetAbonementLessons(userId, false));
+            => Ok(await lessonIterator.GetAbonementLessons(abonementId, false));
 
         [HttpPut("course/edit")]
         public async Task<IActionResult> EditCourse([FromRoute] int userId, [FromQuery] int courseId, [FromBody] CourseInputDto courseDto) 

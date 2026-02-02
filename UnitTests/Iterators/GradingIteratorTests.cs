@@ -37,7 +37,7 @@ namespace UnitTests.Iterators
             {
                 Teacher = new TeacherProfile
                 {
-                    User = new User { Id = 201 } // учитель НЕ тот, кто оценивает
+                    User = new User { Id = 999 }
                 }
             };
             var abonement = new Abonement
@@ -56,6 +56,9 @@ namespace UnitTests.Iterators
 
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new[] { lesson });
+            var grades = new List<StudentGrading>();
+            _mockContext.Setup(x => x.Set<StudentGrading>())
+                .ReturnsDbSet(grades);
 
             var dto = new GradingInputDto
             {
@@ -69,6 +72,13 @@ namespace UnitTests.Iterators
             var result = await _iterator.GradeLesson(teacherId: 999, lessonId: 501, dto);
 
             // Assert
+            _mockContext.Verify(x => x.Set<StudentGrading>().Add(It.Is<StudentGrading>(x => 
+                x.HomeworkGrade == (Grading)dto.HomeworkGrade &&
+                x.LessonActivityGrade == (Grading)dto.LessonActivityGrade &&
+                x.RepetitionOfMaterialGrade == (Grading)dto.RepetitionOfMaterialGrade &&
+                x.StudyInitiativeGrade == (Grading)dto.StudyInitiativeGrade
+            )));
+
             Assert.That(result, Is.EqualTo(501));
             Assert.That(lesson.Grading, Is.Not.Null);
             Assert.That(lesson.Grading.HomeworkGrade, Is.EqualTo((Grading)4));
@@ -99,6 +109,7 @@ namespace UnitTests.Iterators
         public async Task GradeLesson_WhenTeacherIsOwner_ThrowsException()
         {
             // Arrange
+            var user = new User { Id = 202 };
             var lesson = new Lesson
             {
                 LessonId = 502,
@@ -106,14 +117,17 @@ namespace UnitTests.Iterators
                 {
                     Course = new Course
                     {
-                        Teacher = new TeacherProfile { User = new User { Id = 202 } }
-                    }
+                        Teacher = new TeacherProfile { User = user }
+                    },
+                    Student = new StudentProfile { User = user }
                 },
                 Status = LessonStatus.Happened
             };
 
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new[] { lesson });
+            _mockContext.Setup(x => x.Set<StudentGrading>())
+                .ReturnsDbSet(new List<StudentGrading>());
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<Exception>(async () =>
@@ -144,7 +158,7 @@ namespace UnitTests.Iterators
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<Exception>(async () =>
-                await _iterator.GradeLesson(1, 503, new GradingInputDto()));
+                await _iterator.GradeLesson(301, 503, new GradingInputDto()));
             Assert.That(ex?.Message, Does.Contain("already gradet")); // опечатка в коде — оставляем как есть
         }
 
@@ -170,7 +184,7 @@ namespace UnitTests.Iterators
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<Exception>(async () =>
-                await _iterator.GradeLesson(1, 504, new GradingInputDto()));
+                await _iterator.GradeLesson(302, 504, new GradingInputDto()));
             Assert.That(ex?.Message, Does.Contain("doesn't happened"));
         }
 

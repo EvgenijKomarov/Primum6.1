@@ -76,10 +76,12 @@ namespace PrimumCore.Services.Utilities
                 async (id, decision) =>
                 {
                     var user = context.Set<User>()
-                        .Include(x => x.TeacherProfile)
-                        .ThenInclude(x => x.TeacherShedules)
-                        .Include(x => x.TeacherProfile)
-                        .ThenInclude(x => x.Courses)
+                        .Include(x => x.StudentProfile)
+                        .ThenInclude(x => x.Abonements)
+                        .ThenInclude(x => x.Lessons)
+                        .Include(x => x.StudentProfile)
+                        .ThenInclude(x => x.Abonements)
+                        .ThenInclude(x => x.AbonementShedules)
                         .FirstOrDefault(x => x.Id == id);
                     if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
 

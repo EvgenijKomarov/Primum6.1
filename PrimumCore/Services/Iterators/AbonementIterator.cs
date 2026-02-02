@@ -85,6 +85,7 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.AbonementShedules)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
 
@@ -95,6 +96,7 @@ namespace PrimumCore.Services.Iterators
             if (abonement is null) { throw new Exception("Abonement not found"); }
 
             abonement.AbonementStatus = AbonementStatus.Deleted;
+            abonement.AbonementShedules.Clear();
             await context.SaveChangesAsync();
             return abonement.AbonementId;
         }

@@ -171,7 +171,7 @@ namespace UnitTests.Helpers
             Assert.That(result["ModerateCourses"], Is.True);
             Assert.That(result["ApproveCourses"], Is.True);
             Assert.That(result["AdministrateTeachers"], Is.False); // предполагаем, что его нет
-            Assert.That(result.ContainsKey("GivePermissions"), Is.True); // должен быть ключ для каждого enum-значения
+            Assert.That(result.ContainsKey("EditPermissions"), Is.True); // должен быть ключ для каждого enum-значения
         }
 
         [Test]

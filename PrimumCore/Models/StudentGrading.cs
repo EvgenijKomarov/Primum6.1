@@ -29,6 +29,8 @@ namespace PrimumCore.Models
                 if (grade != Grading.None) { gradeCount++; gradeSum += (int)grade; }
             }
 
+            gradeCount = gradeCount == 0 ? 1 : gradeCount;
+
             return gradeSum / gradeCount;
         }
     }
