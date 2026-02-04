@@ -26,19 +26,10 @@ namespace PrimumCore.Services.Iterators
                 .ToArrayAsync();
         }
 
-        public async Task<TeacherProfileDto> GetTeacher(int teacherId)
+        public async Task<TeacherProfileDto> GetTeacher(int teacherId, bool isOnlyAvailable)
         {
-            var user = await context.Set<User>()
-                .Include(x => x.TeacherProfile)
-                .Where(x => x.TeacherProfile != null)
-                .Select(x => new TeacherProfileDto
-                {
-                    DisplayName = x.DisplayName,
-                    About = x.TeacherProfile.About,
-                    UserId = x.Id,
-                    IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
-                })
-                .FirstOrDefaultAsync(x => x.UserId == teacherId);
+            var user = (await GetTeachers(isOnlyAvailable))
+                .FirstOrDefault(x => x.UserId == teacherId);
             if (user is null) { throw new Exception("Teacher not found"); }
 
             return user;

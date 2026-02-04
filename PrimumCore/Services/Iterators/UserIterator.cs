@@ -115,32 +115,11 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<UserDto> GetUser(int id, bool isOnlyAvailable)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .Include(u => u.TeacherProfile)
-                .Include(u => u.AdminProfile)
-                .IgnoreQueryFilters()
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var user = (await GetUsers(isOnlyAvailable))
+                .FirstOrDefault(x => x.Id == id);
             if (user is null) { throw new Exception("User not found"); }
-            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                DisplayName = user.DisplayName,
-                Cash = user.Cash,
-                IsApprovedStudent = user.StudentProfile is not null ?
-                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsApprovedTeacher = user.TeacherProfile is not null ?
-                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsAdmin = user.AdminProfile is not null,
-                IsBanned = user.IsBanned,
-                MailConfirmed = user.IsMailChecked
-            };
+            return user;
         }
 
         public async Task<IEnumerable<UserDto>> GetUsers(bool isOnlyAvailable)

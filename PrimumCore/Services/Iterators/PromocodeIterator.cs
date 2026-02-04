@@ -31,22 +31,9 @@ namespace PrimumCore.Services.Iterators
                 .ToArrayAsync();
         }
 
-        public async Task<PromocodeDto> GetPromocode(int promocodeId, bool OnlyAvailable)
+        public async Task<PromocodeDto> GetPromocode(int promocodeId, bool onlyAvailable)
         {
-            var code = await context.Set<Promocode>()
-                .Include(x => x.Student)
-                .WhereIf(OnlyAvailable, AvailabilityExpressions.IsPromocodeAvailable)
-                .Select(x => new PromocodeDto
-                {
-                    PromocodeId = x.PromocodeId,
-                    StudentId = x.StudentId,
-                    Code = null,
-                    CoinsPrice = x.CoinsPrice,
-                    Title = x.Title,
-                    Description = x.Description,
-                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
-                })
-                .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId);
+            var code = (await GetPromocodes(onlyAvailable)).FirstOrDefault(x => x.PromocodeId == promocodeId);
             if (code is null) { throw new Exception("Promocode not found"); }
 
             return code;

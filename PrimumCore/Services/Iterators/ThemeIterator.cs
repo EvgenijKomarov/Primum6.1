@@ -23,20 +23,10 @@ namespace PrimumCore.Services.Iterators
                 .ToArrayAsync();
         }
 
-        public async Task<CourseThemeDto> GetTheme(int themeId)
+        public async Task<CourseThemeDto> GetTheme(int themeId, bool isOnlyAvailable)
         {
-            var theme = await context.Set<CourseTheme>()
-                .Include(x => x.Courses)
-                .ThenInclude(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Where(x => x.IsActive)
-                .Select(x => new CourseThemeDto
-                {
-                    CourseThemeId = x.CourseThemeId,
-                    ThemeName = x.ThemeName,
-                    IsActive = x.IsActive
-                })
-                .FirstOrDefaultAsync(x => x.CourseThemeId == themeId);
+            var theme = (await GetThemes(isOnlyAvailable))
+                .FirstOrDefault(x => x.CourseThemeId == themeId);
             if (theme is null) { throw new Exception("Theme not found"); }
             return theme;
         }

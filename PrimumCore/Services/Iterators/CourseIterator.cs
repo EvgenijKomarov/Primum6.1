@@ -41,29 +41,9 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
-        public async Task<CourseDto> GetCourse(int courseId)
+        public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
         {
-            var course = await context.Set<Course>()
-                .Include(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Include(x => x.CourseTheme)
-                .Where(AvailabilityExpressions.IsCourseAvailable)
-                .Select(x => new CourseDto
-                {
-                    CourseId = x.CourseId,
-                    Name = x.Name,
-                    TeacherName = x.Teacher.User.DisplayName,
-                    CourseThemeName = x.CourseTheme.ThemeName,
-                    CourseThemeId = x.CourseThemeId,
-                    TeacherId = x.Teacher.User.Id,
-                    Price = x.Price,
-                    MaxLessons = x.MaxLessons,
-                    FreeLessons = x.FreeLessons,
-                    TeacherAbout = x.Teacher.About,
-                    IsActive = x.IsActive,
-                    ApproveStatus = (StatusApprove)x.ApproveStatus
-                })
-                .FirstOrDefaultAsync(x => x.CourseId == courseId);
+            var course = (await GetCourses(isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);
 
             if (course is null) { throw new Exception("Course not found"); }
 

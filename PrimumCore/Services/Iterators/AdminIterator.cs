@@ -31,18 +31,8 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<AdminProfileDto> GetAdmin(int userId)
         {
-            var admin = await context.Set<User>()
-                .Include(x => x.AdminProfile)
-                .ThenInclude(x => x.Permissions)
-                .Where(x => x.AdminProfile != null)
-                .Select(x => new AdminProfileDto
-                {
-                    DisplayName = x.DisplayName,
-                    UserId = x.Id,
-                    Status = x.AdminProfile.Status,
-                    Permissions = helper.GetAllPermissions(x.AdminProfile)
-                })
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+            var admin = (await GetAdmins())
+                .FirstOrDefault(x => x.UserId == userId);
             if (admin == null) { throw new Exception("Admin not found"); }
 
             return admin;
@@ -174,7 +164,7 @@ namespace PrimumCore.Services.Iterators
             return user.Id;
         }
 
-        public async Task<int> BanUser(int userId, int objUserId)
+        public async Task<int> BanUser(int userId, int objUserId, bool banStatus)
         {
             var iteratingUser = await helper.CheckIteratingUser(userId, Permission.BanUsers);
 
@@ -182,20 +172,7 @@ namespace PrimumCore.Services.Iterators
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
             if (user is null) { throw new Exception("User not found"); }
 
-            user.IsBanned = true;
-            await context.SaveChangesAsync();
-            return user.Id;
-        }
-
-        public async Task<int> UnbanUser(int userId, int objUserId)
-        {
-            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.UnbanUsers);
-
-            var user = await context.Set<User>()
-                .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null) { throw new Exception("User not found"); }
-
-            user.IsBanned = false;
+            user.IsBanned = banStatus;
             await context.SaveChangesAsync();
             return user.Id;
         }

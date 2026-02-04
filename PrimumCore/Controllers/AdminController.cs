@@ -60,11 +60,11 @@ namespace PrimumCore.Controllers
 
         [HttpPatch("ban")]
         public async Task<IActionResult> BanUser([FromRoute] int userId, [FromQuery] int objectUserId)
-            => Ok(await iterator.BanUser(userId, objectUserId));
+            => Ok(await iterator.BanUser(userId, objectUserId, true));
 
         [HttpPatch("unban")]
         public async Task<IActionResult> UnbanUser([FromRoute] int userId, [FromQuery] int objectUserId)
-            => Ok(await iterator.UnbanUser(userId, objectUserId));
+            => Ok(await iterator.BanUser(userId, objectUserId, false));
 
         [HttpPatch("edit-permissions")]
         public async Task<IActionResult> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromBody] Dictionary<string, bool> permissions)

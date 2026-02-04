@@ -31,7 +31,7 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, true));
 
         [HttpGet("teacher/{teacherId}")]
-        public async Task<IActionResult> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId));
+        public async Task<IActionResult> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId, true));
 
         [HttpGet("teachers")]
         public async Task<IActionResult> GetTeachers() => Ok(await teacherIterator.GetTeachers(true));
@@ -50,11 +50,11 @@ namespace PrimumCore.Controllers
 
         [HttpGet("theme/{themeId}")]
         public async Task<IActionResult> GetTheme([FromRoute] int themeId)
-            => Ok(await themeIterator.GetTheme(themeId));
+            => Ok(await themeIterator.GetTheme(themeId, true));
 
         [HttpGet("course/{courseId}")]
         public async Task<IActionResult> GetCourse([FromRoute] int courseId)
-            => Ok(await courseIterator.GetCourse(courseId));
+            => Ok(await courseIterator.GetCourse(courseId, true));
 
         [HttpGet("courses")]
         public async Task<IActionResult> GetCourses()
