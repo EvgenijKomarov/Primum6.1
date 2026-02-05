@@ -138,7 +138,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
 
-            var result = await _iterator.GetCourse(301);
+            var result = await _iterator.GetCourse(301, true);
 
             Assert.That(result.CourseId, Is.EqualTo(301));
         }
@@ -168,8 +168,8 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course1, course2 });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(302));
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(303));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(302, true));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(303, true));
         }
 
         #endregion

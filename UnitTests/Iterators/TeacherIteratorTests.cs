@@ -84,7 +84,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { teacher });
 
             // Act
-            var result = await _iterator.GetTeacher(201);
+            var result = await _iterator.GetTeacher(201, true);
 
             // Assert
             Assert.Multiple(() =>
@@ -103,7 +103,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>()); // или только без нужного ID
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(999));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(999, true));
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { nonTeacher });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(301));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(301, true));
         }
 
         #endregion

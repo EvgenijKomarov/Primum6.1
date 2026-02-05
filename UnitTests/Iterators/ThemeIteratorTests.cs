@@ -74,7 +74,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { theme });
 
             // Act
-            var result = await _iterator.GetTheme(30);
+            var result = await _iterator.GetTheme(30, true);
 
             // Assert
             Assert.Multiple(() =>
@@ -93,7 +93,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<CourseTheme>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(999));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(999, true));
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { inactiveTheme });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(40));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(40, true));
         }
 
         #endregion

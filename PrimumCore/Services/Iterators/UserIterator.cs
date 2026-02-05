@@ -32,7 +32,7 @@ namespace PrimumCore.Services.Iterators
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null) { throw new Exception("User not found"); }
 
-            user.Cash += cash;
+            user.Cash += Math.Abs(cash);
 
             await context.SaveChangesAsync();
             return user.Cash;
@@ -45,7 +45,7 @@ namespace PrimumCore.Services.Iterators
             if (user is null) { throw new Exception("User not found"); }
 
             if (user.Cash < cash) { cash = user.Cash; }
-            user.Cash -= cash;
+            user.Cash -= Math.Abs(cash);
 
             await context.SaveChangesAsync();
             return cash;

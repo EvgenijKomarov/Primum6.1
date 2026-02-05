@@ -166,7 +166,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> BanUser(int userId, int objUserId, bool banStatus)
         {
-            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.BanUsers);
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.ChangeBanStatus);
 
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == objUserId);

@@ -39,7 +39,6 @@ namespace PrimumCore.Models.Enums
         InspectIncidentLogs = 14,
         AddPromocodes = 15,
         DeletePromocodes = 16,
-        BanUsers = 17,
-        UnbanUsers = 19
+        ChangeBanStatus = 17,
     }
 }

@@ -71,7 +71,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { promo });
 
             // Act
-            var result = await _iterator.GetPromocode(10, OnlyAvailable: false);
+            var result = await _iterator.GetPromocode(10, false);
 
             // Assert
             Assert.Multiple(() =>
@@ -103,7 +103,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { promo });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetPromocode(11, OnlyAvailable: true));
+            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetPromocode(11, true));
         }
 
         #endregion
