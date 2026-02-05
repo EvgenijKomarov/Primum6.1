@@ -21,13 +21,25 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
             => Ok(await lessonIterator.GetStudentLessons(userId));
 
+        [HttpGet("lesson/{lessonId}")]
+        public async Task<IActionResult> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
+            => Ok(await lessonIterator.GetStudentLesson(userId, lessonId));
+
         [HttpGet("abonements")]
         public async Task<IActionResult> GetAbonements([FromRoute] int userId) 
             => Ok(await abonementIterator.GetStudentAbonements(userId));
 
+        [HttpGet("abonement/{abonementId}")]
+        public async Task<IActionResult> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await abonementIterator.GetStudentAbonement(userId, abonementId));
+
         [HttpGet("shedules")]
         public async Task<IActionResult> GetShedules([FromRoute] int userId)
             => Ok(await sheduleIterator.GetStudentShedules(userId));
+
+        [HttpGet("shedule/{sheduleId}")]
+        public async Task<IActionResult> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
+            => Ok(await sheduleIterator.GetStudentShedule(userId, sheduleId));
 
         [HttpGet("abonement/{abonementId}/shedules")]
         public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
@@ -57,10 +69,6 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> FreezeAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
             => Ok(await abonementIterator.FreezeAbonement(userId, abonementId));
 
-        [HttpDelete("abonement/delete")]
-        public async Task<IActionResult> DeleteAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
-            => Ok(await abonementIterator.DeleteAbonement(userId, abonementId));
-
         [HttpPost("course/subscribe")]
         public async Task<IActionResult> SubscribeToCourse([FromRoute] int userId, [FromQuery] int courseId, [FromQuery] int teacherSheduleId)
             => Ok(await studentIterator.SubscribeToCourse(userId, courseId, teacherSheduleId));
@@ -72,5 +80,9 @@ namespace PrimumCore.Controllers
         [HttpDelete("shedule/delete")]
         public async Task<IActionResult> DeleteShedule([FromRoute] int userId, [FromQuery] int abonementSheduleId) 
             => Ok(await sheduleIterator.DeleteStudentShedule(userId, abonementSheduleId));
+
+        [HttpDelete("abonement/delete")]
+        public async Task<IActionResult> DeleteAbonement([FromRoute] int userId, [FromQuery] int abonementId)
+            => Ok(await abonementIterator.DeleteAbonement(userId, abonementId));
     }
 }

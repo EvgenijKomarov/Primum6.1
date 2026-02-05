@@ -79,6 +79,15 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
+        public async Task<LessonDto> GetTeacherLesson(int teacherId, int lessonId)
+        {
+            var lesson = (await GetTeacherLessons(teacherId))
+                .FirstOrDefault(x => x.LessonId == lessonId);
+            if (lesson is null) { throw new Exception("Lesson not found"); }
+
+            return lesson;
+        }
+
         public async Task<IEnumerable<LessonDto>> GetStudentLessons(int studentId)
         {
             var user = await context.Set<User>()
@@ -115,6 +124,15 @@ namespace PrimumCore.Services.Iterators
                     Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();
+        }
+
+        public async Task<LessonDto> GetStudentLesson(int studentId, int lessonId)
+        {
+            var lesson = (await GetStudentLessons(studentId))
+                .FirstOrDefault(x => x.LessonId == lessonId);
+            if (lesson is null) { throw new Exception("Lesson not found"); }
+
+            return lesson;
         }
     }
 }

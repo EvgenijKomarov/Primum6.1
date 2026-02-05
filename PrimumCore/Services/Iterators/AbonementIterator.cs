@@ -49,6 +49,15 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
+        public async Task<AbonementDto> GetTeacherAbonement(int teacherId, int abonementId)
+        {
+            var lesson = (await GetTeacherAbonements(teacherId))
+                .FirstOrDefault(x => x.AbonementId == abonementId);
+            if (lesson is null) { throw new Exception("Abonement not found"); }
+
+            return lesson;
+        }
+
         public async Task<IEnumerable<AbonementDto>> GetStudentAbonements(int studentId)
         {
             var user = await context.Set<User>()
@@ -82,6 +91,15 @@ namespace PrimumCore.Services.Iterators
                     AbonementStatus = (StatusAbonement)a.AbonementStatus
                 })
                 .ToArray();
+        }
+
+        public async Task<AbonementDto> GetStudentAbonement(int studentId, int abonementId)
+        {
+            var lesson = (await GetStudentAbonements(studentId))
+                .FirstOrDefault(x => x.AbonementId == abonementId);
+            if (lesson is null) { throw new Exception("Abonement not found"); }
+
+            return lesson;
         }
 
         public async Task<int> DeleteAbonement(int studentId, int abonementId)

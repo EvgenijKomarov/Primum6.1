@@ -23,6 +23,10 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetLessons([FromRoute] int userId) 
             => Ok(await lessonIterator.GetTeacherLessons(userId));
 
+        [HttpGet("lesson/{lessonId}")]
+        public async Task<IActionResult> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
+            => Ok(await lessonIterator.GetTeacherLesson(userId, lessonId));
+
         [HttpGet("courses")]
         public async Task<IActionResult> GetCourses([FromRoute] int userId) 
             => Ok(await courseIterator.GetCoursesByTeacher(userId, false));
@@ -31,9 +35,17 @@ namespace PrimumCore.Controllers
         public async Task<IActionResult> GetShedules([FromRoute] int userId) 
             => Ok(await sheduleIterator.GetTeacherShedules(userId, false));
 
+        [HttpGet("shedule/{sheduleId}")]
+        public async Task<IActionResult> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
+            => Ok(await sheduleIterator.GetTeacherShedule(userId, sheduleId, false));
+
         [HttpGet("abonements")]
         public async Task<IActionResult> GetAbonements([FromRoute] int userId)
             => Ok(await abonementIterator.GetTeacherAbonements(userId));
+
+        [HttpGet("abonement/{abonementId}")]
+        public async Task<IActionResult> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
+            => Ok(await abonementIterator.GetTeacherAbonement(userId, abonementId));
 
         [HttpGet("abonement/{abonementId}/shedules")]
         public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)

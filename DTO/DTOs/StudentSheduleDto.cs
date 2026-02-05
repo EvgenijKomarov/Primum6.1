@@ -19,5 +19,7 @@ namespace CoreConnection.DTOs
         public required string TeacherDisplayName { get; set; }
 
         public required int TeacherId { get; set; }
+
+        public required int AbonementSheduleId { get; set; }
     }
 }

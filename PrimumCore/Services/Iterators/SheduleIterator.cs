@@ -46,6 +46,15 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
+        public async Task<TeacherSheduleDto> GetTeacherShedule(int teacherId, int sheduleId, bool isOnlyAvailable)
+        {
+            var shedule = (await GetTeacherShedules(teacherId, isOnlyAvailable))
+                .FirstOrDefault(x => x.TeacherSheduleId == sheduleId);
+            if (shedule is null) { throw new Exception("Shedule not found"); }
+
+            return shedule;
+        }
+
         public async Task<IEnumerable<StudentSheduleDto>> GetAbonementShedules(int abonementId)
         {
             var abonement = await context.Set<Abonement>()
@@ -64,7 +73,8 @@ namespace PrimumCore.Services.Iterators
                 CourseName = x.Abonement.Course.Name,
                 CourseId = x.Abonement.Course.CourseId,
                 TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                TeacherId = x.Abonement.Course.Teacher.User.Id
+                TeacherId = x.Abonement.Course.Teacher.User.Id,
+                AbonementSheduleId = x.AbonementSheduleId
             });
         }
 
@@ -103,7 +113,7 @@ namespace PrimumCore.Services.Iterators
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
             if (shedule is null) { throw new Exception("Shedule not found"); }
-            if (shedule.AbonementShedule is not null) { throw new Exception("Shedule already busy"); }
+            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new Exception("Shedule already busy"); }
 
             user.TeacherProfile.TeacherShedules.Remove(shedule);
             await context.SaveChangesAsync();
@@ -136,9 +146,19 @@ namespace PrimumCore.Services.Iterators
                     TeacherId = x.Abonement.Course.Teacher.User.Id,
                     CourseId = x.Abonement.Course.CourseId,
                     TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                    CourseName = x.Abonement.Course.Name
+                    CourseName = x.Abonement.Course.Name,
+                    AbonementSheduleId = x.AbonementSheduleId
                 })
                 .ToArray();
+        }
+
+        public async Task<StudentSheduleDto> GetStudentShedule(int studentId, int sheduleId)
+        {
+            var shedule = (await GetStudentShedules(studentId))
+                .FirstOrDefault(x => x.AbonementSheduleId == sheduleId);
+            if (shedule is null) { throw new Exception("Shedule not found"); }
+
+            return shedule;
         }
 
         public async Task<int> DeleteStudentShedule(int studentId, int abonementSheduleId)
