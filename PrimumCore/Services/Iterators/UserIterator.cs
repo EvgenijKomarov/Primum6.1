@@ -2,6 +2,7 @@
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -30,7 +31,7 @@ namespace PrimumCore.Services.Iterators
         {
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             user.Cash += Math.Abs(cash);
 
@@ -42,7 +43,7 @@ namespace PrimumCore.Services.Iterators
         {
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             if (user.Cash < cash) { cash = user.Cash; }
             user.Cash -= Math.Abs(cash);
@@ -54,12 +55,12 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> RegUser(RegistrationInputDto dto)
         {
             if (!new EmailAddressAttribute().IsValid(dto.MailAdress)) 
-            { throw new Exception("Adress not valid"); }
+            { throw new BusinessLogicException("Adress not valid"); }
 
             if (await context.Set<User>()
                 .IgnoreQueryFilters()
                 .AnyAsync(x => x.MailAdress == dto.MailAdress)) 
-            { throw new Exception("User with the same adress already exists"); }
+            { throw new BusinessLogicException("User with the same adress already exists"); }
 
             var user = new User
             {
@@ -82,9 +83,9 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
-            if (user.TeacherProfile is not null) { throw new Exception("User is already teacher"); }
-            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
+            if (user is null) { throw new NotFoundException("User"); }
+            if (user.TeacherProfile is not null) { throw new BusinessLogicException("User is already teacher"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
             user.TeacherProfile = new TeacherProfile
             {
@@ -102,9 +103,9 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.StudentProfile)
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
-            if (user.StudentProfile is not null) { throw new Exception("User is already student"); }
-            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new Exception("User is not enabled"); }
+            if (user is null) { throw new NotFoundException("User"); }
+            if (user.StudentProfile is not null) { throw new BusinessLogicException("User is already student"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
             user.StudentProfile = new StudentProfile();
 
@@ -117,7 +118,7 @@ namespace PrimumCore.Services.Iterators
         {
             var user = (await GetUsers(isOnlyAvailable))
                 .FirstOrDefault(x => x.Id == id);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             return user;
         }

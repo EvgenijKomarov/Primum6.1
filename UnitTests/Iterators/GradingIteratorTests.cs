@@ -2,6 +2,7 @@
 using CoreConnection.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
@@ -101,7 +102,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<Lesson>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _iterator.GradeLesson(1, 999, new GradingInputDto()));
         }
 
@@ -130,7 +131,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<StudentGrading>());
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () =>
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _iterator.GradeLesson(teacherId: 202, lessonId: 502, new GradingInputDto()));
             Assert.That(ex?.Message, Does.Contain("can't grade"));
         }
@@ -158,7 +159,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { lesson });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () =>
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _iterator.GradeLesson(301, 503, new GradingInputDto()));
             Assert.That(ex?.Message, Does.Contain("already gradet")); // опечатка в коде — оставляем как есть
         }
@@ -185,7 +186,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { lesson });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () =>
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _iterator.GradeLesson(302, 504, new GradingInputDto()));
             Assert.That(ex?.Message, Does.Contain("doesn't happened"));
         }

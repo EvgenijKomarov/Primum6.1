@@ -1,6 +1,7 @@
 ﻿using CoreConnection.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
@@ -105,7 +106,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<Abonement>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetAbonementLessons(999, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetAbonementLessons(999, true));
         }
 
         #endregion
@@ -169,7 +170,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacherLessons(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTeacherLessons(999));
         }
 
         #endregion
@@ -231,7 +232,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetStudentLessons(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetStudentLessons(999));
         }
 
         #endregion

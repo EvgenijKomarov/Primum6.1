@@ -3,6 +3,7 @@ using CoreConnection.Enums;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
@@ -25,7 +26,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .ThenInclude(a => a.CourseTheme)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
             return user
                 .TeacherProfile
@@ -53,7 +54,7 @@ namespace PrimumCore.Services.Iterators
         {
             var lesson = (await GetTeacherAbonements(teacherId))
                 .FirstOrDefault(x => x.AbonementId == abonementId);
-            if (lesson is null) { throw new Exception("Abonement not found"); }
+            if (lesson is null) { throw new NotFoundException("Abonement"); }
 
             return lesson;
         }
@@ -71,7 +72,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Course)
                 .ThenInclude(a => a.CourseTheme)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             return user
                 .StudentProfile
@@ -97,7 +98,7 @@ namespace PrimumCore.Services.Iterators
         {
             var lesson = (await GetStudentAbonements(studentId))
                 .FirstOrDefault(x => x.AbonementId == abonementId);
-            if (lesson is null) { throw new Exception("Abonement not found"); }
+            if (lesson is null) { throw new NotFoundException("Abonement"); }
 
             return lesson;
         }
@@ -109,13 +110,13 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(s => s.AbonementShedules)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var abonement = user
                 .StudentProfile
                 .Abonements
                 .FirstOrDefault(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new Exception("Abonement not found"); }
+            if (abonement is null) { throw new NotFoundException("Abonement"); }
 
             abonement.AbonementStatus = AbonementStatus.Deleted;
             abonement.AbonementShedules.Clear();
@@ -129,13 +130,13 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var abonement = user
                 .StudentProfile
                 .Abonements
                 .FirstOrDefault(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new Exception("Abonement not found"); }
+            if (abonement is null) { throw new NotFoundException("Abonement"); }
 
             abonement.AbonementStatus = AbonementStatus.Freezed;
             await context.SaveChangesAsync();
@@ -151,13 +152,13 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Teacher)
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var abonement = user
                 .StudentProfile
                 .Abonements
                 .FirstOrDefault(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new Exception("Abonement not found"); }
+            if (abonement is null) { throw new NotFoundException("Abonement"); }
 
             abonement.AbonementStatus = AbonementStatus.Active;
             await context.SaveChangesAsync();

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
@@ -111,7 +112,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetAdmin(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetAdmin(999));
         }
 
         #endregion
@@ -163,8 +164,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.AddCash(101, 201, 100));
-            Assert.That(ex?.Message, Does.Contain("permission policy"));
+            var ex = Assert.ThrowsAsync<NoPermissionException>(async () => await _iterator.AddCash(101, 201, 100));
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser }); // целевого пользователя нет
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.AddCash(102, 999, 100));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.AddCash(102, 999, 100));
         }
 
         #endregion
@@ -262,7 +262,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser, nonAdmin });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.EditPermissions(301, 401, new()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.EditPermissions(301, 401, new()));
         }
 
         #endregion
@@ -318,7 +318,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser, existingAdmin });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateAdminProfile(501, 601, "Test"));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.CreateAdminProfile(501, 601, "Test"));
         }
 
         #endregion
@@ -387,7 +387,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser, nonAdmin });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteAdminProfile(701, 801));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.DeleteAdminProfile(701, 801));
         }
 
         #endregion
@@ -412,7 +412,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser, user });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.BanUser(701, 801, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.BanUser(701, 801, true));
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Never);
         }
 
@@ -463,7 +463,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser, user });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.BanUser(701, 800, false));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.BanUser(701, 800, false));
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Never);
         }
 

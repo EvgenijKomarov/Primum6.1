@@ -6,6 +6,7 @@ namespace PrimumCore.Extentions
     {
         public static WebApplication AddMiddlewares(this WebApplication app)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<TeacherValidationMiddleware>();
             app.UseMiddleware<StudentValidationMiddleware>();
             app.UseMiddleware<AdminValidationMiddleware>();

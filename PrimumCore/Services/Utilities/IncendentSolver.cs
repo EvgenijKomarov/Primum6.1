@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -11,14 +12,14 @@ namespace PrimumCore.Services.Utilities
     public class IncidentSolver(IPrimumContext context)
     {
         //User should be identified
-        public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto)
+        public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto, int userId)
         {
-            if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncidentDecisionDto, Task<int>> rule)) { throw new Exception("Unknown incindent"); }
+            if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncidentDecisionDto, Task<int>> rule)) { throw new NotFoundException("Incindent"); }
             if(!permissions
                 .Any(x => x.GetAvailableIncidentsAttributes()
                     .Any(y => y.Meaning == dto.Meaning && y.Decision == dto.Decision)
                     )
-                ) { throw new Exception("User haven't needed permissions"); }
+                ) { throw new NoPermissionException(userId, dto.Meaning, dto.Decision); }
 
             context.Set<IncidentLog>().Add(new IncidentLog
             {
@@ -49,7 +50,7 @@ namespace PrimumCore.Services.Utilities
                         .Include(x => x.TeacherProfile)
                         .ThenInclude(x => x.Courses)
                         .FirstOrDefault(x => x.Id == id);
-                    if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+                    if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
                     switch(decision) 
                     {
@@ -83,7 +84,7 @@ namespace PrimumCore.Services.Utilities
                         .ThenInclude(x => x.Abonements)
                         .ThenInclude(x => x.AbonementShedules)
                         .FirstOrDefault(x => x.Id == id);
-                    if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+                    if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
                     switch(decision)
                     {
@@ -113,7 +114,7 @@ namespace PrimumCore.Services.Utilities
                         .Include(x => x.Abonements)
                         .ThenInclude(x => x.AbonementShedules)
                         .FirstOrDefault(x => x.CourseId == id);
-                    if (course is null) { throw new Exception("Course not found"); }
+                    if (course is null) { throw new NotFoundException("Course"); }
 
                     switch(decision)
                     {
@@ -142,7 +143,7 @@ namespace PrimumCore.Services.Utilities
                 {
                     var lesson = context.Set<Lesson>()
                         .FirstOrDefault(x => x.LessonId == id);
-                    if (lesson is null) { throw new Exception("Lesson not found"); }
+                    if (lesson is null) { throw new NotFoundException("Lesson"); }
 
                     switch(decision)
                     {

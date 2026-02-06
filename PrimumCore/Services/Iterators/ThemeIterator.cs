@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 
@@ -27,7 +28,7 @@ namespace PrimumCore.Services.Iterators
         {
             var theme = (await GetThemes(isOnlyAvailable))
                 .FirstOrDefault(x => x.CourseThemeId == themeId);
-            if (theme is null) { throw new Exception("Theme not found"); }
+            if (theme is null) { throw new NotFoundException("Theme"); }
             return theme;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 
@@ -9,7 +10,7 @@ namespace PrimumCore.Services.Utilities
         public async Task<User> CheckIteratingUser(int id, Permission permission)
         {
             var user = await GetIteratingUser(id);
-            if (!user.AdminProfile.CheckPermissions(permission)) { throw new Exception("Iterator can't do it due permission policy"); }
+            if (!user.AdminProfile.CheckPermissions(permission)) { throw new NoPermissionException(id, permission); }
             return user;
         }
 
@@ -22,7 +23,7 @@ namespace PrimumCore.Services.Utilities
                 .ThenInclude(x => x.GivenPermissions)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (user is null || user.AdminProfile is null) { throw new Exception("Iterator admin not found"); }
+            if (user is null || user.AdminProfile is null) { throw new NotFoundException("Iterator admin"); }
             return user;
         }
 

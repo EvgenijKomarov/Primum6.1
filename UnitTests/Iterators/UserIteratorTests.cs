@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
@@ -147,7 +148,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.AddMoney(999, 100));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.AddMoney(999, 100));
         }
 
         #endregion
@@ -194,7 +195,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetMoney(999, 100));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetMoney(999, 100));
         }
 
         #endregion
@@ -244,7 +245,7 @@ namespace UnitTests.Iterators
             };
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.RegUser(invalidDto));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.RegUser(invalidDto));
             Assert.That(ex?.Message, Does.Contain("not valid"));
         }
 
@@ -263,7 +264,7 @@ namespace UnitTests.Iterators
             };
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.RegUser(dto));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.RegUser(dto));
             Assert.That(ex?.Message, Does.Contain("already exists"));
         }
 
@@ -301,7 +302,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateTeacherProfile(999, "about"));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.CreateTeacherProfile(999, "about"));
         }
 
         [Test]
@@ -317,7 +318,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateTeacherProfile(302, "about"));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.CreateTeacherProfile(302, "about"));
         }
 
         [Test]
@@ -333,8 +334,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateTeacherProfile(303, "about"));
-            Assert.That(ex?.Message, Does.Contain("not enabled"));
+            var ex = Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.CreateTeacherProfile(303, "about"));
         }
 
         #endregion
@@ -377,7 +377,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateStudentProfile(402));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.CreateStudentProfile(402));
         }
 
         #endregion
@@ -427,7 +427,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetUser(999, false));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetUser(999, false));
         }
 
         [Test]
@@ -449,7 +449,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetUser(999, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetUser(999, true));
         }
 
         #endregion

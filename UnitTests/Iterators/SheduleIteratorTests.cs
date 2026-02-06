@@ -2,6 +2,7 @@
 using CoreConnection.Notifications;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
@@ -87,7 +88,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacherShedules(999, false));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTeacherShedules(999, false));
         }
 
         #endregion
@@ -147,7 +148,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<Abonement>())
                 .ReturnsDbSet(new List<Abonement>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetAbonementShedules(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetAbonementShedules(999));
         }
 
         #endregion
@@ -175,7 +176,7 @@ namespace UnitTests.Iterators
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateTeacherShedule(102, inputDto));
+            Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.CreateTeacherShedule(102, inputDto));
         }
 
         [Test]
@@ -203,7 +204,7 @@ namespace UnitTests.Iterators
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateTeacherShedule(104, inputDto));
+            Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.CreateTeacherShedule(104, inputDto));
         }
 
         #endregion
@@ -231,7 +232,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { teacherUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteTeacherShedule(105, 5));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.DeleteTeacherShedule(105, 5));
         }
 
         [Test]
@@ -249,7 +250,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { teacherUser });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteTeacherShedule(106, 6));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.DeleteTeacherShedule(106, 6));
             Assert.That(ex?.Message, Does.Contain("already busy"));
         }
 
@@ -305,7 +306,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetStudentShedules(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetStudentShedules(999));
         }
 
         #endregion

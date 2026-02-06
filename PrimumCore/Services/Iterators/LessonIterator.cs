@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 
 namespace PrimumCore.Services.Iterators
@@ -18,7 +19,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new Exception("Abonement not found"); }
+            if (abonement is null) { throw new NotFoundException("Abonement"); }
 
             return abonement.Lessons.Select(x => new LessonDto
             {
@@ -52,7 +53,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Student)
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
             return user
                 .TeacherProfile
@@ -83,7 +84,7 @@ namespace PrimumCore.Services.Iterators
         {
             var lesson = (await GetTeacherLessons(teacherId))
                 .FirstOrDefault(x => x.LessonId == lessonId);
-            if (lesson is null) { throw new Exception("Lesson not found"); }
+            if (lesson is null) { throw new NotFoundException("Lesson"); }
 
             return lesson;
         }
@@ -101,7 +102,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(c => c.Teacher)
                 .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             return user
                 .StudentProfile
@@ -130,7 +131,7 @@ namespace PrimumCore.Services.Iterators
         {
             var lesson = (await GetStudentLessons(studentId))
                 .FirstOrDefault(x => x.LessonId == lessonId);
-            if (lesson is null) { throw new Exception("Lesson not found"); }
+            if (lesson is null) { throw new NotFoundException("Lesson"); }
 
             return lesson;
         }

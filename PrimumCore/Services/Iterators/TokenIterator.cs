@@ -1,5 +1,6 @@
 ﻿using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Connectors;
@@ -17,7 +18,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
 
@@ -47,12 +48,12 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);
-            if (token is null) { throw new Exception("Token not found"); }
-            if (token.LifeTime < DateTime.Now) { throw new Exception("Token expired"); }
-            if (token.IsUsed) { throw new Exception("Token is used"); }
+            if (token is null) { throw new NotFoundException("Token"); }
+            if (token.LifeTime < DateTime.Now) { throw new BusinessLogicException("Token expired"); }
+            if (token.IsUsed) { throw new BusinessLogicException("Token is used"); }
 
             token.IsUsed = true;
             switch (token.Meaning)

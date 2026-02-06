@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 
 namespace PrimumCore.Middlewares
@@ -23,34 +24,18 @@ namespace PrimumCore.Middlewares
 
                 if (user is null)
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await context.Response.WriteAsJsonAsync(new
-                    {
-                        error = "User not found",
-                        userId
-                    });
-                    return;
+                    throw new NotAuthorizedException("User", userId);
                 }
                 else if (!AvailabilityExpressions.IsUserAvailable.Compile()(user))
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await context.Response.WriteAsJsonAsync(new
-                    {
-                        error = "User not available",
-                        userId
-                    });
-                    return;
+                    throw new NotAvailableException("User");
                 }
 
                 await next(context);
                 return;
             }
 
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            await context.Response.WriteAsJsonAsync(new
-            {
-                error = "Missing id"
-            });
+            throw new NotAuthorizedException("User");
         }
     }
 }

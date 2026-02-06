@@ -4,6 +4,7 @@ using CoreConnection.Notifications;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
@@ -20,7 +21,7 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             return new StudentProfileDto 
             { 
@@ -41,28 +42,28 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(s => s.Course)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var course = await context.Set<Course>()
                 .Where(AvailabilityExpressions.IsCourseAvailable)
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
-            if (course is null) { throw new Exception("Course not found"); }
+            if (course is null) { throw new NotFoundException("Course"); }
 
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId);
-            if (teacherShedule is null) { throw new Exception("Shedule not found"); }
-            if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new Exception("Teacher is not approved"); }
-            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new Exception("Shedule is busy"); }
-            if (teacherShedule.Teacher.User.Id == studentId) { throw new Exception("Student can't subscribe on himself"); }
+            if (teacherShedule is null) { throw new NotFoundException("Shedule"); }
+            if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
+            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }
+            if (teacherShedule.Teacher.User.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }
             if (user
                 .StudentProfile
                 .Abonements
                 .SelectMany(x => x.AbonementShedules)
                 .Any(x => x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek && x.TeacherShedule.Time == teacherShedule.Time))
             {
-                throw new Exception("Same shedule already exists");
+                throw new BusinessLogicException("Same shedule already exists");
             }
 
             var abonement = user.StudentProfile.Abonements.FirstOrDefault(a => a.CourseId == courseId);
@@ -83,7 +84,7 @@ namespace PrimumCore.Services.Iterators
 
             if (course.MaxLessons <= abonement.AbonementShedules.Count)
             {
-                throw new Exception("Can't create more shedules than course's maximum shedules per week");
+                throw new BusinessLogicException("Can't create more shedules than course's maximum shedules per week");
             }
             if (user
                 .StudentProfile
@@ -91,7 +92,7 @@ namespace PrimumCore.Services.Iterators
                 .SelectMany(x => x.AbonementShedules)
                 .Any(x => x.TeacherShedule.Time == teacherShedule.Time && x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek))
             {
-                throw new Exception("There is a same shedule in student profile");
+                throw new BusinessLogicException("There is a same shedule in student profile");
             }
 
             var suitableDate = dateTimeService.GetNextFreeSuitableDateThisWeek(teacherShedule.DayOfWeek, teacherShedule.Time);

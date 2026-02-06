@@ -2,6 +2,7 @@
 using CoreConnection.Notifications;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
@@ -86,7 +87,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacherAbonements(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTeacherAbonements(999));
         }
 
         #endregion
@@ -147,7 +148,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetStudentAbonements(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetStudentAbonements(999));
         }
 
         #endregion
@@ -182,7 +183,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteAbonement(999, 1));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.DeleteAbonement(999, 1));
         }
 
         [Test]
@@ -194,7 +195,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { studentUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.DeleteAbonement(4, 999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.DeleteAbonement(4, 999));
         }
 
         #endregion

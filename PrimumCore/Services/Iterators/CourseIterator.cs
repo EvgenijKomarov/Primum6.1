@@ -3,6 +3,7 @@ using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumPlatformModel.Models.Enums;
@@ -19,7 +20,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Courses)
                 .ThenInclude(x => x.CourseTheme)
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
             return user.TeacherProfile.Courses
                 .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
@@ -45,7 +46,7 @@ namespace PrimumCore.Services.Iterators
         {
             var course = (await GetCourses(isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);
 
-            if (course is null) { throw new Exception("Course not found"); }
+            if (course is null) { throw new NotFoundException("Course"); }
 
             return course;
         }
@@ -108,15 +109,15 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new Exception("Teacher is not approved"); }
+                { throw new NotAvailableException("Teacher"); }
 
             var course = user
                 .TeacherProfile
                 .Courses
                 .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new Exception("Course not found"); }
+            if (course is null) { throw new NotFoundException("Course"); }
 
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
@@ -132,9 +133,9 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new Exception("Teacher is not approved"); }
+                { throw new NotAvailableException("Teacher"); }
 
             var course = new Course
             {
@@ -156,15 +157,15 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new Exception("Teacher is not approved"); }
+                { throw new NotAvailableException("Teacher"); }
 
             var course = user
                 .TeacherProfile
                 .Courses
                 .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new Exception("Course not found"); }
+            if (course is null) { throw new NotFoundException("Course"); }
 
             course.IsActive = false;
             await context.SaveChangesAsync();
@@ -177,15 +178,15 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new Exception("Teacher is not approved"); }
+                { throw new NotAvailableException("Teacher"); }
 
             var course = user
                 .TeacherProfile
                 .Courses
                 .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new Exception("Course not found"); }
+            if (course is null) { throw new NotFoundException("Course"); }
 
             course.IsActive = true;
             await context.SaveChangesAsync();

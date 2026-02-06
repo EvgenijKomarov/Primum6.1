@@ -3,6 +3,7 @@ using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
@@ -93,7 +94,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NoPermissionException>(async () =>
                 await _iterator.GetIncidentLogs(102, false));
         }
 
@@ -154,7 +155,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetIncidentLog(104, 999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetIncidentLog(104, 999));
         }
 
         #endregion
@@ -208,7 +209,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { iteratingUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.RevisionIncidentLog(106, 999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.RevisionIncidentLog(106, 999));
         }
 
         #endregion

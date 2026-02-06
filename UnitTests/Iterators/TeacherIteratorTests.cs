@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using PrimumPlatformModel.Models.Enums;
@@ -103,7 +104,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>()); // или только без нужного ID
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(999, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTeacher(999, true));
         }
 
         [Test]
@@ -115,7 +116,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { nonTeacher });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTeacher(301, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTeacher(301, true));
         }
 
         #endregion

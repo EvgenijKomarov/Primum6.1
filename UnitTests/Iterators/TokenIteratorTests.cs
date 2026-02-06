@@ -1,6 +1,7 @@
 using CoreConnection.Notifications;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Connectors;
@@ -125,7 +126,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.SendEmailVerification(999, null));
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
@@ -182,7 +183,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.ConfirmToken(999, "any"));
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
@@ -200,7 +201,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User> { user });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.ConfirmToken(123, "nonexistent"));
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
@@ -227,7 +228,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User> { user });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _service.ConfirmToken(123, "old_token"));
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }
@@ -254,7 +255,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User> { user });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _service.ConfirmToken(123, "used_token"));
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
         }

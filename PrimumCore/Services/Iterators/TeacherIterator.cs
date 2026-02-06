@@ -3,6 +3,7 @@ using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 
@@ -30,7 +31,7 @@ namespace PrimumCore.Services.Iterators
         {
             var user = (await GetTeachers(isOnlyAvailable))
                 .FirstOrDefault(x => x.UserId == teacherId);
-            if (user is null) { throw new Exception("Teacher not found"); }
+            if (user is null) { throw new NotFoundException("Teacher"); }
 
             return user;
         }

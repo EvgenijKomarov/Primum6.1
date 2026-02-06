@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -33,7 +34,7 @@ namespace PrimumCore.Services.Iterators
         {
             var admin = (await GetAdmins())
                 .FirstOrDefault(x => x.UserId == userId);
-            if (admin == null) { throw new Exception("Admin not found"); }
+            if (admin == null) { throw new NotFoundException("Admin"); }
 
             return admin;
         }
@@ -44,7 +45,7 @@ namespace PrimumCore.Services.Iterators
 
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             user.Cash += cash;
 
@@ -66,7 +67,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.Permissions)
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null || user.AdminProfile is null) { throw new Exception("User not found"); }
+            if (user is null || user.AdminProfile is null) { throw new NotFoundException("Admin"); }
 
             var adminPermissions = helper.GetAllPermissions(user.AdminProfile);
             Permission[] permissionsToTake = adminPermissions
@@ -123,8 +124,8 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.Permissions)
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null) { throw new Exception("User not found"); }
-            if (user.AdminProfile is not null) { throw new Exception("AdminProfile already exists"); }
+            if (user is null) { throw new NotFoundException("User"); }
+            if (user.AdminProfile is not null) { throw new BusinessLogicException("AdminProfile already exists"); }
 
             user.AdminProfile = new AdminProfile { Status = status };
 
@@ -147,8 +148,8 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AdminProfile)
                 .ThenInclude(x => x.Permissions)
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null) { throw new Exception("User not found"); }
-            if (user.AdminProfile is null) { throw new Exception("AdminProfile not exists"); }
+            if (user is null) { throw new NotFoundException("User"); }
+            if (user.AdminProfile is null) { throw new BusinessLogicException("AdminProfile not exists"); }
 
             context.Set<AdminPermission>().RemoveRange(user.AdminProfile.Permissions);
             context.Set<AdminProfile>().Remove(user.AdminProfile);
@@ -170,7 +171,7 @@ namespace PrimumCore.Services.Iterators
 
             var user = await context.Set<User>()
                 .FirstOrDefaultAsync(x => x.Id == objUserId);
-            if (user is null) { throw new Exception("User not found"); }
+            if (user is null) { throw new NotFoundException("User"); }
 
             user.IsBanned = banStatus;
             await context.SaveChangesAsync();

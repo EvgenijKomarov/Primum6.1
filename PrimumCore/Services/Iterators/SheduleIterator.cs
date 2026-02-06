@@ -3,6 +3,7 @@ using CoreConnection.DTOs.Inputs;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
@@ -26,7 +27,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Abonement)
                 .ThenInclude(x => x.Course)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
             return user.TeacherProfile
                 .TeacherShedules
@@ -50,7 +51,7 @@ namespace PrimumCore.Services.Iterators
         {
             var shedule = (await GetTeacherShedules(teacherId, isOnlyAvailable))
                 .FirstOrDefault(x => x.TeacherSheduleId == sheduleId);
-            if (shedule is null) { throw new Exception("Shedule not found"); }
+            if (shedule is null) { throw new NotFoundException("Shedule"); }
 
             return shedule;
         }
@@ -64,7 +65,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new Exception("Abonement not found"); }
+            if (abonement is null) { throw new NotFoundException("Abonement"); }
 
             return abonement.AbonementShedules.Select(x => new StudentSheduleDto
             {
@@ -84,11 +85,11 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.TeacherProfile)
                 .ThenInclude(a => a.TeacherShedules)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new Exception("Teacher is not approved"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new NotAvailableException("Teacher"); }
 
             if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) 
-                { throw new Exception("Shedule already exists"); }
+                { throw new BusinessLogicException("Shedule already exists"); }
 
             var shedule = new TeacherShedule
             {
@@ -108,12 +109,12 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.TeacherShedules)
                 .ThenInclude(e => e.AbonementShedule)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new Exception("Teacher not found"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new Exception("Teacher is not approved"); }
+            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new BusinessLogicException("Teacher"); }
 
             var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
-            if (shedule is null) { throw new Exception("Shedule not found"); }
-            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new Exception("Shedule already busy"); }
+            if (shedule is null) { throw new NotFoundException("Shedule"); }
+            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new BusinessLogicException("Shedule already busy"); }
 
             user.TeacherProfile.TeacherShedules.Remove(shedule);
             await context.SaveChangesAsync();
@@ -133,7 +134,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Teacher)
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             return user
                 .StudentProfile
@@ -156,7 +157,7 @@ namespace PrimumCore.Services.Iterators
         {
             var shedule = (await GetStudentShedules(studentId))
                 .FirstOrDefault(x => x.AbonementSheduleId == sheduleId);
-            if (shedule is null) { throw new Exception("Shedule not found"); }
+            if (shedule is null) { throw new NotFoundException("Shedule"); }
 
             return shedule;
         }
@@ -174,13 +175,14 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(s => s.Teacher)
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var abonementShedule = user
                 .StudentProfile
                 .Abonements
                 .SelectMany(x => x.AbonementShedules)
                 .FirstOrDefault(x => x.AbonementSheduleId == abonementSheduleId);
+            if (abonementShedule is null) { throw new NotFoundException("Shedule"); }
 
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
             await context.SaveChangesAsync();

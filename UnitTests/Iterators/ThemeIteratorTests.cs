@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using System;
@@ -93,7 +94,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<CourseTheme>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(999, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTheme(999, true));
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { inactiveTheme });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetTheme(40, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetTheme(40, true));
         }
 
         #endregion

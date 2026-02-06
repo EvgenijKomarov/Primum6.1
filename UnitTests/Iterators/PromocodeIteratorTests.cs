@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
@@ -91,7 +92,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<Promocode>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetPromocode(999, false));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetPromocode(999, false));
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { promo });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetPromocode(11, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetPromocode(11, true));
         }
 
         #endregion
@@ -153,7 +154,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { new User { Id = 102, StudentProfile = new StudentProfile { Coins = 1000 } } });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.BuyPromocode(102, 999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.BuyPromocode(102, 999));
         }
 
         [Test]
@@ -167,7 +168,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>()); // студент не найден
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.BuyPromocode(999, 21));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.BuyPromocode(999, 21));
         }
 
         [Test]
@@ -183,7 +184,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { studentUser });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.BuyPromocode(103, 22));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.BuyPromocode(103, 22));
             Assert.That(ex?.Message, Does.Contain("Not enough coins"));
         }
 
@@ -226,7 +227,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetStudentPromocodes(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetStudentPromocodes(999));
         }
 
         #endregion
@@ -285,7 +286,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { adminUser });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.AddPromocode(202, new PromocodeInputDto 
+            Assert.ThrowsAsync<NoPermissionException>(async () => await _iterator.AddPromocode(202, new PromocodeInputDto 
             { 
                 Title = "Title",
                 Description = "Description",
@@ -346,7 +347,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { soldPromo });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.DeletePromocode(204, 41));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.DeletePromocode(204, 41));
             Assert.That(ex?.Message, Does.Contain("was sold"));
         }
 
@@ -370,7 +371,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { promo });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.DeletePromocode(205, 42));
+            Assert.ThrowsAsync<NoPermissionException>(async () => await _iterator.DeletePromocode(205, 42));
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using CoreConnection.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using PrimumPlatformModel.Models.Enums;
@@ -114,7 +115,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCoursesByTeacher(999, false));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetCoursesByTeacher(999, false));
         }
 
         #endregion
@@ -168,8 +169,8 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course1, course2 });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(302, true));
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetCourse(303, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetCourse(302, true));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetCourse(303, true));
         }
 
         #endregion
@@ -221,8 +222,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.EditCourse(302, 1, new CourseInputDto()));
-            Assert.That(ex?.Message, Does.Contain("not approved"));
+            var ex = Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.EditCourse(302, 1, new CourseInputDto()));
         }
 
         [Test]
@@ -232,7 +232,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.EditCourse(303, 999, new CourseInputDto()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.EditCourse(303, 999, new CourseInputDto()));
         }
 
         #endregion
@@ -278,7 +278,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { user });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.CreateCourse(402, new CourseInputDto()));
+            Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.CreateCourse(402, new CourseInputDto()));
         }
 
         #endregion

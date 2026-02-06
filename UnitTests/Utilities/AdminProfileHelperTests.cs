@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
@@ -53,7 +54,7 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _helper.GetIteratingUser(999));
         }
 
@@ -64,7 +65,7 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User> { user });
 
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _helper.GetIteratingUser(100));
         }
 
@@ -115,7 +116,7 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User> { user });
 
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NoPermissionException>(async () =>
                 await _helper.CheckIteratingUser(100, Permission.AddCash));
         }
 
@@ -125,7 +126,7 @@ namespace UnitTests.Utilities
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new List<User>());
 
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _helper.CheckIteratingUser(999, Permission.AddCash));
         }
 

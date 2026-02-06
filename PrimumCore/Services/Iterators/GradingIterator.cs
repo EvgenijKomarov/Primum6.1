@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumPlatformModel.Models.Enums;
@@ -19,10 +20,10 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Student)
                 .FirstOrDefaultAsync(x => x.LessonId == lessonId);
-            if (lesson == null) { throw new Exception("Lesson not found"); }
-            if (lesson.Abonement.Student.User.Id == teacherId) { throw new Exception("Teacher can't grade this lesson"); }
-            if (lesson.Grading is not null) { throw new Exception("Lesson already gradet"); }
-            if (lesson.Status != LessonStatus.Happened) { throw new Exception("Lesson doesn't happened"); }
+            if (lesson == null) { throw new NotFoundException("Lesson"); }
+            if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
+            if (lesson.Grading is not null) { throw new BusinessLogicException("Lesson already gradet"); }
+            if (lesson.Status != LessonStatus.Happened) { throw new BusinessLogicException("Lesson doesn't happened"); }
 
             var lessonGrading = new StudentGrading
             {

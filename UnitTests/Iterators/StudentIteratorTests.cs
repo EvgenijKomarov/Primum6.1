@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
@@ -68,7 +69,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.GetStudentProfile(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.GetStudentProfile(999));
         }
 
         #endregion
@@ -178,7 +179,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<TeacherShedule>())
                 .ReturnsDbSet(new[] { new TeacherShedule { TeacherSheduleId = 1, AbonementShedule = null, Teacher = new TeacherProfile { ApproveStatus = ApproveStatus.Approved } } });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(999, 1, 1));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.SubscribeToCourse(999, 1, 1));
         }
 
         [Test]
@@ -192,7 +193,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { unavailableCourse });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(202, 2, 1));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _iterator.SubscribeToCourse(202, 2, 1));
         }
 
         [Test]
@@ -215,7 +216,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<TeacherShedule>())
                 .ReturnsDbSet(new[] { unapprovedShedule });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(203, 3, 2));
+            Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.SubscribeToCourse(203, 3, 2));
         }
 
         [Test]
@@ -239,7 +240,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<TeacherShedule>())
                 .ReturnsDbSet(new[] { busyShedule });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(204, 4, 3));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.SubscribeToCourse(204, 4, 3));
         }
 
         [Test]
@@ -266,7 +267,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<TeacherShedule>())
                 .ReturnsDbSet(new[] { selfShedule });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(205, 5, 4));
+            Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.SubscribeToCourse(205, 5, 4));
         }
 
         [Test]
@@ -313,7 +314,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<TeacherShedule>())
                 .ReturnsDbSet(new[] { duplicateShedule });
 
-            Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(206, 6, 5));
+            Assert.ThrowsAsync<NotAvailableException>(async () => await _iterator.SubscribeToCourse(206, 6, 5));
         }
 
         [Test]
@@ -375,7 +376,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { newShedule });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _iterator.SubscribeToCourse(207, 7, 6));
+            var ex = Assert.ThrowsAsync<BusinessLogicException>(async () => await _iterator.SubscribeToCourse(207, 7, 6));
             Assert.That(ex?.Message, Does.Contain("maximum shedules per week"));
         }
 

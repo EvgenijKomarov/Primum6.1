@@ -2,6 +2,7 @@
 using CoreConnection.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
@@ -82,7 +83,7 @@ namespace UnitTests.Utilities
                 IncidentInfo = "Test course"
             };
 
-            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
 
             Assert.That(result, Is.EqualTo(301));
 
@@ -164,7 +165,7 @@ namespace UnitTests.Utilities
                 IncidentInfo = "Test teacher"
             };
 
-            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
 
             Assert.That(result, Is.EqualTo(101));
 
@@ -248,7 +249,7 @@ namespace UnitTests.Utilities
                 IncidentInfo = "Test student"
             };
 
-            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
 
             Assert.That(result, Is.EqualTo(201));
 
@@ -295,7 +296,7 @@ namespace UnitTests.Utilities
                 IncidentInfo = "Missed lesson"
             };
 
-            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto);
+            var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
 
             Assert.That(result, Is.EqualTo(401));
             if (decision is IncidentDecisionDto.Delete)
@@ -335,9 +336,8 @@ namespace UnitTests.Utilities
             // Нет нужного разрешения
             var permissions = new[] { Permission.EditPermissions };
 
-            Assert.ThrowsAsync<Exception>(async () =>
-                await _solver.SolveIncident(AdminProfileId, permissions, dto),
-                "User hasn't needed permissions");
+            Assert.ThrowsAsync<NoPermissionException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, permissions, dto, 1));
         }
 
         #endregion

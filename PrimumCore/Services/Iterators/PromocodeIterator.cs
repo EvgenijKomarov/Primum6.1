@@ -2,6 +2,7 @@
 using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -34,7 +35,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PromocodeDto> GetPromocode(int promocodeId, bool onlyAvailable)
         {
             var code = (await GetPromocodes(onlyAvailable)).FirstOrDefault(x => x.PromocodeId == promocodeId);
-            if (code is null) { throw new Exception("Promocode not found"); }
+            if (code is null) { throw new NotFoundException("Promocode"); }
 
             return code;
         }
@@ -45,13 +46,13 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Student)
                 .Where(AvailabilityExpressions.IsPromocodeAvailable)
                 .FirstOrDefault(x => x.PromocodeId == promocodeId);
-            if (code is null) { throw new Exception("Promocode not found"); }
+            if (code is null) { throw new NotFoundException("Promocode"); }
 
             var student = await context.Set<User>()
                 .Include(x => x.StudentProfile)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (student is null || student.StudentProfile is null) { throw new Exception("Student not found"); }
-            if (student.StudentProfile.Coins < code.CoinsPrice) { throw new Exception("Not enough coins"); }
+            if (student is null || student.StudentProfile is null) { throw new NotFoundException("Student"); }
+            if (student.StudentProfile.Coins < code.CoinsPrice) { throw new BusinessLogicException("Not enough coins"); }
 
             student.StudentProfile.Coins -= code.CoinsPrice;
             code.Student = student.StudentProfile;
@@ -75,7 +76,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.StudentProfile)
                 .ThenInclude(x => x.Promocodes)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (student is null || student.StudentProfile is null) { throw new Exception("Student not found"); }
+            if (student is null || student.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             return student.StudentProfile.Promocodes
                 .Select(x => new PromocodeDto
@@ -115,9 +116,9 @@ namespace PrimumCore.Services.Iterators
             var code = await context.Set<Promocode>()
                 .Include(x => x.Student)
                 .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId);
-            if (code is null) { throw new Exception("Promocode not found"); }
+            if (code is null) { throw new NotFoundException("Promocode"); }
             if (!AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)) 
-                { throw new Exception("Promocode was sold"); }
+                { throw new BusinessLogicException("Promocode was sold"); }
 
             context.Set<Promocode>().Remove(code);
             await context.SaveChangesAsync();

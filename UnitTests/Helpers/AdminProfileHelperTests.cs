@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Moq.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
@@ -65,7 +66,7 @@ namespace UnitTests.Helpers
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _helper.GetIteratingUser(999));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _helper.GetIteratingUser(999));
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace UnitTests.Helpers
                 .ReturnsDbSet(new[] { userWithoutAdmin });
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => await _helper.GetIteratingUser(200));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _helper.GetIteratingUser(200));
         }
 
         #endregion
@@ -126,9 +127,8 @@ namespace UnitTests.Helpers
                 .ReturnsDbSet(new[] { user });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(async () =>
+            var ex = Assert.ThrowsAsync<NoPermissionException>(async () =>
                 await _helper.CheckIteratingUser(102, Permission.ModerateTeachers));
-            Assert.That(ex?.Message, Does.Contain("permission policy"));
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace UnitTests.Helpers
                 .ReturnsDbSet(new List<User>());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () =>
+            Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _helper.CheckIteratingUser(999, Permission.ApproveCourses));
         }
 

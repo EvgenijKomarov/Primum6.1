@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
@@ -57,7 +58,7 @@ namespace PrimumCore.Services.Iterators
                     Description = x.Description
                 })
                 .FirstOrDefaultAsync(x => x.LogId == logId);
-            if (log is null) { throw new Exception("Log not found"); }
+            if (log is null) { throw new NotFoundException("Log"); }
 
             return log;
         }
@@ -71,7 +72,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.User)
                 .Where(x => x.AdminProfile != null)
                 .FirstOrDefaultAsync(x => x.LogId == logId);
-            if (log is null) { throw new Exception("Log not found"); }
+            if (log is null) { throw new NotFoundException("Log"); }
             log.IsRevisioned = true;
 
             await context.SaveChangesAsync();
@@ -84,7 +85,7 @@ namespace PrimumCore.Services.Iterators
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
             IncidentSolver solver = new IncidentSolver(context);
 
-            var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto);
+            var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto, userId);
             return subjectId;
         }
     }
