@@ -37,10 +37,12 @@ namespace UnitTests.Iterators
                 TeacherProfile = new TeacherProfile
                 {
                     TeacherId = userId,
-                    User = new User { Id = userId },
+                    User = new User { Id = userId, IsBanned = false, IsMailChecked = true },
                     Courses = new List<Course>(),
                     ApproveStatus = status
-                }
+                },
+                IsBanned = false,
+                IsMailChecked = true
             };
         }
 
@@ -132,8 +134,8 @@ namespace UnitTests.Iterators
                 ApproveStatus = ApproveStatus.Approved,
                 IsActive = true, // → IsAvailable = true
                 Price = 1000,
-                Teacher = new TeacherProfile { User = new User { Id = 201 } },
-                CourseTheme = new CourseTheme { ThemeName = "Data Science", CourseThemeId = 20 }
+                Teacher = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, User = new User { Id = 201, IsMailChecked = true, IsBanned = false } },
+                CourseTheme = new CourseTheme { ThemeName = "Data Science", CourseThemeId = 20, IsActive = true }
             };
 
             _mockContext.Setup(x => x.Set<Course>())

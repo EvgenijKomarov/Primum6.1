@@ -43,8 +43,21 @@ namespace UnitTests.Iterators
                 {
                     Abonement = new Abonement
                     {
-                        Student = new StudentProfile { User = new User { Id = 201 } },
-                        Course = new Course { CourseId = 301, Name = "Математика" }
+                        Student = new StudentProfile { User = new User { Id = 201, IsMailChecked = true, IsBanned = false } },
+                        Course = new Course
+                        {
+                            CourseId = 301,
+                            Name = "Математика",
+                            Teacher = new TeacherProfile
+                            {
+                                ApproveStatus = ApproveStatus.Approved,
+                                User = new User
+                                {
+                                    IsMailChecked = true,
+                                    IsBanned = false,
+                                }
+                            }
+                        }
                     }
                 }
             };
@@ -245,7 +258,7 @@ namespace UnitTests.Iterators
                 AbonementShedule = new AbonementShedule() // занят
             };
             var teacherProfile = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, TeacherShedules = new List<TeacherShedule> { shedule } };
-            var teacherUser = new User { Id = 106, TeacherProfile = teacherProfile };
+            var teacherUser = new User { Id = 106, TeacherProfile = teacherProfile, IsMailChecked = true, IsBanned = false };
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { teacherUser });
 

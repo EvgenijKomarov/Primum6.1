@@ -80,7 +80,7 @@ namespace UnitTests.Utilities
                 Meaning = IncidentMeaningDto.Course,
                 Decision = decision,
                 ObjectId = 301,
-                IncidentInfo = "Test course"
+                DecisionExplanation = "Test course"
             };
 
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
@@ -162,7 +162,7 @@ namespace UnitTests.Utilities
                 Meaning = IncidentMeaningDto.Teacher,
                 Decision = decision,
                 ObjectId = 101,
-                IncidentInfo = "Test teacher"
+                DecisionExplanation = "Test teacher"
             };
 
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
@@ -246,7 +246,7 @@ namespace UnitTests.Utilities
                 Meaning = IncidentMeaningDto.Student,
                 Decision = decision,
                 ObjectId = 201,
-                IncidentInfo = "Test student"
+                DecisionExplanation = "Test student"
             };
 
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
@@ -293,7 +293,7 @@ namespace UnitTests.Utilities
                 Meaning = IncidentMeaningDto.Lesson,
                 Decision = decision,
                 ObjectId = 401,
-                IncidentInfo = "Missed lesson"
+                DecisionExplanation = "Missed lesson"
             };
 
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
@@ -330,7 +330,7 @@ namespace UnitTests.Utilities
                 Meaning = IncidentMeaningDto.Course,
                 Decision = IncidentDecisionDto.SendToAdministrator,
                 ObjectId = 301,
-                IncidentInfo = "test"
+                DecisionExplanation = "test"
             };
 
             // Нет нужного разрешения

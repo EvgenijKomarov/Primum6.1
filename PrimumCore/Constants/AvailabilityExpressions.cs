@@ -21,13 +21,18 @@ namespace PrimumCore.Constants
             IsUserAvailable.And(IsTeacherAvailableBase);
 
         public static Expression<Func<Course, bool>> IsCourseAvailable =>
-            IsCourseAvailableBase.AndWithProperty(s => s.Teacher.User, IsTeacherAvailable);
+            IsCourseAvailableBase
+            .AndWithProperty(s => s.Teacher.User, IsTeacherAvailable)
+            .AndWithProperty(s => s.CourseTheme, IsThemeAvailable);
 
         public static Expression<Func<Abonement, bool>> IsAbonementAvailable =>
             IsAbonementAvailableBase;
 
         public static Expression<Func<Abonement, bool>> IsAbonementAlive =>
             IsAbonementAliveBase;
+
+        public static Expression<Func<CourseTheme, bool>> IsThemeAvailable =>
+            IsThemeAvailableBase;
 
 
         private static Expression<Func<User, bool>> IsUserAvailableBase =>
@@ -50,5 +55,8 @@ namespace PrimumCore.Constants
 
         private static Expression<Func<Abonement, bool>> IsAbonementAliveBase =>
             u => u.AbonementStatus != AbonementStatus.Deleted;
+
+        private static Expression<Func<CourseTheme, bool>> IsThemeAvailableBase =>
+            u => u.IsActive == true;
     }
 }

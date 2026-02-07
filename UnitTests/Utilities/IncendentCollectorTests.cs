@@ -23,6 +23,9 @@ namespace UnitTests.Utilities
         {
             _mockContext = new Mock<IPrimumContext>();
             _collector = new IncidentCollector(_mockContext.Object);
+
+            _mockContext.Setup(x => x.Set<IncidentLog>())
+                .ReturnsDbSet(new List<IncidentLog> { });
         }
 
         #region ModerateTeachers

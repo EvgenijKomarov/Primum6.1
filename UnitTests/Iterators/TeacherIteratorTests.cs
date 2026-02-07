@@ -37,7 +37,9 @@ namespace UnitTests.Iterators
                 {
                     About = "Опытный преподаватель",
                     ApproveStatus = ApproveStatus.Approved
-                }
+                },
+                IsMailChecked = true,
+                IsBanned = false
             };
             var unavailableTeacher = new User
             {

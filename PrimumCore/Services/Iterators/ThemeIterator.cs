@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
@@ -14,7 +15,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Courses)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .WhereIf(isOnlyAvailable, x => x.IsActive)
+                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsThemeAvailable)
                 .Select(x => new CourseThemeDto
                 {
                     CourseThemeId = x.CourseThemeId,

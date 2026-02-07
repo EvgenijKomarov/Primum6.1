@@ -95,7 +95,16 @@ namespace UnitTests.Iterators
                 Price = 500,
                 MaxLessons = 10,
                 FreeLessons = 2,
-                ApproveStatus = ApproveStatus.Approved
+                ApproveStatus = ApproveStatus.Approved,
+                Teacher = new TeacherProfile
+                {
+                    ApproveStatus = ApproveStatus.Approved,
+                    User = new User
+                    {
+                        IsMailChecked = true,
+                        IsBanned = false,
+                    }
+                }
             };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
@@ -203,7 +212,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { student });
 
-            var course = new Course { CourseId = 3, ApproveStatus = ApproveStatus.Approved };
+            var course = new Course {CourseId = 3, ApproveStatus = ApproveStatus.Approved, IsActive = true, Teacher = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, User = new User { IsMailChecked = true, IsBanned = false } } };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
 
@@ -226,7 +235,21 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { student });
 
-            var course = new Course { CourseId = 4, ApproveStatus = ApproveStatus.Approved };
+            var course = new Course
+            {
+                CourseId = 4,
+                ApproveStatus = ApproveStatus.Approved,
+                IsActive = true,
+                Teacher = new TeacherProfile
+                {
+                    ApproveStatus = ApproveStatus.Approved,
+                    User = new User
+                    {
+                        IsMailChecked = true,
+                        IsBanned = false,
+                    }
+                }
+            };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
 
@@ -250,7 +273,7 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { student });
 
-            var course = new Course { CourseId = 5, ApproveStatus = ApproveStatus.Approved };
+            var course = new Course { CourseId = 5, ApproveStatus = ApproveStatus.Approved, IsActive = true, Teacher = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, User = new User { IsMailChecked = true, IsBanned = false } } };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
 
@@ -286,7 +309,20 @@ namespace UnitTests.Iterators
             var abonement = new Abonement
             {
                 CourseId = 6,
-                AbonementShedules = new List<AbonementShedule> { existingShedule }
+                AbonementShedules = new List<AbonementShedule> { existingShedule },
+                Course = new Course
+                {
+                    IsActive = true,
+                    Teacher = new TeacherProfile
+                    {
+                        ApproveStatus = ApproveStatus.Approved,
+                        User = new User
+                        {
+                            IsMailChecked = true,
+                            IsBanned = false,
+                        }
+                    }
+                }
             };
             var student = new User
             {
@@ -296,7 +332,20 @@ namespace UnitTests.Iterators
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { student });
 
-            var course = new Course { CourseId = 6, ApproveStatus = ApproveStatus.Approved };
+            var course = new Course { 
+                CourseId = 6, 
+                ApproveStatus = ApproveStatus.Approved,
+                IsActive = true,
+                Teacher = new TeacherProfile
+                {
+                    ApproveStatus = ApproveStatus.Approved,
+                    User = new User
+                    {
+                        IsMailChecked = true,
+                        IsBanned = false,
+                    }
+                }
+            };
             _mockContext.Setup(x => x.Set<Course>())
                 .ReturnsDbSet(new[] { course });
 
@@ -348,6 +397,19 @@ namespace UnitTests.Iterators
                         {
                             DayOfWeek = DayOfWeek.Friday,
                             Time = 1
+                        }
+                    }
+                },
+                Course = new Course
+                {
+                    IsActive = true,
+                    Teacher = new TeacherProfile
+                    {
+                        ApproveStatus = ApproveStatus.Approved,
+                        User = new User
+                        {
+                            IsMailChecked = true,
+                            IsBanned = false,
                         }
                     }
                 }
