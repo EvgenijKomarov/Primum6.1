@@ -123,6 +123,24 @@ namespace PrimumCore.Services.Iterators
             return user;
         }
 
+        public async Task<UserDtoLite> GetLiteUser(int id, bool isOnlyAvailable)
+        {
+            var user = (await GetUser(id, isOnlyAvailable));
+
+            return new UserDtoLite
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                DisplayName = user.DisplayName,
+                IsApprovedStudent = user.IsApprovedStudent,
+                IsApprovedTeacher = user.IsApprovedTeacher,
+                IsAdmin = user.IsAdmin,
+                IsAvailable = user.IsAvailable
+            };
+        }
+
         public async Task<IEnumerable<UserDto>> GetUsers(bool isOnlyAvailable)
         {
             return await context.Set<User>()
