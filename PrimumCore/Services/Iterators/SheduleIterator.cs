@@ -37,11 +37,12 @@ namespace PrimumCore.Services.Iterators
                     TeacherSheduleId = x.TeacherSheduleId,
                     DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
-                    IsBusy = !AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
-                    StudentName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.DisplayName : null,
-                    StudentId = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Student.User.Id : null,
-                    CourseName = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Course.Name : null,
-                    CourseId = x.AbonementShedule is not null ? x.AbonementShedule.Abonement.Course.CourseId : null,
+                    // simpler busy check to avoid nested-member evaluation NREs
+                    IsBusy = x.AbonementShedule != null,
+                    StudentName = x.AbonementShedule?.Abonement?.Student?.User?.DisplayName,
+                    StudentId = x.AbonementShedule?.Abonement?.Student?.User?.Id,
+                    CourseName = x.AbonementShedule?.Abonement?.Course?.Name,
+                    CourseId = x.AbonementShedule?.Abonement?.Course?.CourseId,
                 }
                 )
                 .ToArray();

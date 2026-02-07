@@ -71,9 +71,16 @@ namespace UnitTests.Iterators
 
             var teacherProfile = new TeacherProfile
             {
-                TeacherShedules = new List<TeacherShedule> { busyShedule, freeShedule }
+                TeacherShedules = new List<TeacherShedule> { busyShedule, freeShedule },
+                ApproveStatus = ApproveStatus.Approved
             };
-            var teacherUser = new User { Id = 101, TeacherProfile = teacherProfile };
+            var teacherUser = new User { Id = 101, IsMailChecked = true, IsBanned = false };
+            teacherProfile.User = teacherUser;
+            teacherUser.TeacherProfile = teacherProfile;
+
+            // link each schedule to the teacher profile so availability checks pass
+            busyShedule.Teacher = teacherProfile;
+            freeShedule.Teacher = teacherProfile;
 
             _mockContext.Setup(x => x.Set<User>())
                 .ReturnsDbSet(new[] { teacherUser });

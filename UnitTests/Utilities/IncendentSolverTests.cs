@@ -124,6 +124,10 @@ namespace UnitTests.Utilities
             IncidentDecisionDto.SendToManager,
             Permission.AdministrateTeachers,
             ApproveStatus.NeedManagerReview)]
+        [TestCase(ApproveStatus.NeedManagerReview,
+            IncidentDecisionDto.Approve,
+            Permission.ApproveTeachers,
+            ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
             IncidentDecisionDto.Delete,
             Permission.ModerateTeachers,
@@ -338,6 +342,93 @@ namespace UnitTests.Utilities
 
             Assert.ThrowsAsync<NoPermissionException>(async () =>
                 await _solver.SolveIncident(AdminProfileId, permissions, dto, 1));
+        }
+
+        #endregion
+
+        #region NotFound and Unknown Meaning Cases
+
+        [Test]
+        public void SolveIncident_WhenMeaningUnknown_ThrowsNotFoundException()
+        {
+            var dto = new IncidentDecisionInputDto
+            {
+                Meaning = IncidentMeaningDto.Unknown,
+                Decision = IncidentDecisionDto.Approve,
+                ObjectId = 1,
+                DecisionExplanation = "Unknown"
+            };
+
+            Assert.ThrowsAsync<NotFoundException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, new[] { Permission.EditPermissions }, dto, 1));
+        }
+
+        [Test]
+        public void SolveIncident_WhenCourseNotFound_ThrowsNotFoundException()
+        {
+            _mockContext.Setup(x => x.Set<Course>()).ReturnsDbSet(new List<Course>());
+
+            var dto = new IncidentDecisionInputDto
+            {
+                Meaning = IncidentMeaningDto.Course,
+                Decision = IncidentDecisionDto.SendToAdministrator,
+                ObjectId = 123,
+                DecisionExplanation = "missing"
+            };
+
+            Assert.ThrowsAsync<NotFoundException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, new[] { Permission.ModerateCourses }, dto, 1));
+        }
+
+        [Test]
+        public void SolveIncident_WhenTeacherNotFound_ThrowsNotFoundException()
+        {
+            _mockContext.Setup(x => x.Set<User>()).ReturnsDbSet(new List<User>());
+
+            var dto = new IncidentDecisionInputDto
+            {
+                Meaning = IncidentMeaningDto.Teacher,
+                Decision = IncidentDecisionDto.SendToAdministrator,
+                ObjectId = 321,
+                DecisionExplanation = "missing"
+            };
+
+            Assert.ThrowsAsync<NotFoundException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, new[] { Permission.ModerateTeachers }, dto, 1));
+        }
+
+        [Test]
+        public void SolveIncident_WhenStudentNotFound_ThrowsNotFoundException()
+        {
+            _mockContext.Setup(x => x.Set<User>()).ReturnsDbSet(new List<User>());
+
+            var dto = new IncidentDecisionInputDto
+            {
+                Meaning = IncidentMeaningDto.Student,
+                Decision = IncidentDecisionDto.SendToAdministrator,
+                ObjectId = 222,
+                DecisionExplanation = "missing"
+            };
+
+            Assert.ThrowsAsync<NotFoundException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, new[] { Permission.ModerateStudents }, dto, 1));
+        }
+
+        [Test]
+        public void SolveIncident_WhenLessonNotFound_ThrowsNotFoundException()
+        {
+            _mockContext.Setup(x => x.Set<Lesson>()).ReturnsDbSet(new List<Lesson>());
+
+            var dto = new IncidentDecisionInputDto
+            {
+                Meaning = IncidentMeaningDto.Lesson,
+                Decision = IncidentDecisionDto.Delete,
+                ObjectId = 555,
+                DecisionExplanation = "missing"
+            };
+
+            Assert.ThrowsAsync<NotFoundException>(async () =>
+                await _solver.SolveIncident(AdminProfileId, new[] { Permission.InspectMissedLessons }, dto, 1));
         }
 
         #endregion

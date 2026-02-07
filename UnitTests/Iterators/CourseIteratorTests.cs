@@ -31,19 +31,21 @@ namespace UnitTests.Iterators
         private User CreateTeacherUser(int userId, string displayName, bool isApproved)
         {
             var status = isApproved ? ApproveStatus.Approved : ApproveStatus.NeedModeratorReview;
-            return new User
+            var user = new User
             {
                 Id = userId,
-                TeacherProfile = new TeacherProfile
-                {
-                    TeacherId = userId,
-                    User = new User { Id = userId, IsBanned = false, IsMailChecked = true },
-                    Courses = new List<Course>(),
-                    ApproveStatus = status
-                },
                 IsBanned = false,
                 IsMailChecked = true
             };
+            var profile = new TeacherProfile
+            {
+                TeacherId = userId,
+                User = user,
+                Courses = new List<Course>(),
+                ApproveStatus = status
+            };
+            user.TeacherProfile = profile;
+            return user;
         }
 
         #endregion
@@ -54,7 +56,7 @@ namespace UnitTests.Iterators
         public async Task GetCoursesByTeacher_WhenTeacherExists_ReturnsMappedCourses()
         {
             var courseTheme = new CourseTheme { CourseThemeId = 10, ThemeName = "Web" };
-            var teacherUser = new User { Id = 101 };
+            var user = CreateTeacherUser(101, "Иван", isApproved: true);
             var course = new Course
             {
                 CourseId = 201,
@@ -64,12 +66,10 @@ namespace UnitTests.Iterators
                 FreeLessons = 2,
                 IsActive = true,
                 ApproveStatus = ApproveStatus.Approved, // → IsAvailable = true
-                Teacher = new TeacherProfile { TeacherId = 101, User = teacherUser, About = "Senior dev" },
+                Teacher = user.TeacherProfile,
                 CourseTheme = courseTheme,
                 CourseThemeId = courseTheme.CourseThemeId
             };
-
-            var user = CreateTeacherUser(101, "Иван", isApproved: true);
             user.TeacherProfile.Courses.Add(course);
 
             _mockContext.Setup(x => x.Set<User>())
@@ -95,9 +95,9 @@ namespace UnitTests.Iterators
             var user = CreateTeacherUser(102, "Тест", isApproved: true);
             user.TeacherProfile.Courses = new[]
             {
-                new Course { CourseId = 202, Name = "Доступный", ApproveStatus = ApproveStatus.Approved, IsActive = true, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема" } },
-                new Course { CourseId = 203, Name = "Неодобренный", ApproveStatus = ApproveStatus.NeedModeratorReview, IsActive = true, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема" } },
-                new Course { CourseId = 204, Name = "Неактивный", ApproveStatus = ApproveStatus.Approved, IsActive = false, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема" } }
+                new Course { CourseId = 202, Name = "Доступный", ApproveStatus = ApproveStatus.Approved, IsActive = true, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема", IsActive = true } },
+                new Course { CourseId = 203, Name = "Неодобренный", ApproveStatus = ApproveStatus.NeedModeratorReview, IsActive = true, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема", IsActive = true } },
+                new Course { CourseId = 204, Name = "Неактивный", ApproveStatus = ApproveStatus.Approved, IsActive = false, Teacher = user.TeacherProfile, CourseTheme = new CourseTheme { ThemeName = "Тема", IsActive = true } }
             };
 
             _mockContext.Setup(x => x.Set<User>())
@@ -127,6 +127,11 @@ namespace UnitTests.Iterators
         [Test]
         public async Task GetCourse_WhenCourseExistsAndAvailable_ReturnsDto()
         {
+            // create a teacher user/profile and link it to the course to satisfy availability checks
+            var teacherUser = new User { Id = 201, IsMailChecked = true, IsBanned = false };
+            var teacherProfile = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, User = teacherUser };
+            teacherUser.TeacherProfile = teacherProfile;
+
             var course = new Course
             {
                 CourseId = 301,
@@ -134,7 +139,7 @@ namespace UnitTests.Iterators
                 ApproveStatus = ApproveStatus.Approved,
                 IsActive = true, // → IsAvailable = true
                 Price = 1000,
-                Teacher = new TeacherProfile { ApproveStatus = ApproveStatus.Approved, User = new User { Id = 201, IsMailChecked = true, IsBanned = false } },
+                Teacher = teacherProfile,
                 CourseTheme = new CourseTheme { ThemeName = "Data Science", CourseThemeId = 20, IsActive = true }
             };
 

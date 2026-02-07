@@ -45,9 +45,11 @@ namespace PrimumCore.Services.Iterators
             if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var course = await context.Set<Course>()
-                .Where(AvailabilityExpressions.IsCourseAvailable)
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
             if (course is null) { throw new NotFoundException("Course"); }
+
+            // strict availability check executed in-memory
+            if (!AvailabilityExpressions.IsCourseAvailable.Compile()(course)) { throw new NotFoundException("Course"); }
 
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
@@ -56,7 +58,7 @@ namespace PrimumCore.Services.Iterators
             if (teacherShedule is null) { throw new NotFoundException("Shedule"); }
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }
-            if (teacherShedule.Teacher.User.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }
+            if (teacherShedule.Teacher.User?.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }
             if (user
                 .StudentProfile
                 .Abonements

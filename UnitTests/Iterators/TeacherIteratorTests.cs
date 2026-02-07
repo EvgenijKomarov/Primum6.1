@@ -80,7 +80,9 @@ namespace UnitTests.Iterators
                 {
                     About = "Преподаёт математику",
                     ApproveStatus = ApproveStatus.Approved
-                }
+                },
+                IsMailChecked = true,
+                IsBanned = false
             };
 
             _mockContext.Setup(x => x.Set<User>())
