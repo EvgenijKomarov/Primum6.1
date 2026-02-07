@@ -1,5 +1,6 @@
 ﻿using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Models;
 using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
@@ -31,7 +32,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
             foreach (var lesson in lessonsForIteration)
             {
                 if (lesson.Abonement.Student.User.Cash >= lesson.Price &&
-                    lesson.Abonement.AbonementStatus == AbonementStatus.Active)//Занятие произошло
+                    AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                 {
                     lesson.Abonement.Student.User.Cash -= lesson.Price;
                     lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.EarningMultiplier);
@@ -57,7 +58,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     logger?.LogInformation($"Lesson {lesson.LessonId} happened successfully");
                 }
                 else if (lesson.Abonement.Student.User.Cash < lesson.Price &&
-                    lesson.Abonement.AbonementStatus == AbonementStatus.Active)//Занятие не оплачено и удаляется
+                    AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
                 {
                     lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
@@ -77,8 +78,8 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 }
                 else //Занятие пропущено по сторонним причинам
                 {
-                    lesson.Status = LessonStatus.Missed;
-                    logger?.LogInformation($"Lesson {lesson.LessonId} missed");
+                    logger?.LogInformation($"Lesson {lesson.LessonId} missed due to non-active abonement");
+                    context.Set<Lesson>().Remove(lesson);
                 }
             }
 

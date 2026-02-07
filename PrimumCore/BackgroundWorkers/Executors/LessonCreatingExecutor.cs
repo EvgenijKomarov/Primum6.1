@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Models;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
@@ -26,15 +27,18 @@ namespace PrimumCore.BackgroundWorkers.Executors
 
                 s.LastIteration = freeDateTime;
                 logger?.LogInformation($"Set LastIterationTime of {s.AbonementSheduleId} for {freeDateTime}");
-                var lesson = new Lesson()
+                if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {
-                    AbonementId = s.Abonement.AbonementId,
-                    DateTime = freeDateTime,
-                    Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
-                    Status = LessonStatus.Waiting
-                };
-                context.Set<Lesson>().Add(lesson);
-                logger?.LogInformation($"Created lesson with Id: {lesson.LessonId} for {lesson.AbonementId} at {lesson.DateTime}");
+                    var lesson = new Lesson()
+                    {
+                        AbonementId = s.Abonement.AbonementId,
+                        DateTime = freeDateTime,
+                        Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
+                        Status = LessonStatus.Waiting
+                    };
+                    context.Set<Lesson>().Add(lesson);
+                    logger?.LogInformation($"Created lesson with Id: {lesson.LessonId} for {lesson.AbonementId} at {lesson.DateTime}");
+                }
             }
 
             await context.SaveChangesAsync();

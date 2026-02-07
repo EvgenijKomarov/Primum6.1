@@ -242,13 +242,13 @@ namespace UnitTests.BackgroundWorkers
             await executor.Execute(_mockLogger.Object);
 
             // Assert
-            Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Missed));
             Assert.That(abonement.AbonementStatus, Is.EqualTo(status)); // не изменён
             Assert.That(studentUser.Cash, Is.EqualTo(1000));
             Assert.That(teacherUser.Cash, Is.EqualTo(2000));
 
             _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
             _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(It.IsAny<IEnumerable<AbonementShedule>>()), Times.Never);
+            _mockContext.Verify(x => x.Set<Lesson>().Remove(It.Is<Lesson>(x => x.LessonId == lesson.LessonId)), Times.Once);
 
             _mockLogger.Verify(
                 x => x.Log(
