@@ -13,7 +13,7 @@ namespace PrimumCore.Services.Connectors
             string jsonMessage = JsonSerializer.Serialize(message);
             var body = Encoding.UTF8.GetBytes(jsonMessage);
 
-            logger?.LogInformation($"Notification {queueName} ({jsonMessage}) successfuly fake pushed on <{queueName}>");
+            logger?.LogWarning($"Notification {queueName} ({jsonMessage}) successfuly fake pushed on <{queueName}>");
         }
     }
 }

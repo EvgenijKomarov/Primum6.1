@@ -38,7 +38,7 @@ namespace PrimumCore.Extentions
         public static WebApplicationBuilder AddProjectControllers(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<StudentController>();
-            builder.Services.AddScoped<UserController>();
+            builder.Services.AddScoped<AvailableUserController>();
             builder.Services.AddScoped<TeacherController>();
             builder.Services.AddScoped<AdminController>();
             builder.Services.AddScoped<PublicController>();

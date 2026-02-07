@@ -145,7 +145,8 @@ namespace PrimumCore.Services.Iterators
                         user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
                     IsAdmin = user.AdminProfile != null,
                     IsBanned = user.IsBanned,
-                    MailConfirmed = user.IsMailChecked
+                    MailConfirmed = user.IsMailChecked,
+                    IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
                 })
                 .ToArrayAsync();
         }

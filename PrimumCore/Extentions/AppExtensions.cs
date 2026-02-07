@@ -10,6 +10,7 @@ namespace PrimumCore.Extentions
             app.UseMiddleware<TeacherValidationMiddleware>();
             app.UseMiddleware<StudentValidationMiddleware>();
             app.UseMiddleware<AdminValidationMiddleware>();
+            app.UseMiddleware<AllUserValidationMiddleware>();
 
             return app;
         }

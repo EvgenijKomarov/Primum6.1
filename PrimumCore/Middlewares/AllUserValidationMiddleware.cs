@@ -5,11 +5,11 @@ using PrimumCore.Models;
 
 namespace PrimumCore.Middlewares
 {
-    public class UserValidationMiddleware(RequestDelegate next)
+    public class AllUserValidationMiddleware(RequestDelegate next)
     {
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!context.Request.Path.StartsWithSegments("/api/available-user"))
+            if (!context.Request.Path.StartsWithSegments("/api/user"))
             {
                 await next(context);
                 return;
@@ -25,10 +25,6 @@ namespace PrimumCore.Middlewares
                 if (user is null)
                 {
                     throw new NotAuthorizedException("User", userId);
-                }
-                else if (!AvailabilityExpressions.IsUserAvailable.Compile()(user))
-                {
-                    throw new NotAvailableException("User");
                 }
 
                 await next(context);

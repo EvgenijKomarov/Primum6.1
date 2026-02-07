@@ -29,5 +29,7 @@ namespace CoreConnection.DTOs
         public required bool? IsApprovedTeacher { get; set; }
 
         public required bool? IsAdmin {get; set; }
+
+        public required bool IsAvailable { get; set; }
     }
 }
