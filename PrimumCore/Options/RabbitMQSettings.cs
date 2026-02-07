@@ -1,6 +1,4 @@
-﻿using static PrimumCore.Options.RabbitMQQueuesSettings;
-
-namespace PrimumCore.Options
+﻿namespace PrimumCore.Options
 {
     public class RabbitMQSettings
     {
@@ -10,6 +8,5 @@ namespace PrimumCore.Options
         public string UserName { get; set; } = "guest";
         public string Password { get; set; } = "guest";
         public string VirtualHost { get; set; } = "/";
-        public List<QueueDeclaration> Queues { get; set; } = new();
     }
 }
