@@ -24,11 +24,13 @@ namespace PrimumCore.Services.Utilities
             context.Set<IncidentLog>().Add(new IncidentLog
             {
                 AdminProfileId = adminProfileId,
-                Description = $"Info:\n" +
-                $"{dto.IncidentInfo}\n" +
+                Description = $"Explanation:\n" +
+                $"{dto.DecisionExplanation}\n" +
                 $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
                 $"Decision: {dto.Decision.ToString()}",
-                DecisionDate = DateTime.Now
+                DecisionDate = DateTime.Now,
+                Meaning = dto.Meaning,
+                ObjectId = dto.ObjectId
             });
 
             var ruleResult = await rule.Invoke(dto.ObjectId, dto.Decision);

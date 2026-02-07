@@ -15,6 +15,6 @@ namespace CoreConnection.DTOs.Inputs
 
         public IncidentDecisionDto Decision { get; set; }
 
-        public string IncidentInfo { get; set; }
+        public string DecisionExplanation { get; set; }
     }
 }

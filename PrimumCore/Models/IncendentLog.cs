@@ -1,4 +1,5 @@
-﻿using PrimumPlatformModel.Models.Enums;
+﻿using CoreConnection.Enums;
+using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Models
 {
@@ -15,5 +16,9 @@ namespace PrimumCore.Models
         public bool IsRevisioned { get; set; } = false;
 
         public virtual AdminProfile AdminProfile { get; set; } = null!;
+
+        public IncidentMeaningDto? Meaning {  get; set; }
+
+        public int? ObjectId { get; set; }
     }
 }

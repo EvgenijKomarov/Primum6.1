@@ -20,6 +20,25 @@ namespace PrimumCore.Services.Utilities
                     incidents.AddRange(rule.Invoke());
                 }
             }
+
+            foreach (var incident in incidents) 
+            {
+                incident.LinkedLogs = await context.Set<IncidentLog>()
+                    .Include(x => x.AdminProfile)
+                    .ThenInclude(x => x.User)
+                    .Where(x => x.ObjectId != null && x.Meaning != null)
+                    .Where(x => x.ObjectId == incident.ObjectId && x.Meaning == incident.Meaning)
+                    .Select(x => new IncidentLogDto
+                    {
+                        AdminUserId = x.AdminProfile.UserId,
+                        AdminDisplayName = x.AdminProfile.User.DisplayName,
+                        LogId = x.LogId,
+                        Description = x.Description,
+                        DateTime = x.DecisionDate
+                    })
+                    .ToArrayAsync();
+            }
+
             return incidents;
         }
 
@@ -41,7 +60,8 @@ namespace PrimumCore.Services.Utilities
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
-                        $"About: {x.TeacherProfile.About}"
+                        $"About: {x.TeacherProfile.About}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -60,7 +80,8 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Mail: {x.MailAdress}"
+                        $"Mail: {x.MailAdress}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -81,7 +102,8 @@ namespace PrimumCore.Services.Utilities
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
-                        $"Free lessons: {x}"
+                        $"Free lessons: {x}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -102,7 +124,8 @@ namespace PrimumCore.Services.Utilities
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
-                        $"Free lessons: {x.FreeLessons}"
+                        $"Free lessons: {x.FreeLessons}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -122,7 +145,8 @@ namespace PrimumCore.Services.Utilities
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
-                        $"About: {x.TeacherProfile.About}"
+                        $"About: {x.TeacherProfile.About}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -141,7 +165,8 @@ namespace PrimumCore.Services.Utilities
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
-                        $"Mail: {x.MailAdress}"
+                        $"Mail: {x.MailAdress}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -162,7 +187,8 @@ namespace PrimumCore.Services.Utilities
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
-                        $"Free lessons: {x.FreeLessons}"
+                        $"Free lessons: {x.FreeLessons}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -182,7 +208,8 @@ namespace PrimumCore.Services.Utilities
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
-                        $"About: {x.TeacherProfile.About}"
+                        $"About: {x.TeacherProfile.About}",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
@@ -213,7 +240,8 @@ namespace PrimumCore.Services.Utilities
                         $"Teacher Id: {x.Abonement.Course.Teacher.User.Id}\n" +
                         $"Course: {x.Abonement.Course.Name}\n" +
                         $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
-                        $"DateTime: {x.DateTime.ToString("HH:mm dd:MM:yyyy")}\n"
+                        $"DateTime: {x.DateTime.ToString("HH:mm dd:MM:yyyy")}\n",
+                        LinkedLogs = null
                     })
                     .ToList()
             },
