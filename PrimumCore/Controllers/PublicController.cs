@@ -17,11 +17,7 @@ namespace PrimumCore.Controllers
     {
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] string mailAdress, [FromQuery] string password)
-        {
-            var result = await userIterator.Login(mailAdress, password);
-            if (result.Item1 is null) { return Unauthorized(result.Item2); }
-            return Ok(result.Item1);
-        }
+            => Ok(await userIterator.Login(mailAdress, password));
 
         [HttpPost("register")]
         public async Task<IActionResult> RegUser([FromBody] RegistrationInputDto dto)

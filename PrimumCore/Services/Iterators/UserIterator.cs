@@ -15,16 +15,16 @@ namespace PrimumCore.Services.Iterators
     public class UserIterator(IPrimumContext context, 
         PasswordHasher passwordHasher)
     {
-        public async Task<(int?, string)> Login(string mailAdress, string password)
+        public async Task<int> Login(string mailAdress, string password)
         {
             var user = await context.Set<User>()
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.MailAdress == mailAdress);
-            if (user is null) { return (null, "Unknown login"); }
-            if (user.IsBanned) { return (null, "User is banned"); }
+            if (user is null) { throw new NotFoundException("User"); }
+            if (user.IsBanned) { throw new BusinessLogicException("User is banned"); }
 
-            if (!passwordHasher.VerifyPassword(password, user.Password)) { return (null, "Wrong password"); }
-            return (user.Id, string.Empty);
+            if (!passwordHasher.VerifyPassword(password, user.Password)) { throw new BusinessLogicException("Wrong password"); }
+            return user.Id;
         }
 
         public async Task<long> AddMoney(int userId, long cash)
