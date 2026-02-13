@@ -1,4 +1,5 @@
-﻿using CoreConnection.DTOs.Inputs;
+﻿using CoreConnection.DTOs;
+using CoreConnection.DTOs.Inputs;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
@@ -6,6 +7,7 @@ namespace PrimumCore.Controllers
 {
     [ApiController]
     [Route("api/teacher/{userId}")]
+    [Tags("Teacher")]
     public class TeacherController(
         TeacherIterator teacherIterator,
         CourseIterator courseIterator,
@@ -16,71 +18,71 @@ namespace PrimumCore.Controllers
         GradingIterator gradingIterator) : PrimumController
     {
         [HttpGet("profile")]
-        public async Task<IActionResult> GetTeacherProfile([FromRoute] int userId)
+        public async Task<ActionResult<TeacherProfileDto>> GetTeacherProfile([FromRoute] int userId)
             => Ok(await teacherIterator.GetTeacher(userId, false));
 
         [HttpGet("lessons")]
-        public async Task<IActionResult> GetLessons([FromRoute] int userId) 
+        public async Task<ActionResult<IEnumerable<LessonDto>>> GetLessons([FromRoute] int userId) 
             => Ok(await lessonIterator.GetTeacherLessons(userId));
 
         [HttpGet("lesson/{lessonId}")]
-        public async Task<IActionResult> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
+        public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
             => Ok(await lessonIterator.GetTeacherLesson(userId, lessonId));
 
         [HttpGet("courses")]
-        public async Task<IActionResult> GetCourses([FromRoute] int userId) 
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses([FromRoute] int userId) 
             => Ok(await courseIterator.GetCoursesByTeacher(userId, false));
 
         [HttpGet("shedules")]
-        public async Task<IActionResult> GetShedules([FromRoute] int userId) 
+        public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetShedules([FromRoute] int userId) 
             => Ok(await sheduleIterator.GetTeacherShedules(userId, false));
 
         [HttpGet("shedule/{sheduleId}")]
-        public async Task<IActionResult> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
+        public async Task<ActionResult<TeacherSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
             => Ok(await sheduleIterator.GetTeacherShedule(userId, sheduleId, false));
 
         [HttpGet("abonements")]
-        public async Task<IActionResult> GetAbonements([FromRoute] int userId)
+        public async Task<ActionResult<IEnumerable<AbonementDto>>> GetAbonements([FromRoute] int userId)
             => Ok(await abonementIterator.GetTeacherAbonements(userId));
 
         [HttpGet("abonement/{abonementId}")]
-        public async Task<IActionResult> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
+        public async Task<ActionResult<AbonementDto>> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.GetTeacherAbonement(userId, abonementId));
 
         [HttpGet("abonement/{abonementId}/shedules")]
-        public async Task<IActionResult> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
+        public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await sheduleIterator.GetAbonementShedules(abonementId));
 
         [HttpGet("abonement/{abonementId}/lessons")]
-        public async Task<IActionResult> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
+        public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await lessonIterator.GetAbonementLessons(abonementId, false));
 
         [HttpPut("course/edit")]
-        public async Task<IActionResult> EditCourse([FromRoute] int userId, [FromQuery] int courseId, [FromBody] CourseInputDto courseDto) 
+        public async Task<ActionResult<int>> EditCourse([FromRoute] int userId, [FromQuery] int courseId, [FromBody] CourseInputDto courseDto) 
             => Ok(await courseIterator.EditCourse(userId, courseId, courseDto));
 
         [HttpPost("course/create")]
-        public async Task<IActionResult> CreateCourse([FromRoute] int userId, [FromBody] CourseInputDto courseDto) 
+        public async Task<ActionResult<int>> CreateCourse([FromRoute] int userId, [FromBody] CourseInputDto courseDto) 
             => Ok(await courseIterator.CreateCourse(userId, courseDto));
 
         [HttpPatch("course/activate")]
-        public async Task<IActionResult> ActivateCourse([FromRoute] int userId, [FromQuery] int courseId) 
+        public async Task<ActionResult<int>> ActivateCourse([FromRoute] int userId, [FromQuery] int courseId) 
             => Ok(await courseIterator.ActivateCourse(userId, courseId));
 
         [HttpPatch("course/deactivate")]
-        public async Task<IActionResult> DeactivateCourse([FromRoute] int userId, [FromQuery] int courseId) 
+        public async Task<ActionResult<int>> DeactivateCourse([FromRoute] int userId, [FromQuery] int courseId) 
             => Ok(await courseIterator.DeactivateCourse(userId, courseId));
 
         [HttpPost("shedule/create")]
-        public async Task<IActionResult> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleInputDto sheduleDto) 
+        public async Task<ActionResult<int>> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleInputDto sheduleDto) 
             => Ok(await sheduleIterator.CreateTeacherShedule(userId, sheduleDto));
 
         [HttpPost("lessons/grade")]
-        public async Task<IActionResult> GradeLesson([FromRoute] int userId, [FromQuery] int lessonId, [FromBody] GradingInputDto gradingDto)
+        public async Task<ActionResult<int>> GradeLesson([FromRoute] int userId, [FromQuery] int lessonId, [FromBody] GradingInputDto gradingDto)
             => Ok(await gradingIterator.GradeLesson(userId, lessonId, gradingDto));
 
         [HttpDelete("shedule/delete")]
-        public async Task<IActionResult> DeleteShedule([FromRoute] int userId, [FromQuery] int sheduleId) 
+        public async Task<ActionResult<int>> DeleteShedule([FromRoute] int userId, [FromQuery] int sheduleId) 
             => Ok(await sheduleIterator.DeleteTeacherShedule(userId, sheduleId));
     }
 }

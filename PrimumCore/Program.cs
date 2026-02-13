@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApiDocument();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+    c.CustomOperationIds(apiDesc =>
+    {
+        return apiDesc.TryGetMethodInfo(out var methodInfo)
+            ? methodInfo.Name
+            : null;
+    });
+    c.TagActionsBy(api =>
+    {
+        var tags = api.CustomAttributes()
+                      .OfType<TagsAttribute>()
+                      .FirstOrDefault();
+
+        return tags?.Tags.ToArray() ?? new[]
+        {
+            api.ActionDescriptor.RouteValues["controller"]
+        };
+    });
+});
 
 builder.AddDI();
 builder.AddPrimumContext();
@@ -22,7 +45,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
