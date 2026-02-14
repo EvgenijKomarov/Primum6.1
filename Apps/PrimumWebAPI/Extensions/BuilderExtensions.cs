@@ -1,6 +1,7 @@
 ﻿using CoreConnection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Services;
 using System.Text;
@@ -29,26 +30,16 @@ namespace PrimumWebAPI.Extensions
         {
             string coreUrl = builder.Configuration["Api:CoreURL"] ?? "https://localhost:5001";
 
-            builder.Services.AddHttpClient<AdminClient>((sp, httpClient) =>
-            {
-                httpClient.BaseAddress = new Uri(coreUrl);
-            });
-            builder.Services.AddHttpClient<StudentClient>((sp, httpClient) =>
-            {
-                httpClient.BaseAddress = new Uri(coreUrl);
-            });
-            builder.Services.AddHttpClient<UserClient>((sp, httpClient) =>
-            {
-                httpClient.BaseAddress = new Uri(coreUrl);
-            });
-            builder.Services.AddHttpClient<PublicClient>((sp, httpClient) =>
-            {
-                httpClient.BaseAddress = new Uri(coreUrl);
-            });
-            builder.Services.AddHttpClient<TeacherClient>((sp, httpClient) =>
-            {
-                httpClient.BaseAddress = new Uri(coreUrl);
-            });
+            builder.Services.AddHttpClient<AdminClient>()
+                .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<StudentClient>()
+                .AddTypedClient((httpClient, sp) => new StudentClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<UserClient>()
+                .AddTypedClient((httpClient, sp) => new UserClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<PublicClient>()
+                .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<TeacherClient>()
+                .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
 
             return builder;
         }
