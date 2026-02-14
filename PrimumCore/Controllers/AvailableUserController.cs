@@ -12,11 +12,11 @@ namespace PrimumCore.Controllers
     public class AvailableUserController(UserIterator iterator) : PrimumController
     {
         [HttpPatch("deposit")]
-        public async Task<ActionResult<long>> DepositMoney([FromRoute] int userId, [FromQuery] long cash)
+        public async Task<ActionResult<long>> DepositMoney([FromRoute] int userId, [FromQuery] long cash = 0)
             => Ok(await iterator.AddMoney(userId, cash));
 
         [HttpPatch("withdrawn")]
-        public async Task<ActionResult<long>> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash)
+        public async Task<ActionResult<long>> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash = 0)
             => Ok(await iterator.GetMoney(userId, cash));
 
         [HttpPost("create-teacher-profile")]

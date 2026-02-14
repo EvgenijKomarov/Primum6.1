@@ -29,12 +29,12 @@ namespace PrimumCore.Controllers
         [HttpGet("admins")]
         public async Task<ActionResult<IEnumerable<AdminProfileDto>>> GetAdmins([FromRoute] int userId) => Ok(await iterator.GetAdmins());
 
-        [HttpGet("admin")]
-        public async Task<ActionResult<AdminProfileDto>> GetAdmin([FromRoute] int userId, [FromQuery] int objectUserId) 
+        [HttpGet("admin/{objectUserId}")]
+        public async Task<ActionResult<AdminProfileDto>> GetAdmin([FromRoute] int userId, [FromRoute] int objectUserId) 
             => Ok(await iterator.GetAdmin(objectUserId));
 
         [HttpGet("incident-logs")]
-        public async Task<ActionResult<IEnumerable<IncidentLogDto>>> GetIncidentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned) 
+        public async Task<ActionResult<IEnumerable<IncidentLogDto>>> GetIncidentLogs([FromRoute] int userId, [FromQuery] bool OnlyUnrevisioned = true) 
             => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned));
 
         [HttpGet("incident-log/{logId}")]
@@ -50,43 +50,43 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetPromocodes(false));
 
         [HttpGet("promocode/{promocodeId}")]
-        public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int promocodeId)
+        public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
 
         [HttpPut("solve")]
-        public async Task<ActionResult<int>> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto) 
+        public async Task<ActionResult<int>> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto = null!) 
             => Ok(await IncidentIterator.SolveIncedent(userId, dto));
 
-        [HttpPatch("add-cash")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int userId, [FromQuery] int cash, [FromQuery] int objectUserId) 
+        [HttpPatch("add-cash/{objectUserId}")]
+        public async Task<ActionResult<int>> AddCash([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int cash = 0) 
             => Ok(await iterator.AddCash(userId, objectUserId, cash));
 
-        [HttpPatch("ban")]
-        public async Task<ActionResult<int>> BanUser([FromRoute] int userId, [FromQuery] int objectUserId)
+        [HttpPatch("ban/{objectUserId}")]
+        public async Task<ActionResult<int>> BanUser([FromRoute] int userId, [FromRoute] int objectUserId)
             => Ok(await iterator.BanUser(userId, objectUserId, true));
 
-        [HttpPatch("unban")]
-        public async Task<ActionResult<int>> UnbanUser([FromRoute] int userId, [FromQuery] int objectUserId)
+        [HttpPatch("unban/{objectUserId}")]
+        public async Task<ActionResult<int>> UnbanUser([FromRoute] int userId, [FromRoute] int objectUserId)
             => Ok(await iterator.BanUser(userId, objectUserId, false));
 
-        [HttpPatch("edit-permissions")]
-        public async Task<ActionResult<int>> EditPermissions([FromRoute] int userId, [FromQuery] int objectUserId, [FromBody] Dictionary<string, bool> permissions)
+        [HttpPatch("edit-permissions/{objectUserId}")]
+        public async Task<ActionResult<int>> EditPermissions([FromRoute] int userId, [FromRoute] int objectUserId, [FromBody] Dictionary<string, bool> permissions = null!)
             => Ok(await iterator.EditPermissions(userId, objectUserId, permissions));
 
-        [HttpPut("create-admin-profile")]
-        public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int userId, [FromQuery] int objectUserId, [FromQuery] string status)
+        [HttpPut("create-admin-profile/{objectUserId}")]
+        public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] string status)
             => Ok(await iterator.CreateAdminProfile(userId, objectUserId, status));
 
         [HttpPut("add-promocode")]
-        public async Task<ActionResult<int>> AddPromocode([FromRoute] int userId, [FromBody] PromocodeInputDto dto)
+        public async Task<ActionResult<int>> AddPromocode([FromRoute] int userId, [FromBody] PromocodeInputDto dto = null!)
             => Ok(await promocodeIterator.AddPromocode(userId, dto));
 
-        [HttpPut("delete-admin-profile")]
-        public async Task<ActionResult<int>> DeleteAdminProfile([FromRoute] int userId, [FromQuery] int objectUserId)
+        [HttpPut("delete-admin-profile/{objectUserId}")]
+        public async Task<ActionResult<int>> DeleteAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId)
             => Ok(await iterator.DeleteAdminProfile(userId, objectUserId));
 
-        [HttpDelete("delete-promocode")]
-        public async Task<ActionResult<int>> DeletePromocode([FromRoute] int userId, [FromQuery] int promocodeId)
+        [HttpDelete("delete-promocode/{promocodeId}")]
+        public async Task<ActionResult<int>> DeletePromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.DeletePromocode(userId, promocodeId));
     }
 }

@@ -43,11 +43,11 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<StudentSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
             => Ok(await sheduleIterator.GetStudentShedule(userId, sheduleId));
 
-        [HttpGet("abonement/{abonementId}/shedules")]
+        [HttpGet("abonement-shedules/{abonementId}")]
         public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await sheduleIterator.GetAbonementShedules(userId));
 
-        [HttpGet("abonement/{abonementId}/lessons")]
+        [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await lessonIterator.GetAbonementLessons(userId, true));
 
@@ -63,28 +63,28 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
 
-        [HttpPatch("abonement/activate")]
-        public async Task<ActionResult<int>> ActivateAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
+        [HttpPatch("abonement-activate/{abonementId}")]
+        public async Task<ActionResult<int>> ActivateAbonement([FromRoute] int userId, [FromRoute] int abonementId) 
             => Ok(await abonementIterator.ActivateAbonement(userId, abonementId));
 
-        [HttpPatch("abonement/freeze")]
-        public async Task<ActionResult<int>> FreezeAbonement([FromRoute] int userId, [FromQuery] int abonementId) 
+        [HttpPatch("abonement-freeze/{abonementId}")]
+        public async Task<ActionResult<int>> FreezeAbonement([FromRoute] int userId, [FromRoute] int abonementId) 
             => Ok(await abonementIterator.FreezeAbonement(userId, abonementId));
 
-        [HttpPost("course/subscribe")]
-        public async Task<ActionResult<int>> SubscribeToCourse([FromRoute] int userId, [FromQuery] int courseId, [FromQuery] int teacherSheduleId)
+        [HttpPost("course-subscribe/{courseId}/{teacherSheduleId}")]
+        public async Task<ActionResult<int>> SubscribeToCourse([FromRoute] int userId, [FromRoute] int courseId, [FromRoute] int teacherSheduleId)
             => Ok(await studentIterator.SubscribeToCourse(userId, courseId, teacherSheduleId));
 
-        [HttpPost("buy-promocode")]
-        public async Task<ActionResult<PromocodeDto>> BuyPromocode([FromRoute] int userId, [FromQuery] int promocodeId)
+        [HttpPost("buy-promocode/{promocodeId}")]
+        public async Task<ActionResult<PromocodeDto>> BuyPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.BuyPromocode(userId, promocodeId));
 
-        [HttpDelete("shedule/delete")]
-        public async Task<ActionResult<int>> DeleteShedule([FromRoute] int userId, [FromQuery] int abonementSheduleId) 
+        [HttpDelete("shedule/{abonementSheduleId}")]
+        public async Task<ActionResult<int>> DeleteShedule([FromRoute] int userId, [FromRoute] int abonementSheduleId) 
             => Ok(await sheduleIterator.DeleteStudentShedule(userId, abonementSheduleId));
 
-        [HttpDelete("abonement/delete")]
-        public async Task<ActionResult<int>> DeleteAbonement([FromRoute] int userId, [FromQuery] int abonementId)
+        [HttpDelete("abonement-delete/{abonementId}")]
+        public async Task<ActionResult<int>> DeleteAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.DeleteAbonement(userId, abonementId));
     }
 }

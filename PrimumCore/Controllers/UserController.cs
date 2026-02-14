@@ -16,8 +16,8 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
             => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));
 
-        [HttpPost("confirm-email")]
-        public async Task<ActionResult<int>> ConfirmEmail([FromRoute] int userId, [FromQuery] string token)
+        [HttpPost("confirm-email/{token}")]
+        public async Task<ActionResult<int>> ConfirmEmail([FromRoute] int userId, [FromRoute] string token)
             => Ok(await tokenIterator.ConfirmToken(userId, token));
     }
 }
