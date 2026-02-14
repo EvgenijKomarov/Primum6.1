@@ -56,11 +56,11 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetStudentPromocodes(userId));
 
         [HttpGet("available-promocodes")]
-        public async Task<ActionResult<IEnumerable<PromocodeDto>>> GetPromocodes()
+        public async Task<ActionResult<IEnumerable<PromocodeDto>>> GetPromocodes([FromRoute] int userId)
             => Ok(await promocodeIterator.GetPromocodes(true));
 
         [HttpGet("promocode/{promocodeId}")]
-        public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int promocodeId)
+        public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
 
         [HttpPatch("abonement-activate/{abonementId}")]

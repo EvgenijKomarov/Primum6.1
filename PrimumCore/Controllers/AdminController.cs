@@ -53,7 +53,7 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
 
-        [HttpPut("solve")]
+        [HttpPut("solve-incident")]
         public async Task<ActionResult<int>> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto = null!) 
             => Ok(await IncidentIterator.SolveIncedent(userId, dto));
 

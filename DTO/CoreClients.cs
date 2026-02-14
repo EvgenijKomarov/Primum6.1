@@ -389,10 +389,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AdminProfileDto> AdminAsync(int userId, int? objectUserId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AdminProfileDto> AdminAsync(int userId, int objectUserId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -405,16 +408,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/admin"
+                    // Operation Path: "api/admin/{userId}/admin/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/admin");
-                    urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/admin/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -789,13 +787,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PromocodeDto> PromocodeAsync(int promocodeId, string userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PromocodeDto> PromocodeAsync(int userId, int promocodeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (promocodeId == null)
-                throw new System.ArgumentNullException("promocodeId");
-
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (promocodeId == null)
+                throw new System.ArgumentNullException("promocodeId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -869,7 +867,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> SolveAsync(int userId, IncidentDecisionInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> SolveIncidentAsync(int userId, IncidentDecisionInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -889,10 +887,10 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/solve"
+                    // Operation Path: "api/admin/{userId}/solve-incident"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/solve");
+                    urlBuilder_.Append("/solve-incident");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -949,10 +947,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> AddCashAsync(int userId, int? cash = null, int? objectUserId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> AddCashAsync(int userId, int objectUserId, int? cash = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -966,19 +967,16 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/add-cash"
+                    // Operation Path: "api/admin/{userId}/add-cash/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/add-cash");
+                    urlBuilder_.Append("/add-cash/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append('?');
                     if (cash != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("cash")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cash, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
                     urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -1036,10 +1034,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> BanAsync(int userId, int? objectUserId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> BanAsync(int userId, int objectUserId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1053,16 +1054,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/ban"
+                    // Operation Path: "api/admin/{userId}/ban/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/ban");
-                    urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/ban/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1119,10 +1115,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> UnbanAsync(int userId, int? objectUserId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> UnbanAsync(int userId, int objectUserId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1136,16 +1135,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/unban"
+                    // Operation Path: "api/admin/{userId}/unban/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/unban");
-                    urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/unban/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1202,10 +1196,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> EditPermissionsAsync(int userId, int? objectUserId = null, System.Collections.Generic.IDictionary<string, bool>? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> EditPermissionsAsync(int userId, int objectUserId, System.Collections.Generic.IDictionary<string, bool>? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1222,16 +1219,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/edit-permissions"
+                    // Operation Path: "api/admin/{userId}/edit-permissions/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/edit-permissions");
-                    urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/edit-permissions/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1288,10 +1280,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> CreateAdminProfileAsync(int userId, int? objectUserId = null, string? status = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CreateAdminProfileAsync(int userId, int objectUserId, string? status = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1305,15 +1300,12 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/create-admin-profile"
+                    // Operation Path: "api/admin/{userId}/create-admin-profile/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/create-admin-profile");
+                    urlBuilder_.Append("/create-admin-profile/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
                     if (status != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("status")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(status, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -1455,10 +1447,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeleteAdminProfileAsync(int userId, int? objectUserId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> DeleteAdminProfileAsync(int userId, int objectUserId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (objectUserId == null)
+                throw new System.ArgumentNullException("objectUserId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1472,16 +1467,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/delete-admin-profile"
+                    // Operation Path: "api/admin/{userId}/delete-admin-profile/{objectUserId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/delete-admin-profile");
-                    urlBuilder_.Append('?');
-                    if (objectUserId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("objectUserId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/delete-admin-profile/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(objectUserId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1538,10 +1528,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeletePromocodeAsync(int userId, int? promocodeId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> DeletePromocodeAsync(int userId, int promocodeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (promocodeId == null)
+                throw new System.ArgumentNullException("promocodeId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1554,16 +1547,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/admin/{userId}/delete-promocode"
+                    // Operation Path: "api/admin/{userId}/delete-promocode/{promocodeId}"
                     urlBuilder_.Append("api/admin/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/delete-promocode");
-                    urlBuilder_.Append('?');
-                    if (promocodeId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("promocodeId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(promocodeId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/delete-promocode/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(promocodeId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -3096,7 +3084,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsGetAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3408,7 +3396,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> ShedulesGetAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> ShedulesAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3484,7 +3472,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<StudentSheduleDto> SheduleAsync(int userId, int sheduleId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<StudentSheduleDto> SheduleGetAsync(int userId, int sheduleId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3564,7 +3552,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> ShedulesGetAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> AbonementShedulesAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3583,12 +3571,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/abonement/{abonementId}/shedules"
+                    // Operation Path: "api/student/{userId}/abonement-shedules/{abonementId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/");
+                    urlBuilder_.Append("/abonement-shedules/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/shedules");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -3645,7 +3632,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsGetAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> AbonementLessonsAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3664,12 +3651,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/abonement/{abonementId}/lessons"
+                    // Operation Path: "api/student/{userId}/abonement-lessons/{abonementId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/");
+                    urlBuilder_.Append("/abonement-lessons/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/lessons");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -3802,7 +3788,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PromocodeDto>> AvailablePromocodesAsync(string userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PromocodeDto>> AvailablePromocodesAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -3878,13 +3864,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PromocodeDto> PromocodeAsync(int promocodeId, string userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PromocodeDto> PromocodeAsync(int userId, int promocodeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (promocodeId == null)
-                throw new System.ArgumentNullException("promocodeId");
-
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (promocodeId == null)
+                throw new System.ArgumentNullException("promocodeId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3958,10 +3944,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> ActivateAsync(int userId, int? abonementId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> AbonementActivateAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (abonementId == null)
+                throw new System.ArgumentNullException("abonementId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3975,16 +3964,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/abonement/activate"
+                    // Operation Path: "api/student/{userId}/abonement-activate/{abonementId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/activate");
-                    urlBuilder_.Append('?');
-                    if (abonementId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("abonementId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/abonement-activate/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4041,10 +4025,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> FreezeAsync(int userId, int? abonementId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> AbonementFreezeAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (abonementId == null)
+                throw new System.ArgumentNullException("abonementId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4058,16 +4045,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/abonement/freeze"
+                    // Operation Path: "api/student/{userId}/abonement-freeze/{abonementId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/freeze");
-                    urlBuilder_.Append('?');
-                    if (abonementId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("abonementId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/abonement-freeze/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4124,10 +4106,16 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> SubscribeAsync(int userId, int? courseId = null, int? teacherSheduleId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseSubscribeAsync(int userId, int courseId, int teacherSheduleId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (courseId == null)
+                throw new System.ArgumentNullException("courseId");
+
+            if (teacherSheduleId == null)
+                throw new System.ArgumentNullException("teacherSheduleId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4141,20 +4129,13 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/course/subscribe"
+                    // Operation Path: "api/student/{userId}/course-subscribe/{courseId}/{teacherSheduleId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/course/subscribe");
-                    urlBuilder_.Append('?');
-                    if (courseId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("courseId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (teacherSheduleId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("teacherSheduleId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(teacherSheduleId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/course-subscribe/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(teacherSheduleId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4211,10 +4192,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PromocodeDto> BuyPromocodeAsync(int userId, int? promocodeId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PromocodeDto> BuyPromocodeAsync(int userId, int promocodeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (promocodeId == null)
+                throw new System.ArgumentNullException("promocodeId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4228,16 +4212,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/buy-promocode"
+                    // Operation Path: "api/student/{userId}/buy-promocode/{promocodeId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/buy-promocode");
-                    urlBuilder_.Append('?');
-                    if (promocodeId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("promocodeId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(promocodeId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/buy-promocode/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(promocodeId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4294,10 +4273,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeleteDeleteAsync(int userId, int? abonementSheduleId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> SheduleDeleteAsync(int userId, int abonementSheduleId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (abonementSheduleId == null)
+                throw new System.ArgumentNullException("abonementSheduleId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4310,16 +4292,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/shedule/delete"
+                    // Operation Path: "api/student/{userId}/shedule/{abonementSheduleId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/shedule/delete");
-                    urlBuilder_.Append('?');
-                    if (abonementSheduleId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("abonementSheduleId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(abonementSheduleId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/shedule/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementSheduleId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4376,10 +4353,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeleteDeleteAsync(int userId, int? abonementId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> AbonementDeleteAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (abonementId == null)
+                throw new System.ArgumentNullException("abonementId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4392,16 +4372,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/abonement/delete"
+                    // Operation Path: "api/student/{userId}/abonement-delete/{abonementId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/delete");
-                    urlBuilder_.Append('?');
-                    if (abonementId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("abonementId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/abonement-delete/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -4714,7 +4689,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsGetAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -4946,7 +4921,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TeacherSheduleDto>> ShedulesGetAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TeacherSheduleDto>> ShedulesAsync(int userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5258,7 +5233,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> ShedulesGetAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentSheduleDto>> AbonementShedulesAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5277,12 +5252,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/abonement/{abonementId}/shedules"
+                    // Operation Path: "api/teacher/{userId}/abonement-shedules/{abonementId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/");
+                    urlBuilder_.Append("/abonement-shedules/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/shedules");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5339,7 +5313,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> LessonsGetAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LessonDto>> AbonementLessonsAsync(int userId, int abonementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5358,12 +5332,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/abonement/{abonementId}/lessons"
+                    // Operation Path: "api/teacher/{userId}/abonement-lessons/{abonementId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/abonement/");
+                    urlBuilder_.Append("/abonement-lessons/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/lessons");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5420,10 +5393,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> EditAsync(int userId, int? courseId = null, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseEditAsync(int userId, int courseId, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (courseId == null)
+                throw new System.ArgumentNullException("courseId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5440,16 +5416,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/course/edit"
+                    // Operation Path: "api/teacher/{userId}/course-edit/{courseId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/course/edit");
-                    urlBuilder_.Append('?');
-                    if (courseId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("courseId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/course-edit/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5506,7 +5477,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> CreatePostAsync(int userId, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseCreateAsync(int userId, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5526,10 +5497,10 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/course/create"
+                    // Operation Path: "api/teacher/{userId}/course-create"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/course/create");
+                    urlBuilder_.Append("/course-create");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5586,10 +5557,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> ActivateAsync(int userId, int? courseId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseActivateAsync(int userId, int courseId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (courseId == null)
+                throw new System.ArgumentNullException("courseId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5603,16 +5577,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/course/activate"
+                    // Operation Path: "api/teacher/{userId}/course-activate/{courseId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/course/activate");
-                    urlBuilder_.Append('?');
-                    if (courseId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("courseId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/course-activate/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5669,10 +5638,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeactivateAsync(int userId, int? courseId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseDeactivateAsync(int userId, int courseId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (courseId == null)
+                throw new System.ArgumentNullException("courseId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5686,16 +5658,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/course/deactivate"
+                    // Operation Path: "api/teacher/{userId}/course-deactivate/{courseId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/course/deactivate");
-                    urlBuilder_.Append('?');
-                    if (courseId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("courseId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/course-deactivate/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(courseId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5752,7 +5719,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> CreatePostAsync(int userId, TeacherSheduleInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> SheduleCreateAsync(int userId, TeacherSheduleInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5772,10 +5739,10 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/shedule/create"
+                    // Operation Path: "api/teacher/{userId}/shedule-create"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/shedule/create");
+                    urlBuilder_.Append("/shedule-create");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5832,10 +5799,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> GradeAsync(int userId, int? lessonId = null, GradingInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> LessonGradeAsync(int userId, int lessonId, GradingInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (lessonId == null)
+                throw new System.ArgumentNullException("lessonId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5852,16 +5822,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/lessons/grade"
+                    // Operation Path: "api/teacher/{userId}/lesson-grade/{lessonId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/lessons/grade");
-                    urlBuilder_.Append('?');
-                    if (lessonId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("lessonId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lessonId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/lesson-grade/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(lessonId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5918,10 +5883,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> DeleteAsync(int userId, int? sheduleId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> SheduleDeleteAsync(int userId, int sheduleId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (sheduleId == null)
+                throw new System.ArgumentNullException("sheduleId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5934,16 +5902,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/teacher/{userId}/shedule/delete"
+                    // Operation Path: "api/teacher/{userId}/shedule-delete/{sheduleId}"
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/shedule/delete");
-                    urlBuilder_.Append('?');
-                    if (sheduleId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("sheduleId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(sheduleId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/shedule-delete/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(sheduleId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -6662,10 +6625,13 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> ConfirmEmailAsync(int userId, string? token = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> ConfirmEmailAsync(int userId, string token, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
+
+            if (token == null)
+                throw new System.ArgumentNullException("token");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -6679,16 +6645,11 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/user/{userId}/confirm-email"
+                    // Operation Path: "api/user/{userId}/confirm-email/{token}"
                     urlBuilder_.Append("api/user/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/confirm-email");
-                    urlBuilder_.Append('?');
-                    if (token != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("token")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(token, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append("/confirm-email/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(token, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

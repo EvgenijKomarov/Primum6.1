@@ -49,11 +49,11 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<AbonementDto>> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.GetTeacherAbonement(userId, abonementId));
 
-        [HttpGet("abonement/{abonementId}/shedules")]
+        [HttpGet("abonement-shedules/{abonementId}")]
         public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await sheduleIterator.GetAbonementShedules(abonementId));
 
-        [HttpGet("abonement/{abonementId}/lessons")]
+        [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await lessonIterator.GetAbonementLessons(abonementId, false));
 
