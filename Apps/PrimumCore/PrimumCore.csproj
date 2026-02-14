@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DTO\CoreConnection.csproj" />
+    <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
   </ItemGroup>
 
 </Project>
