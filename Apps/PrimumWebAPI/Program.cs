@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using PrimumCore.Middlewares;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Extensions;
 using PrimumWebAPI.Services;
@@ -17,10 +18,11 @@ builder.AddAuth();
 builder.AddControllers();
 builder.AddServices();
 builder.AddClients();
-
 builder.AddSwagger();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
 {
