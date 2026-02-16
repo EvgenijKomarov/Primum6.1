@@ -49,11 +49,10 @@ namespace UnitTests.Iterators
                 .Returns(true);
 
             // Act
-            var (userId, error) = await _iterator.Login("test@example.com", "correct_pass");
+            var userId = await _iterator.Login("test@example.com", "correct_pass");
 
             // Assert
             Assert.That(userId, Is.EqualTo(101));
-            Assert.That(error, Is.Empty);
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new List<User>());
 
             // Act
-            var (userId, error) = await _iterator.Login("unknown@test.com", "pass");
+            var userId = await _iterator.Login("unknown@test.com", "pass");
 
             // Assert
             Assert.That(userId, Is.Null);
@@ -86,6 +85,7 @@ namespace UnitTests.Iterators
                 .ReturnsDbSet(new[] { bannedUser });
 
             // Act
+            Assert.ThrowsAsync<NotAvailableException>
             var (userId, error) = await _iterator.Login("banned@test.com", "pass");
 
             // Assert

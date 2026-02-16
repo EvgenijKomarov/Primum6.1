@@ -13,6 +13,10 @@ namespace PrimumWebAPI.Controllers
     [Authorize]
     public class AdminController(AdminClient client): DefaultController
     {
+        [HttpGet("profile")]
+        public async Task<ActionResult<AdminProfileDto>> GetProfile()
+            => Ok(await client.AdminAsync(User.GetUserId(), User.GetUserId()));
+
         [HttpGet("get-user/{objectUserId}")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int objectUserId)
             => Ok(await client.GetUserAsync(User.GetUserId(), objectUserId));
@@ -23,10 +27,10 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("incidents")]
         public async Task<ActionResult<IEnumerable<IncidentDto>>> GetIncidents() => Ok(await client.IncidentsAsync(User.GetUserId()));
 
-        [HttpGet("admins")]
+        [HttpGet("other-admins")]
         public async Task<ActionResult<IEnumerable<AdminProfileDto>>> GetAdmins() => Ok(await client.AdminsAsync(User.GetUserId()));
 
-        [HttpGet("admin/{objectUserId}")]
+        [HttpGet("other-admin/{objectUserId}")]
         public async Task<ActionResult<AdminProfileDto>> GetAdmin([FromRoute] int objectUserId)
             => Ok(await client.AdminAsync(User.GetUserId(), objectUserId));
 
@@ -70,6 +74,10 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<int>> EditPermissions([FromRoute] int objectUserId, [FromBody] Dictionary<string, bool> permissions = null!)
             => Ok(await client.EditPermissionsAsync(User.GetUserId(), objectUserId, permissions));
 
+        [HttpPatch("edit-course-theme/{themeId}")]
+        public async Task<ActionResult<int>> EditTheme([FromRoute] int themeId, [FromBody] CourseThemeInputDto dto = null!)
+            => Ok(await client.EditCourseThemeAsync(User.GetUserId(), themeId, dto));
+
         [HttpPut("create-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int objectUserId, [FromQuery] string status)
             => Ok(await client.CreateAdminProfileAsync(User.GetUserId(), objectUserId, status));
@@ -81,6 +89,10 @@ namespace PrimumWebAPI.Controllers
         [HttpPut("delete-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> DeleteAdminProfile([FromRoute] int objectUserId)
             => Ok(await client.DeleteAdminProfileAsync(User.GetUserId(), objectUserId));
+
+        [HttpPut("create-course-theme")]
+        public async Task<ActionResult<int>> CreateTheme([FromBody] CourseThemeInputDto dto = null!)
+            => Ok(await client.CreateCourseThemeAsync(User.GetUserId(), dto));
 
         [HttpDelete("delete-promocode/{promocodeId}")]
         public async Task<ActionResult<int>> DeletePromocode([FromRoute] int promocodeId)

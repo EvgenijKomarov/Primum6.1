@@ -53,10 +53,6 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
 
-        [HttpPut("solve-incident")]
-        public async Task<ActionResult<int>> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto = null!) 
-            => Ok(await IncidentIterator.SolveIncedent(userId, dto));
-
         [HttpPatch("add-cash/{objectUserId}")]
         public async Task<ActionResult<int>> AddCash([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int cash = 0) 
             => Ok(await iterator.AddCash(userId, objectUserId, cash));
@@ -73,6 +69,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> EditPermissions([FromRoute] int userId, [FromRoute] int objectUserId, [FromBody] Dictionary<string, bool> permissions = null!)
             => Ok(await iterator.EditPermissions(userId, objectUserId, permissions));
 
+        [HttpPatch("edit-course-theme/{themeId}")]
+        public async Task<ActionResult<int>> EditTheme([FromRoute] int userId, [FromRoute] int themeId, [FromBody] CourseThemeInputDto dto = null!)
+            => Ok(await iterator.EditTheme(userId, themeId, dto));
+
         [HttpPut("create-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] string status)
             => Ok(await iterator.CreateAdminProfile(userId, objectUserId, status));
@@ -81,7 +81,15 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> AddPromocode([FromRoute] int userId, [FromBody] PromocodeInputDto dto = null!)
             => Ok(await promocodeIterator.AddPromocode(userId, dto));
 
-        [HttpPut("delete-admin-profile/{objectUserId}")]
+        [HttpPut("solve-incident")]
+        public async Task<ActionResult<int>> SolveIncedent([FromRoute] int userId, [FromBody] IncidentDecisionInputDto dto = null!)
+            => Ok(await IncidentIterator.SolveIncedent(userId, dto));
+
+        [HttpPut("create-course-theme")]
+        public async Task<ActionResult<int>> CreateTheme([FromRoute] int userId, [FromBody] CourseThemeInputDto dto = null!)
+            => Ok(await iterator.CreateTheme(userId, dto));
+
+        [HttpDelete("delete-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> DeleteAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId)
             => Ok(await iterator.DeleteAdminProfile(userId, objectUserId));
 

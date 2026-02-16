@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using CoreConnection.DTOs.Inputs;
+using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Models;
@@ -493,5 +494,131 @@ namespace UnitTests.Iterators
         }
 
         #endregion
+
+        #region CreateTheme
+
+        [Test]
+        public async Task CreateTheme_WhenValid_CreatesThemeAndIncidentLog()
+        {
+            // Arrange
+            const int userId = 1;
+
+            var dto = new CourseThemeInputDto
+            {
+                ThemeName = "Backend",
+                IsActive = true
+            };
+
+            var themes = new List<CourseTheme>();
+
+            var admin = new User
+            {
+                AdminProfile = new AdminProfile
+                {
+                    AdminId = 10,
+                    IncidentLogs = new List<IncidentLog>(),
+                    Permissions = new List<AdminPermission>() { new AdminPermission { Permission = Permission.EditCourseThemes } }
+                }
+            };
+
+            _mockContext.Setup(x => x.Set<CourseTheme>())
+                .ReturnsDbSet(themes);
+
+            _mockContext.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1)
+                .Callback(() =>
+                {
+                    themes.Last().CourseThemeId = 100;
+                });
+
+            // Act
+            var id = await _iterator.CreateTheme(userId, dto);
+
+            // Assert
+
+            Assert.That(id, Is.EqualTo(100));
+
+            Assert.That(themes.Count, Is.EqualTo(1));
+
+            var created = themes[0];
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(created.ThemeName, Is.EqualTo("Backend"));
+                Assert.That(created.IsActive, Is.True);
+            });
+
+            Assert.That(admin.AdminProfile.IncidentLogs.Count, Is.EqualTo(1));
+
+            var log = admin.AdminProfile.IncidentLogs.First();
+
+            Assert.That(log.Description,
+                Is.EqualTo("Created course theme with name: Backend, active: True"));
+        }
+
+        #endregion
+
+        #region EditTheme
+
+        [Test]
+        public async Task EditTheme_WhenExists_UpdatesThemeAndCreatesIncidentLog()
+        {
+            // Arrange
+
+            const int userId = 2;
+
+            var theme = new CourseTheme
+            {
+                CourseThemeId = 50,
+                ThemeName = "Old",
+                IsActive = false
+            };
+
+            var dto = new CourseThemeInputDto
+            {
+                ThemeName = "New",
+                IsActive = true
+            };
+
+            var admin = new User
+            {
+                AdminProfile = new AdminProfile
+                {
+                    AdminId = 5,
+                    IncidentLogs = new List<IncidentLog>(),
+                    Permissions = new List<AdminPermission>() { new AdminPermission { Permission = Permission.EditCourseThemes } }
+                }
+            };
+
+            _mockContext.Setup(x => x.Set<CourseTheme>())
+                .ReturnsDbSet(new List<CourseTheme> { theme });
+
+            _mockContext.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            // Act
+
+            var result = await _iterator.EditTheme(userId, 50, dto);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(50));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(theme.ThemeName, Is.EqualTo("New"));
+                Assert.That(theme.IsActive, Is.True);
+            });
+
+            Assert.That(admin.AdminProfile.IncidentLogs.Count, Is.EqualTo(1));
+
+            var log = admin.AdminProfile.IncidentLogs.First();
+
+            Assert.That(log.Description,
+                Is.EqualTo("Edited course theme (50) to name: New, active: True"));
+        }
+
+        #endregion
+
     }
 }

@@ -177,5 +177,49 @@ namespace PrimumCore.Services.Iterators
             await context.SaveChangesAsync();
             return user.Id;
         }
+
+        public async Task<int> CreateTheme(int userId, CourseThemeInputDto dto)
+        {
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.EditCourseThemes);
+
+            var theme = new CourseTheme
+            {
+                IsActive = dto.IsActive,
+                ThemeName = dto.ThemeName,
+            };
+            context.Set<CourseTheme>().Add(theme);
+
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description =
+                $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}",
+                DecisionDate = DateTime.Now
+            });
+            await context.SaveChangesAsync();
+            return theme.CourseThemeId;
+        }
+
+        public async Task<int> EditTheme(int userId, int themeId, CourseThemeInputDto dto)
+        {
+            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.EditCourseThemes);
+
+            var theme = context.Set<CourseTheme>()
+                .FirstOrDefault(x => x.CourseThemeId == themeId);
+            if (theme is null) { throw new NotFoundException("Theme"); }
+
+            theme.ThemeName = dto.ThemeName;
+            theme.IsActive = dto.IsActive;
+
+            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
+            {
+                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                Description =
+                $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}",
+                DecisionDate = DateTime.Now
+            });
+            await context.SaveChangesAsync();
+            return theme.CourseThemeId;
+        }
     }
 }

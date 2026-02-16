@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.DTOs.Inputs;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;
