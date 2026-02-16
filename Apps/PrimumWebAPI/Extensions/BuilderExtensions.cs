@@ -1,9 +1,12 @@
 ﻿using CoreConnection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Services;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
 namespace PrimumWebAPI.Extensions
@@ -23,6 +26,50 @@ namespace PrimumWebAPI.Extensions
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<JwtTokenService>();
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddSwagger(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.EnableAnnotations();
+                c.CustomOperationIds(apiDesc =>
+                {
+                    return apiDesc.TryGetMethodInfo(out var methodInfo)
+                        ? methodInfo.Name
+                        : null;
+                });
+                c.TagActionsBy(api =>
+                {
+                    var tags = api.CustomAttributes()
+                                  .OfType<TagsAttribute>()
+                                  .FirstOrDefault();
+
+                    return tags?.Tags.ToArray() ?? new[]
+                    {
+                        api.ActionDescriptor.RouteValues["controller"]
+                    };
+                });
+                var scheme = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Description = "JWT Authorization header using the Bearer scheme."
+                };
+                c.AddSecurityDefinition("bearer", scheme);
+                c.AddSecurityRequirement(d => new OpenApiSecurityRequirement
+                  {
+                    {
+                      new OpenApiSecuritySchemeReference("bearer", d),
+                      new List<string>()
+                    }
+                  });
+            });
+
             return builder;
         }
 
