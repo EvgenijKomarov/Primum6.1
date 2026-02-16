@@ -21,18 +21,22 @@ namespace PrimumCore.Middlewares
                     .GetRequiredService<IPrimumContext>();
                 var user = await dbContext.Set<User>()
                     .Include(x => x.StudentProfile)
-                    .FirstOrDefaultAsync(x => x.Id == userId && x.StudentProfile != null);
+                    .FirstOrDefaultAsync(x => x.Id == userId);
 
                 if (user is null)
                 {
-                    throw new NotAuthorizedException("Student", userId);
+                    throw new RequestingUserNotFoundException(userId);
+                }
+                else if (user.StudentProfile is null)
+                {
+                    throw new ProfileNotExistException("Student", userId);
                 }
 
                 await next(context);
                 return;
             }
 
-            throw new NotAuthorizedException("Student");
+            throw new ArgumentException("Invalid id");
         }
     }
 }

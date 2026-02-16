@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Services;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
@@ -87,6 +88,14 @@ namespace PrimumWebAPI.Extensions
                 .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
                 .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration));
 
             return builder;
         }

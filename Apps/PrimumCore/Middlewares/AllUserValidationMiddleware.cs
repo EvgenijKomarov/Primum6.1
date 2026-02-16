@@ -24,14 +24,14 @@ namespace PrimumCore.Middlewares
 
                 if (user is null)
                 {
-                    throw new NotAuthorizedException("User", userId);
+                    throw new RequestingUserNotFoundException(userId);
                 }
 
                 await next(context);
                 return;
             }
 
-            throw new NotAuthorizedException("User");
+            throw new ArgumentException("Invalid id");
         }
     }
 }

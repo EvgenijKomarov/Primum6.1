@@ -24,7 +24,7 @@ namespace PrimumCore.Middlewares
 
                 if (user is null)
                 {
-                    throw new NotAuthorizedException("User", userId);
+                    throw new RequestingUserNotFoundException(userId);
                 }
                 else if (!AvailabilityExpressions.IsUserAvailable.Compile()(user))
                 {
@@ -35,7 +35,7 @@ namespace PrimumCore.Middlewares
                 return;
             }
 
-            throw new NotAuthorizedException("User");
+            throw new ArgumentException("Invalid id");
         }
     }
 }

@@ -13,9 +13,17 @@ namespace PrimumCore.Middlewares
             {
                 await _next(context);
             }
-            catch (NotAuthorizedException ex)
+            catch (ProfileNotExistException ex)
             {
-                context.Response.StatusCode = 401;
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = ex.Message
+                });
+            }
+            catch (RequestingUserNotFoundException ex)
+            {
+                context.Response.StatusCode = 404;
                 await context.Response.WriteAsJsonAsync(new
                 {
                     error = ex.Message
@@ -23,7 +31,7 @@ namespace PrimumCore.Middlewares
             }
             catch (BusinessLogicException ex)
             {
-                context.Response.StatusCode = 406;
+                context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new
                 {
                     error = ex.Message

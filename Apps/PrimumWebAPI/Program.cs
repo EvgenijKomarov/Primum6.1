@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.AddAuth();
+builder.AddLogging();
 builder.AddControllers();
 builder.AddServices();
 builder.AddClients();
