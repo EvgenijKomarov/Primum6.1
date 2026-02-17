@@ -24,13 +24,13 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<int>> ConfirmEmail([FromQuery] string token)
             => Ok(await client.ConfirmEmailAsync(User.GetUserId(), token));
 
-        [HttpPatch("deposit")]
+        /*[HttpPatch("deposit")]
         public async Task<ActionResult<long>> DepositMoney([FromQuery] long cash)
             => Ok(await client.DepositAsync(User.GetUserId(), cash));
 
         [HttpPatch("withdrawn")]
         public async Task<ActionResult<long>> WithdrawnMoney([FromQuery] long cash)
-            => Ok(await client.WithdrawnAsync(User.GetUserId(), cash));
+            => Ok(await client.WithdrawnAsync(User.GetUserId(), cash));*/
 
         [HttpPost("create-teacher-profile")]
         public async Task<ActionResult<int>> CreateTeacherProfile([FromBody] string about)
