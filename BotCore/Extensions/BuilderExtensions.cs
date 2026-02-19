@@ -1,7 +1,8 @@
-﻿using BotCore.Entities;
-using BotCore.Entities.Inputs;
-using BotCore.Entities.Outputs;
+﻿using BotCore.Entities.Engine;
+using BotCore.Entities.Engine.Inputs;
+using BotCore.Entities.Engine.Outputs;
 using BotCore.Nodes.EndpointNodes;
+using BotCore.Services;
 using BotCore.Services.Iterators;
 using CoreConnection;
 using Engine;
@@ -32,7 +33,7 @@ namespace BotCore.Extensions
 
         public static WebApplicationBuilder AddBotEngine(this WebApplicationBuilder builder)
         {
-            builder.Services.AddSingleton<EasyBotEngine<CommandInput, DataBuffer, OutputMessage>>(sp => 
+            builder.Services.AddSingleton(sp => 
                 new EasyBotEngine<CommandInput, DataBuffer, OutputMessage>(
                     sp,
                     sp.GetService<ILogger<EasyBotEngine<CommandInput, DataBuffer, OutputMessage>>>()
@@ -58,6 +59,7 @@ namespace BotCore.Extensions
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<BotIterator>();
+            builder.Services.AddScoped<InOutConverter>();
 
 
             return builder;

@@ -1,4 +1,4 @@
-﻿namespace BotCore.Entities.Outputs
+﻿namespace BotCore.Entities.Engine.Outputs
 {
     public class OutputMessage
     {

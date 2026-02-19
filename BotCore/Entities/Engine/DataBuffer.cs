@@ -1,6 +1,6 @@
 ﻿using CoreConnection.DTOs;
 
-namespace BotCore.Entities
+namespace BotCore.Entities.Engine
 {
     public class DataBuffer
     {

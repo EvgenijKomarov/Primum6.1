@@ -1,13 +1,13 @@
 ﻿using BotCore.Nodes.EndpointNodes;
 using Engine;
 
-namespace BotCore.Entities.Inputs
+namespace BotCore.Entities.Engine.Inputs
 {
     public class PlainTextInput : CommandInput
     {
         public PlainTextInput(int? userId, string input)
         {
-            EndpointNode = typeof(PlainTextNode);
+            EndpointNodeId = "text";
             Object = new DataBuffer(new List<string> { input });
             UserId = userId;
         }

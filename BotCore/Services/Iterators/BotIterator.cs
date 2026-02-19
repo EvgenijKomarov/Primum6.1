@@ -1,38 +1,41 @@
 ﻿using BotCore.Entities;
-using BotCore.Entities.Inputs;
-using BotCore.Entities.Outputs;
+using BotCore.Entities.Engine;
+using BotCore.Entities.Engine.Inputs;
+using BotCore.Entities.Engine.Outputs;
 using BotCore.Exceptions;
 using Engine;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BotCore.Services.Iterators
 {
-    public class BotIterator(EasyBotEngine<CommandInput, DataBuffer, OutputMessage> engine)
+    public class BotIterator(
+        EasyBotEngine<CommandInput, DataBuffer, OutputMessage> engine,
+        InOutConverter converter
+        )
     {
-        public async Task<OutputMessage> ProcessTextMessage(int? userId, string message, CancellationToken token)
+        public async Task<BotOutput> ProcessTextMessage(int? userId, string message, CancellationToken token)
         {
             OutputMessage? result = null;
             if (message.StartsWith('/')) 
             { 
-                result = await engine.Process(new TextCommand(userId, message.Substring(1), engine.GetEndpointNodes().Select(x => x.GetType()).ToArray())); 
+                result = await engine.Process(new TextCommand(userId, message.Substring(1))); 
             }
             else
             {
                 result = await engine.Process(new PlainTextInput(userId, message), token);
             }
             if (result is null) { throw new ProcessFailureException(); }
-            return result;
+            return converter.ConvertToOutput(result, engine.GetEndpointNodeTypes());
         }
 
-        public async Task<OutputMessage> ProcessCallBackQuery(int? userId, string message, CancellationToken token)
+        public async Task<BotOutput> ProcessCallBackQuery(int? userId, string message, CancellationToken token)
         {
             var result = await engine.Process(new CallbackQueryCommand(
                 userId,
-                message, 
-                engine.GetEndpointNodes().Select(x => x.GetType()).ToArray()), 
+                message),
                 token);
             if (result is null) { throw new ProcessFailureException(); }
-            return result;
+            return converter.ConvertToOutput(result, engine.GetEndpointNodeTypes());
         }
     }
 }

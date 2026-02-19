@@ -1,6 +1,5 @@
 ﻿using BotCore.Entities;
-using BotCore.Entities.Inputs;
-using BotCore.Entities.Outputs;
+using BotCore.Entities.Engine.Outputs;
 using BotCore.Nodes;
 using BotCore.Services.Iterators;
 using Engine;
@@ -13,11 +12,11 @@ namespace BotCore.Controllers
     public class BotController(BotIterator iterator) : DefaultController
     {
         [HttpPost("text-command")]
-        public async Task<ActionResult<OutputMessage>> ProcedeTextCommand([FromQuery] int? userId, [FromBody] string message, CancellationToken token)
+        public async Task<ActionResult<BotOutput>> ProcedeTextCommand([FromQuery] int? userId, [FromBody] string message, CancellationToken token)
             => await iterator.ProcessTextMessage(userId, message, token);
 
         [HttpPost("callbackquery-command")]
-        public async Task<ActionResult<OutputMessage>> ProcedeCallBackQuery([FromQuery] int? userId, [FromBody] string message, CancellationToken token)
+        public async Task<ActionResult<BotOutput>> ProcedeCallBackQuery([FromQuery] int? userId, [FromBody] string message, CancellationToken token)
             => await iterator.ProcessCallBackQuery(userId, message, token);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using BotCore.Exceptions;
 
-namespace BotCore.Entities.Inputs
+namespace BotCore.Entities.Engine.Inputs
 {
     public class TextCommand: CommandInput
     {
-        public TextCommand(int? userId, string command, IEnumerable<Type> endpointTypes)
+        public TextCommand(int? userId, string command)
         {
             if (string.IsNullOrWhiteSpace(command))
                 throw new ArgumentException("Input string is null or empty", nameof(command));
@@ -14,9 +14,7 @@ namespace BotCore.Entities.Inputs
             if (parts.Length == 0)
                 throw new ArgumentException("Invalid command format", nameof(command));
 
-            var resCommand = endpointTypes.FirstOrDefault(x => x.Name == parts[0]);
-            if (resCommand == null) throw new BadCommandNameException(parts[0]);
-            EndpointNode = resCommand;
+            EndpointNodeId = command;
             Object = new DataBuffer(parts.Skip(1).ToList());
             UserId = userId;
         }
