@@ -1,7 +1,8 @@
-﻿using BotCore.Nodes.EndpointNodes;
+﻿using BotCore.Entities.Engine;
+using BotCore.Nodes.EndpointNodes;
 using Engine;
 
-namespace BotCore.Entities.Engine.Inputs
+namespace BotCore.Engine.Entities.Inputs
 {
     public class PlainTextInput : CommandInput
     {

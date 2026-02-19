@@ -1,7 +1,8 @@
-﻿using BotCore.Entities;
-using BotCore.Entities.Engine;
+﻿using BotCore.Engine.Entities;
+using BotCore.Engine.Entities.Inputs;
+using BotCore.Engine.Entities.Outputs;
+using BotCore.Entities;
 using BotCore.Entities.Engine.Inputs;
-using BotCore.Entities.Engine.Outputs;
 using BotCore.Exceptions;
 using Engine;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 ﻿using Engine;
 
-namespace BotCore.Entities.Engine.Inputs
+namespace BotCore.Engine.Entities.Inputs
 {
     public abstract class CommandInput: IEngineInput<DataBuffer>
     {

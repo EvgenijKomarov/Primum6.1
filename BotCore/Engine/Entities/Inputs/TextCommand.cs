@@ -1,6 +1,7 @@
-﻿using BotCore.Exceptions;
+﻿using BotCore.Entities.Engine;
+using BotCore.Exceptions;
 
-namespace BotCore.Entities.Engine.Inputs
+namespace BotCore.Engine.Entities.Inputs
 {
     public class TextCommand: CommandInput
     {

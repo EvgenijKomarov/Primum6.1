@@ -1,8 +1,9 @@
-﻿using BotCore.Exceptions;
+﻿using BotCore.Entities.Engine;
+using BotCore.Exceptions;
 using BotCore.Nodes;
 using Engine;
 
-namespace BotCore.Entities.Engine.Inputs
+namespace BotCore.Engine.Entities.Inputs
 {
     public class CallbackQueryCommand: CommandInput
     {

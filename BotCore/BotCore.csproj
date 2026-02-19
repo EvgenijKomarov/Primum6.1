@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Libs\CoreConnection\CoreConnection.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Engine\Middlewares\" />
+    <Folder Include="Entities\Engine\" />
+  </ItemGroup>
+
 </Project>

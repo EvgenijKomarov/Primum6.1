@@ -1,9 +1,9 @@
-﻿using BotCore.Entities.Engine;
-using BotCore.Entities.Engine.Outputs;
+﻿using BotCore.Engine.Entities;
+using BotCore.Engine.Entities.Outputs;
 using Engine;
 using Engine.Nodes;
 
-namespace BotCore.Nodes.EndpointNodes
+namespace BotCore.Engine.Nodes.EndpointNodes
 {
     public class PlainTextNode(): EndpointNode<DataBuffer, OutputMessage>("text")
     {

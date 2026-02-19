@@ -1,7 +1,7 @@
-﻿using BotCore.Entities.Engine;
-using BotCore.Entities.Engine.Inputs;
-using BotCore.Entities.Engine.Outputs;
-using BotCore.Nodes.EndpointNodes;
+﻿using BotCore.Engine.Entities;
+using BotCore.Engine.Entities.Inputs;
+using BotCore.Engine.Entities.Outputs;
+using BotCore.Engine.Nodes.EndpointNodes;
 using BotCore.Services;
 using BotCore.Services.Iterators;
 using CoreConnection;
