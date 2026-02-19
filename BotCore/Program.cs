@@ -12,6 +12,7 @@ builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();
 builder.AddServices();
+builder.AddMiddlewares();
 
 var app = builder.Build();
 

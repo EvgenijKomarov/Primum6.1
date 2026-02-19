@@ -1,5 +1,4 @@
-﻿using BotCore.Entities.Engine;
-using BotCore.Exceptions;
+﻿using BotCore.Exceptions;
 
 namespace BotCore.Engine.Entities.Inputs
 {
@@ -16,7 +15,7 @@ namespace BotCore.Engine.Entities.Inputs
                 throw new ArgumentException("Invalid command format", nameof(command));
 
             EndpointNodeId = command;
-            Object = new DataBuffer(parts.Skip(1).ToList());
+            Object = new DataBuffer(userId, parts.Skip(1).ToList());
             UserId = userId;
         }
     }

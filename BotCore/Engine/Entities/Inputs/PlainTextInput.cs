@@ -1,6 +1,4 @@
-﻿using BotCore.Entities.Engine;
-using BotCore.Nodes.EndpointNodes;
-using Engine;
+﻿using Engine;
 
 namespace BotCore.Engine.Entities.Inputs
 {
@@ -9,7 +7,7 @@ namespace BotCore.Engine.Entities.Inputs
         public PlainTextInput(int? userId, string input)
         {
             EndpointNodeId = "text";
-            Object = new DataBuffer(new List<string> { input });
+            Object = new DataBuffer(userId, new List<string> { input });
             UserId = userId;
         }
     }

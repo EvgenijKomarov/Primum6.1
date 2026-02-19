@@ -1,6 +1,4 @@
-﻿using BotCore.Entities.Engine.Inputs;
-
-namespace BotCore.Engine.Entities.Outputs
+﻿namespace BotCore.Engine.Entities.Outputs
 {
     public class Button
     {

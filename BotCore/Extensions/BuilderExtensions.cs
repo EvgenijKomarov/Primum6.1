@@ -1,6 +1,7 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Inputs;
 using BotCore.Engine.Entities.Outputs;
+using BotCore.Engine.Middlewares;
 using BotCore.Engine.Nodes.EndpointNodes;
 using BotCore.Services;
 using BotCore.Services.Iterators;
@@ -44,6 +45,14 @@ namespace BotCore.Extensions
         public static WebApplicationBuilder AddNodes(this WebApplicationBuilder builder)
         {
             builder.Services.AddEngineEndpointNode<PlainTextNode, DataBuffer, OutputMessage>();
+            builder.Services.AddEngineEndpointNode<ProfileNode, DataBuffer, OutputMessage>();
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddMiddlewares(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddEngineMiddleware<AuthentificationMiddleware, DataBuffer, OutputMessage>();
 
             return builder;
         }

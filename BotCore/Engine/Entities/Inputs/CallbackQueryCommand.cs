@@ -1,6 +1,4 @@
-﻿using BotCore.Entities.Engine;
-using BotCore.Exceptions;
-using BotCore.Nodes;
+﻿using BotCore.Exceptions;
 using Engine;
 
 namespace BotCore.Engine.Entities.Inputs
@@ -10,7 +8,7 @@ namespace BotCore.Engine.Entities.Inputs
         public CallbackQueryCommand(string endpointNodeId, List<string> arguments)
         {
             EndpointNodeId = endpointNodeId;
-            Object = new DataBuffer(arguments ?? new List<string>());
+            Object = new DataBuffer(null, arguments ?? new List<string>());
         }
 
         public CallbackQueryCommand(int? userId, string command)
@@ -24,7 +22,7 @@ namespace BotCore.Engine.Entities.Inputs
                 throw new ArgumentException("Invalid command format", nameof(command));
 
             EndpointNodeId = parts.First();
-            Object = new DataBuffer(parts.Skip(1).ToList());
+            Object = new DataBuffer(userId, parts.Skip(1).ToList());
             UserId = userId;
         }
     }

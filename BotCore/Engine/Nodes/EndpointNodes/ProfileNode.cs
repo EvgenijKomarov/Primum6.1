@@ -5,13 +5,13 @@ using Engine.Nodes;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class PlainTextNode(): EndpointNode<DataBuffer, OutputMessage>("text")
+    public class ProfileNode(): EndpointNode<DataBuffer, OutputMessage>("start")
     {
         public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
             return Finish(new OutputMessage
             {
-                Message = "Hello"
+                Message = $"Привет, {input.User?.DisplayName}!"
             });
         }
     }

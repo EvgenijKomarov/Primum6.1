@@ -1,6 +1,4 @@
-﻿using BotCore.Entities.Engine.Outputs;
-
-namespace BotCore.Entities
+﻿namespace BotCore.Entities
 {
     public class BotOutput
     {
