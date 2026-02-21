@@ -1,4 +1,5 @@
-﻿using BotCore.Engine.Entities;
+﻿using AnonimousTokenProducer;
+using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Inputs;
 using BotCore.Engine.Entities.Outputs;
 using BotCore.Engine.Middlewares;
@@ -69,6 +70,8 @@ namespace BotCore.Extensions
         {
             builder.Services.AddScoped<BotIterator>();
             builder.Services.AddScoped<InOutConverter>();
+
+            builder.Services.AddTransient<AnonimousTokenWorker>();
 
 
             return builder;

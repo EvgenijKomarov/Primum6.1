@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AnonimousTokenProducer;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.BackgroundWorkers;
 using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
@@ -31,6 +32,8 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<ConverterToDateTimeService>();
             builder.Services.AddScoped<RandomStringGenerator>();
             builder.Services.AddScoped<TokenIterator>();
+            builder.Services.AddScoped<AnonymousTokenIterator>();
+            builder.Services.AddScoped<AnonimousTokenWorker>();
 
             return builder;
         }

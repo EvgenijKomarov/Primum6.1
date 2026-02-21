@@ -13,26 +13,26 @@ namespace BotCore.Services.Iterators
         InOutConverter converter
         )
     {
-        public async Task<BotOutput> ProcessTextMessage(int? userId, string message, CancellationToken token)
+        public async Task<BotOutput> ProcessTextMessage(int? userId, BotInput input, CancellationToken token)
         {
             OutputMessage? result = null;
-            if (message.StartsWith('/')) 
+            if (input.Data.StartsWith('/')) 
             { 
-                result = await engine.Process(new TextCommand(userId, message.Substring(1))); 
+                result = await engine.Process(new TextCommand(userId, input)); 
             }
             else
             {
-                result = await engine.Process(new PlainTextInput(userId, message), token);
+                result = await engine.Process(new PlainTextInput(userId, input), token);
             }
             if (result is null) { throw new ProcessFailureException(); }
             return converter.ConvertToOutput(result, engine.GetEndpointNodeTypes());
         }
 
-        public async Task<BotOutput> ProcessCallBackQuery(int? userId, string message, CancellationToken token)
+        public async Task<BotOutput> ProcessCallBackQuery(int? userId, BotInput input, CancellationToken token)
         {
             var result = await engine.Process(new CallbackQueryCommand(
                 userId,
-                message),
+                input),
                 token);
             if (result is null) { throw new ProcessFailureException(); }
             return converter.ConvertToOutput(result, engine.GetEndpointNodeTypes());

@@ -1,4 +1,5 @@
-﻿using BotCore.Engine.Entities;
+﻿using AnonimousTokenProducer;
+using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using CoreConnection.DTOs;
@@ -6,7 +7,7 @@ using Engine;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client): Middleware<DataBuffer, OutputMessage>
+    public class AuthentificationMiddleware(UserClient client, AnonimousTokenWorker tokenWorker) : Middleware<DataBuffer, OutputMessage>
     {
         public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
@@ -25,7 +26,8 @@ namespace BotCore.Engine.Middlewares
             {
                 return Finish(new OutputMessage
                 {
-                    Message = "Привет! Это примум бот, тебе надо сперва зарегистрироваться!"
+                    Message = "Привет! Для быстрой авторизации используй этот токен:\n" +
+                    $"{tokenWorker.EncryptSign(input.Sign)}"
                 });
             }
             return Complete(input);

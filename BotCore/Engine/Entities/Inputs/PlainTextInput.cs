@@ -1,13 +1,14 @@
-﻿using Engine;
+﻿using BotCore.Entities;
+using Engine;
 
 namespace BotCore.Engine.Entities.Inputs
 {
     public class PlainTextInput : CommandInput
     {
-        public PlainTextInput(int? userId, string input)
+        public PlainTextInput(int? userId, BotInput input)
         {
             EndpointNodeId = "text";
-            Object = new DataBuffer(userId, new List<string> { input });
+            Object = new DataBuffer(userId, new List<string> { input.Data }, input.Sign);
             UserId = userId;
         }
     }

@@ -24,6 +24,10 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<int>> ConfirmEmail([FromQuery] string token)
             => Ok(await client.ConfirmEmailAsync(User.GetUserId(), token));
 
+        [HttpPost("confirm-chat")]
+        public async Task<ActionResult<int>> ConfirmChat([FromQuery] string token)
+            => Ok(await client.ConfirmChatAsync(User.GetUserId(), token));
+
         /*[HttpPatch("deposit")]
         public async Task<ActionResult<long>> DepositMoney([FromQuery] long cash)
             => Ok(await client.DepositAsync(User.GetUserId(), cash));

@@ -1,21 +1,20 @@
-﻿using CoreConnection.DTOs;
+﻿using AnonimousTokenProducer;
+using CoreConnection.DTOs;
 
 namespace BotCore.Engine.Entities
 {
     public class DataBuffer
     {
-        public DataBuffer(int? userId, List<string> arguments) 
+        public int? UserId { get; private set; } = null;
+        public List<string> Arguments = new List<string>();
+        public ChatBotSign Sign { get; private set; }
+        public DataBuffer(int? userId, List<string> arguments, ChatBotSign sign) 
         { 
             Arguments = arguments;
             UserId = userId;
+            Sign = sign;
         }
-        public UserDto? User { get; set; } = null;
-        public int? UserId { get; private set; } = null;
-        public List<string> Arguments = new List<string>();
 
-        public override string ToString()
-        {
-            return string.Join("_", Arguments);
-        }
+        public UserDto? User { get; set; } = null;
     }
 }

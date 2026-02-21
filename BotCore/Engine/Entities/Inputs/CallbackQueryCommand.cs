@@ -1,28 +1,23 @@
-﻿using BotCore.Exceptions;
+﻿using BotCore.Entities;
+using BotCore.Exceptions;
 using Engine;
 
 namespace BotCore.Engine.Entities.Inputs
 {
     public class CallbackQueryCommand: CommandInput
     {
-        public CallbackQueryCommand(string endpointNodeId, List<string> arguments)
+        public CallbackQueryCommand(int? userId, BotInput input)
         {
-            EndpointNodeId = endpointNodeId;
-            Object = new DataBuffer(null, arguments ?? new List<string>());
-        }
+            if (string.IsNullOrWhiteSpace(input.Data))
+                throw new ArgumentException("Input string is null or empty", nameof(input.Data));
 
-        public CallbackQueryCommand(int? userId, string command)
-        {
-            if (string.IsNullOrWhiteSpace(command))
-                throw new ArgumentException("Input string is null or empty", nameof(command));
-
-            var parts = command.Split('_', StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.Data.Split('_', StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length == 0)
-                throw new ArgumentException("Invalid command format", nameof(command));
+                throw new ArgumentException("Invalid command format", nameof(input.Data));
 
             EndpointNodeId = parts.First();
-            Object = new DataBuffer(userId, parts.Skip(1).ToList());
+            Object = new DataBuffer(userId, parts.Skip(1).ToList(), input.Sign);
             UserId = userId;
         }
     }
