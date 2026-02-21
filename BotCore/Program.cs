@@ -1,4 +1,5 @@
 using BotCore.Extensions;
+using BotCore.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

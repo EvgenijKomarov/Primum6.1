@@ -1,4 +1,4 @@
-﻿using AnonimousTokenProducer;
+﻿using ChatSigns;
 using CoreConnection.DTOs;
 
 namespace BotCore.Engine.Entities

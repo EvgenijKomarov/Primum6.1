@@ -1,4 +1,4 @@
-﻿using AnonimousTokenProducer;
+﻿using ChatSigns;
 
 namespace BotCore.Entities
 {

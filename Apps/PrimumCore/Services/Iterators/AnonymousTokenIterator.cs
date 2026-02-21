@@ -1,4 +1,4 @@
-﻿using AnonimousTokenProducer;
+﻿using ChatSigns;
 using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;

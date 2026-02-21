@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A3CAF226-C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCore", "BotCore\BotCore.csproj", "{081F1817-4838-4640-A62A-7F23F2B9F350}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSignTokenWorker", "TokenProducer\ChatSignTokenWorker.csproj", "{640D4E92-0D45-4611-9124-06466AF16265}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSigns", "TokenProducer\ChatSigns.csproj", "{640D4E92-0D45-4611-9124-06466AF16265}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿using AnonimousTokenProducer;
+﻿using ChatSigns;
 using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;

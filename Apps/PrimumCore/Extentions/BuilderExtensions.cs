@@ -1,4 +1,4 @@
-﻿using AnonimousTokenProducer;
+﻿using ChatSigns;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.BackgroundWorkers;
 using PrimumCore.BackgroundWorkers.Executors;
