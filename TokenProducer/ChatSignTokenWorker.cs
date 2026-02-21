@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace AnonimousTokenProducer
 {
-    public class SignTokenWorker
+    public class ChatSignTokenWorker
     {
         private static readonly byte[] Key =
         Encoding.UTF8.GetBytes("12345678901234567890123456789012");
@@ -17,7 +17,7 @@ namespace AnonimousTokenProducer
 
         // ---------- PUBLIC ----------
 
-        public string EncryptSign(ChatBotSign obj)
+        public string EncryptSign(ChatSign obj)
         {
             string json = JsonSerializer.Serialize(obj);
             byte[] data = Encoding.UTF8.GetBytes(json);
@@ -27,7 +27,7 @@ namespace AnonimousTokenProducer
             return Base62Encode(encrypted);
         }
 
-        public ChatBotSign? DecryptSign(string encryptedSign)
+        public ChatSign? DecryptSign(string encryptedSign)
         {
             byte[] encryptedBytes = Base62Decode(encryptedSign);
 
@@ -35,7 +35,7 @@ namespace AnonimousTokenProducer
 
             string json = Encoding.UTF8.GetString(decrypted);
 
-            return JsonSerializer.Deserialize<ChatBotSign>(json);
+            return JsonSerializer.Deserialize<ChatSign>(json);
         }
 
 

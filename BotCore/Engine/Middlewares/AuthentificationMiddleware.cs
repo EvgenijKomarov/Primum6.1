@@ -7,7 +7,7 @@ using Engine;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client, SignTokenWorker tokenWorker, IConfiguration configuration) : Middleware<DataBuffer, OutputMessage>
+    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, IConfiguration configuration) : Middleware<DataBuffer, OutputMessage>
     {
         public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {

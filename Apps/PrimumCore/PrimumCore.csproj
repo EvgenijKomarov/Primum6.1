@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
-    <ProjectReference Include="..\..\TokenProducer\ChatBotSignTokenWorker.csproj" />
+    <ProjectReference Include="..\..\TokenProducer\ChatSignTokenWorker.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AnonimousTokenProducer
 {
-    public class ChatBotSign
+    public class ChatSign
     {
         public string RealizationTag { get; set; } = null!;
         public long ChatId { get; set; }

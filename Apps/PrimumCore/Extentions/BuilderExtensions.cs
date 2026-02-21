@@ -33,7 +33,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<RandomStringGenerator>();
             builder.Services.AddScoped<TokenIterator>();
             builder.Services.AddScoped<AnonymousTokenIterator>();
-            builder.Services.AddScoped<SignTokenWorker>();
+            builder.Services.AddScoped<ChatSignTokenWorker>();
 
             return builder;
         }

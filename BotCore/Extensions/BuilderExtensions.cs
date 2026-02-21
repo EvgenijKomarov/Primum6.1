@@ -73,7 +73,7 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<BotIterator>();
             builder.Services.AddScoped<InOutConverter>();
 
-            builder.Services.AddTransient<SignTokenWorker>();
+            builder.Services.AddTransient<ChatSignTokenWorker>();
 
 
             return builder;
