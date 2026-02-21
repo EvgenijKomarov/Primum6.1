@@ -13,11 +13,19 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             var studentProfile = await client.ProfileAsync(input.UserId!.Value);
             return Finish(new EngineOutputMessage
             {
-                Message = $"Профиль ученика" +
+                Message = $"Профиль ученика\n" +
                 $"Пользователь: {input.User?.DisplayName}!\n" +
                 $"Id: {input.User?.Id}\n" +
                 $"Балланс: {input.User?.Cash} рублей\n" +
                 $"Монеты: {studentProfile.Coins}",
+                Buttons = new EngineOutputButton[]
+                {
+                    new EngineOutputButton
+                    {
+                        Text = "Мои занятия",
+                        EndpointNode = typeof(StudentLessonsNode)
+                    }
+                }
             });
         }
     }

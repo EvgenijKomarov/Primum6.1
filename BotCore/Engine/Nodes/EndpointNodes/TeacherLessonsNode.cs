@@ -1,0 +1,36 @@
+﻿using BotCore.Engine.Entities;
+using BotCore.Engine.Entities.Outputs;
+using CoreConnection;
+using Engine;
+using Engine.Nodes;
+using System.Text;
+
+namespace BotCore.Engine.Nodes.EndpointNodes
+{
+    public class TeacherLessonsNode(TeacherClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("tchLessons")
+    {
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
+        {
+            var lessons = (await client.LessonsAsync(input.UserId!.Value))
+                .Where(x => x.DateTime > DateTime.Now)
+                .OrderBy(x => x.DateTime);
+            StringBuilder sb = new StringBuilder();
+            foreach (var lesson in lessons)
+            {
+                sb.AppendLine($"[{lesson.DateTime.ToString("dd.MM HH:mm")}] {lesson.CourseName} - {lesson.StudentDisplayName}\n");
+            }
+            return Finish(new EngineOutputMessage
+            {
+                Message = lessons.Count() == 0 ? "Занятий нет" : sb.ToString(),
+                Buttons = new EngineOutputButton[]
+                {
+                    new EngineOutputButton
+                    {
+                        Text = "Назад",
+                        EndpointNode = typeof(TeacherProfileNode)
+                    }
+                }
+            });
+        }
+    }
+}

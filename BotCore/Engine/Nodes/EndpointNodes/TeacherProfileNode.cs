@@ -17,6 +17,14 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"Пользователь: {input.User?.DisplayName}!\n" +
                 $"Id: {input.User?.Id}\n" +
                 $"Балланс: {input.User?.Cash} рублей\n",
+                Buttons = new EngineOutputButton[]
+                {
+                    new EngineOutputButton
+                    {
+                        Text = "Мои занятия",
+                        EndpointNode = typeof(TeacherLessonsNode)
+                    }
+                }
             });
         }
     }
