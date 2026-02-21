@@ -7,9 +7,9 @@ using Engine;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, IConfiguration configuration) : Middleware<DataBuffer, OutputMessage>
+    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, IConfiguration configuration) : Middleware<DataBuffer, EngineOutputMessage>
     {
-        public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
             bool isAuthenticated = false;
             if (input.UserId != null)
@@ -24,7 +24,7 @@ namespace BotCore.Engine.Middlewares
 
             if (!isAuthenticated) 
             {
-                return Finish(new OutputMessage
+                return Finish(new EngineOutputMessage
                 {
                     Message = "Привет! Для быстрой авторизации перейди по этой ссылке:\n" +
                     $"{configuration.GetValue<string>("WebUrl")}/api/user/confirm-chat?token={tokenWorker.EncryptSign(input.Sign)}"

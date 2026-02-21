@@ -6,7 +6,7 @@ namespace BotCore.Services
 {
     public class InOutConverter
     {
-        public BotOutput ConvertToOutput(OutputMessage outputMessage, Dictionary<string, Type> availableEndpoints)
+        public BotOutput ConvertToOutput(EngineOutputMessage outputMessage, Dictionary<string, Type> availableEndpoints)
         {
             return new BotOutput
             {

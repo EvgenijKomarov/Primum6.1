@@ -36,26 +36,26 @@ namespace BotCore.Extensions
         public static WebApplicationBuilder AddBotEngine(this WebApplicationBuilder builder)
         {
             builder.Services.AddSingleton(sp => 
-                new EasyBotEngine<CommandInput, DataBuffer, OutputMessage>(
+                new EasyBotEngine<CommandEngineInput, DataBuffer, EngineOutputMessage>(
                     sp,
-                    sp.GetService<ILogger<EasyBotEngine<CommandInput, DataBuffer, OutputMessage>>>()
+                    sp.GetService<ILogger<EasyBotEngine<CommandEngineInput, DataBuffer, EngineOutputMessage>>>()
                 ));
             return builder;
         }
 
         public static WebApplicationBuilder AddNodes(this WebApplicationBuilder builder)
         {
-            builder.Services.AddEngineEndpointNode<PlainTextNode, DataBuffer, OutputMessage>();
-            builder.Services.AddEngineEndpointNode<ProfileNode, DataBuffer, OutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentProfileNode, DataBuffer, OutputMessage>();
-            builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, OutputMessage>();
+            builder.Services.AddEngineEndpointNode<PlainTextNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<ProfileNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentProfileNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }
 
         public static WebApplicationBuilder AddMiddlewares(this WebApplicationBuilder builder)
         {
-            builder.Services.AddEngineMiddleware<AuthentificationMiddleware, DataBuffer, OutputMessage>();
+            builder.Services.AddEngineMiddleware<AuthentificationMiddleware, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }

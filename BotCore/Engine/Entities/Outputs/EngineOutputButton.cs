@@ -1,6 +1,6 @@
 ﻿namespace BotCore.Engine.Entities.Outputs
 {
-    public class Button
+    public class EngineOutputButton
     {
         public required string Text { get; set; } = null!;
         public required Type EndpointNode { get; set; } = null!;

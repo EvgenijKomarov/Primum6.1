@@ -3,7 +3,7 @@ using BotCore.Exceptions;
 
 namespace BotCore.Engine.Entities.Inputs
 {
-    public class TextCommand: CommandInput
+    public class TextCommand: CommandEngineInput
     {
         public TextCommand(int? userId, BotInput input)
         {

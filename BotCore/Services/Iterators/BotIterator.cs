@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace BotCore.Services.Iterators
 {
     public class BotIterator(
-        EasyBotEngine<CommandInput, DataBuffer, OutputMessage> engine,
+        EasyBotEngine<CommandEngineInput, DataBuffer, EngineOutputMessage> engine,
         InOutConverter converter
         )
     {
         public async Task<BotOutput> ProcessTextMessage(int? userId, BotInput input, CancellationToken token)
         {
-            OutputMessage? result = null;
+            EngineOutputMessage? result = null;
             if (input.Data.StartsWith('/')) 
             { 
                 result = await engine.Process(new TextCommand(userId, input)); 

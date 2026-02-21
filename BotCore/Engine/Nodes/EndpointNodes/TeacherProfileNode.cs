@@ -6,12 +6,12 @@ using Engine.Nodes;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class TeacherProfileNode(TeacherClient client) : EndpointNode<DataBuffer, OutputMessage>("tchProf")
+    public class TeacherProfileNode(TeacherClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("tchProf")
     {
-        public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null) 
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null) 
         {
             var teascherProfile = await client.ProfileAsync(input.UserId!.Value);
-            return Finish(new OutputMessage
+            return Finish(new EngineOutputMessage
             {
                 Message = $"Профиль преподавателя\n" +
                 $"Пользователь: {input.User?.DisplayName}!\n" +

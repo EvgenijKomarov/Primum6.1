@@ -4,7 +4,7 @@ using Engine;
 
 namespace BotCore.Engine.Entities.Inputs
 {
-    public class CallbackQueryCommand: CommandInput
+    public class CallbackQueryCommand: CommandEngineInput
     {
         public CallbackQueryCommand(int? userId, BotInput input)
         {

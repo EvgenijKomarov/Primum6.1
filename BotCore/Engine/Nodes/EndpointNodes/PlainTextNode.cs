@@ -5,11 +5,11 @@ using Engine.Nodes;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class PlainTextNode(): EndpointNode<DataBuffer, OutputMessage>("text")
+    public class PlainTextNode(): EndpointNode<DataBuffer, EngineOutputMessage>("text")
     {
-        public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            return Finish(new OutputMessage
+            return Finish(new EngineOutputMessage
             {
                 Message = "Hello"
             });

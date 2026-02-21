@@ -5,14 +5,14 @@ using Engine.Nodes;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class ProfileNode(): EndpointNode<DataBuffer, OutputMessage>("start")
+    public class ProfileNode(): EndpointNode<DataBuffer, EngineOutputMessage>("start")
     {
-        public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            List<Button> buttons = new List<Button>();
+            List<EngineOutputButton> buttons = new List<EngineOutputButton>();
             if(input.User?.IsApprovedStudent != null)
             {
-                buttons.Add(new Button
+                buttons.Add(new EngineOutputButton
                 {
                     Text = "Профиль ученика",
                     EndpointNode = typeof(StudentProfileNode),
@@ -21,7 +21,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             }
             if(input.User?.IsApprovedTeacher != null && input.User?.IsApprovedTeacher == true)
             {
-                buttons.Add(new Button
+                buttons.Add(new EngineOutputButton
                 {
                     Text = "Профиль преподавателя",
                     EndpointNode = typeof(TeacherProfileNode),
@@ -29,7 +29,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 });
             }
 
-            return Finish(new OutputMessage
+            return Finish(new EngineOutputMessage
             {
                 Message = $"Привет, {input.User?.DisplayName}!\n" +
                 $"Id: {input.User?.Id}\n" +
