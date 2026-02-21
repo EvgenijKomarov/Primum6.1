@@ -7,7 +7,7 @@ using PrimumCore.Services.Connectors;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AnonymousTokenIterator(IPrimumContext context, IPublisher publisher, AnonimousTokenWorker tokenWorker)
+    public class AnonymousTokenIterator(IPrimumContext context, IPublisher publisher, SignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {

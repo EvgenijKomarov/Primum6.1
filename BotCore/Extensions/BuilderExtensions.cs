@@ -71,7 +71,7 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<BotIterator>();
             builder.Services.AddScoped<InOutConverter>();
 
-            builder.Services.AddTransient<AnonimousTokenWorker>();
+            builder.Services.AddTransient<SignTokenWorker>();
 
 
             return builder;

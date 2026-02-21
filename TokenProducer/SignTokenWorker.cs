@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace AnonimousTokenProducer
 {
-    public class AnonimousTokenWorker
+    public class SignTokenWorker
     {
         private static readonly byte[] Key =
         Encoding.UTF8.GetBytes("12345678901234567890123456789012");

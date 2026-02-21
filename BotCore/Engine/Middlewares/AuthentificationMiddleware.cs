@@ -7,7 +7,7 @@ using Engine;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client, AnonimousTokenWorker tokenWorker) : Middleware<DataBuffer, OutputMessage>
+    public class AuthentificationMiddleware(UserClient client, SignTokenWorker tokenWorker, IConfiguration configuration) : Middleware<DataBuffer, OutputMessage>
     {
         public async override Task<INodeResult<DataBuffer, OutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
@@ -26,8 +26,8 @@ namespace BotCore.Engine.Middlewares
             {
                 return Finish(new OutputMessage
                 {
-                    Message = "Привет! Для быстрой авторизации используй этот токен:\n" +
-                    $"{tokenWorker.EncryptSign(input.Sign)}"
+                    Message = "Привет! Для быстрой авторизации перейди по этой ссылке:\n" +
+                    $"{configuration.GetValue<string>("WebUrl")}/api/user/confirm-chat?token={tokenWorker.EncryptSign(input.Sign)}"
                 });
             }
             return Complete(input);
