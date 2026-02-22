@@ -27,4 +27,64 @@
     <ProjectReference Include="..\TokenProducer\ChatSigns.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resourses\AbonementStatusRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AbonementStatusRes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resourses\AbonStatus.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AbonStatus.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resourses\BoolRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BoolRes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resourses\Emoticons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Emoticons.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resourses\GradeRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GradeRes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resourses\LessonStatusRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LessonStatusRes.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resourses\AbonementStatusRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AbonementStatusRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resourses\AbonStatus.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AbonStatus.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resourses\BoolRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BoolRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resourses\Emoticons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Emoticons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resourses\GradeRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GradeRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resourses\LessonStatusRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LessonStatusRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
