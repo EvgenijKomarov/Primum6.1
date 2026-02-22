@@ -51,6 +51,8 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentAbonementNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentAbonementsNode, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }
