@@ -1,5 +1,6 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
+using BotCore.Resourses;
 using Engine;
 using Engine.Nodes;
 
@@ -14,7 +15,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             {
                 buttons.Add(new EngineOutputButton
                 {
-                    Text = "Профиль ученика",
+                    Text = $"{Emoticons.Student}Профиль ученика",
                     EndpointNode = typeof(StudentProfileNode),
                     Args = new List<string>()
                 });
@@ -23,7 +24,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             {
                 buttons.Add(new EngineOutputButton
                 {
-                    Text = "Профиль преподавателя",
+                    Text = $"{Emoticons.Teacher}Профиль преподавателя",
                     EndpointNode = typeof(TeacherProfileNode),
                     Args = new List<string>()
                 });
@@ -31,9 +32,9 @@ namespace BotCore.Engine.Nodes.EndpointNodes
 
             return Finish(new EngineOutputMessage
             {
-                Message = $"Привет, {input.User?.DisplayName}!\n" +
-                $"Id: {input.User?.Id}\n" +
-                $"Балланс: {input.User?.Cash} рублей\n",
+                Message = $"Привет, {Emoticons.User}{input.User?.DisplayName}!\n" +
+                $"{Emoticons.Id}Id: {input.User?.Id}\n" +
+                $"{Emoticons.Cash}Балланс: {input.User?.Cash} рублей\n",
                 Buttons = buttons
             });
         }

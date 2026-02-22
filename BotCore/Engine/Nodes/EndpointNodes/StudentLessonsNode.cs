@@ -1,5 +1,6 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
+using BotCore.Resourses;
 using CoreConnection;
 using Engine;
 using Engine.Nodes;
@@ -17,7 +18,8 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             StringBuilder sb = new StringBuilder();
             foreach (var lesson in lessons) 
             {
-                sb.AppendLine($"[{lesson.DateTime.ToString("dd.MM HH:mm")}] {lesson.CourseName} - {lesson.TeacherDisplayName}\n");
+                sb.AppendLine($"[{lesson.DateTime.ToString("dd.MM HH:mm")}] {lesson.CourseName} - " +
+                    $"{LessonStatusRes.ResourceManager.GetString(lesson.LessonStatus.ToString()) ?? string.Empty}\n");
             }
             return Finish(new EngineOutputMessage
             {
@@ -26,7 +28,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     new EngineOutputButton
                     {
-                        Text = "Назад",
+                        Text = $"{Emoticons.Back}Назад",
                         EndpointNode = typeof(StudentProfileNode)
                     }
                 }

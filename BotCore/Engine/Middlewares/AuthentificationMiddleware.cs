@@ -4,6 +4,7 @@ using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using CoreConnection.DTOs;
 using Engine;
+using BotCore.Resourses;
 
 namespace BotCore.Engine.Middlewares
 {
@@ -26,7 +27,10 @@ namespace BotCore.Engine.Middlewares
             {
                 return Finish(new EngineOutputMessage
                 {
-                    Message = "Привет! Для быстрой авторизации перейди по этой ссылке:\n" +
+                    Message = $"Привет!{Emoticons.Hello}\n" +
+                    $"Я - {Emoticons.Bot}Primum bot\n" +
+                    $"{Emoticons.Spark}Для начала работы тебе нужно войти, и тогда я дам тебе удобный доступ к своему профилю\n" +
+                    $"Для быстрой авторизации перейди по этой ссылке:\n" +
                     $"{configuration.GetValue<string>("WebUrl")}/api/user/confirm-chat?token={tokenWorker.EncryptSign(input.Sign)}"
                 });
             }

@@ -126,17 +126,38 @@
   <data name="Back" xml:space="preserve">
     <value>↩️</value>
   </data>
+  <data name="Bot" xml:space="preserve">
+    <value>🤖</value>
+  </data>
+  <data name="Cash" xml:space="preserve">
+    <value>💵</value>
+  </data>
+  <data name="Coins" xml:space="preserve">
+    <value>✨💰</value>
+  </data>
   <data name="Course" xml:space="preserve">
     <value>🏫</value>
   </data>
+  <data name="Hello" xml:space="preserve">
+    <value>🙋</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>🆔</value>
+  </data>
   <data name="Left" xml:space="preserve">
     <value>⬅️</value>
+  </data>
+  <data name="Lesson" xml:space="preserve">
+    <value>🕘</value>
   </data>
   <data name="Right" xml:space="preserve">
     <value>➡️</value>
   </data>
   <data name="Shedule" xml:space="preserve">
     <value>🗓</value>
+  </data>
+  <data name="Spark" xml:space="preserve">
+    <value>✨</value>
   </data>
   <data name="Student" xml:space="preserve">
     <value>👨‍🎓</value>

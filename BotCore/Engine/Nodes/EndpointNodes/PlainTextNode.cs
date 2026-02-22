@@ -11,7 +11,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         {
             return Finish(new EngineOutputMessage
             {
-                Message = "Hello"
+                Message = "Я не понимаю такой фразы. Напиши /start для начала работы со мной!"
             });
         }
     }

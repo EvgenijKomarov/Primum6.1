@@ -88,6 +88,33 @@ namespace BotCore.Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 🤖.
+        /// </summary>
+        internal static string Bot {
+            get {
+                return ResourceManager.GetString("Bot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 💵.
+        /// </summary>
+        internal static string Cash {
+            get {
+                return ResourceManager.GetString("Cash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ✨💰.
+        /// </summary>
+        internal static string Coins {
+            get {
+                return ResourceManager.GetString("Coins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 🏫.
         /// </summary>
         internal static string Course {
@@ -97,11 +124,38 @@ namespace BotCore.Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 🙋.
+        /// </summary>
+        internal static string Hello {
+            get {
+                return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🆔.
+        /// </summary>
+        internal static string Id {
+            get {
+                return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ⬅️.
         /// </summary>
         internal static string Left {
             get {
                 return ResourceManager.GetString("Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🕘.
+        /// </summary>
+        internal static string Lesson {
+            get {
+                return ResourceManager.GetString("Lesson", resourceCulture);
             }
         }
         
@@ -120,6 +174,15 @@ namespace BotCore.Resourses {
         internal static string Shedule {
             get {
                 return ResourceManager.GetString("Shedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ✨.
+        /// </summary>
+        internal static string Spark {
+            get {
+                return ResourceManager.GetString("Spark", resourceCulture);
             }
         }
         
