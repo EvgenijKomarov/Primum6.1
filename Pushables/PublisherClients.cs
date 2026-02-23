@@ -80,7 +80,7 @@ namespace Pushables
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PushAsync(object? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PushAsync(string? queue = null, string? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -98,6 +98,12 @@ namespace Pushables
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "publisher/push"
                     urlBuilder_.Append("publisher/push");
+                    urlBuilder_.Append('?');
+                    if (queue != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("queue")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(queue, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

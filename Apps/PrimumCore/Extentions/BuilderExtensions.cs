@@ -75,8 +75,8 @@ namespace PrimumCore.Extentions
         {
             string coreUrl = builder.Configuration["PublisherURL"] ?? "https://localhost:5004";
 
-            builder.Services.AddHttpClient<PublisherClient>()
-                .AddTypedClient((httpClient, sp) => new PublisherClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<PublisherService>()
+                .AddTypedClient((httpClient, sp) => new PublisherService(coreUrl, httpClient));
 
             return builder;
         }

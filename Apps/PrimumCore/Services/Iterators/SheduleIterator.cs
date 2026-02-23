@@ -10,7 +10,7 @@ using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class SheduleIterator(IPrimumContext context, PublisherClient publisher)
+    public class SheduleIterator(IPrimumContext context, PublisherService publisher)
     {
         public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable)
         {
@@ -188,7 +188,7 @@ namespace PrimumCore.Services.Iterators
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
             await context.SaveChangesAsync();
 
-            await publisher.PushAsync(new DeleteAbonementSheduleNotification
+            await publisher.Push(new DeleteAbonementSheduleNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

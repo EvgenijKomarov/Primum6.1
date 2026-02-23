@@ -11,7 +11,7 @@ namespace PrimumCore.Services.Iterators
 {
     public class TokenIterator(IPrimumContext context,
         RandomStringGenerator randomGenerator,
-        PublisherClient publisher)
+        PublisherService publisher)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
@@ -32,7 +32,7 @@ namespace PrimumCore.Services.Iterators
             };
             user.VerificationTokens.Add(token);
 
-            await publisher.PushAsync(new UserEmailVerificationNotification
+            await publisher.Push(new UserEmailVerificationNotification
             {
                 EmailAdress = user.MailAdress,
                 VerificationHash = token.Token,
@@ -61,7 +61,7 @@ namespace PrimumCore.Services.Iterators
             {
                 case TokenMeaning.EmailVerification:
                     user.IsMailChecked = true;
-                    await publisher.PushAsync(new UserVerifiedEmailEvent
+                    await publisher.Push(new UserVerifiedEmailEvent
                     {
                         EmailAdress = user.MailAdress,
                         Userid = user.Id

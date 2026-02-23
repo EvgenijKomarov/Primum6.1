@@ -1,4 +1,3 @@
-using MassTransit;
 using Publisher.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 

@@ -7,7 +7,7 @@ using Pushables.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AnonymousTokenIterator(IPrimumContext context, PublisherClient publisher, ChatSignTokenWorker tokenWorker)
+    public class AnonymousTokenIterator(IPrimumContext context, PublisherService publisher, ChatSignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {
@@ -18,7 +18,7 @@ namespace PrimumCore.Services.Iterators
 
             var decryptedToken = tokenWorker.DecryptSign(token);
             if (decryptedToken is null) { throw new BusinessLogicException("Invalid token"); }
-            await publisher.PushAsync(new UserVerifiedChatEvent
+            await publisher.Push(new UserVerifiedChatEvent
             {
                 UserId = user.Id,
                 ChatId = decryptedToken.ChatId,

@@ -14,7 +14,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
-            var publisher = scope.ServiceProvider.GetRequiredService<PublisherClient>();
+            var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
             var jitsiService = new JitsiLinkCreationService();
 
             var lessonsForIteration = context.Set<Lesson>()
@@ -42,7 +42,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                         DateTime.Now.ToString() + lesson.AbonementId.ToString());
                     lesson.StudentLink = tuple.guestLink;
                     lesson.TeacherLink = tuple.adminLink;
-                    await publisher.PushAsync(new LessonNotification()
+                    await publisher.Push(new LessonNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,
@@ -63,7 +63,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
                     context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
-                    await publisher.PushAsync(new LessonFailureNotification()
+                    await publisher.Push(new LessonFailureNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,

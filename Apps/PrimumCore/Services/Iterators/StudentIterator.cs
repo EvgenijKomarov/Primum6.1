@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, PublisherClient publisher)
+    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, PublisherService publisher)
     {
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {
@@ -122,7 +122,7 @@ namespace PrimumCore.Services.Iterators
 
             await context.SaveChangesAsync();
 
-            await publisher.PushAsync(new NewAbonementSheduleNotification
+            await publisher.Push(new NewAbonementSheduleNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AbonementIterator(IPrimumContext context, PublisherClient publisher)
+    public class AbonementIterator(IPrimumContext context, PublisherService publisher)
     {
         public async Task<IEnumerable<AbonementDto>> GetTeacherAbonements(int teacherId)
         {
@@ -162,7 +162,7 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Active;
             await context.SaveChangesAsync();
-            await publisher.PushAsync(new AbonementChangeStatusNotification
+            await publisher.Push(new AbonementChangeStatusNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,
