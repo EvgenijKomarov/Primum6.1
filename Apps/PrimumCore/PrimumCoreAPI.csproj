@@ -17,11 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.csproj" />
-    <ProjectReference Include="..\..\CoreDBModel\CoreDBModel.csproj" />
+    <ProjectReference Include="..\..\Libs\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Libs\CoreDBModel\CoreDBModel.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
-    <ProjectReference Include="..\..\Pushables\Pushables.csproj" />
-    <ProjectReference Include="..\..\TokenProducer\ChatSigns.csproj" />
+    <ProjectReference Include="..\..\Libs\Pushables\Pushables.csproj" />
+    <ProjectReference Include="..\..\Libs\TokenProducer\ChatSigns.csproj" />
   </ItemGroup>
 
 </Project>

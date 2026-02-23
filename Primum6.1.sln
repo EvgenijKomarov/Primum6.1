@@ -17,19 +17,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimumWebAPI", "Apps\Primum
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A3CAF226-C218-40E3-B561-0C3ADE549954}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCore", "BotCore\BotCore.csproj", "{081F1817-4838-4640-A62A-7F23F2B9F350}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCore", "Apps\BotCore\BotCore.csproj", "{081F1817-4838-4640-A62A-7F23F2B9F350}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSigns", "TokenProducer\ChatSigns.csproj", "{640D4E92-0D45-4611-9124-06466AF16265}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSigns", "Libs\TokenProducer\ChatSigns.csproj", "{640D4E92-0D45-4611-9124-06466AF16265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "Publisher\Publisher.csproj", "{0F08136D-3AFF-4ACA-BF15-3CBBD8F92DA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "Apps\Publisher\Publisher.csproj", "{0F08136D-3AFF-4ACA-BF15-3CBBD8F92DA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pushables", "Pushables\Pushables.csproj", "{CB9561BA-FD57-4696-87C5-E5E8040A71D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pushables", "Libs\Pushables\Pushables.csproj", "{CB9561BA-FD57-4696-87C5-E5E8040A71D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDBModel", "CoreDBModel\CoreDBModel.csproj", "{CBEC561A-A51E-4939-AF63-49F59375C7F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDBModel", "Libs\CoreDBModel\CoreDBModel.csproj", "{CBEC561A-A51E-4939-AF63-49F59375C7F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDBIterator", "Apps\CoreDBIterator\CoreDBIterator.csproj", "{7525872A-1E57-4302-9301-EDB6D4CEB8CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D5DBD699-BD86-478A-B5F0-BE507FCDAD01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Libs\Common\Common.csproj", "{D5DBD699-BD86-478A-B5F0-BE507FCDAD01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
