@@ -1,17 +1,16 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumPlatformModel.Models.Enums;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class CourseIterator(IPrimumContext context)
+    public class CourseIterator(PrimumContext context)
     {
         public async Task<IEnumerable<CourseDto>> GetCoursesByTeacher(int userId, bool isOnlyAvailable)
         {

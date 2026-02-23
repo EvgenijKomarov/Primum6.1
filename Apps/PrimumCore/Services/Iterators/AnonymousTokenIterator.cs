@@ -1,13 +1,13 @@
 ﻿using ChatSigns;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 using Pushables;
 using Pushables.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AnonymousTokenIterator(IPrimumContext context, PublisherService publisher, ChatSignTokenWorker tokenWorker)
+    public class AnonymousTokenIterator(PrimumContext context, PublisherService publisher, ChatSignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {

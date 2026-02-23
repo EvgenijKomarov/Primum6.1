@@ -1,18 +1,19 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
+using CoreDBModel.Constants;
+using CoreDBModel.Extensions;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumPlatformModel.Models.Enums;
 using Pushables;
 using Pushables.Notifications;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AbonementIterator(IPrimumContext context, PublisherService publisher)
+    public class AbonementIterator(PrimumContext context, PublisherService publisher)
     {
         public async Task<IEnumerable<AbonementDto>> GetTeacherAbonements(int teacherId)
         {

@@ -1,12 +1,12 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class LessonIterator(IPrimumContext context)
+    public class LessonIterator(PrimumContext context)
     {
         public async Task<IEnumerable<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink)
         {

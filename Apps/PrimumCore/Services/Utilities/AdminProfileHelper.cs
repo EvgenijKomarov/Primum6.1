@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class AdminProfileHelper(IPrimumContext context)
+    public class AdminProfileHelper(PrimumContext context)
     {
         public async Task<User> CheckIteratingUser(int id, Permission permission)
         {

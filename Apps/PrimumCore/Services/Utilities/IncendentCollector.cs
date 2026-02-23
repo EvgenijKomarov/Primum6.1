@@ -1,14 +1,14 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
+using CoreDBModel.Extensions;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
-using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncidentCollector(IPrimumContext context)
+    public class IncidentCollector(PrimumContext context)
     {
         public virtual async Task<IEnumerable<IncidentDto>> GetIncedents(Permission[] permissions)
         {

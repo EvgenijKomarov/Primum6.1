@@ -1,14 +1,14 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class ThemeIterator(IPrimumContext context)
+    public class ThemeIterator(PrimumContext context)
     {
         public async Task<IEnumerable<CourseThemeDto>> GetThemes(bool isOnlyAvailable)
         {

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
-using PrimumCore.Exceptions;
-using PrimumCore.Models;
+﻿using PrimumCore.Exceptions;
 
 namespace PrimumCore.Middlewares
 {

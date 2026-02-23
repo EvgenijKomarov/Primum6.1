@@ -30,10 +30,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.AddDI();
-builder.AddPrimumContext();
+builder.AddContext();
 builder.AddProjectControllers();
 builder.AddPeriodWorkers();
-builder.AddSettings();
 builder.AddPublishers();
 builder.AddLogging();
 

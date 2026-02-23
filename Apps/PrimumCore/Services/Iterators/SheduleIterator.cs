@@ -1,16 +1,16 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
 using Pushables;
 using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class SheduleIterator(IPrimumContext context, PublisherService publisher)
+    public class SheduleIterator(PrimumContext context, PublisherService publisher)
     {
         public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable)
         {

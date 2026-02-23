@@ -1,16 +1,16 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class PromocodeIterator(IPrimumContext context)
+    public class PromocodeIterator(PrimumContext context)
     {
         private AdminProfileHelper helper = new AdminProfileHelper(context);
 

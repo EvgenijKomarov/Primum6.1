@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
 using Pushables;
 using Pushables.Events;
@@ -9,7 +9,7 @@ using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class TokenIterator(IPrimumContext context,
+    public class TokenIterator(PrimumContext context,
         RandomStringGenerator randomGenerator,
         PublisherService publisher)
     {

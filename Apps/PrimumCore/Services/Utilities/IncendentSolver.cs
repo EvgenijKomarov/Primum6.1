@@ -1,15 +1,15 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using CoreConnection.Enums;
+using CoreDBModel.Models;
+using CoreDBModel.Extensions;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
-using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncidentSolver(IPrimumContext context)
+    public class IncidentSolver(PrimumContext context)
     {
         //User should be identified
         public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto, int userId)

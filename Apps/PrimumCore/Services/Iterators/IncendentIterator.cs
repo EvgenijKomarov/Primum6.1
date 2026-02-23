@@ -1,15 +1,15 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class IncidentIterator(IPrimumContext context)
+    public class IncidentIterator(PrimumContext context)
     {
         private AdminProfileHelper helper = new AdminProfileHelper(context);
 

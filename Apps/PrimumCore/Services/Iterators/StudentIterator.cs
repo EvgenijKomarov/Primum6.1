@@ -1,20 +1,20 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using Pushables;
 using Pushables.Notifications;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, PublisherService publisher)
+    public class StudentIterator(PrimumContext context, ConverterToDateTimeService dateTimeService, PublisherService publisher)
     {
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {

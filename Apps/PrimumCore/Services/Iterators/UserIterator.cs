@@ -1,17 +1,16 @@
 ﻿using CoreConnection.DTOs;
+using CoreDBModel.Constants;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(IPrimumContext context, 
+    public class UserIterator(PrimumContext context, 
         PasswordHasher passwordHasher)
     {
         public async Task<int> Login(string mailAdress, string password)

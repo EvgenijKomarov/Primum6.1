@@ -1,5 +1,5 @@
 ﻿using CoreConnection.Enums;
-using PrimumCore.Models.Enums;
+using CoreDBModel.Models.Enums;
 
 namespace PrimumCore.Exceptions
 {

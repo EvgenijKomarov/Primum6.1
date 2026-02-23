@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PrimumCore.Models;
-using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using Pushables;
 using Pushables.Notifications;
 
@@ -12,7 +11,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         public async Task Execute(ILogger? logger = null)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
 
             var lessonsForPreparation = context.Set<Lesson>()

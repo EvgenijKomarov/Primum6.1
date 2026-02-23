@@ -1,15 +1,13 @@
 ﻿using ChatSigns;
-using CoreConnection;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.BackgroundWorkers;
 using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
-using PrimumCore.Models;
-using PrimumCore.Options;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
 using Pushables;
 using Serilog;
+using CoreDBModel.Extensions;
 
 namespace PrimumCore.Extentions
 {
@@ -64,13 +62,6 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddSettings(this WebApplicationBuilder builder)
-        {
-            builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
-
-            return builder;
-        }
-
         public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
         {
             string coreUrl = builder.Configuration["PublisherURL"] ?? "https://localhost:5004";
@@ -89,15 +80,9 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddPrimumContext(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder)
         {
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            builder.Services.AddDbContext<PrimumContext>(options =>
-                options.UseSqlServer(connectionString));
-
-            builder.Services.AddScoped<IPrimumContext>(provider =>
-                provider.GetRequiredService<PrimumContext>());
+            builder.Services.AddCoreContext(builder.Configuration.GetConnectionString("DefaultConnection"));
 
             return builder;
         }

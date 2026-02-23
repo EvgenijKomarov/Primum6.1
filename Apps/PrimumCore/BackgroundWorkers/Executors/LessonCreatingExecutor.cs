@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
-using PrimumCore.Models;
+﻿using CoreDBModel.Constants;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.BackgroundWorkers.Executors
 {
@@ -11,7 +11,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         public async Task Execute(ILogger? logger = null)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var datetimeService = scope.ServiceProvider.GetRequiredService<ConverterToDateTimeService>();
 
             var availableForProlongation = await context.Set<AbonementShedule>()

@@ -1,13 +1,12 @@
 ﻿using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
-using PrimumPlatformModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class GradingIterator(IPrimumContext context)
+    public class GradingIterator(PrimumContext context)
     {
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
