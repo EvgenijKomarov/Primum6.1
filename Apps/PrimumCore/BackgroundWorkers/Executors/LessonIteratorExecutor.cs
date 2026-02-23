@@ -1,10 +1,10 @@
-﻿using CoreConnection.Notifications;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 
 namespace PrimumCore.BackgroundWorkers.Executors
 {
@@ -14,7 +14,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
-            var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
+            var publisher = scope.ServiceProvider.GetRequiredService<PublisherClient>();
             var jitsiService = new JitsiLinkCreationService();
 
             var lessonsForIteration = context.Set<Lesson>()
@@ -42,7 +42,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                         DateTime.Now.ToString() + lesson.AbonementId.ToString());
                     lesson.StudentLink = tuple.guestLink;
                     lesson.TeacherLink = tuple.adminLink;
-                    await publisher.PublishAsync(new LessonNotification()
+                    await publisher.PushAsync(new LessonNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,
@@ -63,7 +63,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
                     context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
-                    await publisher.PublishAsync(new LessonFailureNotification()
+                    await publisher.PushAsync(new LessonFailureNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,

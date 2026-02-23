@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
-namespace CoreConnection.Notifications
+namespace Pushables.Events
 {
-    public class UserVerifiedChatNotification: INotification
+    public class UserVerifiedChatEvent: IEvent
     {
         public int UserId { get; set; }
         public long ChatId { get; set; }

@@ -1,20 +1,20 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
-using CoreConnection.Notifications;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, IPublisher publisher)
+    public class StudentIterator(IPrimumContext context, ConverterToDateTimeService dateTimeService, PublisherClient publisher)
     {
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {
@@ -122,7 +122,7 @@ namespace PrimumCore.Services.Iterators
 
             await context.SaveChangesAsync();
 
-            await publisher.PublishAsync(new NewAbonementSheduleNotification
+            await publisher.PushAsync(new NewAbonementSheduleNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

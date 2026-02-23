@@ -1,6 +1,13 @@
-﻿namespace CoreConnection.Notifications
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace Pushables.Notifications
 {
-    public class LessonNotification : INotification
+    public class AbonementChangeStatusNotification : INotification
     {
         public required string StudentName { get; set; }
 
@@ -14,12 +21,6 @@
 
         public required int AbonementId { get; set; }
 
-        public required int LessonId { get; set; }
-
-        public required DateTime DateTime { get; set; }
-
-        public required string TeacherLink { get; set; }
-
-        public required string StudentLink { get; set; }
+        public required string AbonementStatus { get; set; }
     }
 }

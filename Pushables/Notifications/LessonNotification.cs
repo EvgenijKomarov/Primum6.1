@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
-namespace CoreConnection.Notifications
+namespace Pushables.Notifications
 {
-    public class LessonFailureNotification : INotification
+    public class LessonNotification : INotification
     {
         public required string StudentName { get; set; }
 
@@ -23,5 +19,9 @@ namespace CoreConnection.Notifications
         public required int LessonId { get; set; }
 
         public required DateTime DateTime { get; set; }
+
+        public required string TeacherLink { get; set; }
+
+        public required string StudentLink { get; set; }
     }
 }

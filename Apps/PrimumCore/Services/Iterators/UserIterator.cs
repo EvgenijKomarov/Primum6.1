@@ -1,5 +1,4 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CoreConnection.Notifications
+namespace Pushables.Events
 {
-    public class UserVerifiedEmailNotification : INotification
+    public class UserVerifiedEmailEvent : IEvent
     {
         public required string EmailAdress { get; set; }
 

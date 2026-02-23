@@ -1,16 +1,16 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
+using Pushables;
+using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class SheduleIterator(IPrimumContext context, IPublisher publisher)
+    public class SheduleIterator(IPrimumContext context, PublisherClient publisher)
     {
         public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable)
         {
@@ -188,7 +188,7 @@ namespace PrimumCore.Services.Iterators
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
             await context.SaveChangesAsync();
 
-            await publisher.PublishAsync(new DeleteAbonementSheduleNotification
+            await publisher.PushAsync(new DeleteAbonementSheduleNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

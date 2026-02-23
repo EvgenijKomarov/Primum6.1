@@ -1,9 +1,9 @@
-﻿using CoreConnection.Notifications;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
 using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 
 namespace PrimumCore.BackgroundWorkers.Executors
 {
@@ -13,7 +13,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<IPrimumContext>();
-            var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
+            var publisher = scope.ServiceProvider.GetRequiredService<PublisherClient>();
 
             var lessonsForPreparation = context.Set<Lesson>()
                 .Include(x => x.Abonement)
@@ -30,7 +30,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
             foreach (var lesson in lessonsForPreparation)
             {
                 lesson.Status = LessonStatus.Warned;
-                await publisher.PublishAsync(new LessonPreparationNotification()
+                await publisher.PushAsync(new LessonPreparationNotification()
                 {
                     StudentName = lesson.Abonement.Student.User.DisplayName,
                     StudentUserId = lesson.Abonement.Student.User.Id,

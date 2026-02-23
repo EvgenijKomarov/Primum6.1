@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
+    <ProjectReference Include="..\..\Pushables\Pushables.csproj" />
     <ProjectReference Include="..\..\TokenProducer\ChatSigns.csproj" />
   </ItemGroup>
 

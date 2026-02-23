@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Pushables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreConnection.Notifications
+namespace Pushables.Notifications
 {
-    public interface INotification
+    public interface INotification: IPushable
     {
     }
 }

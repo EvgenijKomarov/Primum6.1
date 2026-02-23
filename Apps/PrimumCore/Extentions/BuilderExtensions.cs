@@ -1,13 +1,14 @@
 ﻿using ChatSigns;
+using CoreConnection;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.BackgroundWorkers;
 using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
 using PrimumCore.Models;
 using PrimumCore.Options;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
+using Pushables;
 using Serilog;
 
 namespace PrimumCore.Extentions
@@ -72,22 +73,10 @@ namespace PrimumCore.Extentions
 
         public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
         {
-            var rabbitMqSection = builder.Configuration.GetSection("RabbitMQ");
-            var isFake = rabbitMqSection.GetValue<bool>("IsFake");
+            string coreUrl = builder.Configuration["PublisherURL"] ?? "https://localhost:5004";
 
-            if (isFake)
-            {
-                builder.Services.AddScoped<FakePublisher>();
-                builder.Services.AddScoped<IPublisher>(provider =>
-                    provider.GetRequiredService<FakePublisher>());
-            }
-            else
-            {
-                builder.Services.AddSingleton<RabbitMQConnection>();
-                builder.Services.AddScoped<RabbitMQMessagePublisher>();
-                builder.Services.AddScoped<IPublisher>(provider =>
-                    provider.GetRequiredService<RabbitMQMessagePublisher>());
-            }
+            builder.Services.AddHttpClient<PublisherClient>()
+                .AddTypedClient((httpClient, sp) => new PublisherClient(coreUrl, httpClient));
 
             return builder;
         }

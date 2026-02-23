@@ -1,18 +1,18 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.Enums;
-using CoreConnection.Notifications;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AbonementIterator(IPrimumContext context, IPublisher publisher)
+    public class AbonementIterator(IPrimumContext context, PublisherClient publisher)
     {
         public async Task<IEnumerable<AbonementDto>> GetTeacherAbonements(int teacherId)
         {
@@ -162,7 +162,7 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Active;
             await context.SaveChangesAsync();
-            await publisher.PublishAsync(new AbonementChangeStatusNotification
+            await publisher.PushAsync(new AbonementChangeStatusNotification
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

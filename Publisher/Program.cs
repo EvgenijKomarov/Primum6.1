@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Mvc.Controllers;
-using PrimumCore.Extentions;
+using MassTransit;
+using Publisher.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.EnableAnnotations();
     c.CustomOperationIds(apiDesc =>
     {
         return apiDesc.TryGetMethodInfo(out var methodInfo)
@@ -29,28 +29,24 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.AddDI();
-builder.AddPrimumContext();
-builder.AddProjectControllers();
-builder.AddPeriodWorkers();
-builder.AddSettings();
-builder.AddPublishers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+builder.AddPublisher();
 builder.AddLogging();
-
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
 app.UseAuthorization();
 
-app.AddMiddlewares();
 app.MapControllers();
 
 app.Run();

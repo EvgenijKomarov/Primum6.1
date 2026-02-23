@@ -1,16 +1,17 @@
-﻿using CoreConnection.Notifications;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Models;
 using PrimumCore.Models.Enums;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Utilities;
+using Pushables;
+using Pushables.Events;
+using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
     public class TokenIterator(IPrimumContext context,
         RandomStringGenerator randomGenerator,
-        IPublisher publisher)
+        PublisherClient publisher)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
@@ -31,11 +32,11 @@ namespace PrimumCore.Services.Iterators
             };
             user.VerificationTokens.Add(token);
 
-            await publisher.PublishAsync(new UserVerificationNotification
+            await publisher.PushAsync(new UserEmailVerificationNotification
             {
                 EmailAdress = user.MailAdress,
                 VerificationHash = token.Token,
-                Userid = user.Id
+                UserId = user.Id
             });
 
             await context.SaveChangesAsync();
@@ -60,7 +61,7 @@ namespace PrimumCore.Services.Iterators
             {
                 case TokenMeaning.EmailVerification:
                     user.IsMailChecked = true;
-                    await publisher.PublishAsync(new UserVerifiedEmailNotification
+                    await publisher.PushAsync(new UserVerifiedEmailEvent
                     {
                         EmailAdress = user.MailAdress,
                         Userid = user.Id

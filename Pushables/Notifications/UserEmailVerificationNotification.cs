@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
-namespace CoreConnection.Notifications
+namespace Pushables.Notifications
 {
-    public class UserVerificationNotification: INotification
+    public class UserEmailVerificationNotification: INotification
     {
         public required string EmailAdress { get; set; }
-
         public required string VerificationHash { get; set; }
-
-        public required int Userid { get; set; }
+        public required int UserId { get; set; }
     }
 }
