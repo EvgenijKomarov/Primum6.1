@@ -32,7 +32,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.AddDI();
 builder.AddContext();
 builder.AddProjectControllers();
-builder.AddPeriodWorkers();
 builder.AddPublishers();
 builder.AddLogging();
 

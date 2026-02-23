@@ -1,15 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimumCore.Services.Utilities
+namespace Common.Utilities
 {
-    public class ConverterToDateTimeService(IConfiguration _configuration)
+    public class ConverterToDateTimeService
     {
-        private int blockedDays = _configuration.GetValue<int>("Constants:BlockedDaysForLessonCreation");
+        private int blockedDays = 3;
         private Dictionary<string, DayOfWeek> weekDays = new Dictionary<string, DayOfWeek>()
         {
             ["Понедельник"] = DayOfWeek.Monday,

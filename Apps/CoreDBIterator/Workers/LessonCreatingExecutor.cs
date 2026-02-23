@@ -1,14 +1,24 @@
-﻿using CoreDBModel.Constants;
+﻿using Common.Utilities;
+using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Services.Utilities;
 
-namespace PrimumCore.BackgroundWorkers.Executors
+namespace CoreDBIterator.Workers
 {
-    public class LessonCreatingExecutor(IServiceScopeFactory _serviceScopeFactory)
+    public class LessonCreatingExecutor(IServiceScopeFactory _serviceScopeFactory, ILogger<LessonCreatingExecutor> logger) : BackgroundService
     {
-        public async Task Execute(ILogger? logger = null)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                logger.LogInformation("Lesson creation running at: {time}", DateTimeOffset.Now);
+                await Action();
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+            }
+        }
+
+        protected async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
@@ -21,12 +31,21 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.Now)
                 .ToArrayAsync();
 
+            if (availableForProlongation.Length != 0) 
+            {
+                logger.LogInformation($"Found {availableForProlongation.Length} abonement schedules available for creating lessons.");
+            }
+            else
+            {
+                logger.LogInformation("No abonement schedules available for creating lessons found.");
+            }
+
             foreach (var s in availableForProlongation)
             {
                 var freeDateTime = datetimeService.GetNextSuitableDateThisWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
 
                 s.LastIteration = freeDateTime;
-                logger?.LogInformation($"Set LastIterationTime of {s.AbonementSheduleId} for {freeDateTime}");
+                logger.LogInformation($"Set LastIterationTime of {s.AbonementSheduleId} for {freeDateTime}");
                 if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {
                     var lesson = new Lesson()

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj" />
     <ProjectReference Include="..\..\CoreDBModel\CoreDBModel.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
     <ProjectReference Include="..\..\Pushables\Pushables.csproj" />

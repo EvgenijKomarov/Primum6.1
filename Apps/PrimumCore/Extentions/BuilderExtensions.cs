@@ -1,13 +1,12 @@
 ﻿using ChatSigns;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.BackgroundWorkers;
-using PrimumCore.BackgroundWorkers.Executors;
 using PrimumCore.Controllers;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
 using Pushables;
 using Serilog;
 using CoreDBModel.Extensions;
+using Common.Utilities;
 
 namespace PrimumCore.Extentions
 {
@@ -44,20 +43,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<TeacherController>();
             builder.Services.AddScoped<AdminController>();
             builder.Services.AddScoped<PublicController>();
-
-            return builder;
-        }
-
-        public static WebApplicationBuilder AddPeriodWorkers(this WebApplicationBuilder builder)
-        {
-            builder.Services.AddHostedService<LessonWarningWorker>();
-            builder.Services.AddHostedService<LessonIteratorWorker>();
-            builder.Services.AddHostedService<LessonCreatingWorker>();
-
-            //executors
-            builder.Services.AddSingleton<LessonWarningExecutor>();
-            builder.Services.AddSingleton<LessonIteratorExecutor>();
-            builder.Services.AddSingleton<LessonCreatingExecutor>();
 
             return builder;
         }

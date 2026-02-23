@@ -1,16 +1,26 @@
-﻿using CoreDBModel.Constants;
+﻿using Common.Utilities;
+using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Services.Utilities;
 using Pushables;
 using Pushables.Notifications;
 
-namespace PrimumCore.BackgroundWorkers.Executors
+namespace CoreDBIterator.Workers
 {
-    public class LessonIteratorExecutor(IServiceScopeFactory _serviceScopeFactory)
+    public class LessonIteratorExecutor(IServiceScopeFactory _serviceScopeFactory, ILogger<LessonIteratorExecutor> logger) : BackgroundService
     {
-        public async Task Execute(ILogger? logger = null)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                logger.LogInformation("Lesson iteration running at: {time}", DateTimeOffset.Now);
+                await Action();
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+            }
+        }
+
+        protected async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
@@ -28,6 +38,15 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(l => l.Status == LessonStatus.Warned)
                 .Where(l => l.DateTime <= DateTime.Now.AddMinutes(30))
                 .ToArray();
+
+            if (lessonsForIteration.Length != 0)
+            {
+                logger.LogInformation($"Found {lessonsForIteration.Length} lessons available for iteration.");
+            }
+            else
+            {
+                logger.LogInformation("No lessons available for iteration found.");
+            }
 
             foreach (var lesson in lessonsForIteration)
             {

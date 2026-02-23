@@ -4,11 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Pushables;
 using Pushables.Notifications;
 
-namespace PrimumCore.BackgroundWorkers.Executors
+namespace CoreDBIterator.Workers
 {
-    public class LessonWarningExecutor(IServiceScopeFactory _serviceScopeFactory)
+    public class LessonWarningExecutor(IServiceScopeFactory _serviceScopeFactory, ILogger<LessonWarningExecutor> logger) : BackgroundService
     {
-        public async Task Execute(ILogger? logger = null)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                logger.LogInformation("Lesson warning running at: {time}", DateTimeOffset.Now);
+                await Action();
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+            }
+        }
+
+        protected async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
@@ -26,6 +36,15 @@ namespace PrimumCore.BackgroundWorkers.Executors
                 .Where(l => l.DateTime <= DateTime.Now.AddDays(1))
                 .ToArray();
 
+            if (lessonsForPreparation.Length != 0)
+            {
+                logger.LogInformation($"Found {lessonsForPreparation.Length} lessons available for warn.");
+            }
+            else
+            {
+                logger.LogInformation("No lessons available for warn found.");
+            }
+
             foreach (var lesson in lessonsForPreparation)
             {
                 lesson.Status = LessonStatus.Warned;
@@ -41,7 +60,7 @@ namespace PrimumCore.BackgroundWorkers.Executors
                     DateTime = lesson.DateTime,
                     IsEnoughMoney = lesson.Abonement.Student.User.Cash >= lesson.Price
                 });
-                logger?.LogInformation($"Lesson {lesson.LessonId} warned");
+                logger.LogInformation($"Lesson {lesson.LessonId} warned");
             }
 
             await context.SaveChangesAsync();
