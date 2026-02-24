@@ -11,7 +11,7 @@ namespace Publisher.Services
     {
         private readonly ConnectionFactory _factory;
         private readonly int _maxRetries = 3;
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _serializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = false
@@ -22,46 +22,60 @@ namespace Publisher.Services
             _factory = new ConnectionFactory { Uri = new Uri(connectionString) };
         }
 
-        public async Task Publish(string queueName, string message, CancellationToken cancellationToken = default)//не понятно работает ли
+        public async Task Publish(string queueName, string message, CancellationToken cancellationToken = default)
         {
-            IConnection _connection = await _factory.CreateConnectionAsync(cancellationToken);
-
             var json = JsonSerializer.Serialize(message, _serializerOptions);
-
             var body = Encoding.UTF8.GetBytes(json);
 
             for (int attempt = 0; attempt < _maxRetries; attempt++)
             {
+                IConnection? connection = null;
                 try
                 {
-                    using var channel = await _connection.CreateChannelAsync();
+                    connection = await _factory.CreateConnectionAsync(cancellationToken);
+
+                    await using var channel = await connection.CreateChannelAsync();
 
                     await channel.QueueDeclareAsync(
                         queue: queueName,
                         durable: true,
                         exclusive: false,
                         autoDelete: false,
-                        arguments: null
+                        arguments: null,
+                        cancellationToken: cancellationToken
                     );
 
                     await channel.BasicPublishAsync(
                         exchange: string.Empty,
                         routingKey: queueName,
-                        body: body
+                        mandatory: true,
+                        body: body,
+                        cancellationToken: cancellationToken
                     );
 
+                    // Успех — выходим из цикла
                     return;
                 }
                 catch (Exception) when (attempt < _maxRetries - 1)
                 {
-                    // exponential backoff with cancellation support
+                    // Экспоненциальная задержка перед повторной попыткой
                     var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt));
-                    try { await Task.Delay(delay, cancellationToken); } catch (OperationCanceledException) { throw; }
+                    try { await Task.Delay(delay, cancellationToken); }
+                    catch (OperationCanceledException) { throw; }
+                }
+                finally
+                {
+                    // Гарантированное закрытие соединения
+                    if (connection is not null)
+                    {
+                        await connection.CloseAsync(cancellationToken);
+                        await connection.DisposeAsync();
+                    }
                 }
             }
 
-            await _connection?.CloseAsync(cancellationToken);
-            _connection?.DisposeAsync();
+            // Если все попытки исчерпаны — выбрасываем исключение
+            throw new InvalidOperationException($"Failed to publish message to queue '{queueName}' after {_maxRetries} attempts");
         }
     }
 }
