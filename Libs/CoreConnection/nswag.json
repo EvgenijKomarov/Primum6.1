@@ -12,8 +12,7 @@
       "namespace": "CoreConnection",
       "additionalNamespaceUsages": [
         "CoreConnection.DTOs",
-        "CoreConnection.DTOs.Inputs",
-        "CoreConnection.Enums"
+        "CoreConnection.DTOs.Inputs"
       ],
       "generateClientClasses": true,
       "generateClientInterfaces": false,

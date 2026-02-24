@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +29,6 @@ namespace CoreConnection.DTOs
 
         public required int PricePerLesson { get; set; }
 
-        public required StatusAbonement AbonementStatus { get; set; }
+        public required AbonementStatus AbonementStatus { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Enums;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
@@ -27,7 +26,7 @@ namespace PrimumCore.Services.Utilities
                     .Include(x => x.AdminProfile)
                     .ThenInclude(x => x.User)
                     .Where(x => x.ObjectId != null && x.Meaning != null)
-                    .Where(x => x.ObjectId == incident.ObjectId && (IncidentMeaningDto)x.Meaning == incident.Meaning)
+                    .Where(x => x.ObjectId == incident.ObjectId && x.Meaning == incident.Meaning)
                     .Select(x => new IncidentLogDto
                     {
                         AdminUserId = x.AdminProfile.UserId,
@@ -52,9 +51,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Teacher,
-                        Decisions = Permission.ModerateTeachers.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Teacher,
+                        Decisions = Permission.ModerateTeachers.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo = 
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
@@ -73,9 +72,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Student,
-                        Decisions = Permission.ModerateStudents.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Student,
+                        Decisions = Permission.ModerateStudents.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
@@ -94,9 +93,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.CourseId,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Course,
-                        Decisions = Permission.ModerateCourses.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Course,
+                        Decisions = Permission.ModerateCourses.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
@@ -116,9 +115,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.CourseId,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Course,
-                        Decisions = Permission.AdministrateCourses.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Course,
+                        Decisions = Permission.AdministrateCourses.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
@@ -137,9 +136,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Teacher,
-                        Decisions = Permission.AdministrateTeachers.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Teacher,
+                        Decisions = Permission.AdministrateTeachers.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
@@ -158,9 +157,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Student,
-                        Decisions = Permission.AdministrateStudents.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Student,
+                        Decisions = Permission.AdministrateStudents.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
@@ -179,9 +178,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.CourseId,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Course,
-                        Decisions = Permission.ApproveCourses.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Course,
+                        Decisions = Permission.ApproveCourses.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
@@ -200,9 +199,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatusDto.NeedModeration,
-                        Meaning = IncidentMeaningDto.Teacher,
-                        Decisions = Permission.ApproveTeachers.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedModeration,
+                        Meaning = IncidentMeaning.Teacher,
+                        Decisions = Permission.ApproveTeachers.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Surname: {x.Surname}\n" +
@@ -230,9 +229,9 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.LessonId,
-                        Status = IncidentStatusDto.NeedInspectation,
-                        Meaning = IncidentMeaningDto.Lesson,
-                        Decisions = Permission.InspectMissedLessons.GetAvailableIncidentsAttributes().Select(x => (IncidentDecisionDto)x.Decision),
+                        Status = IncidentStatus.NeedInspectation,
+                        Meaning = IncidentMeaning.Lesson,
+                        Decisions = Permission.InspectMissedLessons.GetAvailableIncidentsAttributes().Select(x => x.Decision),
                         CommonInfo =
                         $"Student: {x.Abonement.Student.User.DisplayName}\n" +
                         $"Student Id: {x.Abonement.Student.User.Id}\n" +

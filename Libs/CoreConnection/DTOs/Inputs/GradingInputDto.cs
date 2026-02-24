@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,12 @@ namespace CoreConnection.DTOs.Inputs
 {
     public class GradingInputDto
     {
-        public Grade HomeworkGrade { get; set; } = Grade.None;
+        public Grading HomeworkGrade { get; set; } = Grading.None;
 
-        public Grade LessonActivityGrade { get; set; } = Grade.None;
+        public Grading LessonActivityGrade { get; set; } = Grading.None;
 
-        public Grade RepetitionOfMaterialGrade { get; set; } = Grade.None;
+        public Grading RepetitionOfMaterialGrade { get; set; } = Grading.None;
 
-        public Grade StudyInitiativeGrade { get; set; } = Grade.None;
+        public Grading StudyInitiativeGrade { get; set; } = Grading.None;
     }
 }

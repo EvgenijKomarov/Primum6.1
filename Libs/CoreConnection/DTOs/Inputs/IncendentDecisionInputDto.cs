@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,9 @@ namespace CoreConnection.DTOs.Inputs
     {
         public int ObjectId { get; set; }
 
-        public IncidentMeaningDto Meaning { get; set; } = IncidentMeaningDto.Unknown;
+        public IncidentMeaning Meaning { get; set; } = IncidentMeaning.Unknown;
 
-        public IncidentDecisionDto Decision { get; set; }
+        public IncidentDecision Decision { get; set; }
 
         public string DecisionExplanation { get; set; }
     }

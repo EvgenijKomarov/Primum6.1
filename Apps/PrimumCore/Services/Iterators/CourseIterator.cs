@@ -1,6 +1,5 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Enums;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +35,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (StatusApprove)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus
                 })
                 .ToArray();
         }
@@ -70,7 +69,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (StatusApprove)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus
                 })
                 .ToArrayAsync();
         }
@@ -97,7 +96,7 @@ namespace PrimumCore.Services.Iterators
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
                     IsActive = x.IsActive,
-                    ApproveStatus = (StatusApprove)x.ApproveStatus
+                    ApproveStatus = x.ApproveStatus
                 })
                 .ToArrayAsync();
         }

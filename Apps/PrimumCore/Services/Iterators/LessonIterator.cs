@@ -1,5 +1,4 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Enums;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
@@ -34,7 +33,7 @@ namespace PrimumCore.Services.Iterators
                 AbonementId = x.Abonement.AbonementId,
                 Price = x.Price,
                 LessonId = x.LessonId,
-                LessonStatus = (StatusLesson)x.Status,
+                LessonStatus = x.Status,
                 Grade = x.Grading is null ? null : x.Grading.GetFinalGrade()
             });
         }
@@ -74,7 +73,7 @@ namespace PrimumCore.Services.Iterators
                     StudentId = l.Abonement.Student.User.Id,
                     TeacherDisplayName = user.DisplayName,
                     TeacherId = user.Id,
-                    LessonStatus = (StatusLesson)l.Status,
+                    LessonStatus = l.Status,
                     Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();
@@ -121,7 +120,7 @@ namespace PrimumCore.Services.Iterators
                     StudentId = user.Id,
                     Price = l.Price,
                     TeacherId = l.Abonement.Course.Teacher.User.Id,
-                    LessonStatus = (StatusLesson)l.Status,
+                    LessonStatus = l.Status,
                     Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();

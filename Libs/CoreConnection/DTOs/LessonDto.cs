@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace CoreConnection.DTOs
 
         public required int Price { get; set; }
 
-        public required StatusLesson LessonStatus { get; set; }
+        public required LessonStatus LessonStatus { get; set; }
 
         public required float? Grade { get; set; }
     }

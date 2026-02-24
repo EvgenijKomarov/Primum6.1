@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace CoreConnection.DTOs
 
         public required string CommonInfo { get; set; }
 
-        public required IncidentStatusDto Status { get; set; }
+        public required IncidentStatus Status { get; set; }
 
-        public required IncidentMeaningDto Meaning { get; set; }
+        public required IncidentMeaning Meaning { get; set; }
 
-        public required IEnumerable<IncidentDecisionDto> Decisions { get; set; }
+        public required IEnumerable<IncidentDecision> Decisions { get; set; }
 
         public required IEnumerable<IncidentLogDto>? LinkedLogs { get; set; }
     }

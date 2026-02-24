@@ -1,5 +1,4 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Enums;
 using CoreDBModel.Constants;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
@@ -46,7 +45,7 @@ namespace PrimumCore.Services.Iterators
                     CourseThemeName = a.Course.CourseTheme.ThemeName,
                     CourseThemeId = a.Course.CourseTheme.CourseThemeId,
                     PricePerLesson = a.PricePerLesson,
-                    AbonementStatus = (StatusAbonement)a.AbonementStatus
+                    AbonementStatus = a.AbonementStatus
                 })
                 .ToArray();
         }
@@ -90,7 +89,7 @@ namespace PrimumCore.Services.Iterators
                     CourseThemeId = a.Course.CourseTheme.CourseThemeId,
                     AbonementId = a.AbonementId,
                     PricePerLesson = a.PricePerLesson,
-                    AbonementStatus = (StatusAbonement)a.AbonementStatus
+                    AbonementStatus = a.AbonementStatus
                 })
                 .ToArray();
         }

@@ -1,6 +1,5 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Enums;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
