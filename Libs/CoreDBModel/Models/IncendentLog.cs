@@ -1,4 +1,4 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 
 namespace CoreDBModel.Models
 {
@@ -16,7 +16,7 @@ namespace CoreDBModel.Models
 
         public virtual AdminProfile AdminProfile { get; set; } = null!;
 
-        public IncidentMeaningDto? Meaning {  get; set; }
+        public IncidentMeaning? Meaning {  get; set; }
 
         public int? ObjectId { get; set; }
     }

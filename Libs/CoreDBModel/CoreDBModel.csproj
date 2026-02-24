@@ -20,8 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
-  </ItemGroup>
-
 </Project>

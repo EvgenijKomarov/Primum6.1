@@ -1,14 +1,14 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models.Enums;
 
 namespace CoreDBModel.Models.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class AvailableIncident : Attribute
     {
-        public IncidentMeaningDto Meaning { get; }
-        public IncidentDecisionDto Decision { get; }
+        public IncidentMeaning Meaning { get; }
+        public IncidentDecision Decision { get; }
 
-        public AvailableIncident(IncidentMeaningDto meaning, IncidentDecisionDto decision)
+        public AvailableIncident(IncidentMeaning meaning, IncidentDecision decision)
         {
             Meaning = meaning;
             Decision = decision;

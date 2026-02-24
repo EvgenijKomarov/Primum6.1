@@ -17,7 +17,7 @@ namespace PrimumCore.Services.Utilities
             if (!solvingRules.TryGetValue(dto.Meaning, out Func<int, IncidentDecisionDto, Task<int>> rule)) { throw new NotFoundException("Incindent"); }
             if(!permissions
                 .Any(x => x.GetAvailableIncidentsAttributes()
-                    .Any(y => y.Meaning == dto.Meaning && y.Decision == dto.Decision)
+                    .Any(y => (IncidentMeaningDto)y.Meaning == dto.Meaning && (IncidentDecisionDto)y.Decision == dto.Decision)
                     )
                 ) { throw new NoPermissionException(userId, dto.Meaning, dto.Decision); }
 
@@ -29,7 +29,7 @@ namespace PrimumCore.Services.Utilities
                 $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
                 $"Decision: {dto.Decision.ToString()}",
                 DecisionDate = DateTime.Now,
-                Meaning = dto.Meaning,
+                Meaning = (IncidentMeaning)dto.Meaning,
                 ObjectId = dto.ObjectId
             });
 

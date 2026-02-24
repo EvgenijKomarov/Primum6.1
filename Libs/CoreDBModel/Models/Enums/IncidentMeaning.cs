@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CoreConnection.Enums
+namespace CoreDBModel.Models.Enums
 {
-    public enum IncidentMeaningDto//carefully map with IncidentMeaning in CoreConnection
+    public enum IncidentMeaning
     {
         Unknown = 0,
         Teacher = 1,
         Student = 2,
         Course = 3,
         Lesson = 4,
-
     }
 }

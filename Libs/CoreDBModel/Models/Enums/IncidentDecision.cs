@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CoreConnection.Enums
+namespace CoreDBModel.Models.Enums
 {
-    public enum IncidentDecisionDto//carefully map with IncidentDecision in CoreConnection
+    public enum IncidentDecision
     {
         Approve = 0,
         Delete = 1,

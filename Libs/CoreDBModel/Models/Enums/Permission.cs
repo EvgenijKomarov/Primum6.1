@@ -1,5 +1,4 @@
-﻿using CoreConnection.Enums;
-using CoreDBModel.Models.Attributes;
+﻿using CoreDBModel.Models.Attributes;
 
 namespace CoreDBModel.Models.Enums
 {
@@ -8,32 +7,32 @@ namespace CoreDBModel.Models.Enums
         EditPermissions = 0,
         AddCash = 1,
         DeleteLessons = 2,
-        [AvailableIncident(IncidentMeaningDto.Student, IncidentDecisionDto.Approve)]
-        [AvailableIncident(IncidentMeaningDto.Student, IncidentDecisionDto.Delete)]
-        [AvailableIncident(IncidentMeaningDto.Student, IncidentDecisionDto.SendToAdministrator)]
+        [AvailableIncident(IncidentMeaning.Student, IncidentDecision.Approve)]
+        [AvailableIncident(IncidentMeaning.Student, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Student, IncidentDecision.SendToAdministrator)]
         ModerateStudents = 3,
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.SendToManager)]
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.Delete)]
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.SendToAdministrator)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.SendToManager)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.SendToAdministrator)]
         ModerateTeachers = 4,
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.SendToManager)]
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.Delete)]
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.SendToAdministrator)]
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.SendToManager)]
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.SendToAdministrator)]
         ModerateCourses = 5,
-        [AvailableIncident(IncidentMeaningDto.Student, IncidentDecisionDto.Approve)]
+        [AvailableIncident(IncidentMeaning.Student, IncidentDecision.Approve)]
         AdministrateStudents = 6,
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.SendToManager)] 
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.SendToManager)] 
         AdministrateCourses = 7,
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.SendToManager)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.SendToManager)]
         AdministrateTeachers = 8,
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.Approve)]
-        [AvailableIncident(IncidentMeaningDto.Course, IncidentDecisionDto.Delete)]
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.Approve)]
+        [AvailableIncident(IncidentMeaning.Course, IncidentDecision.Delete)]
         ApproveCourses = 10,
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.Approve)]
-        [AvailableIncident(IncidentMeaningDto.Teacher, IncidentDecisionDto.Delete)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.Approve)]
+        [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.Delete)]
         ApproveTeachers = 11,
-        [AvailableIncident(IncidentMeaningDto.Lesson, IncidentDecisionDto.Delete)]
-        [AvailableIncident(IncidentMeaningDto.Lesson, IncidentDecisionDto.Revisioned)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Revisioned)]
         InspectMissedLessons = 12,
         CreateAdminProfiles = 13,
         InspectIncidentLogs = 14,
