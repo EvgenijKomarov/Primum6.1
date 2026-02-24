@@ -8,6 +8,8 @@ namespace ChatSigns
 {
     public class ChatSignTokenWorker
     {
+        // Это всё не секретные данные, так что можно не заморачиваться с их хранением.
+        // Если получить к ним доступ, злоумышленник максимум привяжет свой аккаунт к чужому чату, что не так уж и плохо.
         private static readonly byte[] Key =
         Encoding.UTF8.GetBytes("12345678901234567890123456789012");
 

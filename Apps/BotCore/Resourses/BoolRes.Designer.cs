@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCoreAPI.Resourses {
+namespace BotCore.Resourses {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace BotCoreAPI.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class GradeRes {
+    internal class BoolRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal GradeRes() {
+        internal BoolRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace BotCoreAPI.Resourses {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCoreAPI.Resourses.GradeRes", typeof(GradeRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.BoolRes", typeof(BoolRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,20 @@ namespace BotCoreAPI.Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 😁Замечательно!.
+        ///   Ищет локализованную строку, похожую на ❌.
         /// </summary>
-        internal static string Excellent {
+        internal static string _false {
             get {
-                return ResourceManager.GetString("Excellent", resourceCulture);
+                return ResourceManager.GetString("false", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 😩Старайся лучше!.
+        ///   Ищет локализованную строку, похожую на ✅.
         /// </summary>
-        internal static string Fail {
+        internal static string _true {
             get {
-                return ResourceManager.GetString("Fail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на 🙂Хорошо.
-        /// </summary>
-        internal static string Good {
-            get {
-                return ResourceManager.GetString("Good", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ❌Оценки нет.
-        /// </summary>
-        internal static string None {
-            get {
-                return ResourceManager.GetString("None", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ☹️Плохо.
-        /// </summary>
-        internal static string Poor {
-            get {
-                return ResourceManager.GetString("Poor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на 😐Нормально.
-        /// </summary>
-        internal static string Satisfactory {
-            get {
-                return ResourceManager.GetString("Satisfactory", resourceCulture);
+                return ResourceManager.GetString("true", resourceCulture);
             }
         }
     }

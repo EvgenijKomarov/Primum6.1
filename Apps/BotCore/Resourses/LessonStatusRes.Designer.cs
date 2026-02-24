@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCoreAPI.Resourses {
+namespace BotCore.Resourses {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace BotCoreAPI.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class BoolRes {
+    internal class LessonStatusRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal BoolRes() {
+        internal LessonStatusRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace BotCoreAPI.Resourses {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCoreAPI.Resourses.BoolRes", typeof(BoolRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,47 @@ namespace BotCoreAPI.Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на ❌.
+        ///   Ищет локализованную строку, похожую на 🏁Прошло.
         /// </summary>
-        internal static string _false {
+        internal static string Happened {
             get {
-                return ResourceManager.GetString("false", resourceCulture);
+                return ResourceManager.GetString("Happened", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на ✅.
+        ///   Ищет локализованную строку, похожую на 😢Пропущено.
         /// </summary>
-        internal static string _true {
+        internal static string Missed {
             get {
-                return ResourceManager.GetString("true", resourceCulture);
+                return ResourceManager.GetString("Missed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 😭Пропущено без причины.
+        /// </summary>
+        internal static string MissedWithoutReason {
+            get {
+                return ResourceManager.GetString("MissedWithoutReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ⏳В ожидании.
+        /// </summary>
+        internal static string Waiting {
+            get {
+                return ResourceManager.GetString("Waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🚀Начало в течении суток.
+        /// </summary>
+        internal static string Warned {
+            get {
+                return ResourceManager.GetString("Warned", resourceCulture);
             }
         }
     }
