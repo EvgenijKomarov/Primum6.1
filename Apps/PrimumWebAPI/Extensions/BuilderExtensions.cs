@@ -74,10 +74,8 @@ namespace PrimumWebAPI.Extensions
             return builder;
         }
 
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl)
         {
-            string coreUrl = builder.Configuration["Api:CoreURL"] ?? "https://localhost:5001";
-
             builder.Services.AddHttpClient<AdminClient>()
                 .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<StudentClient>()

@@ -1,6 +1,0 @@
-@PrimumWebAPI_HostAddress = http://localhost:5101
-
-GET {{PrimumWebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

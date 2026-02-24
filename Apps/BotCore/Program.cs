@@ -1,14 +1,19 @@
 using BotCore.Extensions;
 using BotCore.Middlewares;
+using SolutionConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+builder.Services.AddSingleton<SolutionEnvironment>(sp => solutionEnvironment);
+builder.WebHost.UseUrls(solutionEnvironment.BotCoreURL);
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-builder.AddClients();
+builder.AddClients(solutionEnvironment.PrimumCoreURL);
 builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();

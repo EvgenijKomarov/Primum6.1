@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\..\Libs\Pushables\Pushables.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
-using BotCore.Resourses;
+using BotCoreAPI.Resourses;
 using Engine;
 using Engine.Nodes;
 

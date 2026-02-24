@@ -1,0 +1,8 @@
+{
+  "PrimumCoreURL": "http://localhost:5001",
+  "PrimumWebURL": "http://localhost:5002",
+  "BotCoreURL": "http://localhost:5003",
+  "PublisherURL": "http://localhost:5004",
+  "GatewayURL": "http://localhost:5002",
+  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;"
+}

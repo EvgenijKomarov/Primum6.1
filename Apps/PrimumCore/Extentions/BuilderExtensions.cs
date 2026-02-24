@@ -7,6 +7,7 @@ using Pushables;
 using Serilog;
 using CoreDBModel.Extensions;
 using Common.Utilities;
+using SolutionConfiguration;
 
 namespace PrimumCore.Extentions
 {
@@ -47,12 +48,10 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder, string publisherUrl)
         {
-            string coreUrl = builder.Configuration["PublisherURL"] ?? "https://localhost:5004";
-
             builder.Services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(publisherUrl, httpClient));
 
             return builder;
         }

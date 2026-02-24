@@ -1,7 +1,11 @@
 using Publisher.Extensions;
+using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+builder.WebHost.UseUrls(solutionEnvironment.PublisherURL);
 
 // Add services to the container.
 

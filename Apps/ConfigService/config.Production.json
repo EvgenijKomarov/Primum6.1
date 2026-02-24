@@ -1,0 +1,7 @@
+{
+  "PrimumCoreURL": "http://localhost:5001",
+  "PrimumWebURL": "http://localhost:5002",
+  "BotCoreAPI": "http://localhost:5003",
+  "PublisherAPI": "http://localhost:5004",
+  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;"
+}

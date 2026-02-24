@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;
+using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+builder.WebHost.UseUrls(solutionEnvironment.PrimumCoreURL);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -32,7 +36,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.AddDI();
 builder.AddContext();
 builder.AddProjectControllers();
-builder.AddPublishers();
+builder.AddPublishers(solutionEnvironment.PublisherURL);
 builder.AddLogging();
 
 var app = builder.Build();

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace BotCoreAPI.Resourses {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BotCore.Resourses {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCoreAPI.Resourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,51 @@ namespace BotCore.Resourses {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🏁Прошло.
+        /// </summary>
+        internal static string Happened {
+            get {
+                return ResourceManager.GetString("Happened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 😢Пропущено.
+        /// </summary>
+        internal static string Missed {
+            get {
+                return ResourceManager.GetString("Missed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 😭Пропущено без причины.
+        /// </summary>
+        internal static string MissedWithoutReason {
+            get {
+                return ResourceManager.GetString("MissedWithoutReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ⏳В ожидании.
+        /// </summary>
+        internal static string Waiting {
+            get {
+                return ResourceManager.GetString("Waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🚀Начало в течении суток.
+        /// </summary>
+        internal static string Warned {
+            get {
+                return ResourceManager.GetString("Warned", resourceCulture);
             }
         }
     }

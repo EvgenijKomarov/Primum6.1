@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace BotCoreAPI.Resourses {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BotCore.Resourses {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.AbonementStatusRes", typeof(AbonementStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCoreAPI.Resourses.AbonementStatusRes", typeof(AbonementStatusRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
