@@ -34,7 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.AddDI();
-builder.AddContext();
+builder.AddContext(solutionEnvironment.CoreDatabaseConnection);
 builder.AddProjectControllers();
 builder.AddPublishers(solutionEnvironment.PublisherURL);
 builder.AddLogging();

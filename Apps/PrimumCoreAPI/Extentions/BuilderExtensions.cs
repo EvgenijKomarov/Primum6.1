@@ -64,9 +64,9 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder, string dbConnectionString)
         {
-            builder.Services.AddCoreContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+            builder.Services.AddCoreContext(dbConnectionString);
 
             return builder;
         }
