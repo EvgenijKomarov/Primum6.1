@@ -5,15 +5,15 @@ namespace Publisher.Extensions
 {
     public static class BuilderExtensions
     {
-        public static WebApplicationBuilder AddPublisher(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddPublisher(this WebApplicationBuilder builder, string rabbitMqConnection)
         {
-            if (builder.Configuration.GetValue<bool>("RabbitMQ:IsFake"))
+            if (builder.Configuration.GetValue<bool>("IsFakePublisherOn"))
             {
                 builder.Services.AddScoped<IPublisher, FakePublisher>();
             }
             else
             {
-                builder.Services.AddScoped<IPublisher, RabbitMQEventPublisher>();
+                builder.Services.AddScoped<IPublisher, RabbitMQEventPublisher>(sp => new RabbitMQEventPublisher(rabbitMqConnection));
             }
             return builder;
         }

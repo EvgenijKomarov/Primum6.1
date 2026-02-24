@@ -11,6 +11,11 @@ namespace Publisher.Services
     {
         private readonly ConnectionFactory _factory;
         private readonly int _maxRetries = 3;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
 
         public RabbitMQEventPublisher(string connectionString)
         {
@@ -21,11 +26,7 @@ namespace Publisher.Services
         {
             IConnection _connection = await _factory.CreateConnectionAsync(cancellationToken);
 
-            var json = JsonSerializer.Serialize(message, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = false
-            });
+            var json = JsonSerializer.Serialize(message, _serializerOptions);
 
             var body = Encoding.UTF8.GetBytes(json);
 

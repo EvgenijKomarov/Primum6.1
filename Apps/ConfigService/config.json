@@ -4,5 +4,6 @@
   "BotCoreURL": "https://localhost:5003",
   "PublisherURL": "https://localhost:5004",
   "GatewayURL": "https://localhost:5002",
-  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;"
+  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
+  "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
 }

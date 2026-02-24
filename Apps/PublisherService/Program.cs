@@ -34,7 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.AddPublisher();
+builder.AddPublisher(solutionEnvironment.RabbitMQConnection);
 builder.AddLogging();
 var app = builder.Build();
 

@@ -24,5 +24,8 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("CoreDatabaseConnection")]
         public string CoreDatabaseConnection { get; set; } = string.Empty;
+
+        [JsonPropertyName("RabbitMQConnection")]
+        public string RabbitMQConnection { get; set; } = string.Empty;
     }
 }
