@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pushables.Events
 {
-    public class UserVerifiedEmailEvent : IEvent
+    public record UserVerifiedEmailEvent : IPushable
     {
         public required string EmailAdress { get; set; }
 

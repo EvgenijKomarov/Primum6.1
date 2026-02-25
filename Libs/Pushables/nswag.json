@@ -12,7 +12,8 @@
       "namespace": "Pushables",
       "additionalNamespaceUsages": [
         "Pushables.Events",
-        "Pushables.Notifications"
+        "Pushables.Notifications",
+        "Pushables.Entities"
       ],
       "generateClientClasses": true,
       "generateClientInterfaces": false,

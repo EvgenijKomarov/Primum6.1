@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libs\ChatBotResourses\ChatBotResourses.csproj" />
+    <ProjectReference Include="..\..\Libs\ChatBotResourses\Resourses.csproj" />
     <ProjectReference Include="..\..\Libs\ChatSigns\ChatSigns.csproj" />
     <ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />

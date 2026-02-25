@@ -1,9 +1,9 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
-using ChatBotResourses;
 using CoreConnection;
 using Engine;
 using Engine.Nodes;
+using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {

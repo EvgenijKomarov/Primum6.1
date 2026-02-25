@@ -15,7 +15,7 @@ namespace PrimumWebAPI.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(UserDtoLite user)
+        public string GenerateToken(UserDto user)
         {
             var securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));

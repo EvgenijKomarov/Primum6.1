@@ -5,10 +5,10 @@ using System.Text.Json;
 
 namespace Pushables.Events
 {
-    public class UserVerifiedChatEvent: IEvent
+    public record UserVerifiedChatEvent: IPushable
     {
-        public int UserId { get; set; }
-        public long ChatId { get; set; }
-        public string RealizationTag { get; set; }
+        public required int UserId { get; set; }
+        public required long ChatId { get; set; }
+        public required string RealizationTag { get; set; }
     }
 }

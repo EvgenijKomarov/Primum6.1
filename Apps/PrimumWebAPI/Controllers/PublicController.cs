@@ -9,13 +9,13 @@ namespace PrimumWebAPI.Controllers
     [ApiController]
     [Route("api/public")]
     [Tags("Public")]
-    public class PublicController(PublicClient client, JwtTokenService tokenService) : DefaultController
+    public class PublicController(UserClient userClient, PublicClient client, JwtTokenService tokenService) : DefaultController
     {
         [HttpGet("login")]
         public async Task<ActionResult<string>> Login([FromQuery] string mailAdress, [FromQuery] string password)
         {
             var id = await client.LoginAsync(mailAdress, password);
-            var user = await client.UserAsync(id);
+            var user = await userClient.ProfileAsync(id);
 
             return Ok(tokenService.GenerateToken(user));
         }
@@ -24,7 +24,7 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<string>> RegUser([FromBody] RegistrationInputDto dto)
         {
             var id = await client.RegisterAsync(dto);
-            var user = await client.UserAsync(id);
+            var user = await userClient.ProfileAsync(id);
 
             return Ok(tokenService.GenerateToken(user));
         }

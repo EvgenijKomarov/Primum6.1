@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pushables.Entities;
+using Resourses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pushables.Notifications
 {
-    public class LessonPreparationNotification : INotification
+    public class LessonPreparationNotification : IChatBotNotification, IMailNotification
     {
         public required string StudentName { get; set; }
 
@@ -26,5 +28,39 @@ namespace Pushables.Notifications
         public required DateTime DateTime { get; set; }
 
         public required bool IsEnoughMoney { get; set; }
+
+        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        {
+            return [
+                new ChatBotNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
+                },
+                new ChatBotNotification
+                {
+                    UserId = StudentUserId,
+                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                    (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс."),
+                }
+            ];
+        }
+
+        public IEnumerable<MailNotification> GetMailNotifications()
+        {
+            return [
+                new MailNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
+                },
+                new MailNotification
+                {
+                    UserId = StudentUserId,
+                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                    (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс."),
+                }
+            ];
+        }
     }
 }

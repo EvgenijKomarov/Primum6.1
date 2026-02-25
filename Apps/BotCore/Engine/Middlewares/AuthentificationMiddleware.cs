@@ -4,8 +4,8 @@ using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using CoreConnection.DTOs;
 using Engine;
-using ChatBotResourses;
 using SolutionConfiguration;
+using Resourses;
 
 namespace BotCore.Engine.Middlewares
 {

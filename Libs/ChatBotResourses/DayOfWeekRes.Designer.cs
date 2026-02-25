@@ -22,14 +22,14 @@ namespace Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LessonStatusRes {
+    public class DayOfWeekRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LessonStatusRes() {
+        internal DayOfWeekRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resourses {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resourses.DayOfWeekRes", typeof(DayOfWeekRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,65 @@ namespace Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 🏁Прошло.
+        ///   Ищет локализованную строку, похожую на Пятница.
         /// </summary>
-        public static string Happened {
+        public static string Friday {
             get {
-                return ResourceManager.GetString("Happened", resourceCulture);
+                return ResourceManager.GetString("Friday", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 😢Пропущено.
+        ///   Ищет локализованную строку, похожую на Понедельник.
         /// </summary>
-        public static string Missed {
+        public static string Monday {
             get {
-                return ResourceManager.GetString("Missed", resourceCulture);
+                return ResourceManager.GetString("Monday", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 😭Пропущено без причины.
+        ///   Ищет локализованную строку, похожую на Суббота.
         /// </summary>
-        public static string MissedWithoutReason {
+        public static string Saturday {
             get {
-                return ResourceManager.GetString("MissedWithoutReason", resourceCulture);
+                return ResourceManager.GetString("Saturday", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на ⏳В ожидании.
+        ///   Ищет локализованную строку, похожую на Воскресенье.
         /// </summary>
-        public static string Waiting {
+        public static string Sunday {
             get {
-                return ResourceManager.GetString("Waiting", resourceCulture);
+                return ResourceManager.GetString("Sunday", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 🚀Начало в течении суток.
+        ///   Ищет локализованную строку, похожую на Четверг.
         /// </summary>
-        public static string Warned {
+        public static string Thursday {
             get {
-                return ResourceManager.GetString("Warned", resourceCulture);
+                return ResourceManager.GetString("Thursday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вторник.
+        /// </summary>
+        public static string Tuesday {
+            get {
+                return ResourceManager.GetString("Tuesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Среда.
+        /// </summary>
+        public static string Wednesday {
+            get {
+                return ResourceManager.GetString("Wednesday", resourceCulture);
             }
         }
     }

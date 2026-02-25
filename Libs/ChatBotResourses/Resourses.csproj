@@ -17,6 +17,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="DayOfWeekRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DayOfWeekRes.resx</DependentUpon>
+    </Compile>
     <Compile Update="Emoticons.Designer.cs">
       <DependentUpon>Emoticons.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -42,6 +47,10 @@
     <EmbeddedResource Update="BoolRes.resx">
       <LastGenOutput>BoolRes.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DayOfWeekRes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DayOfWeekRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Emoticons.resx">
       <LastGenOutput>Emoticons.Designer.cs</LastGenOutput>

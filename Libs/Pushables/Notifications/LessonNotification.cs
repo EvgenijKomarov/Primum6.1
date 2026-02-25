@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using Pushables.Entities;
+using Resourses;
+using System.Text.Json;
 
 namespace Pushables.Notifications
 {
-    public class LessonNotification : INotification
+    public class LessonNotification : IChatBotNotification, IMailNotification
     {
         public required string StudentName { get; set; }
 
@@ -23,5 +25,37 @@ namespace Pushables.Notifications
         public required string TeacherLink { get; set; }
 
         public required string StudentLink { get; set; }
+
+        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        {
+            return [
+                new ChatBotNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
+                },
+                new ChatBotNotification
+                {
+                    UserId = StudentUserId,
+                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
+                }
+            ];
+        }
+
+        public IEnumerable<MailNotification> GetMailNotifications()
+        {
+            return [
+                new MailNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
+                },
+                new MailNotification
+                {
+                    UserId = StudentUserId,
+                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
+                }
+            ];
+        }
     }
 }

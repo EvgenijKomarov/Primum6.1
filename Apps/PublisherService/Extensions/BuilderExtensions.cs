@@ -1,4 +1,5 @@
-﻿using Publisher.Services;
+﻿using MassTransit;
+using Publisher.Services;
 using Serilog;
 
 namespace Publisher.Extensions
@@ -13,7 +14,21 @@ namespace Publisher.Extensions
             }
             else
             {
-                builder.Services.AddScoped<IPublisher, RabbitMQEventPublisher>(sp => new RabbitMQEventPublisher(rabbitMqConnection));
+                builder.Services.AddMassTransit(x =>
+                {
+                    x.UsingRabbitMq((context, cfg) =>
+                    {
+                        cfg.Host(rabbitMqConnection, h =>
+                        {
+                            h.Username("guest");
+                            h.Password("guest");
+                        });
+
+                        // Именование очередей: по умолчанию "namespace:MessageType"
+                        cfg.ConfigureEndpoints(context);
+                    });
+                });
+                builder.Services.AddScoped<IPublisher, RabbitMQEventPublisher>();
             }
             return builder;
         }

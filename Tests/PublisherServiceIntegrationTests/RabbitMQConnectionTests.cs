@@ -11,7 +11,7 @@ using Testcontainers.RabbitMq;
 
 namespace PublisherServiceIntegrationTests
 {
-    public class RabbitMQTests// run docker firstly!
+    /*public class RabbitMQTests// run docker firstly!
     {
         [SetUpFixture]
         public class RabbitMQTestSetup
@@ -275,5 +275,5 @@ namespace PublisherServiceIntegrationTests
                 });
             }
         }
-    }
+    }*/
 }

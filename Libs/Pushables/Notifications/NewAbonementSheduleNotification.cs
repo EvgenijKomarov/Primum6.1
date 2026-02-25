@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pushables.Entities;
+using Resourses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pushables.Notifications
 {
-    public class NewAbonementSheduleNotification : INotification
+    public class NewAbonementSheduleNotification : IChatBotNotification, IMailNotification
     {
         public required string StudentName { get; set; }
 
@@ -26,5 +28,27 @@ namespace Pushables.Notifications
         public required string DayOfWeek { get; set; }
 
         public required int Time {  get; set; }
+
+        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        {
+            return [
+                new ChatBotNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                }
+            ];
+        }
+
+        public IEnumerable<MailNotification> GetMailNotifications()
+        {
+            return [
+                new MailNotification
+                {
+                    UserId = TeacherUserId,
+                    Text = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                }
+            ];
+        }
     }
 }

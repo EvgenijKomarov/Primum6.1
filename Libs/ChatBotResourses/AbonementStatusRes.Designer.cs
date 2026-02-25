@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChatBotResourses {
+namespace Resourses {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ChatBotResourses {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ChatBotResourses.AbonementStatusRes", typeof(AbonementStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resourses.AbonementStatusRes", typeof(AbonementStatusRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

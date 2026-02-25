@@ -4,6 +4,6 @@ namespace Publisher.Services
 {
     public interface IPublisher
     {
-        Task Publish(string queueName, string message, CancellationToken cancellationToken = default);
+        Task Publish<T>(T message, CancellationToken cancellationToken = default) where T: class;
     }
 }
