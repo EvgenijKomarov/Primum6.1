@@ -1,6 +1,6 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
-using BotCore.Resourses;
+using ChatBotResourses;
 using CoreConnection;
 using Engine;
 using Engine.Nodes;

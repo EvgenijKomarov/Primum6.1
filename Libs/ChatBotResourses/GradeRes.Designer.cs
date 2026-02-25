@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace ChatBotResourses {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace BotCore.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class BoolRes {
+    public class GradeRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal BoolRes() {
+        internal GradeRes() {
         }
         
         /// <summary>
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.BoolRes", typeof(BoolRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ChatBotResourses.GradeRes", typeof(GradeRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace BotCore.Resourses {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,20 +61,56 @@ namespace BotCore.Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на ❌.
+        ///   Ищет локализованную строку, похожую на 😁Замечательно!.
         /// </summary>
-        internal static string _false {
+        public static string Excellent {
             get {
-                return ResourceManager.GetString("false", resourceCulture);
+                return ResourceManager.GetString("Excellent", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на ✅.
+        ///   Ищет локализованную строку, похожую на 😩Старайся лучше!.
         /// </summary>
-        internal static string _true {
+        public static string Fail {
             get {
-                return ResourceManager.GetString("true", resourceCulture);
+                return ResourceManager.GetString("Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🙂Хорошо.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ❌Оценки нет.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ☹️Плохо.
+        /// </summary>
+        public static string Poor {
+            get {
+                return ResourceManager.GetString("Poor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 😐Нормально.
+        /// </summary>
+        public static string Satisfactory {
+            get {
+                return ResourceManager.GetString("Satisfactory", resourceCulture);
             }
         }
     }

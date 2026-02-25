@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace ChatBotResourses {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace BotCore.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class LessonStatusRes {
+    public class LessonStatusRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace BotCore.Resourses {
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ChatBotResourses.LessonStatusRes", typeof(LessonStatusRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace BotCore.Resourses {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🏁Прошло.
         /// </summary>
-        internal static string Happened {
+        public static string Happened {
             get {
                 return ResourceManager.GetString("Happened", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 😢Пропущено.
         /// </summary>
-        internal static string Missed {
+        public static string Missed {
             get {
                 return ResourceManager.GetString("Missed", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 😭Пропущено без причины.
         /// </summary>
-        internal static string MissedWithoutReason {
+        public static string MissedWithoutReason {
             get {
                 return ResourceManager.GetString("MissedWithoutReason", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ⏳В ожидании.
         /// </summary>
-        internal static string Waiting {
+        public static string Waiting {
             get {
                 return ResourceManager.GetString("Waiting", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🚀Начало в течении суток.
         /// </summary>
-        internal static string Warned {
+        public static string Warned {
             get {
                 return ResourceManager.GetString("Warned", resourceCulture);
             }

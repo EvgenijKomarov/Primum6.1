@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace ChatBotResourses {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace BotCore.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Emoticons {
+    public class Emoticons {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace BotCore.Resourses {
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.Emoticons", typeof(Emoticons).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ChatBotResourses.Emoticons", typeof(Emoticons).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace BotCore.Resourses {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🎫.
         /// </summary>
-        internal static string Abonement {
+        public static string Abonement {
             get {
                 return ResourceManager.GetString("Abonement", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 👷‍♂️.
         /// </summary>
-        internal static string Admin {
+        public static string Admin {
             get {
                 return ResourceManager.GetString("Admin", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ↩️.
         /// </summary>
-        internal static string Back {
+        public static string Back {
             get {
                 return ResourceManager.GetString("Back", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🤖.
         /// </summary>
-        internal static string Bot {
+        public static string Bot {
             get {
                 return ResourceManager.GetString("Bot", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 💵.
         /// </summary>
-        internal static string Cash {
+        public static string Cash {
             get {
                 return ResourceManager.GetString("Cash", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ✨💰.
         /// </summary>
-        internal static string Coins {
+        public static string Coins {
             get {
                 return ResourceManager.GetString("Coins", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🏫.
         /// </summary>
-        internal static string Course {
+        public static string Course {
             get {
                 return ResourceManager.GetString("Course", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🙋.
         /// </summary>
-        internal static string Hello {
+        public static string Hello {
             get {
                 return ResourceManager.GetString("Hello", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🆔.
         /// </summary>
-        internal static string Id {
+        public static string Id {
             get {
                 return ResourceManager.GetString("Id", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ⬅️.
         /// </summary>
-        internal static string Left {
+        public static string Left {
             get {
                 return ResourceManager.GetString("Left", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🕘.
         /// </summary>
-        internal static string Lesson {
+        public static string Lesson {
             get {
                 return ResourceManager.GetString("Lesson", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ➡️.
         /// </summary>
-        internal static string Right {
+        public static string Right {
             get {
                 return ResourceManager.GetString("Right", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🗓.
         /// </summary>
-        internal static string Shedule {
+        public static string Shedule {
             get {
                 return ResourceManager.GetString("Shedule", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на ✨.
         /// </summary>
-        internal static string Spark {
+        public static string Spark {
             get {
                 return ResourceManager.GetString("Spark", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 👨‍🎓.
         /// </summary>
-        internal static string Student {
+        public static string Student {
             get {
                 return ResourceManager.GetString("Student", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 👨‍🏫.
         /// </summary>
-        internal static string Teacher {
+        public static string Teacher {
             get {
                 return ResourceManager.GetString("Teacher", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 🕘.
         /// </summary>
-        internal static string Time {
+        public static string Time {
             get {
                 return ResourceManager.GetString("Time", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace BotCore.Resourses {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 👨‍🦰.
         /// </summary>
-        internal static string User {
+        public static string User {
             get {
                 return ResourceManager.GetString("User", resourceCulture);
             }

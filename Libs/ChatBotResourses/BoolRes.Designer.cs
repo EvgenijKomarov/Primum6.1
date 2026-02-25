@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotCore.Resourses {
+namespace ChatBotResourses {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace BotCore.Resourses {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AbonementStatusRes {
+    public class BoolRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AbonementStatusRes() {
+        internal BoolRes() {
         }
         
         /// <summary>
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BotCore.Resourses.AbonementStatusRes", typeof(AbonementStatusRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ChatBotResourses.BoolRes", typeof(BoolRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace BotCore.Resourses {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,29 +61,20 @@ namespace BotCore.Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 🔥Активен!.
+        ///   Ищет локализованную строку, похожую на ❌.
         /// </summary>
-        internal static string Active {
+        public static string _false {
             get {
-                return ResourceManager.GetString("Active", resourceCulture);
+                return ResourceManager.GetString("false", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 🗑Удалён.
+        ///   Ищет локализованную строку, похожую на ✅.
         /// </summary>
-        internal static string Deleted {
+        public static string _true {
             get {
-                return ResourceManager.GetString("Deleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на 🧊Заморожен.
-        /// </summary>
-        internal static string Freezed {
-            get {
-                return ResourceManager.GetString("Freezed", resourceCulture);
+                return ResourceManager.GetString("true", resourceCulture);
             }
         }
     }
