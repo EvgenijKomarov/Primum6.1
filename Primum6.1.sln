@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionConfiguration", "Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherServiceIntegrationTests", "Tests\PublisherServiceIntegrationTests\PublisherServiceIntegrationTests.csproj", "{CAE672DE-9560-43C1-85D1-C4F2E9354B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resourses", "Libs\ChatBotResourses\Resourses.csproj", "{CE16A797-55A2-44EC-B6CD-056374EAE3D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resourses", "Libs\Resourses\Resourses.csproj", "{CE16A797-55A2-44EC-B6CD-056374EAE3D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

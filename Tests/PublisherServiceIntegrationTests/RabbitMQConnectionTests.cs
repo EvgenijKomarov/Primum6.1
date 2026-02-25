@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using MassTransit;
+using Microsoft.Extensions.Logging.Abstractions;
+using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using Publisher.Services;
 using RabbitMQ.Client;
@@ -11,7 +13,7 @@ using Testcontainers.RabbitMq;
 
 namespace PublisherServiceIntegrationTests
 {
-    /*public class RabbitMQTests// run docker firstly!
+    public class MassTransitRabbitMQTests // run docker firstly!
     {
         [SetUpFixture]
         public class RabbitMQTestSetup
@@ -42,238 +44,224 @@ namespace PublisherServiceIntegrationTests
             }
         }
 
+        // Простой тестовый контракт — record удобен для сравнения
+        public record TestMessage(string Content, Guid CorrelationId);
+
         [TestFixture]
         public class RabbitMQEventPublisherTests
         {
-            private IConnection? _consumerConnection;
-            private IChannel? _consumerChannel;
+            private IBus? _bus;
+            private TestConsumer? _consumer;
+            private readonly List<TestMessage> _receivedMessages = new();
 
             [SetUp]
             public async Task SetUp()
             {
-                // Создаём отдельное соединение для потребления сообщений в каждом тесте
-                var factory = new ConnectionFactory
+                _receivedMessages.Clear();
+                _consumer = new TestConsumer(_receivedMessages);
+
+                _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
                 {
-                    Uri = new Uri(RabbitMQTestSetup.ConnectionString!)
-                };
-                _consumerConnection = await factory.CreateConnectionAsync();
-                _consumerChannel = await _consumerConnection.CreateChannelAsync();
+                    cfg.Host(RabbitMQTestSetup.ConnectionString!);
+
+                    // Подписываем тестового потребителя на очередь для TestMessage
+                    cfg.ReceiveEndpoint("test-consumer-queue", e =>
+                    {
+                        e.ConfigureConsumer<TestConsumer>(null);
+                    });
+                });
             }
 
             [TearDown]
-            public void TearDown()
+            public async Task TearDown()
             {
-                _consumerConnection?.Dispose();
-                _consumerChannel?.Dispose();
+                
             }
 
-            private async Task<string?> ConsumeMessageAsync(string queueName, TimeSpan timeout)
-            {
-                var tcs = new TaskCompletionSource<string?>();
-                var consumer = new AsyncEventingBasicConsumer(_consumerChannel!);
-
-                consumer.ReceivedAsync += async (_, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    await _consumerChannel!.BasicAckAsync(ea.DeliveryTag, false);
-                    tcs.TrySetResult(message);
-                    await Task.CompletedTask;
-                };
-
-                await _consumerChannel!.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
-
-                var completedTask = await Task.WhenAny(tcs.Task, Task.Delay(timeout));
-                return completedTask == tcs.Task ? await tcs.Task : null;
-            }
-
+            /// <summary>
+            /// Базовый тест: сообщение публикуется и корректно десериализуется
+            /// </summary>
             [Test]
-            public async Task Publish_MessageSuccessfullySent_ToNewQueue()
+            public async Task Publish_MessageSuccessfullySent_AndDeserialized()
             {
                 // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-                var testMessage = "Hello, RabbitMQ!";
+                var publisher = new RabbitMQEventPublisher(_bus!, NullLogger<RabbitMQEventPublisher>.Instance);
+                var testMessage = new TestMessage("Hello, MassTransit!", Guid.NewGuid());
 
                 // Act
-                await publisher.Publish(queueName, testMessage, CancellationToken.None);
+                await publisher.Publish(testMessage, CancellationToken.None);
 
                 // Assert
-                var received = await ConsumeMessageAsync(queueName, TimeSpan.FromSeconds(5));
+                var received = await WaitForMessageAsync(TimeSpan.FromSeconds(5));
+
                 Assert.That(received, Is.Not.Null, "Message should be received");
-
-                // Проверяем, что сообщение было сериализовано как JSON-строка
-                var deserialized = JsonSerializer.Deserialize<string>(received, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                Assert.That(deserialized, Is.EqualTo(testMessage));
+                Assert.That(received!.Content, Is.EqualTo(testMessage.Content));
+                Assert.That(received.CorrelationId, Is.EqualTo(testMessage.CorrelationId));
             }
 
-            [Test]
-            public async Task Publish_QueueDeclaredAsDurable()
-            {
-                // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-
-                // Act
-                await publisher.Publish(queueName, "test", CancellationToken.None);
-
-                // Assert - проверяем, что очередь существует и может быть объявлена повторно
-                var factory = new ConnectionFactory { Uri = new Uri(RabbitMQTestSetup.ConnectionString!) };
-                await using var connection = await factory.CreateConnectionAsync();
-                await using var channel = await connection.CreateChannelAsync();
-
-                // QueueDeclarePassive проверяет существование очереди без её создания
-                await channel.QueueDeclarePassiveAsync(queueName);
-            }
-
+            /// <summary>
+            /// Проверяем, что CancellationToken корректно пробрасывается в MassTransit
+            /// </summary>
             [Test]
             public async Task Publish_CancellationTokenRespected_WhenCancelled()
             {
                 // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
+                var publisher = new RabbitMQEventPublisher(_bus!, NullLogger<RabbitMQEventPublisher>.Instance);
+                var testMessage = new TestMessage("test", Guid.NewGuid());
                 using var cts = new CancellationTokenSource();
-                cts.Cancel(); // Отменяем сразу
+                cts.Cancel();
 
-                // Act & Assert
-                Assert.ThrowsAsync<TaskCanceledException>(async () =>
+                // Act & Assert - MassTransit пробросит OperationCanceledException
+                Assert.ThrowsAsync<OperationCanceledException>(async () =>
                 {
-                    await publisher.Publish(queueName, "test", cts.Token);
+                    await publisher.Publish(testMessage, cts.Token);
                 });
             }
 
+            /// <summary>
+            /// Проверяем порядок доставки нескольких сообщений
+            /// </summary>
             [Test]
             public async Task Publish_MultipleMessages_ReceivedInOrder()
             {
                 // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-                var messages = new[] { "First", "Second", "Third" };
-                var received = new List<string?>();
-
-                // 🔹 ОБЪЯВЛЯЕМ очередь ДО подписки потребителя
-                // Параметры должны СОВПАДАТЬ с теми, что в RabbitMQEventPublisher!
-                await _consumerChannel!.QueueDeclareAsync(
-                    queue: queueName,
-                    durable: true,        // должно совпадать с publisher
-                    exclusive: false,     // должно совпадать с publisher
-                    autoDelete: false,    // должно совпадать с publisher
-                    arguments: null);
-
-                // Теперь подписываемся — очередь уже существует ✅
-                var consumer = new AsyncEventingBasicConsumer(_consumerChannel!);
-                consumer.ReceivedAsync += async (_, ea) =>
+                var publisher = new RabbitMQEventPublisher(_bus!, NullLogger<RabbitMQEventPublisher>.Instance);
+                var messages = new[]
                 {
-                    var body = ea.Body.ToArray();
-                    received.Add(Encoding.UTF8.GetString(body));
-                    await _consumerChannel!.BasicAckAsync(ea.DeliveryTag, false);
-                };
-                await _consumerChannel!.BasicConsumeAsync(queueName, false, consumer);
+                new TestMessage("First", Guid.NewGuid()),
+                new TestMessage("Second", Guid.NewGuid()),
+                new TestMessage("Third", Guid.NewGuid())
+            };
 
                 // Act
                 foreach (var msg in messages)
                 {
-                    await publisher.Publish(queueName, msg, CancellationToken.None);
+                    await publisher.Publish(msg, CancellationToken.None);
                 }
 
-                //waiting for all messages
-                var start = DateTime.UtcNow;
-                while (received.Count < 3)
-                {
-                    if (DateTime.UtcNow - start > TimeSpan.FromSeconds(5))
-                        throw new TimeoutException($"Ожидание 3 сообщений превысило лимит");
-                    await Task.Delay(50);
-                }
+                // Wait for all messages
+                var received = await WaitForMessagesAsync(3, TimeSpan.FromSeconds(10));
 
                 // Assert
                 Assert.That(received, Has.Count.EqualTo(3));
-                var deserialized = received.Select(r => JsonSerializer.Deserialize<string>(r!));
-                CollectionAssert.AreEqual(messages, deserialized, "Messages should be received in order");
+                CollectionAssert.AreEqual(
+                    messages.Select(m => m.Content),
+                    received.Select(r => r.Content),
+                    "Messages should be received in order");
             }
 
-            [Test]
-            public async Task Publish_ConnectionFailure_RetriesAndSucceeds()
-            {
-                // Arrange — smoke test: публикуем при рабочей инфраструктуре
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-
-                // Act & Assert — убеждаемся, что retry-логика не мешает при нормальной работе
-                Assert.DoesNotThrowAsync(async () =>
-                {
-                    await publisher.Publish(queueName, "retry-test", CancellationToken.None);
-                });
-
-                var received = await ConsumeMessageAsync(queueName, TimeSpan.FromSeconds(5));
-                Assert.That(received, Is.Not.Null);
-            }
-
-            [Test]
-            public async Task Publish_AfterMaxRetries_ThrowsInvalidOperationException()
-            {
-                // Arrange — используем неверный connectionString, чтобы все попытки провалились
-                var invalidConnectionString = "amqp://invalid:invalid@localhost:5670";
-                var publisher = new RabbitMQEventPublisher(invalidConnectionString);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-
-                // Act & Assert
-                Assert.ThrowsAsync<BrokerUnreachableException>(async () =>
-                {
-                    await publisher.Publish(queueName, "test", CancellationToken.None);
-                });
-            }
-
+            /// <summary>
+            /// Проверяем, что спецсимволы и Unicode сохраняются при JSON-сериализации MassTransit
+            /// </summary>
             [Test]
             public async Task Publish_SpecialCharactersInMessage_PreservedCorrectly()
             {
                 // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-                var testMessage = "Hello \"world\" with 🚀 and \\n newlines";
+                var publisher = new RabbitMQEventPublisher(_bus!, NullLogger<RabbitMQEventPublisher>.Instance);
+                var testMessage = new TestMessage("Hello \"world\" with 🚀 and \\n newlines", Guid.NewGuid());
 
                 // Act
-                await publisher.Publish(queueName, testMessage, CancellationToken.None);
-                var received = await ConsumeMessageAsync(queueName, TimeSpan.FromSeconds(5));
+                await publisher.Publish(testMessage, CancellationToken.None);
+                var received = await WaitForMessageAsync(TimeSpan.FromSeconds(5));
 
                 // Assert
                 Assert.That(received, Is.Not.Null);
-                var deserialized = JsonSerializer.Deserialize<string>(received!);
-                Assert.That(deserialized, Is.EqualTo(testMessage));
+                Assert.That(received!.Content, Is.EqualTo(testMessage.Content));
             }
 
+            /// <summary>
+            /// [Опционально] Проверяем "сырой" вид сообщения в RabbitMQ через RabbitMQ.Client
+            /// Это помогает убедиться, как именно MassTransit сериализует сообщение
+            /// </summary>
             [Test]
-            public async Task Publish_EmptyMessage_HandledCorrectly()
+            public async Task Publish_MessageStructure_VerifyRawJson()
             {
                 // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-                var queueName = $"test-queue-{Guid.NewGuid()}";
-                var testMessage = string.Empty;
+                var publisher = new RabbitMQEventPublisher(_bus!, NullLogger<RabbitMQEventPublisher>.Instance);
+                var testMessage = new TestMessage("raw check", Guid.Parse("11111111-1111-1111-1111-111111111111"));
 
-                // Act
-                await publisher.Publish(queueName, testMessage, CancellationToken.None);
-                var received = await ConsumeMessageAsync(queueName, TimeSpan.FromSeconds(5));
-
-                // Assert
-                Assert.That(received, Is.Not.Null);
-                var deserialized = JsonSerializer.Deserialize<string>(received!);
-                Assert.That(deserialized, Is.EqualTo(testMessage));
-            }
-
-            [Test]
-            public async Task Publish_NullQueueName_ThrowsArgumentException()
-            {
-                // Arrange
-                var publisher = new RabbitMQEventPublisher(RabbitMQTestSetup.ConnectionString!);
-
-                // Act & Assert
-                Assert.ThrowsAsync<NullReferenceException>(async () =>
+                // Создаём отдельное соединение для "прослушки" сырых сообщений
+                using var connection = await new ConnectionFactory
                 {
-                    await publisher.Publish(null!, "test", CancellationToken.None);
-                });
+                    Uri = new Uri(RabbitMQTestSetup.ConnectionString!)
+                }.CreateConnectionAsync();
+                using var channel = await connection.CreateChannelAsync();
+
+                // Объявляем временную очередь для перехвата
+                var tempQueue = $"raw-inspect-{Guid.NewGuid()}";
+                await channel.QueueDeclareAsync(tempQueue, durable: false, exclusive: true, autoDelete: true);
+                await channel.QueueBindAsync(tempQueue, "test-consumer-queue", string.Empty); // bind к exchange
+
+                // Act
+                await publisher.Publish(testMessage, CancellationToken.None);
+
+                // Consume raw message
+                var result = await channel.BasicGetAsync(tempQueue, autoAck: true);
+                Assert.That(result, Is.Not.Null, "Raw message should be captured");
+
+                var rawJson = Encoding.UTF8.GetString(result!.Body.ToArray());
+
+                // Assert - проверяем, что JSON содержит ожидаемые поля
+                // MassTransit по умолчанию добавляет метаданные, но Content должен быть внутри
+                Assert.That(rawJson, Does.Contain("Content"));
+                Assert.That(rawJson, Does.Contain("raw check"));
+                Assert.That(rawJson, Does.Contain("11111111-1111-1111-1111-111111111111"));
+            }
+
+            // ─────────────────────────────────────────────────────────────
+            // Вспомогательные методы
+            // ─────────────────────────────────────────────────────────────
+
+            private async Task<TestMessage?> WaitForMessageAsync(TimeSpan timeout)
+            {
+                var start = DateTime.UtcNow;
+                while (DateTime.UtcNow - start < timeout)
+                {
+                    lock (_receivedMessages)
+                    {
+                        if (_receivedMessages.Count > 0)
+                            return _receivedMessages[0];
+                    }
+                    await Task.Delay(50);
+                }
+                return null;
+            }
+
+            private async Task<List<TestMessage>> WaitForMessagesAsync(int count, TimeSpan timeout)
+            {
+                var start = DateTime.UtcNow;
+                while (DateTime.UtcNow - start < timeout)
+                {
+                    lock (_receivedMessages)
+                    {
+                        if (_receivedMessages.Count >= count)
+                            return new List<TestMessage>(_receivedMessages);
+                    }
+                    await Task.Delay(50);
+                }
+                lock (_receivedMessages)
+                    return new List<TestMessage>(_receivedMessages);
+            }
+
+            // ─────────────────────────────────────────────────────────────
+            // Тестовый потребитель
+            // ─────────────────────────────────────────────────────────────
+
+            private class TestConsumer : IConsumer<TestMessage>
+            {
+                private readonly List<TestMessage> _storage;
+
+                public TestConsumer(List<TestMessage> storage) => _storage = storage;
+
+                public Task Consume(ConsumeContext<TestMessage> context)
+                {
+                    lock (_storage)
+                    {
+                        _storage.Add(context.Message);
+                    }
+                    return Task.CompletedTask;
+                }
             }
         }
-    }*/
+    }
 }

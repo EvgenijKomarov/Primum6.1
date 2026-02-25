@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChatBotResourses\Resourses.csproj" />
+    <ProjectReference Include="..\Resourses\Resourses.csproj" />
   </ItemGroup>
 
 </Project>
