@@ -7,17 +7,17 @@ namespace SolutionConfiguration
 {
     public class SolutionEnvironment
     {
-        [JsonPropertyName("PrimumCoreURL")]
-        public string PrimumCoreURL { get; set; } = string.Empty;
+        [JsonPropertyName("PrimumCore")]
+        public ServiceConfiguration PrimumCore { get; set; } = null!;
 
-        [JsonPropertyName("PrimumWebURL")]
-        public string PrimumWebURL { get; set; } = string.Empty;
+        [JsonPropertyName("PrimumWebAPI")]
+        public ServiceConfiguration PrimumWebAPI { get; set; } = null!;
 
-        [JsonPropertyName("BotCoreURL")]
-        public string BotCoreURL { get; set; } = string.Empty;
+        [JsonPropertyName("BotCore")]
+        public ServiceConfiguration BotCore { get; set; } = null!;
 
-        [JsonPropertyName("PublisherURL")]
-        public string PublisherURL { get; set; } = string.Empty;
+        [JsonPropertyName("PublisherService")]
+        public ServiceConfiguration PublisherService { get; set; } = null!;
 
         [JsonPropertyName("GatewayURL")]
         public string GatewayURL { get; set; } = string.Empty;

@@ -1,8 +1,21 @@
 {
-  "PrimumCoreURL": "http://localhost:5001",
-  "PrimumWebURL": "http://localhost:5002",
-  "BotCoreURL": "http://localhost:5003",
-  "PublisherURL": "http://localhost:5004",
-  "GatewayURL": "http://localhost:5002",
-  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;"
+  "PrimumCore": {
+    "SelfUrl": "https://localhost:5001",
+    "PublicUrl": "https://localhost:5001"
+  },
+  "PrimumWebAPI": {
+    "SelfUrl": "https://localhost:5002",
+    "PublicUrl": "https://localhost:5002"
+  },
+  "BotCore": {
+    "SelfUrl": "https://localhost:5003",
+    "PublicUrl": "https://localhost:5003"
+  },
+  "PublisherService": {
+    "SelfUrl": "https://localhost:5004",
+    "PublicUrl": "https://localhost:5004"
+  },
+  "GatewayURL": "https://localhost:5002",
+  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
+  "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
 }

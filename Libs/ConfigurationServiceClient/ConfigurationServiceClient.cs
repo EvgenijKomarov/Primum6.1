@@ -24,7 +24,7 @@ namespace SolutionConfiguration
         internal ConfigurationClient(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _httpClient.BaseAddress = new Uri("http://localhost:5000");
+            _httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("CONFIG_SERVICE_URL") ?? "http://localhost:5000");
         }
 
         public async Task<SolutionEnvironment> GetConfigurationAsync(CancellationToken cancellationToken = default)

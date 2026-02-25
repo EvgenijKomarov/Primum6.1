@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PublisherURL);
+builder.WebHost.UseUrls(solutionEnvironment.PublisherService.SelfUrl);
 
 // Add services to the container.
 

@@ -21,7 +21,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
     {
         services.AddTransient<ConverterToDateTimeService>();
         services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherURL, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient));
 
         services.AddHostedService<LessonCreatingExecutor>();
         services.AddHostedService<LessonWarningExecutor>();

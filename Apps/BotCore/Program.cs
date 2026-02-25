@@ -8,12 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
 builder.Services.AddSingleton<SolutionEnvironment>(sp => solutionEnvironment);
-builder.WebHost.UseUrls(solutionEnvironment.BotCoreURL);
+builder.WebHost.UseUrls(solutionEnvironment.BotCore.SelfUrl);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-builder.AddClients(solutionEnvironment.PrimumCoreURL);
+builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl);
 builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();

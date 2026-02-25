@@ -13,7 +13,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PrimumWebURL);
+builder.WebHost.UseUrls(solutionEnvironment.PrimumWebAPI.SelfUrl);
 
 builder.Services.AddControllers();
 
@@ -21,7 +21,7 @@ builder.AddAuth();
 builder.AddLogging();
 builder.AddControllers();
 builder.AddServices();
-builder.AddClients(solutionEnvironment.PrimumCoreURL);
+builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl);
 builder.AddSwagger();
 
 var app = builder.Build();

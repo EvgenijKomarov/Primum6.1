@@ -9,6 +9,9 @@ app = FastAPI(title="Config Service")
 ENV = os.getenv("ENVIRONMENT", "Development")
 CONFIG_FILE = "config.Production.json" if ENV == "Production" else "config.json"
 
+# 🔥 Читаем хост и порт из окружения с дефолтами для локальной разработки
+HOST = os.getenv("HOST", "localhost")  # В Kubernetes всегда 0.0.0.0
+PORT = int(os.getenv("PORT", 5000))   # Порт можно переопределить
 
 # загрузка конфига каждый раз (hot reload)
 def load_config() -> dict:
@@ -66,8 +69,8 @@ def health():
     return {"status": "ok"}
 
 if __name__ == "__main__":
-    host = "localhost"
-    port = 5000
+    host = HOST
+    port = PORT
     print(f"-> Starting server on http://{host}:{port} in {ENV} mode")
 
     uvicorn.run(

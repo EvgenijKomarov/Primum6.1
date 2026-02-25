@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PrimumCoreURL);
+builder.WebHost.UseUrls(solutionEnvironment.PrimumCore.SelfUrl);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.AddDI();
 builder.AddContext(solutionEnvironment.CoreDatabaseConnection);
 builder.AddProjectControllers();
-builder.AddPublishers(solutionEnvironment.PublisherURL);
+builder.AddPublishers(solutionEnvironment.PublisherService.PublicUrl);
 builder.AddLogging();
 
 var app = builder.Build();
