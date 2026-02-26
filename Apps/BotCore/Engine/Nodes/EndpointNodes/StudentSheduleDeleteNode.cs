@@ -16,7 +16,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             await client.SheduleDeleteAsync(input.UserId!.Value, int.Parse(sheduleId));
 
             input.Arguments = new List<string> { abonId };
-            return Next<StudentAbonementShedulesNode>(input);
+            return Next<StudentAbonementNode>(input);
         }
     }
 }

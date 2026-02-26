@@ -54,6 +54,8 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<StudentSheduleDeleteNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementSheduleNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementShedulesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentAbonementDeleteNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentAbonementActivateDeactivateNode, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }

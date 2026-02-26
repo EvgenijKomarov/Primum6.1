@@ -124,11 +124,29 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 🔥.
+        /// </summary>
+        public static string Fire {
+            get {
+                return ResourceManager.GetString("Fire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 🙋.
         /// </summary>
         public static string Hello {
             get {
                 return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🧊.
+        /// </summary>
+        public static string Ice {
+            get {
+                return ResourceManager.GetString("Ice", resourceCulture);
             }
         }
         

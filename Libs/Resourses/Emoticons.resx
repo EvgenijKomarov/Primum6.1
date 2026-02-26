@@ -138,8 +138,14 @@
   <data name="Course" xml:space="preserve">
     <value>🏫</value>
   </data>
+  <data name="Fire" xml:space="preserve">
+    <value>🔥</value>
+  </data>
   <data name="Hello" xml:space="preserve">
     <value>🙋</value>
+  </data>
+  <data name="Ice" xml:space="preserve">
+    <value>🧊</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>🆔</value>
