@@ -33,6 +33,9 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<TokenIterator>();
             builder.Services.AddScoped<AnonymousTokenIterator>();
             builder.Services.AddScoped<ChatSignTokenWorker>();
+            builder.Services.AddScoped<IncidentCollector>();
+            builder.Services.AddScoped<IncidentSolver>();
+            builder.Services.AddScoped<AdminProfileHelper>();
 
             return builder;
         }

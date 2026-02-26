@@ -9,14 +9,11 @@ using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class IncidentIterator(PrimumContext context)
+    public class IncidentIterator(PrimumContext context, IncidentCollector collector, IncidentSolver solver, AdminProfileHelper helper)
     {
-        private AdminProfileHelper helper = new AdminProfileHelper(context);
-
         public async Task<IEnumerable<IncidentDto>> GetIncedents(int userId)
         {
             Permission[] userPermissions = (await helper.GetIteratingUser(userId)).AdminProfile.Permissions.Select(x => x.Permission).ToArray();
-            IncidentCollector collector = new IncidentCollector(context);
 
             return await collector.GetIncedents(userPermissions);
         }
@@ -83,7 +80,6 @@ namespace PrimumCore.Services.Iterators
         {
             var iteratingUserAdminProfile = (await helper.GetIteratingUser(userId)).AdminProfile;
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
-            IncidentSolver solver = new IncidentSolver(context);
 
             var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto, userId);
             return subjectId;
