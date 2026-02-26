@@ -88,6 +88,11 @@ namespace PrimumCore.Services.Iterators
             return lesson;
         }
 
+        public async Task<IEnumerable<LessonDto>> GetTeacherFutureLessons(int teacherId)
+        {
+            return (await GetTeacherLessons(teacherId)).Where(x => x.DateTime > DateTime.Now).OrderBy(x => x.DateTime);
+        }
+
         public async Task<IEnumerable<LessonDto>> GetStudentLessons(int studentId)
         {
             var user = await context.Set<User>()
@@ -124,6 +129,11 @@ namespace PrimumCore.Services.Iterators
                     Grade = l.Grading is null ? null : l.Grading.GetFinalGrade()
                 })
                 .ToArray();
+        }
+
+        public async Task<IEnumerable<LessonDto>> GetStudentFutureLessons(int studentId)
+        {
+            return (await GetStudentLessons(studentId)).Where(x => x.DateTime > DateTime.Now).OrderBy(x => x.DateTime);
         }
 
         public async Task<LessonDto> GetStudentLesson(int studentId, int lessonId)

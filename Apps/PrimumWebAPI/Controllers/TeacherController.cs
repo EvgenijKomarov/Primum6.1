@@ -21,6 +21,10 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<IEnumerable<LessonDto>>> GetLessons()
             => Ok(await client.LessonsAsync(User.GetUserId()));
 
+        [HttpGet("future-lessons")]
+        public async Task<ActionResult<IEnumerable<LessonDto>>> GetFututreLessons()
+            => Ok(await client.FutureLessonsAsync(User.GetUserId()));
+
         [HttpGet("lesson/{lessonId}")]
         public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int lessonId)
             => Ok(await client.LessonAsync(User.GetUserId(), lessonId));

@@ -12,9 +12,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var lessons = (await client.LessonsAsync(input.UserId!.Value))
-                .Where(x => x.DateTime > DateTime.Now)
-                .OrderBy(x => x.DateTime);
+            var lessons = await client.LessonsAsync(input.UserId!.Value);
             StringBuilder sb = new StringBuilder();
             foreach (var lesson in lessons)
             {
@@ -23,7 +21,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             }
             return Finish(new EngineOutputMessage
             {
-                Message = lessons.Count() == 0 ? "Занятий нет" : sb.ToString(),
+                Message = lessons.Count() == 0 ? $"{Emoticons.Lesson}Занятий в ближайшее время не запланировано" : sb.ToString(),
                 Buttons = new EngineOutputButton[]
                 {
                     new EngineOutputButton
