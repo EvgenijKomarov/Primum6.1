@@ -35,7 +35,7 @@ namespace Pushables.Notifications
                 new ChatBotNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{Emoticons.Abonement}Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} был удалён",
+                    Text = $"{Emoticons.Student}Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
                 }
             ];
         }
@@ -46,7 +46,7 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{Emoticons.Abonement}Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} был удалён",
+                    Text = $"{Emoticons.Student}Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
                 }
             ];
         }

@@ -109,6 +109,11 @@ namespace PrimumCore.Services.Iterators
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
                 .ThenInclude(s => s.AbonementShedules)
+                .Include(u => u.StudentProfile)
+                .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Course)
+                .ThenInclude(s => s.Teacher)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
@@ -121,6 +126,16 @@ namespace PrimumCore.Services.Iterators
             abonement.AbonementStatus = AbonementStatus.Deleted;
             abonement.AbonementShedules.Clear();
             await context.SaveChangesAsync();
+            await publisher.Push(new AbonementChangeStatusNotification
+            {
+                StudentName = user.DisplayName,
+                StudentUserId = user.Id,
+                TeacherName = abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = abonement.Course.Teacher.User.Id,
+                CourseName = abonement.Course.Name,
+                AbonementId = abonement.AbonementId,
+                AbonementStatus = abonement.AbonementStatus.ToString()
+            });
             return abonement.AbonementId;
         }
 
@@ -129,6 +144,9 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(u => u.StudentProfile)
                 .ThenInclude(s => s.Abonements)
+                .ThenInclude(s => s.Course)
+                .ThenInclude(s => s.Teacher)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
@@ -140,6 +158,16 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Freezed;
             await context.SaveChangesAsync();
+            await publisher.Push(new AbonementChangeStatusNotification
+            {
+                StudentName = user.DisplayName,
+                StudentUserId = user.Id,
+                TeacherName = abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = abonement.Course.Teacher.User.Id,
+                CourseName = abonement.Course.Name,
+                AbonementId = abonement.AbonementId,
+                AbonementStatus = abonement.AbonementStatus.ToString()
+            });
             return abonement.AbonementId;
         }
 
