@@ -214,6 +214,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 🗑.
+        /// </summary>
+        public static string Trash {
+            get {
+                return ResourceManager.GetString("Trash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 👨‍🦰.
         /// </summary>
         public static string User {

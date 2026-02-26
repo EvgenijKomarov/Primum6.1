@@ -45,6 +45,9 @@ namespace PrimumCore.Services.Iterators
             if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
             var course = await context.Set<Course>()
+                .Include(x => x.CourseTheme)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.CourseId == courseId);
             if (course is null) { throw new NotFoundException("Course"); }
 

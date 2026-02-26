@@ -25,6 +25,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                     {
                         Text = $"{Emoticons.Lesson}Мои занятия",
                         EndpointNode = typeof(StudentLessonsNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Abonement}Мои абонементы",
+                        EndpointNode = typeof(StudentAbonementsNode)
                     }
                 }
             });

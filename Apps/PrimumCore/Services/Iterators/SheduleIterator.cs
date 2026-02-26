@@ -165,33 +165,23 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> DeleteStudentShedule(int studentId, int abonementSheduleId)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(s => s.Course)
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(s => s.AbonementShedules)
-                .ThenInclude(s => s.TeacherShedule)
-                .ThenInclude(s => s.Teacher)
-                .ThenInclude(s => s.User)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
-
-            var abonementShedule = user
-                .StudentProfile
-                .Abonements
-                .SelectMany(x => x.AbonementShedules)
-                .FirstOrDefault(x => x.AbonementSheduleId == abonementSheduleId);
+            var abonementShedule = await context.Set<AbonementShedule>()
+                .Include(x => x.TeacherShedule)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.AbonementSheduleId == abonementSheduleId);
             if (abonementShedule is null) { throw new NotFoundException("Shedule"); }
+            if (abonementShedule.Abonement.Student.User.Id != studentId) { throw new BusinessLogicException("Only owner can delete shedule"); }
 
-            abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
-            await context.SaveChangesAsync();
-
-            await publisher.Push(new DeleteAbonementSheduleNotification
+            var notification = new DeleteAbonementSheduleNotification
             {
-                StudentName = user.DisplayName,
-                StudentUserId = user.Id,
+                StudentName = abonementShedule.Abonement.Student.User.DisplayName,
+                StudentUserId = abonementShedule.Abonement.Student.User.Id,
                 TeacherName = abonementShedule.TeacherShedule.Teacher.User.DisplayName,
                 TeacherUserId = abonementShedule.TeacherShedule.Teacher.User.Id,
                 CourseName = abonementShedule.Abonement.Course.Name,
@@ -199,8 +189,11 @@ namespace PrimumCore.Services.Iterators
                 AbonementSheduleId = abonementShedule.AbonementSheduleId,
                 DayOfWeek = abonementShedule.TeacherShedule.DayOfWeek.ToString(),
                 Time = abonementShedule.TeacherShedule.Time
-            });
+            };
+            abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
+            await context.SaveChangesAsync();
 
+            await publisher.Push(notification);
             return abonementShedule.AbonementSheduleId;
         }
     }

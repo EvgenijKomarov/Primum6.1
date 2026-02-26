@@ -81,8 +81,7 @@ namespace CoreDBIterator.Workers
                 {
                     lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
-                    context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
-                    await publisher.Push(new LessonFailureNotification()
+                    var notification = new LessonFailureNotification()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,
@@ -92,7 +91,9 @@ namespace CoreDBIterator.Workers
                         AbonementId = lesson.Abonement.AbonementId,
                         LessonId = lesson.LessonId,
                         DateTime = lesson.DateTime
-                    });
+                    };
+                    context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
+                    await publisher.Push(notification);
                     logger?.LogInformation($"Lesson {lesson.LessonId} not happened and deleted abonement");
                 }
                 else //Занятие пропущено по сторонним причинам
