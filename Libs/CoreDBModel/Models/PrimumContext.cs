@@ -78,7 +78,7 @@ public partial class PrimumContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.TeacherShedule)
-                .WithOne()
+                .WithOne(d => d.AbonementShedule)
                 .HasForeignKey<AbonementShedule>(d => d.TeacherSheduleId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
