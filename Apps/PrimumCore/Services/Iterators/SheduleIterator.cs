@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Constants;
+using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
@@ -14,31 +15,27 @@ namespace PrimumCore.Services.Iterators
     {
         public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable)
         {
-            var user = await context.Set<User>()
-                .Include(x => x.TeacherProfile)
-                .ThenInclude(x => x.TeacherShedules)
-                .ThenInclude(x => x.AbonementShedule)
+            var shedules = await context.Set<TeacherShedule>()
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .Include(x => x.AbonementShedule)
                 .ThenInclude(x => x.Abonement)
                 .ThenInclude(x => x.Student)
                 .ThenInclude(x => x.User)
-                .Include(x => x.TeacherProfile)
-                .ThenInclude(x => x.TeacherShedules)
-                .ThenInclude(x => x.AbonementShedule)
+                .Include(x => x.AbonementShedule)
                 .ThenInclude(x => x.Abonement)
                 .ThenInclude(x => x.Course)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-
-            return user.TeacherProfile
-                .TeacherShedules
+                .Where(x => x.Teacher.User.Id == teacherId)
                 .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherSheduleAvailable)
+                .ToArrayAsync();
+
+            return shedules
                 .Select(x => new TeacherSheduleDto
                 {
                     TeacherSheduleId = x.TeacherSheduleId,
                     DayOfWeek = x.DayOfWeek,
                     Time = x.Time,
-                    // simpler busy check to avoid nested-member evaluation NREs
-                    IsBusy = x.AbonementShedule != null,
+                    IsAvailable = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
                     StudentName = x.AbonementShedule?.Abonement?.Student?.User?.DisplayName,
                     StudentId = x.AbonementShedule?.Abonement?.Student?.User?.Id,
                     CourseName = x.AbonementShedule?.Abonement?.Course?.Name,

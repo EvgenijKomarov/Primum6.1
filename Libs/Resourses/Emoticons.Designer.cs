@@ -124,11 +124,29 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на ⬇️.
+        /// </summary>
+        public static string Down {
+            get {
+                return ResourceManager.GetString("Down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 🔥.
         /// </summary>
         public static string Fire {
             get {
                 return ResourceManager.GetString("Fire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 💯.
+        /// </summary>
+        public static string Grade {
+            get {
+                return ResourceManager.GetString("Grade", resourceCulture);
             }
         }
         
@@ -178,6 +196,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 🎁.
+        /// </summary>
+        public static string Promocode {
+            get {
+                return ResourceManager.GetString("Promocode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ➡️.
         /// </summary>
         public static string Right {
@@ -223,6 +250,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 💬.
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 🕘.
         /// </summary>
         public static string Time {
@@ -237,6 +273,15 @@ namespace Resourses {
         public static string Trash {
             get {
                 return ResourceManager.GetString("Trash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ⬆️.
+        /// </summary>
+        public static string Up {
+            get {
+                return ResourceManager.GetString("Up", resourceCulture);
             }
         }
         

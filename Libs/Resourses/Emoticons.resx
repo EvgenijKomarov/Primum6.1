@@ -138,8 +138,14 @@
   <data name="Course" xml:space="preserve">
     <value>🏫</value>
   </data>
+  <data name="Down" xml:space="preserve">
+    <value>⬇️</value>
+  </data>
   <data name="Fire" xml:space="preserve">
     <value>🔥</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>💯</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>🙋</value>
@@ -156,6 +162,9 @@
   <data name="Lesson" xml:space="preserve">
     <value>🕘</value>
   </data>
+  <data name="Promocode" xml:space="preserve">
+    <value>🎁</value>
+  </data>
   <data name="Right" xml:space="preserve">
     <value>➡️</value>
   </data>
@@ -171,11 +180,17 @@
   <data name="Teacher" xml:space="preserve">
     <value>👨‍🏫</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>💬</value>
+  </data>
   <data name="Time" xml:space="preserve">
     <value>🕘</value>
   </data>
   <data name="Trash" xml:space="preserve">
     <value>🗑</value>
+  </data>
+  <data name="Up" xml:space="preserve">
+    <value>⬆️</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>👨‍🦰</value>

@@ -1,0 +1,66 @@
+﻿using BotCore.Engine.Entities;
+using BotCore.Engine.Entities.Outputs;
+using BotCore.Engine.Nodes.EndpointNodes;
+using CoreDBModel.Models;
+using Engine;
+using Engine.Nodes;
+using Resourses;
+
+namespace BotCore.Engine.Abstractions
+{
+    public abstract class ScrollableEndpointNode<TItem>(string endpointId) : EndpointNode<DataBuffer, EngineOutputMessage>(endpointId)
+    {
+        public abstract Task<string> ItemInfo(TItem item, DataBuffer buffer);
+        public abstract Task<IEnumerable<TItem>> GetEnumerable(DataBuffer buffer);
+        public abstract Task<IEnumerable<EngineOutputButton>> ItemButtons(TItem item, DataBuffer buffer);
+        public abstract Task<EngineOutputButton> BackButton(DataBuffer buffer);
+        public abstract Task<string> IfItemsEmptyText(DataBuffer buffer);
+
+        public async sealed override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
+        {
+            var indexRaw = input.Arguments.FirstOrDefault() ?? "0";
+            var index = int.Parse(indexRaw);
+
+            var items = await GetEnumerable(input);
+            if (!items.Any())
+            {
+                return Finish(new EngineOutputMessage
+                {
+                    Message = await IfItemsEmptyText(input),
+                    Buttons = new List<EngineOutputButton> { await BackButton(input) }
+                });
+            }
+
+
+            var item = items.ElementAt(index);
+
+            var buttons = new List<EngineOutputButton>();
+            if (index != 0)
+            {
+                buttons.Add(new EngineOutputButton
+                {
+                    Text = Emoticons.Up,
+                    EndpointNode = GetType(),
+                    Args = new List<string> { (index - 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
+                });
+            }
+            buttons.AddRange(await ItemButtons(item, input));
+            if (index != items.Count() - 1)
+            {
+                buttons.Add(new EngineOutputButton
+                {
+                    Text = Emoticons.Down,
+                    EndpointNode = GetType(),
+                    Args = new List<string> { (index + 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
+                });
+            }
+            buttons.Add(await BackButton(input));
+
+            return Finish(new EngineOutputMessage
+            {
+                Message = await ItemInfo(item, input),
+                Buttons = buttons
+            });
+        }
+    }
+}

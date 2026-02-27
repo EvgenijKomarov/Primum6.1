@@ -14,7 +14,7 @@ namespace CoreConnection.DTOs
 
         public required int Time { get; set; }
 
-        public required bool IsBusy { get; set; }
+        public required bool IsAvailable { get; set; }
 
         public required string? StudentName { get; set; }
 

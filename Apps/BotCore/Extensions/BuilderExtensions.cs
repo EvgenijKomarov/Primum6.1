@@ -48,7 +48,8 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<StudentProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherLessonsNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentFutureLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentAllLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentSheduleDeleteNode, DataBuffer, EngineOutputMessage>();
@@ -56,6 +57,11 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<StudentAbonementShedulesNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementDeleteNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementActivateDeactivateNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentBoughtPromocodesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentSubscribeCourseNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentExploreTeacherShedulesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentExploreCoursesByThemeNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentExploreThemesNode, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }
