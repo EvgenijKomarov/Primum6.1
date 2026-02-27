@@ -26,6 +26,7 @@ namespace PrimumCore.Services.Iterators
                 {
                     CourseId = x.CourseId,
                     Name = x.Name,
+                    About = x.About,
                     TeacherName = x.Teacher.User.DisplayName,
                     CourseThemeName = x.CourseTheme.ThemeName,
                     CourseThemeId = x.CourseThemeId,
@@ -65,6 +66,7 @@ namespace PrimumCore.Services.Iterators
                     CourseThemeId = x.CourseThemeId,
                     TeacherId = x.Teacher.User.Id,
                     Price = x.Price,
+                    About = x.About,
                     MaxLessons = x.MaxLessons,
                     FreeLessons = x.FreeLessons,
                     TeacherAbout = x.Teacher.About,
@@ -87,6 +89,7 @@ namespace PrimumCore.Services.Iterators
                 {
                     CourseId = x.CourseId,
                     Name = x.Name,
+                    About = x.About,
                     TeacherName = x.Teacher.User.DisplayName,
                     CourseThemeName = x.CourseTheme.ThemeName,
                     CourseThemeId = x.CourseThemeId,
@@ -125,7 +128,7 @@ namespace PrimumCore.Services.Iterators
             return course.CourseId;
         }
 
-        public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto)
+        public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto, string about)
         {
             var user = await context.Set<User>()
                 .Include(u => u.TeacherProfile)
@@ -141,7 +144,8 @@ namespace PrimumCore.Services.Iterators
                 Price = courseDto.Price,
                 MaxLessons = courseDto.MaxLessons,
                 FreeLessons = courseDto.FreeLessons,
-                CourseThemeId = courseDto.CourseThemeId
+                CourseThemeId = courseDto.CourseThemeId,
+                About = about
             };
 
             user.TeacherProfile.Courses.Add(course);

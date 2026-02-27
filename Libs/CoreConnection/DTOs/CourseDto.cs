@@ -17,6 +17,8 @@ namespace CoreConnection.DTOs
 
         public required string CourseThemeName { get; set; }
 
+        public required string About { get; set; }
+
         public required int CourseThemeId {  get; set; }
 
         public required int TeacherId {  get; set; }

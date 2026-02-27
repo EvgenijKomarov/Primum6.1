@@ -66,8 +66,8 @@ namespace PrimumCore.Controllers
             => Ok(await courseIterator.EditCourse(userId, courseId, courseDto));
 
         [HttpPost("course-create")]
-        public async Task<ActionResult<int>> CreateCourse([FromRoute] int userId, [FromBody] CourseInputDto courseDto) 
-            => Ok(await courseIterator.CreateCourse(userId, courseDto));
+        public async Task<ActionResult<int>> CreateCourse([FromRoute] int userId, [FromQuery] string about, [FromBody] CourseInputDto courseDto) 
+            => Ok(await courseIterator.CreateCourse(userId, courseDto, about));
 
         [HttpPatch("course-activate/{courseId}")]
         public async Task<ActionResult<int>> ActivateCourse([FromRoute] int userId, [FromRoute] int courseId) 

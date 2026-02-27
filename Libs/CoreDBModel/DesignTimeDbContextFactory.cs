@@ -13,8 +13,7 @@ namespace CoreDBModel
         {
             var optionsBuilder = new DbContextOptionsBuilder<PrimumContext>();
             // Временная строка подключения для генерации миграций
-            optionsBuilder.UseSqlServer("Server=.;Database=Temp;Trusted_Connection=True;",
-                b => b.MigrationsAssembly("Database.Migrator"));
+            optionsBuilder.UseSqlServer("Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;");
 
             return new PrimumContext(optionsBuilder.Options);
         }

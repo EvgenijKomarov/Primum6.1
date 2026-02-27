@@ -62,8 +62,8 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.CourseEditAsync(User.GetUserId(), courseId, courseDto));
 
         [HttpPost("course-create")]
-        public async Task<ActionResult<int>> CreateCourse([FromBody] CourseInputDto courseDto)
-            => Ok(await client.CourseCreateAsync(User.GetUserId(), courseDto));
+        public async Task<ActionResult<int>> CreateCourse([FromBody] CourseInputDto courseDto, [FromQuery] string about)
+            => Ok(await client.CourseCreateAsync(User.GetUserId(), about, courseDto));
 
         [HttpPatch("course-activate/{courseId}")]
         public async Task<ActionResult<int>> ActivateCourse([FromRoute] int courseId)

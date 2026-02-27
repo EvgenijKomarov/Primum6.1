@@ -5791,7 +5791,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> CourseCreateAsync(int userId, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> CourseCreateAsync(int userId, string? about = null, CourseInputDto? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5815,6 +5815,12 @@ namespace CoreConnection
                     urlBuilder_.Append("api/teacher/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append("/course-create");
+                    urlBuilder_.Append('?');
+                    if (about != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("about")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(about, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

@@ -10,6 +10,8 @@ public partial class Course
 
     public string Name { get; set; } = null!;
 
+    public string About { get; set; } = null!;
+
     public int TeacherId { get; set; }
 
     public int Price { get; set; }

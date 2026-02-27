@@ -15,6 +15,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Cash}Стоимость урока:{item.Price}\n" +
                 $"{Emoticons.Lesson}Пробные уроки:{item.FreeLessons}\n" +
                 $"{Emoticons.Lesson}Максимум уроков:{item.MaxLessons}\n" +
+                $"О курсе: {item.About}" +
                 $"\n" +
                 $"{Emoticons.Teacher}Преподаватель: {item.TeacherName}\n" +
                 $"О преподавателе: {item.TeacherAbout}";
