@@ -1,12 +1,10 @@
 ﻿using CoreConnection.DTOs.Inputs;
-using CoreConnection.Enums;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +15,14 @@ namespace UnitTests.Utilities
 {
     public class IncidentSolverTests
     {
-        private Mock<IPrimumContext> _mockContext;
+        private Mock<PrimumContext> _mockContext;
         private IncidentSolver _solver;
         private const int AdminProfileId = 999;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _solver = new IncidentSolver(_mockContext.Object);
             _mockContext.Setup(x => x.Set<IncidentLog>())
                 .ReturnsDbSet(new List<IncidentLog>());
@@ -33,28 +31,28 @@ namespace UnitTests.Utilities
         #region Course Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.SendToAdministrator,
+            IncidentDecision.SendToAdministrator,
             Permission.ModerateCourses,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncidentDecisionDto.SendToManager,
+            IncidentDecision.SendToManager,
             Permission.AdministrateCourses,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.SendToManager,
+            IncidentDecision.SendToManager,
             Permission.ModerateCourses,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedManagerReview,
-            IncidentDecisionDto.Approve,
+            IncidentDecision.Approve,
             Permission.ApproveCourses,
             ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.Delete,
+            IncidentDecision.Delete,
             Permission.ModerateCourses,
             null)] // удаление — статус не меняется (сущность удаляется)
         public async Task SolveIncident_Course_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncidentDecisionDto decision,
+            IncidentDecision decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -77,7 +75,7 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Course,
+                Meaning = IncidentMeaning.Course,
                 Decision = decision,
                 ObjectId = 301,
                 DecisionExplanation = "Test course"
@@ -93,7 +91,7 @@ namespace UnitTests.Utilities
             }
 
             // Проверка удаления
-            if (decision == IncidentDecisionDto.Delete)
+            if (decision == IncidentDecision.Delete)
             {
                 _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(abonementShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Lesson>().RemoveRange(lessons), Times.Once);
@@ -113,28 +111,28 @@ namespace UnitTests.Utilities
         #region Teacher Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.SendToAdministrator,
+            IncidentDecision.SendToAdministrator,
             Permission.ModerateTeachers,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.SendToManager,
+            IncidentDecision.SendToManager,
             Permission.ModerateTeachers,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncidentDecisionDto.SendToManager,
+            IncidentDecision.SendToManager,
             Permission.AdministrateTeachers,
             ApproveStatus.NeedManagerReview)]
         [TestCase(ApproveStatus.NeedManagerReview,
-            IncidentDecisionDto.Approve,
+            IncidentDecision.Approve,
             Permission.ApproveTeachers,
             ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.Delete,
+            IncidentDecision.Delete,
             Permission.ModerateTeachers,
             null)]
         public async Task SolveIncident_Teacher_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncidentDecisionDto decision,
+            IncidentDecision decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -163,7 +161,7 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Teacher,
+                Meaning = IncidentMeaning.Teacher,
                 Decision = decision,
                 ObjectId = 101,
                 DecisionExplanation = "Test teacher"
@@ -178,7 +176,7 @@ namespace UnitTests.Utilities
                 Assert.That(user.TeacherProfile.ApproveStatus, Is.EqualTo(expectedStatus.Value));
             }
 
-            if (decision == IncidentDecisionDto.Delete)
+            if (decision == IncidentDecision.Delete)
             {
                 _mockContext.Verify(x => x.Set<TeacherShedule>().RemoveRange(teacherShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Course>().RemoveRange(courses), Times.Once);
@@ -197,20 +195,20 @@ namespace UnitTests.Utilities
         #region Student Cases
 
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.SendToAdministrator,
+            IncidentDecision.SendToAdministrator,
             Permission.ModerateStudents,
             ApproveStatus.NeedAdministratorReview)]
         [TestCase(ApproveStatus.NeedAdministratorReview,
-            IncidentDecisionDto.Approve,
+            IncidentDecision.Approve,
             Permission.AdministrateStudents,
             ApproveStatus.Approved)]
         [TestCase(ApproveStatus.NeedModeratorReview,
-            IncidentDecisionDto.Delete,
+            IncidentDecision.Delete,
             Permission.ModerateStudents,
             null)]
         public async Task SolveIncident_Student_HandlesAllDecisions(
             ApproveStatus initialStatus,
-            IncidentDecisionDto decision,
+            IncidentDecision decision,
             Permission requiredPermission,
             ApproveStatus? expectedStatus)
         {
@@ -247,7 +245,7 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Student,
+                Meaning = IncidentMeaning.Student,
                 Decision = decision,
                 ObjectId = 201,
                 DecisionExplanation = "Test student"
@@ -262,7 +260,7 @@ namespace UnitTests.Utilities
                 Assert.That(user.StudentProfile.ApproveStatus, Is.EqualTo(expectedStatus.Value));
             }
 
-            if (decision == IncidentDecisionDto.Delete)
+            if (decision == IncidentDecision.Delete)
             {
                 _mockContext.Verify(x => x.Set<AbonementShedule>().RemoveRange(abonementShedules), Times.Once);
                 _mockContext.Verify(x => x.Set<Lesson>().RemoveRange(lessons), Times.Once);
@@ -281,10 +279,10 @@ namespace UnitTests.Utilities
 
         #region Lesson Cases
 
-        [TestCase(IncidentDecisionDto.Delete, Permission.InspectMissedLessons, null)]
-        [TestCase(IncidentDecisionDto.Revisioned, Permission.InspectMissedLessons, LessonStatus.MissedWithoutReason)]
+        [TestCase(IncidentDecision.Delete, Permission.InspectMissedLessons, null)]
+        [TestCase(IncidentDecision.Revisioned, Permission.InspectMissedLessons, LessonStatus.MissedWithoutReason)]
         public async Task SolveIncident_Lesson_HandlesDelete(
-            IncidentDecisionDto decision,
+            IncidentDecision decision,
             Permission requiredPermission,
             LessonStatus? expectedStatus)
         {
@@ -294,7 +292,7 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Lesson,
+                Meaning = IncidentMeaning.Lesson,
                 Decision = decision,
                 ObjectId = 401,
                 DecisionExplanation = "Missed lesson"
@@ -303,7 +301,7 @@ namespace UnitTests.Utilities
             var result = await _solver.SolveIncident(AdminProfileId, new[] { requiredPermission }, dto, 1);
 
             Assert.That(result, Is.EqualTo(401));
-            if (decision is IncidentDecisionDto.Delete)
+            if (decision is IncidentDecision.Delete)
             {
                 _mockContext.Verify(x => x.Set<Lesson>().Remove(It.Is<Lesson>(l => l.LessonId == 401)), Times.Once);
             }
@@ -331,8 +329,8 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Course,
-                Decision = IncidentDecisionDto.SendToAdministrator,
+                Meaning = IncidentMeaning.Course,
+                Decision = IncidentDecision.SendToAdministrator,
                 ObjectId = 301,
                 DecisionExplanation = "test"
             };
@@ -353,8 +351,8 @@ namespace UnitTests.Utilities
         {
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Unknown,
-                Decision = IncidentDecisionDto.Approve,
+                Meaning = IncidentMeaning.Unknown,
+                Decision = IncidentDecision.Approve,
                 ObjectId = 1,
                 DecisionExplanation = "Unknown"
             };
@@ -370,8 +368,8 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Course,
-                Decision = IncidentDecisionDto.SendToAdministrator,
+                Meaning = IncidentMeaning.Course,
+                Decision = IncidentDecision.SendToAdministrator,
                 ObjectId = 123,
                 DecisionExplanation = "missing"
             };
@@ -387,8 +385,8 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Teacher,
-                Decision = IncidentDecisionDto.SendToAdministrator,
+                Meaning = IncidentMeaning.Teacher,
+                Decision = IncidentDecision.SendToAdministrator,
                 ObjectId = 321,
                 DecisionExplanation = "missing"
             };
@@ -404,8 +402,8 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Student,
-                Decision = IncidentDecisionDto.SendToAdministrator,
+                Meaning = IncidentMeaning.Student,
+                Decision = IncidentDecision.SendToAdministrator,
                 ObjectId = 222,
                 DecisionExplanation = "missing"
             };
@@ -421,8 +419,8 @@ namespace UnitTests.Utilities
 
             var dto = new IncidentDecisionInputDto
             {
-                Meaning = IncidentMeaningDto.Lesson,
-                Decision = IncidentDecisionDto.Delete,
+                Meaning = IncidentMeaning.Lesson,
+                Decision = IncidentDecision.Delete,
                 ObjectId = 555,
                 DecisionExplanation = "missing"
             };

@@ -1,10 +1,8 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +13,13 @@ namespace UnitTests.Utilities
 {
     public class IncidentCollectorTests
     {
-        private Mock<IPrimumContext> _mockContext;
+        private Mock<PrimumContext> _mockContext;
         private IncidentCollector _collector;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _collector = new IncidentCollector(_mockContext.Object);
 
             _mockContext.Setup(x => x.Set<IncidentLog>())
@@ -58,8 +56,8 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(101));
-            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Teacher));
-            Assert.That(incident.Status, Is.EqualTo(IncidentStatusDto.NeedModeration));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaning.Teacher));
+            Assert.That(incident.Status, Is.EqualTo(IncidentStatus.NeedModeration));
             Assert.That(incident.CommonInfo, Does.Contain("Иванов"));
             Assert.That(incident.Decisions, Is.Not.Empty);
         }
@@ -92,7 +90,7 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(201));
-            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Student));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaning.Student));
             Assert.That(incident.CommonInfo, Does.Contain("Петрова"));
         }
 
@@ -135,7 +133,7 @@ namespace UnitTests.Utilities
             Assert.That(result.Count, Is.EqualTo(1));
             var incident = result.First();
             Assert.That(incident.ObjectId, Is.EqualTo(501));
-            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaningDto.Lesson));
+            Assert.That(incident.Meaning, Is.EqualTo(IncidentMeaning.Lesson));
             Assert.That(incident.CommonInfo, Does.Contain("15:00 27:01:2026"));
         }
 

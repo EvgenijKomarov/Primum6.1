@@ -1,12 +1,10 @@
 ﻿using CoreConnection.DTOs.Inputs;
-using CoreConnection.Enums;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +15,13 @@ namespace UnitTests.Iterators
 {
     public class GradingIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private GradingIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new GradingIterator(_mockContext.Object);
         }
 
@@ -63,10 +61,10 @@ namespace UnitTests.Iterators
 
             var dto = new GradingInputDto
             {
-                HomeworkGrade = (Grade)4,
-                LessonActivityGrade = (Grade)5,
-                RepetitionOfMaterialGrade = (Grade)3,
-                StudyInitiativeGrade = (Grade)4
+                HomeworkGrade = (Grading)4,
+                LessonActivityGrade = (Grading)5,
+                RepetitionOfMaterialGrade = (Grading)3,
+                StudyInitiativeGrade = (Grading)4
             };
 
             // Act

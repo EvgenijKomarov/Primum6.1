@@ -1,28 +1,29 @@
-using CoreConnection.Notifications;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
+using Pushables;
+using Pushables.Events;
+using Pushables.Notifications;
 
 namespace UnitTests.Iterators
 {
     public class TokenIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext;
+        private Mock<PrimumContext> _mockContext;
         private Mock<RandomStringGenerator> _mockRandomGenerator;
-        private Mock<IPublisher> _mockPublisher;
+        private Mock<PublisherService> _mockPublisher;
         private TokenIterator _service;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _mockRandomGenerator = new Mock<RandomStringGenerator>();
-            _mockPublisher = new Mock<IPublisher>();
+            _mockPublisher = new Mock<PublisherService>(string.Empty);
 
             _service = new TokenIterator(_mockContext.Object, _mockRandomGenerator.Object, _mockPublisher.Object);
         }
@@ -66,10 +67,10 @@ namespace UnitTests.Iterators
             Assert.That(createdToken.Meaning, Is.EqualTo(TokenMeaning.EmailVerification));
             Assert.That(createdToken.LifeTime, Is.GreaterThan(DateTime.Now.AddHours(11))); // ~12h
 
-            _mockPublisher.Verify(x => x.PublishAsync(It.Is<UserVerificationNotification>(n =>
+            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationNotification>(n =>
                 n.EmailAdress == newEmail &&
                 n.VerificationHash == tokenValue &&
-                n.Userid == userId)), Times.Once);
+                n.UserId == userId)), Times.Once);
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -110,10 +111,10 @@ namespace UnitTests.Iterators
             Assert.That(createdToken.Meaning, Is.EqualTo(TokenMeaning.EmailVerification));
             Assert.That(createdToken.LifeTime, Is.GreaterThan(DateTime.Now.AddHours(11))); // ~12h
 
-            _mockPublisher.Verify(x => x.PublishAsync(It.Is<UserVerificationNotification>(n =>
+            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationNotification>(n =>
                 n.EmailAdress == email &&
                 n.VerificationHash == tokenValue &&
-                n.Userid == userId)), Times.Once);
+                n.UserId == userId)), Times.Once);
 
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -128,7 +129,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.SendEmailVerification(999, null));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         #endregion
@@ -168,7 +169,7 @@ namespace UnitTests.Iterators
             Assert.That(result, Is.EqualTo(userId));
             Assert.That(user.IsMailChecked, Is.True);
             Assert.That(user.VerificationTokens.First().IsUsed, Is.True);
-            _mockPublisher.Verify(x => x.PublishAsync(It.Is<UserVerifiedEmailNotification>(n =>
+            _mockPublisher.Verify(x => x.Push(It.Is<UserVerifiedEmailEvent>(n =>
                 n.EmailAdress == user.MailAdress &&
                 n.Userid == userId)), Times.Once);
 
@@ -185,7 +186,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.ConfirmToken(999, "any"));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         [Test]
@@ -203,7 +204,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<NotFoundException>(async () =>
                 await _service.ConfirmToken(123, "nonexistent"));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         [Test]
@@ -230,7 +231,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _service.ConfirmToken(123, "old_token"));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         [Test]
@@ -257,7 +258,7 @@ namespace UnitTests.Iterators
             // Act & Assert
             Assert.ThrowsAsync<BusinessLogicException>(async () =>
                 await _service.ConfirmToken(123, "used_token"));
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         #endregion

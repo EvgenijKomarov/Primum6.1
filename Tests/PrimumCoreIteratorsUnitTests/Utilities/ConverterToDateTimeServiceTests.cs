@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Common.Utilities;
 
 namespace UnitTests.Utilities
 {
@@ -18,7 +19,7 @@ namespace UnitTests.Utilities
         {
             public DateTime FixedNow { get; set; }
             public TestableConverterToDateTimeService(IConfiguration config, DateTime fixedNow)
-                : base(config)
+                : base()
             {
                 FixedNow = fixedNow;
             }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Common.Utilities;
+using Microsoft.Extensions.Logging;
 using Moq;
 using PrimumCore.Services.Utilities;
 using System;

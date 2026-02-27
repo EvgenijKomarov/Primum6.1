@@ -18,7 +18,7 @@ namespace CoreDBIterator.Workers
             }
         }
 
-        protected async Task Action()
+        public async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();

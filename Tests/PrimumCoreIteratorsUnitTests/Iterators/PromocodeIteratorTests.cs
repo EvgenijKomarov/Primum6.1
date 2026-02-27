@@ -1,9 +1,9 @@
 ﻿using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
 using System;
 using System.Collections.Generic;
@@ -15,13 +15,13 @@ namespace UnitTests.Iterators
 {
     public class PromocodeIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private PromocodeIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new PromocodeIterator(_mockContext.Object);
         }
 

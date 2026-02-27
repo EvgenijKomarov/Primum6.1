@@ -1,8 +1,8 @@
-﻿using Moq;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ namespace UnitTests.Utilities
 {
     public class AdminProfileHelperTests
     {
-        private Mock<IPrimumContext> _mockContext;
+        private Mock<PrimumContext> _mockContext;
         private AdminProfileHelper _helper;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _helper = new AdminProfileHelper(_mockContext.Object);
         }
 

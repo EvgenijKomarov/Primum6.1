@@ -1,12 +1,12 @@
-﻿using CoreConnection.Notifications;
+﻿using CoreDBIterator.Workers;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
-using PrimumCore.BackgroundWorkers.Executors;
-using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
-using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,23 +19,23 @@ namespace UnitTests.BackgroundWorkers
     {
         private Mock<IServiceScopeFactory> _mockScopeFactory = null!;
         private Mock<IServiceProvider> _mockServiceProvider = null!;
-        private Mock<IPrimumContext> _mockContext = null!;
-        private Mock<IPublisher> _mockPublisher = null!;
-        private Mock<ILogger> _mockLogger = null!;
+        private Mock<PrimumContext> _mockContext = null!;
+        private Mock<PublisherService> _mockPublisher = null!;
+        private Mock<ILogger<LessonWarningExecutor>> _mockLogger = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockLogger = new Mock<ILogger>();
-            _mockContext = new Mock<IPrimumContext>();
-            _mockPublisher = new Mock<IPublisher>();
+            _mockLogger = new Mock<ILogger<LessonWarningExecutor>>();
+            _mockContext = new Mock<PrimumContext>();
+            _mockPublisher = new Mock<PublisherService>();
 
             _mockServiceProvider = new Mock<IServiceProvider>();
             _mockServiceProvider
-                .Setup(x => x.GetService(typeof(IPrimumContext)))
+                .Setup(x => x.GetService(typeof(PrimumContext)))
                 .Returns(_mockContext.Object);
             _mockServiceProvider
-                .Setup(x => x.GetService(typeof(IPublisher)))
+                .Setup(x => x.GetService(typeof(PublisherService)))
                 .Returns(_mockPublisher.Object);
 
             var mockScope = new Mock<IServiceScope>();
@@ -54,13 +54,13 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new List<Lesson>());
 
-            var executor = new LessonWarningExecutor(_mockScopeFactory.Object);
+            var executor = new LessonWarningExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
         }
 
@@ -95,16 +95,16 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new[] { lesson });
 
-            var executor = new LessonWarningExecutor(_mockScopeFactory.Object);
+            var executor = new LessonWarningExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Warned));
 
             _mockPublisher.Verify(
-                x => x.PublishAsync(It.Is<LessonPreparationNotification>(n =>
+                x => x.Push(It.Is<LessonPreparationNotification>(n =>
                     n.LessonId == lesson.LessonId &&
                     n.StudentUserId == studentUser.Id &&
                     n.TeacherUserId == course.TeacherId &&
@@ -157,10 +157,10 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(lessons);
 
-            var executor = new LessonWarningExecutor(_mockScopeFactory.Object);
+            var executor = new LessonWarningExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             foreach (var lesson in lessons)
@@ -168,7 +168,7 @@ namespace UnitTests.BackgroundWorkers
                 Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Warned));
             }
 
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<LessonPreparationNotification>()), Times.Exactly(3));
+            _mockPublisher.Verify(x => x.Push(It.IsAny<LessonPreparationNotification>()), Times.Exactly(3));
             _mockLogger.Verify(
                 x => x.Log(
                     LogLevel.Information,
@@ -193,14 +193,14 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new[] { lesson });
 
-            var executor = new LessonWarningExecutor(_mockScopeFactory.Object);
+            var executor = new LessonWarningExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Waiting)); // не изменён
-            _mockPublisher.Verify(x => x.PublishAsync(It.IsAny<INotification>()), Times.Never);
+            _mockPublisher.Verify(x => x.Push(It.IsAny<IPushable>()), Times.Never);
         }
 
         [Test]
@@ -234,14 +234,14 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<Lesson>())
                 .ReturnsDbSet(new[] { lesson });
 
-            var executor = new LessonWarningExecutor(_mockScopeFactory.Object);
+            var executor = new LessonWarningExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             _mockPublisher.Verify(
-                x => x.PublishAsync(It.Is<LessonPreparationNotification>(n =>
+                x => x.Push(It.Is<LessonPreparationNotification>(n =>
                     n.IsEnoughMoney == false // 200 < 500
                 )),
                 Times.Once);

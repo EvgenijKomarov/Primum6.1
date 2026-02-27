@@ -1,13 +1,14 @@
-﻿using CoreConnection.Notifications;
+﻿using Common.Utilities;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,22 +19,22 @@ namespace UnitTests.Iterators
 {
     public class StudentIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private Mock<ConverterToDateTimeService> _mockDateTimeService = null!;
-        private Mock<IPublisher> _mockPublisher = null!;
+        private Mock<PublisherService> _mockPublisher = null!;
         private StudentIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _mockDateTimeService = new Mock<ConverterToDateTimeService>(new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
                     {
                         { "Constants:BlockedDaysForLessonCreation", "3" }
                     })
                 .Build());
-            _mockPublisher = new Mock<IPublisher>();
+            _mockPublisher = new Mock<PublisherService>();
             _iterator = new StudentIterator(_mockContext.Object, _mockDateTimeService.Object, _mockPublisher.Object);
         }
 
@@ -165,7 +166,7 @@ namespace UnitTests.Iterators
 
             // Проверяем публикацию
             _mockPublisher.Verify(
-                x => x.PublishAsync(It.Is<NewAbonementSheduleNotification>(n =>
+                x => x.Push(It.Is<NewAbonementSheduleNotification>(n =>
                     n.StudentUserId == 201 &&
                     n.TeacherUserId == 401 &&
                     n.CourseName == "Математика" &&

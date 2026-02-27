@@ -1,11 +1,10 @@
 ﻿using CoreConnection.DTOs.Inputs;
-using CoreConnection.Enums;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +15,13 @@ namespace UnitTests.Iterators
 {
     public class CourseIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private CourseIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new CourseIterator(_mockContext.Object);
         }
 
@@ -85,7 +84,7 @@ namespace UnitTests.Iterators
                 Assert.That(dto.CourseThemeName, Is.EqualTo("Web"));
                 Assert.That(dto.Price, Is.EqualTo(1500));
                 Assert.That(dto.IsActive, Is.True);
-                Assert.That(dto.ApproveStatus, Is.EqualTo(StatusApprove.Approved));
+                Assert.That(dto.ApproveStatus, Is.EqualTo(ApproveStatus.Approved));
             });
         }
 

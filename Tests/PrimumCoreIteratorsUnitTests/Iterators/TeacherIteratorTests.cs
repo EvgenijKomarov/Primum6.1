@@ -1,9 +1,9 @@
-﻿using Moq;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +14,13 @@ namespace UnitTests.Iterators
 {
     public class TeacherIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private TeacherIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new TeacherIterator(_mockContext.Object);
         }
 

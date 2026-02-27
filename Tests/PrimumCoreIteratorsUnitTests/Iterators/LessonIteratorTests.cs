@@ -1,11 +1,9 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Models.Enums;
 using PrimumCore.Services.Iterators;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +14,13 @@ namespace UnitTests.Iterators
 {
     public class LessonIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private LessonIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new LessonIterator(_mockContext.Object);
         }
 
@@ -89,7 +87,7 @@ namespace UnitTests.Iterators
             {
                 Assert.That(l1.CourseName, Is.EqualTo("Математика"));
                 Assert.That(l1.LessonLink, Is.EqualTo(lesson1.StudentLink));
-                Assert.That(l1.LessonStatus, Is.EqualTo(StatusLesson.Happened));
+                Assert.That(l1.LessonStatus, Is.EqualTo(LessonStatus.Happened));
                 Assert.That(l1.Grade, Is.Not.Null);
             });
 

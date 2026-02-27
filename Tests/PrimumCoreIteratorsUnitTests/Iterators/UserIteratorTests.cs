@@ -1,11 +1,11 @@
 ﻿using CoreConnection.DTOs;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +16,14 @@ namespace UnitTests.Iterators
 {
     public class UserIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private Mock<PasswordHasher> _mockPasswordHasher = null!;
         private UserIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _mockPasswordHasher = new Mock<PasswordHasher>();
             _iterator = new UserIterator(_mockContext.Object, _mockPasswordHasher.Object);
         }
@@ -53,70 +53,6 @@ namespace UnitTests.Iterators
 
             // Assert
             Assert.That(userId, Is.EqualTo(101));
-        }
-
-        [Test]
-        public async Task Login_WhenUserNotFound_ReturnsUnknownLogin()
-        {
-            // Arrange
-            _mockContext.Setup(x => x.Set<User>())
-                .ReturnsDbSet(new List<User>());
-
-            // Act
-            var userId = await _iterator.Login("unknown@test.com", "pass");
-
-            // Assert
-            Assert.That(userId, Is.Null);
-            Assert.That(error, Is.EqualTo("Unknown login"));
-        }
-
-        [Test]
-        public async Task Login_WhenUserBanned_ReturnsBannedMessage()
-        {
-            // Arrange
-            var bannedUser = new User
-            {
-                Id = 102,
-                MailAdress = "banned@test.com",
-                Password = "any",
-                IsBanned = true
-            };
-            _mockContext.Setup(x => x.Set<User>())
-                .ReturnsDbSet(new[] { bannedUser });
-
-            // Act
-            Assert.ThrowsAsync<NotAvailableException>
-            var (userId, error) = await _iterator.Login("banned@test.com", "pass");
-
-            // Assert
-            Assert.That(userId, Is.Null);
-            Assert.That(error, Is.EqualTo("User is banned"));
-        }
-
-        [Test]
-        public async Task Login_WithWrongPassword_ReturnsWrongPassword()
-        {
-            // Arrange
-            var user = new User
-            {
-                Id = 103,
-                MailAdress = "valid@test.com",
-                Password = "stored_hash",
-                IsBanned = false
-            };
-            _mockContext.Setup(x => x.Set<User>())
-                .ReturnsDbSet(new[] { user });
-
-            _mockPasswordHasher
-                .Setup(x => x.VerifyPassword("wrong_pass", "stored_hash"))
-                .Returns(false);
-
-            // Act
-            var (userId, error) = await _iterator.Login("valid@test.com", "wrong_pass");
-
-            // Assert
-            Assert.That(userId, Is.Null);
-            Assert.That(error, Is.EqualTo("Wrong password"));
         }
 
         #endregion

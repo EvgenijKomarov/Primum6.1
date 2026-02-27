@@ -1,8 +1,12 @@
-﻿using CoreConnection.Enums;
+﻿using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Services.Iterators;
+using Publisher.Services;
+using Pushables;
+using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +17,15 @@ namespace UnitTests.Iterators
 {
     public class AbonementIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
-        private Mock<IPublisher> _mockPublisher = null!;
+        private Mock<PrimumContext> _mockContext = null!;
+        private Mock<PublisherService> _mockPublisher = null!;
         private AbonementIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
-            _mockPublisher = new Mock<IPublisher>();
+            _mockContext = new Mock<PrimumContext>();
+            _mockPublisher = new Mock<PublisherService>();
             _iterator = new AbonementIterator(_mockContext.Object, _mockPublisher.Object);
         }
 
@@ -72,7 +76,7 @@ namespace UnitTests.Iterators
             Assert.That(abonementDto.CourseName, Is.EqualTo("Английский"));
             Assert.That(abonementDto.CourseThemeName, Is.EqualTo("Грамматика"));
             Assert.That(abonementDto.PricePerLesson, Is.EqualTo(600));
-            Assert.That(abonementDto.AbonementStatus, Is.EqualTo(StatusAbonement.Active));
+            Assert.That(abonementDto.AbonementStatus, Is.EqualTo(AbonementStatus.Active));
         }
 
         [Test]
@@ -133,7 +137,7 @@ namespace UnitTests.Iterators
             Assert.That(dto.CourseName, Is.EqualTo("C#"));
             Assert.That(dto.CourseThemeName, Is.EqualTo("Алгоритмы"));
             Assert.That(dto.PricePerLesson, Is.EqualTo(800));
-            Assert.That(dto.AbonementStatus, Is.EqualTo(StatusAbonement.Freezed));
+            Assert.That(dto.AbonementStatus, Is.EqualTo(AbonementStatus.Freezed));
         }
 
         [Test]
@@ -249,7 +253,7 @@ namespace UnitTests.Iterators
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
 
             _mockPublisher.Verify(
-                x => x.PublishAsync(It.Is<AbonementChangeStatusNotification>(n =>
+                x => x.Push(It.Is<AbonementChangeStatusNotification>(n =>
                     n.StudentUserId == 6 &&
                     n.TeacherUserId == 202 &&
                     n.AbonementId == 305 &&

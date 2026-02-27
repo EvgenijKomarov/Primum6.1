@@ -1,9 +1,9 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
 using PrimumCore.Services.Iterators;
 using System;
 using System.Collections.Generic;
@@ -15,13 +15,13 @@ namespace UnitTests.Iterators
 {
     public class ThemeIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private ThemeIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
+            _mockContext = new Mock<PrimumContext>();
             _iterator = new ThemeIterator(_mockContext.Object);
         }
 

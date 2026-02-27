@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Utilities;
+using CoreDBIterator.Workers;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
-using PrimumCore.BackgroundWorkers.Executors;
-using PrimumCore.Models;
 using PrimumCore.Services.Utilities;
-using PrimumPlatformModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,15 @@ namespace UnitTests.BackgroundWorkers
     {
         private Mock<IServiceScopeFactory> _mockScopeFactory = null!;
         private Mock<IServiceProvider> _mockServiceProvider = null!;
-        private Mock<IPrimumContext> _mockContext = null!;
+        private Mock<PrimumContext> _mockContext = null!;
         private Mock<ConverterToDateTimeService> _mockDateTimeService = null!;
-        private Mock<ILogger> _mockLogger = null!;
+        private Mock<ILogger<LessonCreatingExecutor>> _mockLogger = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockLogger = new Mock<ILogger>();
-            _mockContext = new Mock<IPrimumContext>();
+            _mockLogger = new Mock<ILogger<LessonCreatingExecutor>>();
+            _mockContext = new Mock<PrimumContext>();
 
             // === Мок IConfiguration ===
             var сonfiguration = new ConfigurationBuilder()
@@ -42,7 +43,7 @@ namespace UnitTests.BackgroundWorkers
 
             _mockServiceProvider = new Mock<IServiceProvider>();
             _mockServiceProvider
-                .Setup(x => x.GetService(typeof(IPrimumContext)))
+                .Setup(x => x.GetService(typeof(PrimumContext)))
                 .Returns(_mockContext.Object);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(ConverterToDateTimeService)))
@@ -64,10 +65,10 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<AbonementShedule>())
                 .ReturnsDbSet(new List<AbonementShedule>());
 
-            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object);
+            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             _mockContext.Verify(x => x.Set<Lesson>(), Times.Never);
@@ -110,10 +111,10 @@ namespace UnitTests.BackgroundWorkers
                 .Setup(x => x.GetNextSuitableDateThisWeek(DayOfWeek.Wednesday, It.IsAny<int>()))
                 .Returns(nextDate);
 
-            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object);
+            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             Assert.That(shedule.LastIteration, Is.EqualTo(nextDate));
@@ -184,10 +185,10 @@ namespace UnitTests.BackgroundWorkers
                 .Setup(x => x.GetNextSuitableDateThisWeek(DayOfWeek.Friday, It.IsAny<int>()))
                 .Returns(nextDate);
 
-            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object);
+            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert
             _mockContext.Verify(x => x.Set<Lesson>().Add(It.Is<Lesson>(l =>
@@ -210,10 +211,10 @@ namespace UnitTests.BackgroundWorkers
             _mockContext.Setup(x => x.Set<AbonementShedule>())
                 .ReturnsDbSet(new List<AbonementShedule> { recentShedule });
 
-            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object);
+            var executor = new LessonCreatingExecutor(_mockScopeFactory.Object, _mockLogger.Object);
 
             // Act
-            await executor.Execute(_mockLogger.Object);
+            await executor.Action();
 
             // Assert: ничего не должно быть создано
             _mockContext.Verify(x => x.Set<Lesson>().Add(It.IsAny<Lesson>()), Times.Never);

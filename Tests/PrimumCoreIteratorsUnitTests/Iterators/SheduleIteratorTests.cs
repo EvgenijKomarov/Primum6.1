@@ -1,12 +1,12 @@
 ﻿using CoreConnection.DTOs.Inputs;
-using CoreConnection.Notifications;
+using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Moq;
 using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Models;
-using PrimumCore.Services.Connectors;
 using PrimumCore.Services.Iterators;
-using PrimumPlatformModel.Models.Enums;
+using Pushables;
+using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +17,15 @@ namespace UnitTests.Iterators
 {
     public class SheduleIteratorTests
     {
-        private Mock<IPrimumContext> _mockContext = null!;
-        private Mock<IPublisher> _mockPublisher = null!;
+        private Mock<PrimumContext> _mockContext = null!;
+        private Mock<PublisherService> _mockPublisher = null!;
         private SheduleIterator _iterator = null!;
 
         [SetUp]
         public void Setup()
         {
-            _mockContext = new Mock<IPrimumContext>();
-            _mockPublisher = new Mock<IPublisher>();
+            _mockContext = new Mock<PrimumContext>();
+            _mockPublisher = new Mock<PublisherService>();
             _iterator = new SheduleIterator(_mockContext.Object, _mockPublisher.Object);
         }
 
@@ -97,7 +97,7 @@ namespace UnitTests.Iterators
             {
                 Assert.That(freeDto.DayOfWeek, Is.EqualTo(DayOfWeek.Wednesday));
                 Assert.That(freeDto.Time, Is.EqualTo(14));
-                Assert.That(freeDto.IsBusy, Is.False);
+                Assert.That(freeDto.IsAvailable, Is.False);
                 Assert.That(freeDto.StudentName, Is.Null);
             });
         }
@@ -377,7 +377,7 @@ namespace UnitTests.Iterators
             Assert.That(abonement.AbonementShedules.Count, Is.EqualTo(0));
 
             _mockPublisher.Verify(
-                x => x.PublishAsync(It.Is<DeleteAbonementSheduleNotification>(n =>
+                x => x.Push(It.Is<DeleteAbonementSheduleNotification>(n =>
                     n.StudentUserId == 203 &&
                     n.TeacherUserId == 601 &&
                     n.AbonementSheduleId == 20 &&
