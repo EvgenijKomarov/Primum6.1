@@ -23,6 +23,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHttpClient<PublisherService>()
                 .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient));
 
+        services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();
         services.AddHostedService<LessonWarningExecutor>();
         services.AddHostedService<LessonIteratorExecutor>();
