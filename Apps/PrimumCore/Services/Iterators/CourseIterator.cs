@@ -128,7 +128,7 @@ namespace PrimumCore.Services.Iterators
             return course.CourseId;
         }
 
-        public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto, string about)
+        public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto)
         {
             var user = await context.Set<User>()
                 .Include(u => u.TeacherProfile)
@@ -145,7 +145,7 @@ namespace PrimumCore.Services.Iterators
                 MaxLessons = courseDto.MaxLessons,
                 FreeLessons = courseDto.FreeLessons,
                 CourseThemeId = courseDto.CourseThemeId,
-                About = about
+                About = courseDto.Description
             };
 
             user.TeacherProfile.Courses.Add(course);
