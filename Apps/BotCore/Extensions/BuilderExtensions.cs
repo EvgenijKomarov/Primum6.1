@@ -47,7 +47,7 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<ProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<TeacherLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherFutureLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentFutureLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAllLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementNode, DataBuffer, EngineOutputMessage>();
@@ -62,6 +62,10 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<StudentExploreTeacherShedulesNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentExploreCoursesByThemeNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentExploreThemesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherAllLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherAbonementsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherCoursesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherShedulesNode, DataBuffer, EngineOutputMessage>();
 
             return builder;
         }

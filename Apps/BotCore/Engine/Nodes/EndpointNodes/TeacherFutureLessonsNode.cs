@@ -8,11 +8,11 @@ using System.Text;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class TeacherLessonsNode(TeacherClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("tchLessons")
+    public class TeacherFutureLessonsNode(TeacherClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("tchFutureLessons")
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var lessons = await client.LessonsAsync(input.UserId!.Value);
+            var lessons = await client.FutureLessonsAsync(input.UserId!.Value);
             StringBuilder sb = new StringBuilder();
             foreach (var lesson in lessons)
             {

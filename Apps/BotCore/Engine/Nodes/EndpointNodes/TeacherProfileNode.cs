@@ -22,8 +22,33 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     new EngineOutputButton
                     {
-                        Text = $"{Emoticons.Lesson}Мои занятия",
-                        EndpointNode = typeof(TeacherLessonsNode)
+                        Text = $"{Emoticons.Lesson}Будущие занятия",
+                        EndpointNode = typeof(TeacherFutureLessonsNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Lesson}Все занятия",
+                        EndpointNode = typeof(TeacherAllLessonsNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Course}Курсы",
+                        EndpointNode = typeof(TeacherCoursesNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Abonement}Подписанты",
+                        EndpointNode = typeof(TeacherAbonementsNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Shedule}Расписания",
+                        EndpointNode = typeof(TeacherShedulesNode)
+                    },
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Back}Назад",
+                        EndpointNode = typeof(ProfileNode)
                     }
                 }
             });
