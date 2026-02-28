@@ -48,12 +48,14 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
                 },
                 new MailNotification
                 {
                     UserId = StudentUserId,
-                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
                 }
             ];
         }

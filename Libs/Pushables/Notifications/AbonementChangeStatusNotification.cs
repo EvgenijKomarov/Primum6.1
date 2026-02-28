@@ -42,7 +42,8 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{Emoticons.Abonement}Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
+                    Title = "Изменение статуса абонемента одного из учеников",
+                    Text = $"Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
                 }
             ];
         }

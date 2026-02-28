@@ -52,12 +52,14 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
                 },
                 new MailNotification
                 {
                     UserId = StudentUserId,
-                    Text = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
                     (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс."),
                 }
             ];

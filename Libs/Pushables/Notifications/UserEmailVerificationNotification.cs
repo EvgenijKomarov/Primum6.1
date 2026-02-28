@@ -11,7 +11,7 @@ namespace Pushables.Notifications
     public class UserEmailVerificationNotification: IMailNotification
     {
         public required string EmailAdress { get; set; }
-        public required string VerificationHash { get; set; }
+        public required string VerificationLink { get; set; }
         public required int UserId { get; set; }
 
         public IEnumerable<MailNotification> GetMailNotifications()
@@ -20,7 +20,8 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = UserId,
-                    Text = $"Для полного доступа на площадку, пожалуйста, используйте этот код на сайте для подтверждения почты: {VerificationHash}",
+                    Title = "Подтверждение почты",
+                    Text = $"Для полного доступа на площадку, пожалуйста, перейдите по ссылке для подтверждения почты: {VerificationLink}",
                     EmailAdress = this.EmailAdress,
                 }
             ];

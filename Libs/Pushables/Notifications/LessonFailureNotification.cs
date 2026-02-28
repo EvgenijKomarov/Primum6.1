@@ -49,12 +49,14 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
                 },
                 new MailNotification
                 {
                     UserId = StudentUserId,
-                    Text = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
+                    Title = "Уведомление о будущем занятии",
+                    Text = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
                 }
             ];
         }

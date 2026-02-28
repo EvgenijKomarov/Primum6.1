@@ -8,6 +8,7 @@ namespace Pushables.Entities
     {
         public required int UserId { get; set; }
         public required string Text { get; set; }
+        public required string Title { get; set; }
         public string? EmailAdress { get; set; } = null;
     }
 }

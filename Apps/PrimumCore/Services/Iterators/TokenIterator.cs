@@ -6,12 +6,14 @@ using PrimumCore.Services.Utilities;
 using Pushables;
 using Pushables.Events;
 using Pushables.Notifications;
+using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
 {
     public class TokenIterator(PrimumContext context,
         RandomStringGenerator randomGenerator,
-        PublisherService publisher)
+        PublisherService publisher,
+        SolutionEnvironment environment)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
@@ -35,7 +37,7 @@ namespace PrimumCore.Services.Iterators
             await publisher.Push(new UserEmailVerificationNotification
             {
                 EmailAdress = user.MailAdress,
-                VerificationHash = token.Token,
+                VerificationLink = $"{environment.GatewayURL}/api/user/confirm-email?token={token.Token}",
                 UserId = user.Id
             });
 

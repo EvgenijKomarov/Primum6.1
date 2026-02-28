@@ -46,7 +46,8 @@ namespace Pushables.Notifications
                 new MailNotification
                 {
                     UserId = TeacherUserId,
-                    Text = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                    Title = "Новый ученик, подписавшийся на Ваш курс",
+                    Text = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
                 }
             ];
         }

@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
 builder.WebHost.UseUrls(solutionEnvironment.PrimumCore.SelfUrl);
+builder.Services.AddSingleton(sp => solutionEnvironment);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
