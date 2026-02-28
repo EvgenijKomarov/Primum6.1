@@ -10,6 +10,7 @@ namespace CoreDBModel.Models.Enums
         Delete = 1,
         SendToAdministrator = 2,
         SendToManager = 3,
-        Revisioned = 4
+        Revisioned = 4,
+        BanUser = 5
     }
 }

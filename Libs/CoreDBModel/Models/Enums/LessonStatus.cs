@@ -8,10 +8,10 @@ namespace CoreDBModel.Models.Enums
 {
     public enum LessonStatus
     {
-        Waiting = 0,
-        Warned = 1,
-        Happened = 2,
-        Missed = 3,
-        MissedWithoutReason = 4
+        Waiting = 0, // ожидает начала
+        Warned = 1, // предупрежден за сутки
+        Happened = 2, // произошло
+        Missed = 3, //пропущено без объяснений, надо разобраться почему
+        MissedWithoutReason = 4 //пропущено без уважительной причины
     }
 }

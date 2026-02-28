@@ -143,6 +143,9 @@ namespace PrimumCore.Services.Utilities
                 async (id, decision) =>
                 {
                     var lesson = context.Set<Lesson>()
+                        .Include(x => x.Abonement)
+                        .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.User)
                         .FirstOrDefault(x => x.LessonId == id);
                     if (lesson is null) { throw new NotFoundException("Lesson"); }
 
@@ -153,6 +156,9 @@ namespace PrimumCore.Services.Utilities
                             break;
                         case IncidentDecision.Revisioned:
                             lesson.Status = LessonStatus.MissedWithoutReason;
+                            break;
+                        case IncidentDecision.BanUser:
+                            lesson.Abonement.Student.User.IsBanned = true;
                             break;
                     }
                     return lesson.LessonId;

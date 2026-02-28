@@ -79,7 +79,6 @@ namespace CoreDBIterator.Workers
                 else if (lesson.Abonement.Student.User.Cash < lesson.Price &&
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
                 {
-                    lesson.Abonement.AbonementStatus = AbonementStatus.Deleted;
                     lesson.Status = LessonStatus.Missed;
                     var notification = new LessonFailureNotification()
                     {
@@ -92,9 +91,8 @@ namespace CoreDBIterator.Workers
                         LessonId = lesson.LessonId,
                         DateTime = lesson.DateTime
                     };
-                    context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
                     await publisher.Push(notification);
-                    logger?.LogInformation($"Lesson {lesson.LessonId} not happened and deleted abonement");
+                    logger?.LogInformation($"Lesson {lesson.LessonId} not happened");
                 }
                 else //Занятие пропущено по сторонним причинам
                 {

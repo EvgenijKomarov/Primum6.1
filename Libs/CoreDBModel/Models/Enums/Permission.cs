@@ -33,6 +33,7 @@ namespace CoreDBModel.Models.Enums
         ApproveTeachers = 11,
         [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
         [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Revisioned)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.BanUser)]
         InspectMissedLessons = 12,
         CreateAdminProfiles = 13,
         InspectIncidentLogs = 14,

@@ -235,6 +235,7 @@ namespace PrimumCore.Services.Utilities
                         CommonInfo =
                         $"Student: {x.Abonement.Student.User.DisplayName}\n" +
                         $"Student Id: {x.Abonement.Student.User.Id}\n" +
+                        $"Student mail: {x.Abonement.Student.User.MailAdress}" +
                         $"Teacher: {x.Abonement.Course.Teacher.User.DisplayName}\n" +
                         $"Teacher Id: {x.Abonement.Course.Teacher.User.Id}\n" +
                         $"Course: {x.Abonement.Course.Name}\n" +
