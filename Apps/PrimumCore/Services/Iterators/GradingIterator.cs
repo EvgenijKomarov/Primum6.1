@@ -3,10 +3,12 @@ using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
+using Pushables;
+using Pushables.Notifications;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class GradingIterator(PrimumContext context)
+    public class GradingIterator(PrimumContext context, PublisherService publisherService)
     {
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
@@ -18,6 +20,7 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.User)
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.LessonId == lessonId);
             if (lesson == null) { throw new NotFoundException("Lesson"); }
             if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
@@ -32,10 +35,27 @@ namespace PrimumCore.Services.Iterators
                 StudyInitiativeGrade = (Grading)dto.StudyInitiativeGrade
             };
             lesson.Grading = lessonGrading;
-            lesson.Abonement.Student.Coins += CoinFormula(lessonGrading.GetFinalGrade(), lesson.Price);
+
+            var avgGrade = lessonGrading.GetFinalGrade();
+            var addedCoins = CoinFormula(avgGrade, lesson.Price);
+
+            lesson.Abonement.Student.Coins += addedCoins;
 
             context.Set<StudentGrading>().Add(lessonGrading);
             await context.SaveChangesAsync();
+
+            await publisherService.Push(new LessonGradedNotification
+            {
+                CourseId = lesson.Abonement.Course.CourseId,
+                CourseName = lesson.Abonement.Course.Name,
+                StudentDisplayName = lesson.Abonement.Student.User.DisplayName,
+                StudentUserId = lesson.Abonement.Student.User.Id,
+                DateTime = lesson.DateTime,
+                TeacherDisplayName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
+                Grade = avgGrade,
+                EarnedCoins = addedCoins
+            });
 
             return lesson.LessonId;
         }
