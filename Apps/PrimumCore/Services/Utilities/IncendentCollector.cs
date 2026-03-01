@@ -184,6 +184,7 @@ namespace PrimumCore.Services.Utilities
                         CommonInfo =
                         $"Name: {x.Name}\n" +
                         $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
+                        $"Teacher Mail: {x.Teacher.User.MailAdress}\n" +
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
                         $"Free lessons: {x.FreeLessons}",

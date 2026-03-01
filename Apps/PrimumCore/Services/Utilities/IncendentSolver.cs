@@ -144,8 +144,13 @@ namespace PrimumCore.Services.Utilities
                 {
                     var lesson = context.Set<Lesson>()
                         .Include(x => x.Abonement)
+                        .ThenInclude(a => a.Lessons)
+                        .Include(x => x.Abonement)
                         .ThenInclude(x => x.Student)
                         .ThenInclude(x => x.User)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.Abonements)
                         .FirstOrDefault(x => x.LessonId == id);
                     if (lesson is null) { throw new NotFoundException("Lesson"); }
 
@@ -159,6 +164,9 @@ namespace PrimumCore.Services.Utilities
                             break;
                         case IncidentDecision.BanUser:
                             lesson.Abonement.Student.User.IsBanned = true;
+                            context.Set<Lesson>().RemoveRange(lesson.Abonement.Lessons);
+                            context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
+                            context.Set<Abonement>().RemoveRange(lesson.Abonement.Student.Abonements);
                             break;
                     }
                     return lesson.LessonId;

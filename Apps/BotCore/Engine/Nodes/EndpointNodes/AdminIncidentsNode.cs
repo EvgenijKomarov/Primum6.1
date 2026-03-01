@@ -14,7 +14,9 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             return $"{Emoticons.Spark}Субъект:{IncidentMeaningRes.ResourceManager.GetString(item.Meaning.ToString()) ?? string.Empty}\n" +
                 $"{Emoticons.Id}Id субъекта: {item.ObjectId}\n" +
                 $"{Emoticons.Status}Статус:{IncidentStatusRes.ResourceManager.GetString(item.Status.ToString()) ?? string.Empty}\n" +
-                $"{Emoticons.Info}Контекст: {item.CommonInfo}";
+                $"\n" +
+                $"{Emoticons.Info}Контекст: \n" +
+                $"{item.CommonInfo}";
         }
         public override async Task<IEnumerable<IncidentDto>> GetEnumerable(DataBuffer input)
         {
