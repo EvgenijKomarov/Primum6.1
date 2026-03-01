@@ -29,10 +29,10 @@ namespace PrimumCore.Services.Iterators
 
             var lessonGrading = new StudentGrading
             {
-                HomeworkGrade = (Grading)dto.HomeworkGrade,
-                LessonActivityGrade = (Grading)dto.LessonActivityGrade,
-                RepetitionOfMaterialGrade = (Grading)dto.RepetitionOfMaterialGrade,
-                StudyInitiativeGrade = (Grading)dto.StudyInitiativeGrade
+                HomeworkGrade = dto.HomeworkGrade,
+                LessonActivityGrade = dto.LessonActivityGrade,
+                RepetitionOfMaterialGrade = dto.RepetitionOfMaterialGrade,
+                StudyInitiativeGrade = dto.StudyInitiativeGrade
             };
             lesson.Grading = lessonGrading;
 

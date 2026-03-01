@@ -178,6 +178,24 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на ❗️.
+        /// </summary>
+        public static string Incident {
+            get {
+                return ResourceManager.GetString("Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ℹ️.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ⬅️.
         /// </summary>
         public static string Left {
@@ -228,6 +246,15 @@ namespace Resourses {
         public static string Spark {
             get {
                 return ResourceManager.GetString("Spark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🌡.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
             }
         }
         

@@ -16,6 +16,10 @@ namespace PrimumCore.Controllers
         UserIterator userIterator
         ) : PrimumController
     {
+        [HttpGet("profile")]
+        public async Task<ActionResult<AdminProfileDto>> GetProfile([FromRoute] int userId)
+            => Ok(await iterator.GetAdmin(userId));
+
         [HttpGet("get-user/{objectUserId}")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int userId, [FromRoute] int objectUserId) 
             => Ok(await userIterator.GetUser(objectUserId, false));

@@ -29,6 +29,15 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                     Args = new List<string>()
                 });
             }
+            if (input.User?.IsAdmin != null && input.User?.IsAdmin == true)
+            {
+                buttons.Add(new EngineOutputButton
+                {
+                    Text = $"{Emoticons.Admin}Профиль админа",
+                    EndpointNode = typeof(AdminProfileNode),
+                    Args = new List<string>()
+                });
+            }
 
             return Finish(new EngineOutputMessage
             {

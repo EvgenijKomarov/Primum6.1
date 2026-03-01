@@ -117,91 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Abonement" xml:space="preserve">
-    <value>🎫</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>👷‍♂️</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>↩️</value>
-  </data>
-  <data name="Bot" xml:space="preserve">
-    <value>🤖</value>
-  </data>
-  <data name="Cash" xml:space="preserve">
-    <value>💵</value>
-  </data>
-  <data name="Coins" xml:space="preserve">
-    <value>✨💰</value>
-  </data>
   <data name="Course" xml:space="preserve">
-    <value>🏫</value>
-  </data>
-  <data name="Down" xml:space="preserve">
-    <value>⬇️</value>
-  </data>
-  <data name="Fire" xml:space="preserve">
-    <value>🔥</value>
-  </data>
-  <data name="Grade" xml:space="preserve">
-    <value>💯</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>🙋</value>
-  </data>
-  <data name="Ice" xml:space="preserve">
-    <value>🧊</value>
-  </data>
-  <data name="Id" xml:space="preserve">
-    <value>🆔</value>
-  </data>
-  <data name="Incident" xml:space="preserve">
-    <value>❗️</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>ℹ️</value>
-  </data>
-  <data name="Left" xml:space="preserve">
-    <value>⬅️</value>
+    <value>Курс</value>
   </data>
   <data name="Lesson" xml:space="preserve">
-    <value>🕘</value>
-  </data>
-  <data name="Promocode" xml:space="preserve">
-    <value>🎁</value>
-  </data>
-  <data name="Right" xml:space="preserve">
-    <value>➡️</value>
-  </data>
-  <data name="Shedule" xml:space="preserve">
-    <value>🗓</value>
-  </data>
-  <data name="Spark" xml:space="preserve">
-    <value>✨</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>🌡</value>
+    <value>Урок</value>
   </data>
   <data name="Student" xml:space="preserve">
-    <value>👨‍🎓</value>
+    <value>Ученик</value>
   </data>
   <data name="Teacher" xml:space="preserve">
-    <value>👨‍🏫</value>
+    <value>Преподаватель</value>
   </data>
-  <data name="Theme" xml:space="preserve">
-    <value>💬</value>
-  </data>
-  <data name="Time" xml:space="preserve">
-    <value>🕘</value>
-  </data>
-  <data name="Trash" xml:space="preserve">
-    <value>🗑</value>
-  </data>
-  <data name="Up" xml:space="preserve">
-    <value>⬆️</value>
-  </data>
-  <data name="User" xml:space="preserve">
-    <value>👨‍🦰</value>
+  <data name="Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
   </data>
 </root>

@@ -15,7 +15,7 @@ namespace PrimumWebAPI.Controllers
     {
         [HttpGet("profile")]
         public async Task<ActionResult<AdminProfileDto>> GetProfile()
-            => Ok(await client.AdminAsync(User.GetUserId(), User.GetUserId()));
+            => Ok(await client.ProfileAsync(User.GetUserId()));
 
         [HttpGet("get-user/{objectUserId}")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int objectUserId)
