@@ -7,23 +7,23 @@ using System.Text.Json;
 
 namespace Pushables
 {
-    public class PublisherService(string url, HttpClient httpClient)
+    public class PublisherService(string url, HttpClient httpClient, ChatBotSignInjector injector)
     {
         private PublisherClient client = new PublisherClient(url, httpClient);
         public async Task Push<TPushable>(TPushable message) where TPushable : IPushable
         {
             if (message is IChatBotNotification chatBotNotification)
             {
-                await client.PushChatbotNotificationAsync(chatBotNotification.GetChatBotNotifications());
+                await client.PushChatbotNotificationAsync(await chatBotNotification.GetChatBotNotifications(injector));
             }
             if (message is IMailNotification mailNotification)
             { 
                 await client.PushMailNotificationAsync(mailNotification.GetMailNotifications());
             }
-            if (message is UserVerifiedEmailEvent userVerifiedEmailEvent)
+            /*if (message is UserVerifiedEmailEvent userVerifiedEmailEvent)
             {
                 await client.PushUserVerifiedEmailEventAsync(userVerifiedEmailEvent);
-            }
+            }*/
         }
     }
 }

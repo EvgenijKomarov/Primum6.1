@@ -32,7 +32,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<ConverterToDateTimeService>();
             builder.Services.AddScoped<RandomStringGenerator>();
             builder.Services.AddScoped<TokenIterator>();
-            builder.Services.AddScoped<AnonymousTokenIterator>();
+            builder.Services.AddScoped<ChatSignTokenIterator>();
             builder.Services.AddScoped<ChatSignTokenWorker>();
             builder.Services.AddScoped<IncidentCollector>();
             builder.Services.AddScoped<IncidentSolver>();

@@ -1,5 +1,6 @@
 ﻿using Pushables.Entities;
 using Resourses;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace Pushables.Notifications
@@ -26,20 +27,18 @@ namespace Pushables.Notifications
 
         public required string StudentLink { get; set; }
 
-        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        public async Task<IEnumerable<ChatBotNotification>> GetChatBotNotifications(ChatBotSignInjector injector)
         {
-            return [
-                new ChatBotNotification
-                {
-                    UserId = TeacherUserId,
-                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
-                },
-                new ChatBotNotification
-                {
-                    UserId = StudentUserId,
-                    Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
-                }
-            ];
+            return ((await injector.InjectSign(StudentUserId)).Select(x => new ChatBotNotification
+            {
+                ChatSign = x,
+                Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}",
+            }))
+            .Concat((await injector.InjectSign(TeacherUserId)).Select(x => new ChatBotNotification
+            {
+                ChatSign = x,
+                Text = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
+            }));
         }
 
         public IEnumerable<MailNotification> GetMailNotifications()

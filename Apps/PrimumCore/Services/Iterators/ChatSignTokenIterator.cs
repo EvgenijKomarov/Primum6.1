@@ -8,7 +8,7 @@ using SignServiceConnection.Models;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AnonymousTokenIterator(PrimumContext context, SignServiceClient client, ChatSignTokenWorker tokenWorker)
+    public class ChatSignTokenIterator(PrimumContext context, SignServiceClient client, ChatSignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {

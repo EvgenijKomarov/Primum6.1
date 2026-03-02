@@ -10,6 +10,6 @@ namespace Pushables.Notifications
 {
     public interface IChatBotNotification: IPushable
     {
-        IEnumerable<ChatBotNotification> GetChatBotNotifications();
+        Task<IEnumerable<ChatBotNotification>> GetChatBotNotifications(ChatBotSignInjector injector);
     }
 }

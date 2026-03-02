@@ -10,7 +10,7 @@ namespace PrimumCore.Controllers
     public class UserController(
         UserIterator userIterator, 
         TokenIterator tokenIterator,
-        AnonymousTokenIterator anonTokenIterator) : PrimumController
+        ChatSignTokenIterator anonTokenIterator) : PrimumController
     {
         [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, false));

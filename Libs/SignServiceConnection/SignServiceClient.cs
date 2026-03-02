@@ -52,7 +52,7 @@ namespace SignServiceConnection
         /// <summary>
         /// Получает список всех подписей для заданного userId
         /// </summary>
-        public async Task<List<ChatSign>> GetSignsAsync(int userId, CancellationToken ct = default)
+        public async Task<IEnumerable<ChatSign>> GetSignsAsync(int userId, CancellationToken ct = default)
         {
             var response = await _httpClient.GetAsync($"/get-signs/{userId}", ct);
             await EnsureSuccessAsync(response, ct);

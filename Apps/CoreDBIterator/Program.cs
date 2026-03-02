@@ -20,8 +20,9 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddTransient<ConverterToDateTimeService>();
+
         services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient, sp.GetRequiredService<ChatBotSignInjector>()));
 
         services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();

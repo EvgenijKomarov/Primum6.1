@@ -18,15 +18,13 @@ namespace Pushables.Notifications
         public required float Grade;
         public required int EarnedCoins;
 
-        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        public async Task<IEnumerable<ChatBotNotification>> GetChatBotNotifications(ChatBotSignInjector injector)
         {
-            return [
-                new ChatBotNotification
-                {
-                    UserId = StudentUserId,
-                    Text = $"{Emoticons.Lesson}Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. {(EarnedCoins == 0 ? "" : $"{Emoticons.Coins}Начислено {EarnedCoins} монет!")}",
-                }
-            ];
+            return (await injector.InjectSign(StudentUserId)).Select(x => new ChatBotNotification
+            {
+                ChatSign = x,
+                Text = $"{Emoticons.Lesson}Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. {(EarnedCoins == 0 ? "" : $"{Emoticons.Coins}Начислено {EarnedCoins} монет!")}",
+            });
         }
 
         public IEnumerable<MailNotification> GetMailNotifications()

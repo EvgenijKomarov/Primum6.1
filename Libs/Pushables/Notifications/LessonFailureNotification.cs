@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Pushables.Notifications
 {
@@ -27,20 +28,13 @@ namespace Pushables.Notifications
 
         public required DateTime DateTime { get; set; }
 
-        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        public async Task<IEnumerable<ChatBotNotification>> GetChatBotNotifications(ChatBotSignInjector injector)
         {
-            return [
-                new ChatBotNotification
-                {
-                    UserId = TeacherUserId,
-                    Text = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                },
-                new ChatBotNotification
-                {
-                    UserId = StudentUserId,
-                    Text = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                }
-            ];
+            return ((await injector.InjectSign(TeacherUserId)).Concat(await injector.InjectSign(StudentUserId))).Select(x => new ChatBotNotification
+            {
+                ChatSign = x,
+                Text = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
+            });
         }
 
         public IEnumerable<MailNotification> GetMailNotifications()

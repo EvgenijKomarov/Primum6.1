@@ -29,15 +29,13 @@ namespace Pushables.Notifications
 
         public required int Time {  get; set; }
 
-        public IEnumerable<ChatBotNotification> GetChatBotNotifications()
+        public async Task<IEnumerable<ChatBotNotification>> GetChatBotNotifications(ChatBotSignInjector injector)
         {
-            return [
-                new ChatBotNotification
-                {
-                    UserId = TeacherUserId,
-                    Text = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
-                }
-            ];
+            return (await injector.InjectSign(TeacherUserId)).Select(x => new ChatBotNotification
+            {
+                ChatSign = x,
+                Text = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+            });
         }
 
         public IEnumerable<MailNotification> GetMailNotifications()

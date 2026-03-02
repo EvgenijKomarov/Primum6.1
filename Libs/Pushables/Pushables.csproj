@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Resourses\Resourses.csproj" />
+    <ProjectReference Include="..\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>
