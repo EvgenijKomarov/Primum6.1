@@ -41,12 +41,5 @@ namespace Publisher.Controllers
             await publisher.Publish(inputEvent, cancellationToken);
             return Ok();
         }
-
-        [HttpPost("push-user-verified-chat-event")]
-        public async Task<IActionResult> PushUserVerifiedChatEvent([FromBody] UserVerifiedChatEvent inputEvent, CancellationToken cancellationToken)
-        {
-            await publisher.Publish(inputEvent, cancellationToken);
-            return Ok();
-        }
     }
 }

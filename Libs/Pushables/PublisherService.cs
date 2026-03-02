@@ -20,10 +20,6 @@ namespace Pushables
             { 
                 await client.PushMailNotificationAsync(mailNotification.GetMailNotifications());
             }
-            if (message is UserVerifiedChatEvent userVerifiedChatEvent)
-            { 
-                await client.PushUserVerifiedChatEventAsync(userVerifiedChatEvent);
-            }
             if (message is UserVerifiedEmailEvent userVerifiedEmailEvent)
             {
                 await client.PushUserVerifiedEmailEventAsync(userVerifiedEmailEvent);
