@@ -1,5 +1,4 @@
-﻿using ChatSigns;
-using Common.Utilities;
+﻿using Common.Utilities;
 using CoreDBModel.Extensions;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Controllers;
@@ -8,6 +7,7 @@ using PrimumCore.Services.Utilities;
 using Pushables;
 using Serilog;
 using SignServiceConnection;
+using SignServiceConnection.Models;
 using SolutionConfiguration;
 
 namespace PrimumCore.Extentions

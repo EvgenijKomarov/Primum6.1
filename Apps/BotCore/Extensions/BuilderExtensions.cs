@@ -5,12 +5,12 @@ using BotCore.Engine.Middlewares;
 using BotCore.Engine.Nodes.EndpointNodes;
 using BotCore.Services;
 using BotCore.Services.Iterators;
-using ChatSigns;
 using CoreConnection;
 using Engine;
 using Engine.Extensions;
 using Serilog;
 using SignServiceConnection;
+using SignServiceConnection.Models;
 
 namespace BotCore.Extensions
 {

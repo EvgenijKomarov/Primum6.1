@@ -1,5 +1,5 @@
-﻿using ChatSigns;
-using CoreConnection.DTOs;
+﻿using CoreConnection.DTOs;
+using SignServiceConnection.Models;
 
 namespace BotCore.Engine.Entities
 {

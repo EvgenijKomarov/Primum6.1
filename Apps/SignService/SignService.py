@@ -125,7 +125,10 @@ def get_by_user(userId: int):
     conn.close()
     if not rows:
         return {}
-    return {row[0]: row[1] for row in rows}
+    return [
+        {"realizationTag": row[0], "username": row[1], "chatId": row[2]} 
+        for row in rows
+    ]
 
 
 # ==================== ТОЧКА ВХОДА ====================

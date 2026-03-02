@@ -1,11 +1,11 @@
-﻿using ChatSigns;
-using BotCore.Engine.Entities;
+﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using CoreConnection.DTOs;
 using Engine;
 using SolutionConfiguration;
 using Resourses;
+using SignServiceConnection.Models;
 
 namespace BotCore.Engine.Middlewares
 {

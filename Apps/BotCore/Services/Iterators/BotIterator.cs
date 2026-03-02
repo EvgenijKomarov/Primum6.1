@@ -3,10 +3,10 @@ using BotCore.Engine.Entities.Inputs;
 using BotCore.Engine.Entities.Outputs;
 using BotCore.Entities;
 using BotCore.Exceptions;
-using ChatSigns;
 using Engine;
 using Microsoft.AspNetCore.Mvc;
 using SignServiceConnection;
+using SignServiceConnection.Models;
 
 namespace BotCore.Services.Iterators
 {

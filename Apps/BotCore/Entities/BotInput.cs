@@ -1,4 +1,4 @@
-﻿using ChatSigns;
+﻿using SignServiceConnection.Models;
 
 namespace BotCore.Entities
 {

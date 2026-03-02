@@ -50,15 +50,15 @@ namespace SignServiceConnection
         }
 
         /// <summary>
-        /// Получает словарь { realizationTag → username } для заданного userId
+        /// Получает список всех подписей для заданного userId
         /// </summary>
-        public async Task<Dictionary<string, string>> GetUsernamesAsync(int userId, CancellationToken ct = default)
+        public async Task<List<ChatSign>> GetSignsAsync(int userId, CancellationToken ct = default)
         {
-            var response = await _httpClient.GetAsync($"/get-usernames/{userId}", ct);
+            var response = await _httpClient.GetAsync($"/get-signs/{userId}", ct);
             await EnsureSuccessAsync(response, ct);
 
-            return await response.Content.ReadFromJsonAsync<Dictionary<string, string>>(_jsonOptions, ct)
-                ?? new Dictionary<string, string>();
+            return await response.Content.ReadFromJsonAsync<List<ChatSign>>(_jsonOptions, ct)
+                ?? new List<ChatSign>();
         }
 
         /// <summary>
