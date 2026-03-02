@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\Libs\ChatSigns\ChatSigns.csproj" />
     <ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
+    <ProjectReference Include="..\..\Libs\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Libs\CoreDBModel\CoreDBModel.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
     <ProjectReference Include="..\..\Libs\Pushables\Pushables.csproj" />
+    <ProjectReference Include="..\..\Libs\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>

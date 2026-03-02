@@ -27,7 +27,7 @@ def init_db():
             userId INTEGER NOT NULL,
             realizationTag TEXT NOT NULL,
             chatId INTEGER NOT NULL,
-            username TEXT NOT NULL,
+            username TEXT,
             PRIMARY KEY (realizationTag, chatId)
         )
     """)
@@ -109,7 +109,7 @@ def get_user(realizationTag: str, chatId: int):
     if result:
         return {"userId": result[0]}
     else:
-        raise HTTPException(status_code=404, detail="Not found")
+        return {"userId": None}
 
 # ----------- GET /get-usernames/{userId} -----------
 @app.get("/get-usernames/{userId}")
@@ -124,7 +124,7 @@ def get_by_user(userId: int):
     rows = cursor.fetchall()
     conn.close()
     if not rows:
-        raise HTTPException(status_code=404, detail="User not found")
+        return {}
     return {row[0]: row[1] for row in rows}
 
 

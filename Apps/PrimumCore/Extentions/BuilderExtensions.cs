@@ -1,12 +1,13 @@
 ﻿using ChatSigns;
+using Common.Utilities;
+using CoreDBModel.Extensions;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Controllers;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
 using Pushables;
 using Serilog;
-using CoreDBModel.Extensions;
-using Common.Utilities;
+using SignServiceConnection;
 using SolutionConfiguration;
 
 namespace PrimumCore.Extentions
@@ -70,6 +71,14 @@ namespace PrimumCore.Extentions
         public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder, string dbConnectionString)
         {
             builder.Services.AddCoreContext(dbConnectionString);
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder, string signServiceUrl)
+        {
+            builder.Services.AddHttpClient<SignServiceClient>()
+                .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
 
             return builder;
         }

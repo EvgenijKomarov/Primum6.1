@@ -19,6 +19,9 @@ namespace SolutionConfiguration
         [JsonPropertyName("PublisherService")]
         public ServiceConfiguration PublisherService { get; set; } = null!;
 
+        [JsonPropertyName("SignService")]
+        public ServiceConfiguration SignService { get; set; } = null!;
+
         [JsonPropertyName("GatewayURL")]
         public string GatewayURL { get; set; } = string.Empty;
 

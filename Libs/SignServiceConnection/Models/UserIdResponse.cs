@@ -9,6 +9,6 @@ namespace SignServiceConnection.Models
     public class UserIdResponse
     {
         [JsonPropertyName("userId")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
     }
 }

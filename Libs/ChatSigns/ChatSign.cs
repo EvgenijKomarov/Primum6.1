@@ -8,5 +8,6 @@ namespace ChatSigns
     {
         public string RealizationTag { get; set; } = null!;
         public long ChatId { get; set; }
+        public string? UserName { get; set; }
     }
 }

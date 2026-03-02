@@ -10,11 +10,11 @@ namespace BotCore.Controllers
     public class BotController(BotIterator iterator) : DefaultController
     {
         [HttpPost("text-command")]
-        public async Task<ActionResult<BotOutput>> ProcedeTextCommand([FromQuery] int? userId, [FromBody] BotInput input, CancellationToken token)
-            => await iterator.ProcessTextMessage(userId, input, token);
+        public async Task<ActionResult<BotOutput>> ProcedeTextCommand([FromBody] BotInput input, CancellationToken token)
+            => await iterator.ProcessTextMessage(input, token);
 
         [HttpPost("callbackquery-command")]
-        public async Task<ActionResult<BotOutput>> ProcedeCallBackQuery([FromQuery] int? userId, [FromBody] BotInput input, CancellationToken token)
-            => await iterator.ProcessCallBackQuery(userId, input, token);
+        public async Task<ActionResult<BotOutput>> ProcedeCallBackQuery([FromBody] BotInput input, CancellationToken token)
+            => await iterator.ProcessCallBackQuery(input, token);
     }
 }

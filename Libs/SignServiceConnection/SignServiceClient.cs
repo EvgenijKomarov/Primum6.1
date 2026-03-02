@@ -17,10 +17,10 @@ namespace SignServiceConnection
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        public SignServiceClient(string url, HttpClient httpClient)
+        public SignServiceClient(string signServiceUrl, HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _httpClient.BaseAddress = new Uri(url);
+            _httpClient.BaseAddress = new Uri(signServiceUrl);
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 
@@ -38,16 +38,15 @@ namespace SignServiceConnection
         /// <summary>
         /// Получает userId по realizationTag и chatId
         /// </summary>
-        public async Task<int> GetUserIdAsync(string realizationTag, long chatId, CancellationToken ct = default)
+        public async Task<int?> GetUserIdAsync(string realizationTag, long chatId, CancellationToken ct = default)
         {
             var requestUrl = $"/get-userId?realizationTag={Uri.EscapeDataString(realizationTag)}&chatId={chatId}";
             var response = await _httpClient.GetAsync(requestUrl, ct);
             await EnsureSuccessAsync(response, ct);
 
-            var result = await response.Content.ReadFromJsonAsync<UserIdResponse>(_jsonOptions, ct)
-                ?? throw new InvalidOperationException("Empty response from /get-userId");
+            var result = await response.Content.ReadFromJsonAsync<UserIdResponse>(_jsonOptions, ct);
 
-            return result.UserId;
+            return result?.UserId;
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace SignServiceConnection
             await EnsureSuccessAsync(response, ct);
 
             return await response.Content.ReadFromJsonAsync<Dictionary<string, string>>(_jsonOptions, ct)
-                ?? throw new InvalidOperationException("Empty response from /get-usernames");
+                ?? new Dictionary<string, string>();
         }
 
         /// <summary>

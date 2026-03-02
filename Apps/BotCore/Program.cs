@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
 builder.Services.AddSingleton<SolutionEnvironment>(sp => solutionEnvironment);
 builder.WebHost.UseUrls(solutionEnvironment.BotCore.SelfUrl);
+builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

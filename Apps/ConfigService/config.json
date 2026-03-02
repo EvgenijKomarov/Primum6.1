@@ -16,8 +16,8 @@
     "PublicUrl": "https://localhost:5004"
   },
   "SignService": {
-    "SelfUrl": "https://localhost:5005",
-    "PublicUrl": "https://localhost:5005"
+    "SelfUrl": "http://localhost:5005",
+    "PublicUrl": "http://localhost:5005"
   },
   "GatewayURL": "https://localhost:5002",
   "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",

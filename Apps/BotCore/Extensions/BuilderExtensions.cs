@@ -1,15 +1,16 @@
-﻿using ChatSigns;
-using BotCore.Engine.Entities;
+﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Inputs;
 using BotCore.Engine.Entities.Outputs;
 using BotCore.Engine.Middlewares;
 using BotCore.Engine.Nodes.EndpointNodes;
 using BotCore.Services;
 using BotCore.Services.Iterators;
+using ChatSigns;
 using CoreConnection;
 using Engine;
 using Engine.Extensions;
 using Serilog;
+using SignServiceConnection;
 
 namespace BotCore.Extensions
 {
@@ -27,6 +28,14 @@ namespace BotCore.Extensions
                 .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
                 .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder, string signServiceUrl)
+        {
+            builder.Services.AddHttpClient<SignServiceClient>()
+                .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
 
             return builder;
         }

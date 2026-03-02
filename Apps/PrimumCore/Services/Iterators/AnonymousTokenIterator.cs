@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using Pushables;
 using Pushables.Events;
+using SignServiceConnection;
+using SignServiceConnection.Models;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AnonymousTokenIterator(PrimumContext context, PublisherService publisher, ChatSignTokenWorker tokenWorker)
+    public class AnonymousTokenIterator(PrimumContext context, SignServiceClient client, ChatSignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {
@@ -18,11 +20,12 @@ namespace PrimumCore.Services.Iterators
 
             var decryptedToken = tokenWorker.DecryptSign(token);
             if (decryptedToken is null) { throw new BusinessLogicException("Invalid token"); }
-            await publisher.Push(new UserVerifiedChatEvent
+            await client.AddUserAsync(new UserCreate
             {
                 UserId = user.Id,
+                RealizationTag = decryptedToken.RealizationTag,
                 ChatId = decryptedToken.ChatId,
-                RealizationTag = decryptedToken.RealizationTag
+                Username = decryptedToken.UserName
             });
             return userId;
         }

@@ -38,6 +38,7 @@ builder.AddDI();
 builder.AddContext(solutionEnvironment.CoreDatabaseConnection);
 builder.AddProjectControllers();
 builder.AddPublishers(solutionEnvironment.PublisherService.PublicUrl);
+builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
 builder.AddLogging();
 
 var app = builder.Build();
