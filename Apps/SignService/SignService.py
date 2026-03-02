@@ -41,8 +41,8 @@ def parse_url_to_host_port(url: str) -> tuple[str, int]:
     Пример: "http://192.168.1.10:8080" → ("192.168.1.10", 8080)
     """
     parsed = urlparse(url)
-    host = parsed.hostname or "127.0.0.1"
-    port = parsed.port or 8000  # порт по умолчанию, если не указан в URL
+    host = parsed.hostname
+    port = parsed.port
     return host, port
 
 # ------------------ Загрузка конфигурации ------------------
@@ -111,13 +111,13 @@ def get_user(realizationTag: str, chatId: int):
     else:
         return {"userId": None}
 
-# ----------- GET /get-usernames/{userId} -----------
-@app.get("/get-usernames/{userId}")
+# ----------- GET /get-signs/{userId} -----------
+@app.get("/get-signs/{userId}")
 def get_by_user(userId: int):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT realizationTag, username
+        SELECT realizationTag, username, chatId
         FROM users
         WHERE userId = ?
     """, (userId,))
