@@ -15,6 +15,10 @@
     "SelfUrl": "https://localhost:5004",
     "PublicUrl": "https://localhost:5004"
   },
+  "SignService": {
+    "SelfUrl": "https://localhost:5005",
+    "PublicUrl": "https://localhost:5005"
+  },
   "GatewayURL": "https://localhost:5002",
   "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
   "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"

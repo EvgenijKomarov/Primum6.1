@@ -9,9 +9,8 @@ app = FastAPI(title="Config Service")
 ENV = os.getenv("ENVIRONMENT", "Development")
 CONFIG_FILE = "config.Production.json" if ENV == "Production" else "config.json"
 
-# 🔥 Читаем хост и порт из окружения с дефолтами для локальной разработки
-HOST = os.getenv("HOST", "localhost")  # В Kubernetes всегда 0.0.0.0
-PORT = int(os.getenv("PORT", 5000))   # Порт можно переопределить
+HOST = os.getenv("HOST", "localhost")
+PORT = int(os.getenv("PORT", 5000))
 
 # загрузка конфига каждый раз (hot reload)
 def load_config() -> dict:
