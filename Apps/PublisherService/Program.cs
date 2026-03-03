@@ -1,8 +1,12 @@
 using CoreConnection;
+using MassTransit.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi;
 using Publisher.Extensions;
 using SignServiceConnection;
 using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Publisher Service",
+        Version = "v1",
+        Description = "Сервис пуша уведомлений"
+    });
+    // Подключение XML-комментариев
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    // ⚠️ Важно: второй параметр true включает комментарии для контроллеров!
+    c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
     c.CustomOperationIds(apiDesc =>
     {
         return apiDesc.TryGetMethodInfo(out var methodInfo)

@@ -18,6 +18,12 @@ namespace Publisher.Controllers
     [Route("publisher")]
     public class PublisherController(IPublisher publisher, SignServiceClient signClient, UserClient userClient) : DefaultController
     {
+        /// <summary>
+        /// Запушить уведомление в чат боты
+        /// </summary>
+        /// <param name="inputKeyValue">Словарь, где ключ - id пользователя, а значение - текст сообщения</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPost("push-chat-notification")]
         public async Task<IActionResult> PushChatNotification([FromBody] Dictionary<int, string> inputKeyValue, CancellationToken cancellationToken)
         {
@@ -35,6 +41,13 @@ namespace Publisher.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Запушить письмо на почту
+        /// </summary>
+        /// <param name="title">Тема письма</param>
+        /// <param name="inputKeyValue">Словарь, где ключ - id пользователя, а значение - текст письма</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPost("push-mail-notification")]
         public async Task<IActionResult> PushMailNotification([FromQuery] string title, [FromBody] Dictionary<int, string> inputKeyValue, CancellationToken cancellationToken)
         {
