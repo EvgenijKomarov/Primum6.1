@@ -12,8 +12,7 @@
       "namespace": "Pushables",
       "additionalNamespaceUsages": [
         "Pushables.Events",
-        "Pushables.Notifications",
-        "Pushables.Entities"
+        "Pushables.Abstractions"
       ],
       "generateClientClasses": true,
       "generateClientInterfaces": false,
@@ -24,7 +23,7 @@
       "injectHttpClient": true,
       "disposeHttpClient": false,
       "operationGenerationMode": "MultipleClientsFromFirstTagAndPathSegments",
-      "output": "PublisherClients.cs",
+      "output": "PublisherClient.cs",
       "clientClassAccessModifier": "internal"
     }
   }

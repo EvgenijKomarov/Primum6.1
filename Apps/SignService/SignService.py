@@ -8,9 +8,11 @@ import httpx
 import logging
 import uvicorn
 import asyncio
+import time
 
 DB_NAME = "data.db"
 
+time.sleep(10)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] [%(name)s] %(message)s"

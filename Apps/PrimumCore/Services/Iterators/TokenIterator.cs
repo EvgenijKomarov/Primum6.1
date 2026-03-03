@@ -5,7 +5,6 @@ using PrimumCore.Exceptions;
 using PrimumCore.Services.Utilities;
 using Pushables;
 using Pushables.Events;
-using Pushables.Notifications;
 using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
@@ -34,7 +33,7 @@ namespace PrimumCore.Services.Iterators
             };
             user.VerificationTokens.Add(token);
 
-            await publisher.Push(new UserEmailVerificationNotification
+            await publisher.Push(new UserEmailVerificationEvent
             {
                 EmailAdress = user.MailAdress,
                 VerificationLink = $"{environment.GatewayURL}/api/user/confirm-email?token={token.Token}",
@@ -63,11 +62,6 @@ namespace PrimumCore.Services.Iterators
             {
                 case TokenMeaning.EmailVerification:
                     user.IsMailChecked = true;
-                    await publisher.Push(new UserVerifiedEmailEvent
-                    {
-                        EmailAdress = user.MailAdress,
-                        Userid = user.Id
-                    });
                     break;
             }
             await context.SaveChangesAsync();

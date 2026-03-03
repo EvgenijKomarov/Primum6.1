@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
@@ -126,7 +126,7 @@ namespace PrimumCore.Services.Iterators
             abonement.AbonementStatus = AbonementStatus.Deleted;
             abonement.AbonementShedules.Clear();
             await context.SaveChangesAsync();
-            await publisher.Push(new AbonementChangeStatusNotification
+            await publisher.Push(new AbonementChangeStatusEvent
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,
@@ -158,7 +158,7 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Freezed;
             await context.SaveChangesAsync();
-            await publisher.Push(new AbonementChangeStatusNotification
+            await publisher.Push(new AbonementChangeStatusEvent
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,
@@ -190,7 +190,7 @@ namespace PrimumCore.Services.Iterators
 
             abonement.AbonementStatus = AbonementStatus.Active;
             await context.SaveChangesAsync();
-            await publisher.Push(new AbonementChangeStatusNotification
+            await publisher.Push(new AbonementChangeStatusEvent
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

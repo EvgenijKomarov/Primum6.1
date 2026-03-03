@@ -166,7 +166,7 @@ namespace UnitTests.Iterators
 
             // Проверяем публикацию
             _mockPublisher.Verify(
-                x => x.Push(It.Is<NewAbonementSheduleNotification>(n =>
+                x => x.Push(It.Is<NewAbonementSheduleEvent>(n =>
                     n.StudentUserId == 201 &&
                     n.TeacherUserId == 401 &&
                     n.CourseName == "Математика" &&

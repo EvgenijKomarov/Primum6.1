@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Publisher.Services;
+using PublisherService.Entities;
 using Pushables;
-using Pushables.Entities;
+using Pushables.Abstractions;
 using Pushables.Events;
+using SignServiceConnection;
 using System;
 using System.Collections;
 using System.Linq;
@@ -13,32 +15,29 @@ namespace Publisher.Controllers
 {
     [ApiController]
     [Route("publisher")]
-    public class PublisherController(IPublisher publisher) : DefaultController
+    public class PublisherController(IPublisher publisher, SignServiceClient client) : DefaultController
     {
-        [HttpPost("push-mail-notification")]
-        public async Task<IActionResult> PushMailNotification([FromBody] IEnumerable<MailNotification> notifications, CancellationToken cancellationToken)
+        [HttpPost("push-event")]
+        public async Task<IActionResult> PushEvent([FromBody] IPushable inputEvent, CancellationToken cancellationToken)
         {
-            foreach (var notification in notifications)
+            if(inputEvent is IChatBotNotification chatBotNotification)
             {
-                await publisher.Publish(notification, cancellationToken);
+                foreach (var adressant in chatBotNotification.ToChatBotNotifications())//для каждого адресата 
+                {
+                    foreach (var sign in await client.GetSignsAsync(adressant.Key))//для каждой подписи
+                    {
+                        await publisher.Publish(new ChatBotNotification
+                        {
+                            ChatSign = sign,
+                            Text = adressant.Value
+                        }, cancellationToken);
+                    }
+                }
             }
-            return Ok();
-        }
-
-        [HttpPost("push-chatbot-notification")]
-        public async Task<IActionResult> PushChatBotNotification([FromBody] IEnumerable<ChatBotNotification> notifications, CancellationToken cancellationToken)
-        {
-            foreach (var notification in notifications)
+            else if(inputEvent is IMailNotification)//todo
             {
-                await publisher.Publish(notification, cancellationToken);
-            }
-            return Ok();
-        }
 
-        [HttpPost("push-user-verified-email-event")]
-        public async Task<IActionResult> PushUserVerifiedEmailEvent([FromBody] UserVerifiedEmailEvent inputEvent, CancellationToken cancellationToken)
-        {
-            await publisher.Publish(inputEvent, cancellationToken);
+            }
             return Ok();
         }
     }

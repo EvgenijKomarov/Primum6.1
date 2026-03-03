@@ -253,7 +253,7 @@ namespace UnitTests.Iterators
             _mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<System.Threading.CancellationToken>()), Times.Once);
 
             _mockPublisher.Verify(
-                x => x.Push(It.Is<AbonementChangeStatusNotification>(n =>
+                x => x.Push(It.Is<AbonementChangeStatusEvent>(n =>
                     n.StudentUserId == 6 &&
                     n.TeacherUserId == 202 &&
                     n.AbonementId == 305 &&

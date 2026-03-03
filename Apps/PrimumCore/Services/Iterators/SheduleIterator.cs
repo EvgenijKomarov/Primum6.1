@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -175,7 +175,7 @@ namespace PrimumCore.Services.Iterators
             if (abonementShedule is null) { throw new NotFoundException("Shedule"); }
             if (abonementShedule.Abonement.Student.User.Id != studentId) { throw new BusinessLogicException("Only owner can delete shedule"); }
 
-            var notification = new DeleteAbonementSheduleNotification
+            var notification = new DeleteAbonementSheduleEvent
             {
                 StudentName = abonementShedule.Abonement.Student.User.DisplayName,
                 StudentUserId = abonementShedule.Abonement.Student.User.Id,

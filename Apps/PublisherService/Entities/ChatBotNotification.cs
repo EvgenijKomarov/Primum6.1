@@ -1,11 +1,8 @@
 ﻿using SignServiceConnection.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Pushables.Entities
+namespace PublisherService.Entities
 {
-    public record ChatBotNotification
+    public class ChatBotNotification
     {
         public required ChatSign ChatSign { get; set; }
         public required string Text { get; set; }

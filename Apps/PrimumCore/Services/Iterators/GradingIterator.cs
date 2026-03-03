@@ -4,7 +4,7 @@ using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -44,7 +44,7 @@ namespace PrimumCore.Services.Iterators
             context.Set<StudentGrading>().Add(lessonGrading);
             await context.SaveChangesAsync();
 
-            await publisherService.Push(new LessonGradedNotification
+            await publisherService.Push(new LessonGradedEvent
             {
                 CourseId = lesson.Abonement.Course.CourseId,
                 CourseName = lesson.Abonement.Course.Name,

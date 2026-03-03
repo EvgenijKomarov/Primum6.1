@@ -15,12 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Resourses\Resourses.csproj" />
-    <ProjectReference Include="..\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>

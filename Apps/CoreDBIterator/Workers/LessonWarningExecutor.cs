@@ -2,7 +2,7 @@
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 
 namespace CoreDBIterator.Workers
 {
@@ -48,7 +48,7 @@ namespace CoreDBIterator.Workers
             foreach (var lesson in lessonsForPreparation)
             {
                 lesson.Status = LessonStatus.Warned;
-                await publisher.Push(new LessonPreparationNotification()
+                await publisher.Push(new LessonPreparationEvent()
                 {
                     StudentName = lesson.Abonement.Student.User.DisplayName,
                     StudentUserId = lesson.Abonement.Student.User.Id,

@@ -4,7 +4,7 @@ using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 
 namespace CoreDBIterator.Workers
 {
@@ -61,7 +61,7 @@ namespace CoreDBIterator.Workers
                         DateTime.Now.ToString() + lesson.AbonementId.ToString());
                     lesson.StudentLink = tuple.guestLink;
                     lesson.TeacherLink = tuple.adminLink;
-                    await publisher.Push(new LessonNotification()
+                    await publisher.Push(new LessonReadyEvent()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,
@@ -80,7 +80,7 @@ namespace CoreDBIterator.Workers
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
                 {
                     lesson.Status = LessonStatus.Missed;
-                    var notification = new LessonFailureNotification()
+                    var notification = new LessonFailureEvent()
                     {
                         StudentName = lesson.Abonement.Student.User.DisplayName,
                         StudentUserId = lesson.Abonement.Student.User.Id,

@@ -1,5 +1,5 @@
-﻿using Pushables.Events;
-using Pushables.Notifications;
+﻿using Pushables.Abstractions;
+using Pushables.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,23 +7,12 @@ using System.Text.Json;
 
 namespace Pushables
 {
-    public class PublisherService(string url, HttpClient httpClient, ChatBotSignInjector injector)
+    public class PublisherService(string url, HttpClient httpClient)
     {
         private PublisherClient client = new PublisherClient(url, httpClient);
-        public async Task Push<TPushable>(TPushable message) where TPushable : IPushable
+        public async Task Push(IPushable message)
         {
-            if (message is IChatBotNotification chatBotNotification)
-            {
-                await client.PushChatbotNotificationAsync(await chatBotNotification.GetChatBotNotifications(injector));
-            }
-            if (message is IMailNotification mailNotification)
-            { 
-                await client.PushMailNotificationAsync(mailNotification.GetMailNotifications());
-            }
-            /*if (message is UserVerifiedEmailEvent userVerifiedEmailEvent)
-            {
-                await client.PushUserVerifiedEmailEventAsync(userVerifiedEmailEvent);
-            }*/
+            await client.PushEventAsync(message);
         }
     }
 }

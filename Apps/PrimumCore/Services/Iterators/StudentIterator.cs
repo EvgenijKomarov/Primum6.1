@@ -9,7 +9,7 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using Pushables;
-using Pushables.Notifications;
+using Pushables.Events;
 using System.Linq;
 
 namespace PrimumCore.Services.Iterators
@@ -125,7 +125,7 @@ namespace PrimumCore.Services.Iterators
 
             await context.SaveChangesAsync();
 
-            await publisher.Push(new NewAbonementSheduleNotification
+            await publisher.Push(new NewAbonementSheduleEvent
             {
                 StudentName = user.DisplayName,
                 StudentUserId = user.Id,

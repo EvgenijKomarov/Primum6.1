@@ -377,7 +377,7 @@ namespace UnitTests.Iterators
             Assert.That(abonement.AbonementShedules.Count, Is.EqualTo(0));
 
             _mockPublisher.Verify(
-                x => x.Push(It.Is<DeleteAbonementSheduleNotification>(n =>
+                x => x.Push(It.Is<DeleteAbonementSheduleEvent>(n =>
                     n.StudentUserId == 203 &&
                     n.TeacherUserId == 601 &&
                     n.AbonementSheduleId == 20 &&

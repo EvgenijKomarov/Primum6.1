@@ -5,7 +5,7 @@ using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
-using Pushables;
+using Pushables.Abstractions;
 using Pushables.Events;
 using Pushables.Notifications;
 
@@ -67,7 +67,7 @@ namespace UnitTests.Iterators
             Assert.That(createdToken.Meaning, Is.EqualTo(TokenMeaning.EmailVerification));
             Assert.That(createdToken.LifeTime, Is.GreaterThan(DateTime.Now.AddHours(11))); // ~12h
 
-            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationNotification>(n =>
+            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationEvent>(n =>
                 n.EmailAdress == newEmail &&
                 n.VerificationHash == tokenValue &&
                 n.UserId == userId)), Times.Once);
@@ -111,7 +111,7 @@ namespace UnitTests.Iterators
             Assert.That(createdToken.Meaning, Is.EqualTo(TokenMeaning.EmailVerification));
             Assert.That(createdToken.LifeTime, Is.GreaterThan(DateTime.Now.AddHours(11))); // ~12h
 
-            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationNotification>(n =>
+            _mockPublisher.Verify(x => x.Push(It.Is<UserEmailVerificationEvent>(n =>
                 n.EmailAdress == email &&
                 n.VerificationHash == tokenValue &&
                 n.UserId == userId)), Times.Once);

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Pushables;
+using Pushables.Abstractions;
 using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
@@ -119,7 +120,7 @@ namespace UnitTests.BackgroundWorkers
             Assert.That(lesson.TeacherLink, Does.Contain("userType=admin"));
 
             _mockPublisher.Verify(
-                x => x.Push(It.Is<LessonNotification>(n =>
+                x => x.Push(It.Is<LessonReadyEvent>(n =>
                     n.LessonId == lesson.LessonId &&
                     n.StudentUserId == studentUser.Id &&
                     n.TeacherUserId == course.TeacherId &&
@@ -188,7 +189,7 @@ namespace UnitTests.BackgroundWorkers
                 list.Contains(abonementShedule))), Times.Once);
 
             _mockPublisher.Verify(
-                x => x.Push(It.Is<LessonFailureNotification>(n =>
+                x => x.Push(It.Is<LessonFailureEvent>(n =>
                     n.LessonId == lesson.LessonId &&
                     n.StudentUserId == studentUser.Id)),
                 Times.Once);

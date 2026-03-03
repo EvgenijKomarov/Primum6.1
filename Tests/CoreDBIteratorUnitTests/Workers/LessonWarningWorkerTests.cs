@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Pushables;
+using Pushables.Abstractions;
 using Pushables.Notifications;
 using System;
 using System.Collections.Generic;
@@ -104,7 +105,7 @@ namespace UnitTests.BackgroundWorkers
             Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Warned));
 
             _mockPublisher.Verify(
-                x => x.Push(It.Is<LessonPreparationNotification>(n =>
+                x => x.Push(It.Is<LessonPreparationEvent>(n =>
                     n.LessonId == lesson.LessonId &&
                     n.StudentUserId == studentUser.Id &&
                     n.TeacherUserId == course.TeacherId &&
@@ -168,7 +169,7 @@ namespace UnitTests.BackgroundWorkers
                 Assert.That(lesson.Status, Is.EqualTo(LessonStatus.Warned));
             }
 
-            _mockPublisher.Verify(x => x.Push(It.IsAny<LessonPreparationNotification>()), Times.Exactly(3));
+            _mockPublisher.Verify(x => x.Push(It.IsAny<LessonPreparationEvent>()), Times.Exactly(3));
             _mockLogger.Verify(
                 x => x.Log(
                     LogLevel.Information,
@@ -241,7 +242,7 @@ namespace UnitTests.BackgroundWorkers
 
             // Assert
             _mockPublisher.Verify(
-                x => x.Push(It.Is<LessonPreparationNotification>(n =>
+                x => x.Push(It.Is<LessonPreparationEvent>(n =>
                     n.IsEnoughMoney == false // 200 < 500
                 )),
                 Times.Once);

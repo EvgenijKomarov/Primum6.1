@@ -22,7 +22,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddTransient<ConverterToDateTimeService>();
 
         services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient, sp.GetRequiredService<ChatBotSignInjector>()));
+                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient));
 
         services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();
