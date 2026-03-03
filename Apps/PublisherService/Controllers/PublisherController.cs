@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreConnection;
+using Microsoft.AspNetCore.Mvc;
 using Publisher.Services;
 using PublisherService.Entities;
 using Pushables;
@@ -15,28 +16,36 @@ namespace Publisher.Controllers
 {
     [ApiController]
     [Route("publisher")]
-    public class PublisherController(IPublisher publisher, SignServiceClient client) : DefaultController
+    public class PublisherController(IPublisher publisher, SignServiceClient signClient, UserClient userClient) : DefaultController
     {
-        [HttpPost("push-event")]
-        public async Task<IActionResult> PushEvent([FromBody] IPushable inputEvent, CancellationToken cancellationToken)
+        [HttpPost("push-chat-notification")]
+        public async Task<IActionResult> PushChatNotification([FromBody] Dictionary<int, string> inputKeyValue, CancellationToken cancellationToken)
         {
-            if(inputEvent is IChatBotNotification chatBotNotification)
+            foreach (var adressant in inputKeyValue)//для каждого адресата 
             {
-                foreach (var adressant in chatBotNotification.ToChatBotNotifications())//для каждого адресата 
+                foreach (var sign in await signClient.GetSignsAsync(adressant.Key))//для каждой подписи
                 {
-                    foreach (var sign in await client.GetSignsAsync(adressant.Key))//для каждой подписи
+                    await publisher.Publish(new ChatBotNotification
                     {
-                        await publisher.Publish(new ChatBotNotification
-                        {
-                            ChatSign = sign,
-                            Text = adressant.Value
-                        }, cancellationToken);
-                    }
+                        ChatSign = sign,
+                        Text = adressant.Value
+                    }, cancellationToken);
                 }
             }
-            else if(inputEvent is IMailNotification)//todo
-            {
+            return Ok();
+        }
 
+        [HttpPost("push-mail-notification")]
+        public async Task<IActionResult> PushMailNotification([FromQuery] string title, [FromBody] Dictionary<int, string> inputKeyValue, CancellationToken cancellationToken)
+        {
+            foreach (var adressant in inputKeyValue)//для каждого адресата 
+            {
+                await publisher.Publish(new EmailNotification
+                {
+                    MailAdress = await userClient.GetMailAsync(adressant.Key),
+                    Text = adressant.Value,
+                    Title = title
+                }, cancellationToken);
             }
             return Ok();
         }

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(PrimumContext context, 
+    public class UserIterator(PrimumContext context,
         PasswordHasher passwordHasher)
     {
         public async Task<int> Login(string mailAdress, string password)
@@ -52,12 +52,12 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> RegUser(RegistrationInputDto dto)
         {
-            if (!new EmailAddressAttribute().IsValid(dto.MailAdress)) 
+            if (!new EmailAddressAttribute().IsValid(dto.MailAdress))
             { throw new BusinessLogicException("Adress not valid"); }
 
             if (await context.Set<User>()
                 .IgnoreQueryFilters()
-                .AnyAsync(x => x.MailAdress == dto.MailAdress)) 
+                .AnyAsync(x => x.MailAdress == dto.MailAdress))
             { throw new BusinessLogicException("User with the same adress already exists"); }
 
             var user = new User
@@ -165,6 +165,15 @@ namespace PrimumCore.Services.Iterators
                     IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
                 })
                 .ToArrayAsync();
+        }
+
+        public async Task<string> GetMail(int userId)
+        {
+            var user = await context.Set<User>()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new NotFoundException("User"); }
+            return user.MailAdress;
         }
     }
 }

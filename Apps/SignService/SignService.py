@@ -12,7 +12,6 @@ import time
 
 DB_NAME = "data.db"
 
-time.sleep(10)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] [%(name)s] %(message)s"
@@ -49,10 +48,11 @@ def parse_url_to_host_port(url: str) -> tuple[str, int]:
 
 # ------------------ Загрузка конфигурации ------------------
 async def load_self_url():
-    config_base_url = os.getenv("CONFIG_URL", "http://localhost:5000")
+    config_base_url = os.getenv("CONFIG_URL", "http://127.0.0.1:5000")#127.0.0.1 вместо localhost из-за разных версий IPv6
     url = f"{config_base_url}/config/SignService/SelfUrl"
+    time.sleep(5)
     async with httpx.AsyncClient() as client:
-        response = await client.get(url, timeout=5.0)
+        response = await client.get(url, timeout=20.0)
         response.raise_for_status()
         return response.json()  # ожидаем строку вида "http://host:port"
 

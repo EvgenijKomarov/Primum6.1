@@ -7,12 +7,19 @@ using System.Text.Json;
 
 namespace Pushables
 {
-    public class PublisherService(string url, HttpClient httpClient)
+    public class PublisherService(string publisherUrl, HttpClient httpClient)
     {
-        private PublisherClient client = new PublisherClient(url, httpClient);
+        private PublisherClient client = new PublisherClient(publisherUrl, httpClient);
         public async Task Push(IPushable message)
         {
-            await client.PushEventAsync(message);
+            if (message is IChatBotNotification chatNotification)
+            {
+                await client.PushChatNotificationAsync(chatNotification.ToChatBotNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+            }
+            if (message is IMailNotification mailNotification) 
+            { 
+                await client.PushMailNotificationAsync(mailNotification.MailTitle, mailNotification.ToMailNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+            }
         }
     }
 }

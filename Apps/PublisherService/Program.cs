@@ -1,4 +1,6 @@
+using CoreConnection;
 using Publisher.Extensions;
+using SignServiceConnection;
 using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -6,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
 builder.WebHost.UseUrls(solutionEnvironment.PublisherService.SelfUrl);
+builder.Services.AddHttpClient<SignServiceClient>()
+    .AddTypedClient((httpclient, sp) => new SignServiceClient(solutionEnvironment.SignService.PublicUrl, httpclient));
+builder.Services.AddHttpClient<UserClient>()
+    .AddTypedClient((httpclient, sp) => new UserClient(solutionEnvironment.PrimumCore.PublicUrl, httpclient));
 
 // Add services to the container.
 

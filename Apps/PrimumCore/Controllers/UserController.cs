@@ -15,6 +15,9 @@ namespace PrimumCore.Controllers
         [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, false));
 
+        [HttpGet("get-mail")]
+        public async Task<ActionResult<string>> GetMail([FromRoute] int userId) => Ok(await userIterator.GetMail(userId));
+
         [HttpPost("send-email-verification")]
         public async Task<ActionResult<int>> SendEmailVerification([FromRoute] int userId, [FromQuery] string? correctiveMail)
             => Ok(await tokenIterator.SendEmailVerification(userId, correctiveMail));
