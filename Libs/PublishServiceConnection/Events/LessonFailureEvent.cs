@@ -1,4 +1,4 @@
-﻿using Pushables.Abstractions;
+﻿using PublishServiceConnection.Abstractions;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Pushables.Events
+namespace PublishServiceConnection.Events
 {
     public class LessonFailureEvent : IChatBotNotification, IMailNotification
     {

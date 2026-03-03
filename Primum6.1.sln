@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCore", "Apps\BotCore\Bot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherService", "Apps\PublisherService\PublisherService.csproj", "{0F08136D-3AFF-4ACA-BF15-3CBBD8F92DA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pushables", "Libs\Pushables\Pushables.csproj", "{CB9561BA-FD57-4696-87C5-E5E8040A71D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishServiceConnection", "Libs\PublishServiceConnection\PublishServiceConnection.csproj", "{CB9561BA-FD57-4696-87C5-E5E8040A71D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDBModel", "Libs\CoreDBModel\CoreDBModel.csproj", "{CBEC561A-A51E-4939-AF63-49F59375C7F4}"
 EndProject

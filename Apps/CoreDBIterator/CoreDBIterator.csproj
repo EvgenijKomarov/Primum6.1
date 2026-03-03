@@ -20,6 +20,6 @@
 		<ProjectReference Include="..\..\Libs\Common\Common.csproj" />
 		<ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
 		<ProjectReference Include="..\..\Libs\CoreDBModel\CoreDBModel.csproj" />
-		<ProjectReference Include="..\..\Libs\Pushables\Pushables.csproj" />
+		<ProjectReference Include="..\..\Libs\PublishServiceConnection\PublishServiceConnection.csproj" />
 	</ItemGroup>
 </Project>

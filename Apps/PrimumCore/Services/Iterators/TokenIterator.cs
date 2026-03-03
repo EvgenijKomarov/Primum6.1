@@ -3,8 +3,8 @@ using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Services.Utilities;
-using Pushables;
-using Pushables.Events;
+using PublishServiceConnection;
+using PublishServiceConnection.Events;
 using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators

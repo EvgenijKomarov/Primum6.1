@@ -1,11 +1,11 @@
-﻿using Pushables.Abstractions;
-using Pushables.Events;
+﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace Pushables
+namespace PublishServiceConnection
 {
     public class PublisherService(string publisherUrl, HttpClient httpClient)
     {

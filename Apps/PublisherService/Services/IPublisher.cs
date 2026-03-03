@@ -1,4 +1,4 @@
-﻿using Pushables;
+﻿using PublishServiceConnection;
 
 namespace Publisher.Services
 {

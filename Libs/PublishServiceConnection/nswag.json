@@ -9,10 +9,10 @@
   "codeGenerators": {
     "openApiToCSharpClient": {
       "className": "{controller}Client",
-      "namespace": "Pushables",
+      "namespace": "PublishServiceConnection",
       "additionalNamespaceUsages": [
-        "Pushables.Events",
-        "Pushables.Abstractions"
+        "PublishServiceConnection.Events",
+        "PublishServiceConnection.Abstractions"
       ],
       "generateClientClasses": true,
       "generateClientInterfaces": false,

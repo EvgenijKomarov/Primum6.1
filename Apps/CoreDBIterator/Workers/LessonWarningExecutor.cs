@@ -1,8 +1,8 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using Pushables;
-using Pushables.Events;
+using PublishServiceConnection;
+using PublishServiceConnection.Events;
 
 namespace CoreDBIterator.Workers
 {

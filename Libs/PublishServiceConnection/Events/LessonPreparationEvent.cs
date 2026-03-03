@@ -1,4 +1,4 @@
-﻿using Pushables.Abstractions;
+﻿using PublishServiceConnection.Abstractions;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Pushables.Events
+namespace PublishServiceConnection.Events
 {
     public class LessonPreparationEvent : IChatBotNotification, IMailNotification
     {

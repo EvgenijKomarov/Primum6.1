@@ -1,8 +1,8 @@
 ﻿using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using Pushables;
-using Pushables.Events;
+using PublishServiceConnection;
+using PublishServiceConnection.Events;
 using SignServiceConnection;
 using SignServiceConnection.Models;
 

@@ -1,4 +1,4 @@
-﻿using Pushables.Abstractions;
+﻿using PublishServiceConnection.Abstractions;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Pushables.Events
+namespace PublishServiceConnection.Events
 {
-    public class NewAbonementSheduleEvent : IChatBotNotification, IMailNotification
+    public class DeleteAbonementSheduleEvent : IChatBotNotification, IMailNotification
     {
         public required string StudentName { get; set; }
 
@@ -27,14 +27,14 @@ namespace Pushables.Events
 
         public required string DayOfWeek { get; set; }
 
-        public required int Time {  get; set; }
+        public required int Time { get; set; }
 
-        public string MailTitle => "Новый ученик, подписавшийся на Ваш курс";
+        public string MailTitle => "Удаление абонемента одного из учеников";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                [TeacherUserId] = $"{Emoticons.Student}Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
             };
         }
 
@@ -42,7 +42,7 @@ namespace Pushables.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                [TeacherUserId] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
             };
         }
     }

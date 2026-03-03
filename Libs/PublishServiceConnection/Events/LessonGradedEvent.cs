@@ -1,10 +1,10 @@
-﻿using Pushables.Abstractions;
+﻿using PublishServiceConnection.Abstractions;
 using Resourses;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pushables.Events
+namespace PublishServiceConnection.Events
 {
     public class LessonGradedEvent : IChatBotNotification, IMailNotification
     {

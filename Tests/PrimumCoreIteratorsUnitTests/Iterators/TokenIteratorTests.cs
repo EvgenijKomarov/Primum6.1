@@ -5,9 +5,9 @@ using Moq.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
-using Pushables.Abstractions;
-using Pushables.Events;
-using Pushables.Notifications;
+using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Events;
+using PublishServiceConnection.Notifications;
 
 namespace UnitTests.Iterators
 {

@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Publisher.Services;
 using PublisherService.Entities;
-using Pushables;
-using Pushables.Abstractions;
-using Pushables.Events;
+using PublishServiceConnection;
+using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Events;
 using SignServiceConnection;
 using System;
 using System.Collections;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pushables.Abstractions
+namespace PublishServiceConnection.Abstractions
 {
     public interface IChatBotNotification: IPushable
     {
