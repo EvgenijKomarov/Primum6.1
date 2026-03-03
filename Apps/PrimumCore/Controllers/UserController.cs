@@ -10,7 +10,7 @@ namespace PrimumCore.Controllers
     public class UserController(
         UserIterator userIterator, 
         TokenIterator tokenIterator,
-        ChatSignTokenIterator anonTokenIterator) : PrimumController
+        ChatSignTokenIterator chatSignTokenIterator) : PrimumController
     {
         [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, false));
@@ -28,6 +28,6 @@ namespace PrimumCore.Controllers
 
         [HttpPost("confirm-chat/{token}")]
         public async Task<ActionResult<int>> ConfirmChat([FromRoute] int userId, [FromRoute] string token)
-            => Ok(await anonTokenIterator.AddChat(userId, token));
+            => Ok(await chatSignTokenIterator.AddChat(userId, token));
     }
 }

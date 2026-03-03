@@ -21,6 +21,7 @@ namespace PrimumCore.Services.Iterators
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(x => x.Id == userId);
             if (user is null) { throw new NotFoundException("User"); }
+            if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
 
