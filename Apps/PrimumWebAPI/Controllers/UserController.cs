@@ -13,17 +13,36 @@ namespace PrimumWebAPI.Controllers
     [Tags("User")]
     public class UserController(UserClient client): DefaultController
     {
+        /// <summary>
+        /// Полный профиль пользователя, включая информацию о том, является ли он учеником или преподавателем, подтверждена ли почта и т.д.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetProfile() => Ok(await client.ProfileAsync(User.GetUserId()));
 
+        /// <summary>
+        /// Отправить письмо с подтверждением почты (не сработает если почта уже подтверждена)
+        /// </summary>
+        /// <param name="correctiveMail">Если нужно внести изменения в адрес почты, можно передать correctiveMail</param>
+        /// <returns></returns>
         [HttpPost("send-email-verification")]
         public async Task<ActionResult<int>> SendEmailVerification([FromQuery] string? correctiveMail)
             => Ok(await client.SendEmailVerificationAsync(User.GetUserId(), correctiveMail));
 
+        /// <summary>
+        /// Подтвердить почту, отправив пришедший в письме токен 
+        /// </summary>
+        /// <param name="token">Токен из письма</param>
+        /// <returns></returns>
         [HttpPost("confirm-email")]
         public async Task<ActionResult<int>> ConfirmEmail([FromQuery] string token)
             => Ok(await client.ConfirmEmailAsync(User.GetUserId(), token));
 
+        /// <summary>
+        /// Подтвердить чат, отправив токен из него
+        /// </summary>
+        /// <param name="token">Токен из чата</param>
+        /// <returns></returns>
         [HttpPost("confirm-chat")]
         public async Task<ActionResult<int>> ConfirmChat([FromQuery] string token)
             => Ok(await client.ConfirmChatAsync(User.GetUserId(), token));
@@ -36,10 +55,19 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<long>> WithdrawnMoney([FromQuery] long cash)
             => Ok(await client.WithdrawnAsync(User.GetUserId(), cash));*/
 
+        /// <summary>
+        /// Создать профиль преподавателя
+        /// </summary>
+        /// <param name="about">О преподавателе (обязательно)</param>
+        /// <returns></returns>
         [HttpPost("create-teacher-profile")]
         public async Task<ActionResult<int>> CreateTeacherProfile([FromBody] string about)
             => Ok(await client.CreateTeacherProfileAsync(User.GetUserId(), about));
 
+        /// <summary>
+        /// Создать профиль ученика
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("create-student-profile")]
         public async Task<ActionResult<int>> CreateStudentProfile()
             => Ok(await client.CreateStudentProfileAsync(User.GetUserId()));

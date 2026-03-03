@@ -5,9 +5,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using PrimumWebAPI.Controllers;
+using PrimumWebAPI.Entities;
 using PrimumWebAPI.Services;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 using System.Text;
 
 namespace PrimumWebAPI.Extensions
@@ -34,6 +36,19 @@ namespace PrimumWebAPI.Extensions
         {
             builder.Services.AddSwaggerGen(c =>
             {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Primum WebAPI",
+                    Version = "v1",
+                    Description = "WebAPI приложения"
+                });
+                // Подключение XML-комментариев
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+                // ⚠️ Важно: второй параметр true включает комментарии для контроллеров!
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
                 c.EnableAnnotations();
                 c.CustomOperationIds(apiDesc =>
                 {
@@ -62,13 +77,8 @@ namespace PrimumWebAPI.Extensions
                     Description = "JWT Authorization header using the Bearer scheme."
                 };
                 c.AddSecurityDefinition("bearer", scheme);
-                c.AddSecurityRequirement(d => new OpenApiSecurityRequirement
-                  {
-                    {
-                      new OpenApiSecuritySchemeReference("bearer", d),
-                      new List<string>()
-                    }
-                  });
+
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
             return builder;
