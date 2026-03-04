@@ -1,14 +1,12 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from UserCreate import UserCreate
-from urllib.parse import urlparse
 import sqlite3
 import os
-import httpx
 import logging
 import uvicorn
+from get_url import load_url, load_host_and_port
 import asyncio
-import time
 
 DB_NAME = "data.db"
 
@@ -35,47 +33,17 @@ def init_db():
     conn.commit()
     conn.close()
 
-# ------------------ Парсинг URL ------------------
-def parse_url_to_host_port(url: str) -> tuple[str, int]:
-    """
-    Парсит URL и возвращает кортеж (host, port).
-    Пример: "http://192.168.1.10:8080" → ("192.168.1.10", 8080)
-    """
-    parsed = urlparse(url)
-    host = parsed.hostname
-    port = parsed.port
-    return host, port
-
-# ------------------ Загрузка конфигурации ------------------
-async def load_self_url():
-    config_base_url = os.getenv("CONFIG_URL", "http://127.0.0.1:5000")#127.0.0.1 вместо localhost из-за разных версий IPv6
-    url = f"{config_base_url}/config/SignService/SelfUrl"
-    time.sleep(5)
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url, timeout=20.0)
-        response.raise_for_status()
-        return response.json()  # ожидаем строку вида "http://host:port"
-
-def load_self_url_sync() -> str | None:
-    try:
-        result = asyncio.run(load_self_url())
-        return str(result).strip()
-    except Exception as e:
-        logger.warning(f"Не удалось загрузить SelfUrl из конфига: {e}")
-        return None
-
 # ------------------ Lifespan ------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting service...")
     init_db()
     try:
-        self_url = await load_self_url()
-        app.state.self_url = self_url
-        print(f"Loaded selfUrl (runtime): {self_url}")
+        app.state.url = load_url("SignService/SelfUrl")
+        print(f"Loaded selfUrl (runtime): {app.state.url}")
     except Exception as e:
         print(f"Failed to load config at runtime: {e}")
-        app.state.self_url = None
+        app.state.url = None
     yield
     print("Shutting down service...")
 
@@ -137,14 +105,11 @@ def get_by_user(userId: int):
 if __name__ == "__main__":
     print("Starting server initialization...")
     
-    self_url = load_self_url_sync()
-    
-    # 3️⃣ Парсим URL на host и port
-    HOST, PORT = parse_url_to_host_port(self_url)
+    HOST, PORT = load_host_and_port("SignService/SelfUrl")
     print(f"Binding to http://{HOST}:{PORT}")
     
     uvicorn.run(
-        "SignService:app",  # замените "main" на имя вашего файла без .py
+        "SignService:app",
         host=HOST,
         port=PORT,
         log_level="info",

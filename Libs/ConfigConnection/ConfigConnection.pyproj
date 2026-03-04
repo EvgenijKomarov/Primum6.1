@@ -2,15 +2,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>f4e1e339-2fb7-4d30-8192-78c086a047f3</ProjectGuid>
+    <ProjectGuid>e8ad7c48-dba6-4b50-8f8f-6eae76be8684</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>SignService.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>SignService</Name>
-    <RootNamespace>SignService</RootNamespace>
+    <Name>ConfigConnection</Name>
+    <RootNamespace>ConfigConnection</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,13 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Dockerfile" />
     <Compile Include="get_url.py" />
-    <Compile Include="SignService.py" />
-    <Compile Include="UserCreate.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
