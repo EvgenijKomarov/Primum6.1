@@ -41,6 +41,13 @@ namespace PrimumCore.Services.Iterators
                 .ToArray();
         }
 
+        public async Task<CourseDto> GetCourseByTeacher(int userId, int courseId, bool isOnlyAvailable)
+        {
+            var course = (await GetCoursesByTeacher(userId, isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);
+            if (course == null) { throw new NotFoundException("Course"); }
+            return course;
+        }
+
         public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
         {
             var course = (await GetCourses(isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);

@@ -18,11 +18,8 @@ namespace PrimumWebAPI.Extensions
     {
         public static WebApplicationBuilder AddControllers(this WebApplicationBuilder builder)
         {
-            builder.Services.AddScoped<UserController>();
-            builder.Services.AddScoped<StudentController>();
-            builder.Services.AddScoped<AdminController>();
-            builder.Services.AddScoped<PublicController>();
-            builder.Services.AddScoped<TeacherController>();
+            builder.Services.AddControllers(options =>
+                options.Conventions.Add(new DefaultControllerConvention()));
             return builder;
         }
 
@@ -50,23 +47,6 @@ namespace PrimumWebAPI.Extensions
                 c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 
                 c.EnableAnnotations();
-                c.CustomOperationIds(apiDesc =>
-                {
-                    return apiDesc.TryGetMethodInfo(out var methodInfo)
-                        ? methodInfo.Name
-                        : null;
-                });
-                c.TagActionsBy(api =>
-                {
-                    var tags = api.CustomAttributes()
-                                  .OfType<TagsAttribute>()
-                                  .FirstOrDefault();
-
-                    return tags?.Tags.ToArray() ?? new[]
-                    {
-                        api.ActionDescriptor.RouteValues["controller"]
-                    };
-                });
                 var scheme = new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.Http,

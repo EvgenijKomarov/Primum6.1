@@ -37,6 +37,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses([FromRoute] int userId) 
             => Ok(await courseIterator.GetCoursesByTeacher(userId, false));
 
+        [HttpGet("course/{courseId}")]
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourse([FromRoute] int userId, [FromRoute] int courseId)
+            => Ok(await courseIterator.GetCourseByTeacher(userId, courseId, false));
+
         [HttpGet("shedules")]
         public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetShedules([FromRoute] int userId) 
             => Ok(await sheduleIterator.GetTeacherShedules(userId, false));

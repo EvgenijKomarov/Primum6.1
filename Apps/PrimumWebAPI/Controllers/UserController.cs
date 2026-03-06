@@ -7,17 +7,15 @@ using System.Security.Claims;
 
 namespace PrimumWebAPI.Controllers
 {
-    [ApiController]
     [Authorize]
-    [Route("api/user")]
-    [Tags("User")]
+    [Route("user")]
     public class UserController(UserClient client): DefaultController
     {
         /// <summary>
         /// Полный профиль пользователя, включая информацию о том, является ли он учеником или преподавателем, подтверждена ли почта и т.д.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("profile")]
+        [HttpGet]
         public async Task<ActionResult<UserDto>> GetProfile() => Ok(await client.ProfileAsync(User.GetUserId()));
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="token">Токен из письма</param>
         /// <returns></returns>
         [HttpPost("confirm-email")]
-        public async Task<ActionResult<int>> ConfirmEmail([FromQuery] string token)
+        public async Task<ActionResult<int>> ConfirmEmail([FromBody] string token)
             => Ok(await client.ConfirmEmailAsync(User.GetUserId(), token));
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="token">Токен из чата</param>
         /// <returns></returns>
         [HttpPost("confirm-chat")]
-        public async Task<ActionResult<int>> ConfirmChat([FromQuery] string token)
+        public async Task<ActionResult<int>> ConfirmChat([FromBody] string token)
             => Ok(await client.ConfirmChatAsync(User.GetUserId(), token));
 
         /*[HttpPatch("deposit")]
