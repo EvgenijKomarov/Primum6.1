@@ -10,7 +10,6 @@ namespace PrimumWebAPI.Controllers
     [Authorize]
     public class AdminUserController(AdminClient client) : DefaultController
     {
-
         /// <summary>
         /// Список всех пользователей
         /// </summary>
@@ -38,22 +37,23 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.AddCashAsync(User.GetUserId(), objectUserId, cash));
 
         /// <summary>
-        /// Забанить пользователя. Только для админов с правом ChangeBanStatus
+        /// Забанить/разбанить пользователя. Только для админов с правом ChangeBanStatus
         /// </summary>
         /// <param name="objectUserId"></param>
+        /// <param name="isBanned">Статус бана</param>
         /// <returns></returns>
-        [HttpPatch("{objectUserId}/ban")]
-        public async Task<ActionResult<int>> BanUser([FromRoute] int objectUserId)
-            => Ok(await client.BanAsync(User.GetUserId(), objectUserId));
-
-        /// <summary>
-        /// Разбанить пользователя. Только для админов с правом ChangeBanStatus
-        /// </summary>
-        /// <param name="objectUserId"></param>
-        /// <returns></returns>
-        [HttpPatch("{objectUserId}/unban")]
-        public async Task<ActionResult<int>> UnbanUser([FromRoute] int objectUserId)
-            => Ok(await client.UnbanAsync(User.GetUserId(), objectUserId));
+        [HttpPatch("{objectUserId}/ban-status")]
+        public async Task<ActionResult<int>> BanUser([FromRoute] int objectUserId, [FromBody] bool isBanned)
+        {
+            if (isBanned) 
+            { 
+                return Ok(await client.BanAsync(User.GetUserId(), objectUserId));
+            }
+            else
+            {
+                return Ok(await client.UnbanAsync(User.GetUserId(), objectUserId));
+            }
+        }
 
         /// <summary>
         /// Создать профиль админа пользователю. Только для админов с правом CreateAdminProfiles
@@ -61,7 +61,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="objectUserId"></param>
         /// <param name="status">Статус (просто приписка, ни на что не влияющая)</param>
         /// <returns></returns>
-        [HttpPost("{objectUserId}/create-admin-profile")]
+        [HttpPost("{objectUserId}/admin-profile")]
         public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int objectUserId, [FromQuery] string status)
             => Ok(await client.CreateAdminProfileAsync(User.GetUserId(), objectUserId, status));
     }

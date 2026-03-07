@@ -37,22 +37,23 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.CourseCreateAsync(User.GetUserId(), courseDto));
 
         /// <summary>
-        /// Активировать курс, чтобы он отображался в общем списке и на него могли подписываться ученики.
+        /// Активировать/деактивировать курс, чтобы он отображался в общем списке и на него могли подписываться ученики, либо скрыть его от учеников и не дать им на него подписаться
         /// </summary>
         /// <param name="courseId"></param>
+        /// <param name="activityStatus">Статус активности (active/non-active)</param>
         /// <returns></returns>
-        [HttpPatch("{courseId}/activate")]
-        public async Task<ActionResult<int>> ActivateCourse([FromRoute] int courseId)
-            => Ok(await client.CourseActivateAsync(User.GetUserId(), courseId));
-
-        /// <summary>
-        /// Деактивировать курс, чтобы скрыть его от учеников и не дать им на него подписаться
-        /// </summary>
-        /// <param name="courseId"></param>
-        /// <returns></returns>
-        [HttpPatch("{courseId}/deactivate")]
-        public async Task<ActionResult<int>> DeactivateCourse([FromRoute] int courseId)
-            => Ok(await client.CourseDeactivateAsync(User.GetUserId(), courseId));
+        [HttpPatch("{courseId}/activity")]
+        public async Task<ActionResult<int>> ActivateCourse([FromRoute] int courseId, [FromBody] bool activityStatus)
+        {
+            if (activityStatus)
+            {
+                return Ok(await client.CourseActivateAsync(User.GetUserId(), courseId));
+            }
+            else
+            {
+                return Ok(await client.CourseDeactivateAsync(User.GetUserId(), courseId));
+            }
+        }
 
         /// <summary>
         /// Реадктирование курса. Применится только Price, FreeLessons, и MaxLessonsMaxLessons. Остальные поля не редактируются, так как после редактирования модерация не предполагается
@@ -60,7 +61,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="courseId"></param>
         /// <param name="courseDto"></param>
         /// <returns></returns>
-        [HttpPut("{courseId}/edit")]
+        [HttpPut("{courseId}")]
         public async Task<ActionResult<int>> EditCourse([FromRoute] int courseId, [FromBody] CourseInputDto courseDto = null!)
             => Ok(await client.CourseEditAsync(User.GetUserId(), courseId, courseDto));
     }

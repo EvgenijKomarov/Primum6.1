@@ -23,7 +23,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="correctiveMail">Если нужно внести изменения в адрес почты, можно передать correctiveMail</param>
         /// <returns></returns>
-        [HttpPut("send-email-verification")]
+        [HttpPost("send-email-verification")]
         public async Task<ActionResult<int>> SendEmailVerification([FromQuery] string? correctiveMail)
             => Ok(await client.SendEmailVerificationAsync(User.GetUserId(), correctiveMail));
 
