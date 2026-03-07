@@ -34,7 +34,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<int>> AddPromocode([FromBody] PromocodeInputDto dto = null!)
             => Ok(await client.AddPromocodeAsync(User.GetUserId(), dto));
 

@@ -33,8 +33,8 @@ namespace PrimumWebAPI.Controllers
         /// <param name="objectUserId"></param>
         /// <param name="cash"></param>
         /// <returns></returns>
-        [HttpPatch("{objectUserId}/add-cash/{cash}")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int objectUserId, [FromRoute] int cash = 0)
+        [HttpPatch("{objectUserId}/cash")]
+        public async Task<ActionResult<int>> AddCash([FromRoute] int objectUserId, [FromBody] int cash = 0)
             => Ok(await client.AddCashAsync(User.GetUserId(), objectUserId, cash));
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="objectUserId"></param>
         /// <param name="status">Статус (просто приписка, ни на что не влияющая)</param>
         /// <returns></returns>
-        [HttpPut("{objectUserId}/create-admin-profile")]
+        [HttpPost("{objectUserId}/create-admin-profile")]
         public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int objectUserId, [FromQuery] string status)
             => Ok(await client.CreateAdminProfileAsync(User.GetUserId(), objectUserId, status));
     }

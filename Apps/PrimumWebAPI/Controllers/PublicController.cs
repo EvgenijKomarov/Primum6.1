@@ -1,5 +1,6 @@
 ﻿using CoreConnection;
 using CoreConnection.DTOs;
+using CoreConnection.DTOs.Inputs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrimumWebAPI.Services;
@@ -17,10 +18,10 @@ namespace PrimumWebAPI.Controllers
         /// <param name="mailAdress">Адрес почты</param>
         /// <param name="password">Пароль (голый, без шифрования)</param>
         /// <returns></returns>
-        [HttpGet("login")]
-        public async Task<ActionResult<string>> Login([FromQuery] string mailAdress, [FromQuery] string password)
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login([FromBody] LoggingInputDto input)
         {
-            var id = await client.LoginAsync(mailAdress, password);
+            var id = await client.LoginAsync(input.Email, input.Password);
             var user = await userClient.ProfileAsync(id);
 
             return Ok(tokenService.GenerateToken(user));

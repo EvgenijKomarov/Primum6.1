@@ -23,7 +23,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("solve")]
+        [HttpPatch]
         public async Task<ActionResult<int>> SolveIncedent([FromBody] IncidentDecisionInputDto dto = null!)
             => Ok(await client.SolveIncidentAsync(User.GetUserId(), dto));
 
@@ -50,7 +50,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="logId"></param>
         /// <returns></returns>
-        [HttpPatch("logs/{logId}/revise")]
+        [HttpPatch("logs/{logId}")]
         public async Task<ActionResult<int>> RevisionIncidentLog([FromRoute] int logId)
             => Ok(await client.ReviseIncidentLogAsync(User.GetUserId(), logId));
     }

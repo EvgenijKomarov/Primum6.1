@@ -33,7 +33,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="objectUserId"></param>
         /// <param name="permissions"></param>
         /// <returns></returns>
-        [HttpPatch("{objectUserId}/edit-permissions")]
+        [HttpPatch("{objectUserId}/permissions")]
         public async Task<ActionResult<int>> EditPermissions([FromRoute] int objectUserId, [FromBody] Dictionary<string, bool> permissions = null!)
             => Ok(await client.EditPermissionsAsync(User.GetUserId(), objectUserId, permissions));
 

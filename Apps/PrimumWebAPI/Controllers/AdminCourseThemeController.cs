@@ -15,7 +15,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<int>> CreateTheme([FromBody] CourseThemeInputDto dto = null!)
             => Ok(await client.CreateCourseThemeAsync(User.GetUserId(), dto));
 
