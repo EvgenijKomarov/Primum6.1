@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -56,6 +57,11 @@ namespace SignServiceConnection
         {
             var response = await _httpClient.GetAsync($"/get-signs/{userId}", ct);
             await EnsureSuccessAsync(response, ct);
+
+            if ((await response.Content.ReadAsStringAsync(ct)) == "{}")
+            {
+                return new List<ChatSign>();
+            }
 
             return await response.Content.ReadFromJsonAsync<List<ChatSign>>(_jsonOptions, ct)
                 ?? new List<ChatSign>();
