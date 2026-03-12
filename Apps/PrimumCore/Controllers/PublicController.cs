@@ -12,7 +12,7 @@ namespace PrimumCore.Controllers
         UserIterator userIterator,
         TeacherIterator teacherIterator,
         CourseIterator courseIterator,
-        SheduleIterator sheduleIterator,
+        TeacherSheduleIterator sheduleIterator,
         ThemeIterator themeIterator,
         PromocodeIterator promocodeIterator
         ) : PrimumController

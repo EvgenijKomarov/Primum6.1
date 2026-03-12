@@ -13,7 +13,8 @@ namespace PrimumCore.Controllers
         AdminIterator iterator, 
         IncidentIterator IncidentIterator,
         PromocodeIterator promocodeIterator,
-        UserIterator userIterator
+        UserIterator userIterator,
+        ThemeIterator themeIterator
         ) : PrimumController
     {
         [HttpGet("profile")]
@@ -75,7 +76,7 @@ namespace PrimumCore.Controllers
 
         [HttpPatch("edit-course-theme/{themeId}")]
         public async Task<ActionResult<int>> EditTheme([FromRoute] int userId, [FromRoute] int themeId, [FromBody] CourseThemeInputDto dto = null!)
-            => Ok(await iterator.EditTheme(userId, themeId, dto));
+            => Ok(await themeIterator.EditTheme(userId, themeId, dto));
 
         [HttpPut("create-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> CreateAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] string status)
@@ -91,7 +92,7 @@ namespace PrimumCore.Controllers
 
         [HttpPut("create-course-theme")]
         public async Task<ActionResult<int>> CreateTheme([FromRoute] int userId, [FromBody] CourseThemeInputDto dto = null!)
-            => Ok(await iterator.CreateTheme(userId, dto));
+            => Ok(await themeIterator.CreateTheme(userId, dto));
 
         [HttpDelete("delete-admin-profile/{objectUserId}")]
         public async Task<ActionResult<int>> DeleteAdminProfile([FromRoute] int userId, [FromRoute] int objectUserId)

@@ -53,12 +53,17 @@ namespace Publisher.Controllers
         {
             foreach (var adressant in inputKeyValue)//для каждого адресата 
             {
-                await publisher.Publish(new EmailNotification
+                var mailAdress = await userClient.GetMailAsync(adressant.Key);
+
+                if (!string.IsNullOrWhiteSpace(mailAdress))
                 {
-                    MailAdress = await userClient.GetMailAsync(adressant.Key),
-                    Text = adressant.Value,
-                    Title = title
-                }, cancellationToken);
+                    await publisher.Publish(new EmailNotification
+                    {
+                        MailAdress = mailAdress,
+                        Text = adressant.Value,
+                        Title = title
+                    }, cancellationToken);
+                }
             }
             return Ok();
         }

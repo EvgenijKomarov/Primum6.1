@@ -17,7 +17,7 @@ namespace PrimumCore.Controllers
 
         [HttpPatch("withdrawn")]
         public async Task<ActionResult<long>> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash = 0)
-            => Ok(await iterator.GetMoney(userId, cash));
+            => Ok(await iterator.AddMoney(userId, -cash));
 
         [HttpPost("create-teacher-profile")]
         public async Task<ActionResult<int>> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)

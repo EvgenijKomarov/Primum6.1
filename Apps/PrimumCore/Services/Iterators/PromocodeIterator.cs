@@ -7,46 +7,49 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
+using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class PromocodeIterator(PrimumContext context)
+    public class PromocodeIterator(PrimumContext context, AdminProfileHelper helper)
     {
-        private AdminProfileHelper helper = new AdminProfileHelper(context);
+        private IQueryable<Promocode> Themes(bool isOnlyAvailable, Expression<Func<Promocode, bool>>? predicate) => context
+            .Set<Promocode>()
+            .WhereIf(predicate is not null, predicate!)
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsPromocodeAvailable)
+            .Include(x => x.Student)
+            .ThenInclude(x => x.User);
 
-        public async Task<IEnumerable<PromocodeDto>> GetPromocodes(bool OnlyAvailable)
+        private IQueryable<PromocodeDto> ToDto(IQueryable<Promocode> queryable) => queryable
+            .Select(x => new PromocodeDto
+            {
+                PromocodeId = x.PromocodeId,
+                StudentId = x.Student!.StudentId,
+                Code = null,
+                CoinsPrice = x.CoinsPrice,
+                Title = x.Title,
+                Description = x.Description,
+                IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
+            });
+
+        public async Task<IEnumerable<PromocodeDto>> GetPromocodes(bool onlyAvailable)
         {
-            return await context.Set<Promocode>()
-                .Include(x => x.Student)
-                .WhereIf(OnlyAvailable, AvailabilityExpressions.IsPromocodeAvailable)
-                .Select(x => new PromocodeDto
-                {
-                    PromocodeId = x.PromocodeId,
-                    StudentId = x.StudentId,
-                    Code = null,
-                    CoinsPrice = x.CoinsPrice,
-                    Title = x.Title,
-                    Description = x.Description,
-                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
-                })
-                .ToArrayAsync();
+            return await ToDto(
+                    Themes(onlyAvailable, null)
+                ).ToArrayAsync();
         }
 
         public async Task<PromocodeDto> GetPromocode(int promocodeId, bool onlyAvailable)
         {
-            var code = (await GetPromocodes(onlyAvailable)).FirstOrDefault(x => x.PromocodeId == promocodeId);
-            if (code is null) { throw new NotFoundException("Promocode"); }
-
-            return code;
+            return await ToDto(
+                    Themes(onlyAvailable, null)
+                ).FirstOrDefaultAsync(x => x.PromocodeId == promocodeId) ?? throw new NotFoundException("Promocode");
         }
 
         public async Task<PromocodeDto> BuyPromocode(int studentId, int promocodeId)
         {
-            var code = context.Set<Promocode>()
-                .Include(x => x.Student)
-                .Where(AvailabilityExpressions.IsPromocodeAvailable)
-                .FirstOrDefault(x => x.PromocodeId == promocodeId);
-            if (code is null) { throw new NotFoundException("Promocode"); }
+            var code = await Themes(true, null)
+                .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId) ?? throw new NotFoundException("Promocode");
 
             var student = await context.Set<User>()
                 .Include(x => x.StudentProfile)
@@ -72,24 +75,9 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<IEnumerable<PromocodeDto>> GetStudentPromocodes(int studentId)
         {
-            var student = await context.Set<User>()
-                .Include(x => x.StudentProfile)
-                .ThenInclude(x => x.Promocodes)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (student is null || student.StudentProfile is null) { throw new NotFoundException("Student"); }
-
-            return student.StudentProfile.Promocodes
-                .Select(x => new PromocodeDto
-                {
-                    PromocodeId = x.PromocodeId,
-                    StudentId = x.StudentId,
-                    Code = x.Code,
-                    CoinsPrice = x.CoinsPrice,
-                    Title = x.Title,
-                    Description = x.Description,
-                    IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
-                })
-                .ToArray();
+            return await ToDto(
+                    Themes(false, x => x.Student != null && x.Student.UserId == studentId)
+                ).ToArrayAsync();
         }
 
         public async Task<int> AddPromocode(int adminId, PromocodeInputDto dto)
@@ -113,9 +101,8 @@ namespace PrimumCore.Services.Iterators
         {
             await helper.CheckIteratingUser(adminId, Permission.DeletePromocodes);
 
-            var code = await context.Set<Promocode>()
-                .Include(x => x.Student)
-                .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId);
+            var code = await Themes(false, null)
+                .FirstOrDefaultAsync(x => x.PromocodeId == promocodeId) ?? throw new NotFoundException("Promocode");
             if (code is null) { throw new NotFoundException("Promocode"); }
             if (!AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)) 
                 { throw new BusinessLogicException("Promocode was sold"); }

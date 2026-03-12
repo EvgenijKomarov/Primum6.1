@@ -22,7 +22,8 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<UserIterator>();
             builder.Services.AddScoped<IncidentIterator>();
             builder.Services.AddScoped<CourseIterator>();
-            builder.Services.AddScoped<SheduleIterator>();
+            builder.Services.AddScoped<TeacherSheduleIterator>();
+            builder.Services.AddScoped<StudentSheduleIterator>();
             builder.Services.AddScoped<LessonIterator>();
             builder.Services.AddScoped<ThemeIterator>();
             builder.Services.AddScoped<GradingIterator>();

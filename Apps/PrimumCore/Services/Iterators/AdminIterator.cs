@@ -1,19 +1,14 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
-using System.Security;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AdminIterator(PrimumContext context)
+    public class AdminIterator(PrimumContext context, AdminProfileHelper helper)
     {
-        private AdminProfileHelper helper = new AdminProfileHelper(context);
-
         public async Task<IEnumerable<AdminProfileDto>> GetAdmins()
         {
             return await context.Set<User>()
@@ -176,50 +171,6 @@ namespace PrimumCore.Services.Iterators
             user.IsBanned = banStatus;
             await context.SaveChangesAsync();
             return user.Id;
-        }
-
-        public async Task<int> CreateTheme(int userId, CourseThemeInputDto dto)
-        {
-            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.EditCourseThemes);
-
-            var theme = new CourseTheme
-            {
-                IsActive = dto.IsActive,
-                ThemeName = dto.ThemeName,
-            };
-            context.Set<CourseTheme>().Add(theme);
-
-            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
-            {
-                AdminProfileId = iteratingUser.AdminProfile.AdminId,
-                Description =
-                $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}",
-                DecisionDate = DateTime.Now
-            });
-            await context.SaveChangesAsync();
-            return theme.CourseThemeId;
-        }
-
-        public async Task<int> EditTheme(int userId, int themeId, CourseThemeInputDto dto)
-        {
-            var iteratingUser = await helper.CheckIteratingUser(userId, Permission.EditCourseThemes);
-
-            var theme = context.Set<CourseTheme>()
-                .FirstOrDefault(x => x.CourseThemeId == themeId);
-            if (theme is null) { throw new NotFoundException("Theme"); }
-
-            theme.ThemeName = dto.ThemeName;
-            theme.IsActive = dto.IsActive;
-
-            iteratingUser.AdminProfile.IncidentLogs.Add(new IncidentLog
-            {
-                AdminProfileId = iteratingUser.AdminProfile.AdminId,
-                Description =
-                $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}",
-                DecisionDate = DateTime.Now
-            });
-            await context.SaveChangesAsync();
-            return theme.CourseThemeId;
         }
     }
 }

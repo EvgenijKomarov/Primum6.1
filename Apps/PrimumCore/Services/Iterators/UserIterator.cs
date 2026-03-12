@@ -7,18 +7,60 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(PrimumContext context,
-        PasswordHasher passwordHasher)
+    public class UserIterator(PrimumContext context, PasswordHasher passwordHasher)
     {
+        private IQueryable<User> Users(bool isOnlyAvailable, Expression<Func<User, bool>>? predicate) => context
+            .Set<User>()
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
+            .WhereIf(predicate is not null, predicate!)
+            .Include(u => u.TeacherProfile)
+            .Include(u => u.StudentProfile)
+            .Include(u => u.AdminProfile)
+            .IgnoreQueryFilters();
+
+        private IQueryable<UserDto> ToDto(IQueryable<User> queryable) => queryable
+            .Select(user => new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                DisplayName = user.DisplayName,
+                Cash = user.Cash,
+                IsApprovedStudent = user.StudentProfile != null ?
+                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsApprovedTeacher = user.TeacherProfile != null ?
+                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsAdmin = user.AdminProfile != null,
+                IsBanned = user.IsBanned,
+                MailConfirmed = user.IsMailChecked,
+                IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
+            });
+
+        private IQueryable<UserDtoLite> ToDtoLite(IQueryable<User> queryable) => queryable
+            .Select(user => new UserDtoLite
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                DisplayName = user.DisplayName,
+                IsApprovedStudent = user.StudentProfile != null ?
+                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsApprovedTeacher = user.TeacherProfile != null ?
+                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
+                IsAdmin = user.AdminProfile != null,
+                IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
+            });
+
         public async Task<int> Login(string mailAdress, string password)
         {
-            var user = await context.Set<User>()
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(x => x.MailAdress == mailAdress);
-            if (user is null) { throw new NotFoundException("User"); }
+            var user = await Users(false, null).FirstOrDefaultAsync(x => x.MailAdress == mailAdress) ?? throw new NotFoundException("User");
+
             if (user.IsBanned) { throw new BusinessLogicException("User is banned"); }
 
             if (!passwordHasher.VerifyPassword(password, user.Password)) { throw new BusinessLogicException("Wrong password"); }
@@ -27,27 +69,13 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<long> AddMoney(int userId, long cash)
         {
-            var user = await context.Set<User>()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+            var user = await Users(true, null)
+                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
 
-            user.Cash += Math.Abs(cash);
+            user.Cash += cash;
 
             await context.SaveChangesAsync();
             return user.Cash;
-        }
-
-        public async Task<long> GetMoney(int userId, long cash)
-        {
-            var user = await context.Set<User>()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
-
-            if (user.Cash < cash) { cash = user.Cash; }
-            user.Cash -= Math.Abs(cash);
-
-            await context.SaveChangesAsync();
-            return cash;
         }
 
         public async Task<int> RegUser(RegistrationInputDto dto)
@@ -55,8 +83,7 @@ namespace PrimumCore.Services.Iterators
             if (!new EmailAddressAttribute().IsValid(dto.MailAdress))
             { throw new BusinessLogicException("Adress not valid"); }
 
-            if (await context.Set<User>()
-                .IgnoreQueryFilters()
+            if (await Users(false, null)
                 .AnyAsync(x => x.MailAdress == dto.MailAdress))
             { throw new BusinessLogicException("User with the same adress already exists"); }
 
@@ -77,11 +104,8 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> CreateTeacherProfile(int userId, string about)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+            var user = await Users(false, null)
+                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
             if (user.TeacherProfile is not null) { throw new BusinessLogicException("User is already teacher"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
@@ -97,11 +121,8 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> CreateStudentProfile(int userId)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+            var user = await Users(false, null)
+                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
             if (user.StudentProfile is not null) { throw new BusinessLogicException("User is already student"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
@@ -114,65 +135,36 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<UserDto> GetUser(int id, bool isOnlyAvailable)
         {
-            var user = (await GetUsers(isOnlyAvailable))
-                .FirstOrDefault(x => x.Id == id);
-            if (user is null) { throw new NotFoundException("User"); }
+            var user = await ToDto(
+                    Users(isOnlyAvailable, null)
+                ).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("User");
 
             return user;
         }
 
         public async Task<UserDtoLite> GetLiteUser(int id, bool isOnlyAvailable)
         {
-            var user = (await GetUser(id, isOnlyAvailable));
+            var user = await ToDtoLite(
+                    Users(isOnlyAvailable, null)
+                ).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("User");
 
-            return new UserDtoLite
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                DisplayName = user.DisplayName,
-                IsApprovedStudent = user.IsApprovedStudent,
-                IsApprovedTeacher = user.IsApprovedTeacher,
-                IsAdmin = user.IsAdmin,
-                IsAvailable = user.IsAvailable
-            };
+            return user;
         }
 
         public async Task<IEnumerable<UserDto>> GetUsers(bool isOnlyAvailable)
         {
-            return await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .Include(u => u.TeacherProfile)
-                .Include(u => u.AdminProfile)
-                .IgnoreQueryFilters()
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
-                .Select(user => new UserDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Patronymic = user.Patronymic,
-                    DisplayName = user.DisplayName,
-                    Cash = user.Cash,
-                    IsApprovedStudent = user.StudentProfile != null ?
-                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                    IsApprovedTeacher = user.TeacherProfile != null ?
-                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                    IsAdmin = user.AdminProfile != null,
-                    IsBanned = user.IsBanned,
-                    MailConfirmed = user.IsMailChecked,
-                    IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
-                })
-                .ToArrayAsync();
+            var user = await ToDto(
+                    Users(isOnlyAvailable, null)
+                ).ToArrayAsync();
+
+            return user;
         }
 
         public async Task<string> GetMail(int userId)
         {
-            var user = await context.Set<User>()
-                .IgnoreQueryFilters()
+            var user = await Users(true, null)
                 .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+            if (user is null) { return string.Empty; }
             return user.MailAdress;
         }
     }

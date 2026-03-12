@@ -48,8 +48,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.CourseTheme)
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.CourseId == courseId);
-            if (course is null) { throw new NotFoundException("Course"); }
+                .FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
 
             // strict availability check executed in-memory
             if (!AvailabilityExpressions.IsCourseAvailable.Compile()(course)) { throw new NotFoundException("Course"); }
@@ -57,8 +56,7 @@ namespace PrimumCore.Services.Iterators
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId);
-            if (teacherShedule is null) { throw new NotFoundException("Shedule"); }
+                .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId) ?? throw new NotFoundException("Shedule");
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }
             if (teacherShedule.Teacher.User?.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }

@@ -9,7 +9,7 @@ namespace PrimumCore.Controllers
     [Tags("Student")]
     public class StudentController(
         StudentIterator studentIterator,
-        SheduleIterator sheduleIterator,
+        StudentSheduleIterator sheduleIterator,
         LessonIterator lessonIterator,
         AbonementIterator abonementIterator,
         PromocodeIterator promocodeIterator

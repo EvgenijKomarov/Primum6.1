@@ -6,126 +6,77 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
     public class CourseIterator(PrimumContext context)
     {
-        public async Task<IEnumerable<CourseDto>> GetCoursesByTeacher(int userId, bool isOnlyAvailable)
-        {
-            var user = await context.Set<User>()
-                .Include(x => x.TeacherProfile)
-                .ThenInclude(x => x.Courses)
-                .ThenInclude(x => x.CourseTheme)
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
+        private IQueryable<Course> Courses(bool isOnlyAvailable, Expression<Func<Course, bool>>? predicate) => context
+            .Set<Course>()
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
+            .WhereIf(predicate is not null, predicate!)
+            .Include(x => x.CourseTheme)
+            .Include(x => x.Teacher)
+            .ThenInclude(x => x.User);
 
-            return user.TeacherProfile.Courses
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
-                .Select(x => new CourseDto
-                {
-                    CourseId = x.CourseId,
-                    Name = x.Name,
-                    About = x.About,
-                    TeacherName = x.Teacher.User.DisplayName,
-                    CourseThemeName = x.CourseTheme.ThemeName,
-                    CourseThemeId = x.CourseThemeId,
-                    TeacherId = x.Teacher.User.Id,
-                    Price = x.Price,
-                    MaxLessons = x.MaxLessons,
-                    FreeLessons = x.FreeLessons,
-                    TeacherAbout = x.Teacher.About,
-                    IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus
-                })
-                .ToArray();
+        private IQueryable<CourseDto> ToDto(IQueryable<Course> queryable) => queryable
+            .Select(x => new CourseDto
+            {
+                CourseId = x.CourseId,
+                Name = x.Name,
+                About = x.About,
+                TeacherName = x.Teacher.User.DisplayName,
+                CourseThemeName = x.CourseTheme.ThemeName,
+                CourseThemeId = x.CourseThemeId,
+                TeacherId = x.Teacher.User.Id,
+                Price = x.Price,
+                MaxLessons = x.MaxLessons,
+                FreeLessons = x.FreeLessons,
+                TeacherAbout = x.Teacher.About,
+                IsActive = x.IsActive,
+                ApproveStatus = x.ApproveStatus
+            });
+
+        public async Task<IEnumerable<CourseDto>> GetCoursesByTeacher(int teacherId, bool isOnlyAvailable)
+        {
+            return await ToDto(
+                    Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId)
+                ).ToArrayAsync();
         }
 
-        public async Task<CourseDto> GetCourseByTeacher(int userId, int courseId, bool isOnlyAvailable)
+        public async Task<CourseDto> GetCourseByTeacher(int teacherId, int courseId, bool isOnlyAvailable)
         {
-            var course = (await GetCoursesByTeacher(userId, isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);
-            if (course == null) { throw new NotFoundException("Course"); }
-            return course;
+            return await ToDto(
+                    Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId)
+                ).FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
         }
 
         public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
         {
-            var course = (await GetCourses(isOnlyAvailable)).FirstOrDefault(x => x.CourseId == courseId);
-
-            if (course is null) { throw new NotFoundException("Course"); }
-
-            return course;
+            return await ToDto(
+                    Courses(isOnlyAvailable, null)
+                ).FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
         }
 
         public async Task<IEnumerable<CourseDto>> GetCourses(bool isOnlyAvailable)
         {
-            return await context.Set<Course>()
-                .Include(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Include(x => x.CourseTheme)
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
-                .Select(x => new CourseDto
-                {
-                    CourseId = x.CourseId,
-                    Name = x.Name,
-                    TeacherName = x.Teacher.User.DisplayName,
-                    CourseThemeName = x.CourseTheme.ThemeName,
-                    CourseThemeId = x.CourseThemeId,
-                    TeacherId = x.Teacher.User.Id,
-                    Price = x.Price,
-                    About = x.About,
-                    MaxLessons = x.MaxLessons,
-                    FreeLessons = x.FreeLessons,
-                    TeacherAbout = x.Teacher.About,
-                    IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus
-                })
-                .ToArrayAsync();
+            return await ToDto(
+                    Courses(isOnlyAvailable, null)
+                ).ToArrayAsync();
         }
 
         public async Task<IEnumerable<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable)
         {
-            return await context.Set<CourseTheme>()
-                .Include(x => x.Courses)
-                .ThenInclude(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .SelectMany(x => x.Courses)
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
-                .Where(x => x.CourseThemeId == themeId)
-                .Select(x => new CourseDto
-                {
-                    CourseId = x.CourseId,
-                    Name = x.Name,
-                    About = x.About,
-                    TeacherName = x.Teacher.User.DisplayName,
-                    CourseThemeName = x.CourseTheme.ThemeName,
-                    CourseThemeId = x.CourseThemeId,
-                    TeacherId = x.Teacher.User.Id,
-                    Price = x.Price,
-                    MaxLessons = x.MaxLessons,
-                    FreeLessons = x.FreeLessons,
-                    TeacherAbout = x.Teacher.About,
-                    IsActive = x.IsActive,
-                    ApproveStatus = x.ApproveStatus
-                })
-                .ToArrayAsync();
+            return await ToDto(
+                    Courses(isOnlyAvailable, x => x.CourseTheme.CourseThemeId == themeId)
+                ).ToArrayAsync();
         }
 
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
-        {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(a => a.Courses)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new NotAvailableException("Teacher"); }
-
-            var course = user
-                .TeacherProfile
-                .Courses
-                .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new NotFoundException("Course"); }
+        {   
+            var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
+                .FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
 
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
@@ -142,8 +93,6 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(a => a.Courses)
                 .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new NotAvailableException("Teacher"); }
 
             var course = new Course
             {
@@ -160,48 +109,14 @@ namespace PrimumCore.Services.Iterators
             return course.CourseId;
         }
 
-        public async Task<int> DeactivateCourse(int teacherId, int courseId)
+        public async Task<int> SwitchCourseActivity(int teacherId, int courseId, bool activity)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(a => a.Courses)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new NotAvailableException("Teacher"); }
+            var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
+                .FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
 
-            var course = user
-                .TeacherProfile
-                .Courses
-                .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new NotFoundException("Course"); }
-
-            course.IsActive = false;
+            course.IsActive = activity;
             await context.SaveChangesAsync();
             return course.CourseId;
         }
-
-        public async Task<int> ActivateCourse(int teacherId, int courseId)
-        {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(a => a.Courses)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) 
-                { throw new NotAvailableException("Teacher"); }
-
-            var course = user
-                .TeacherProfile
-                .Courses
-                .FirstOrDefault(c => c.CourseId == courseId);
-            if (course is null) { throw new NotFoundException("Course"); }
-
-            course.IsActive = true;
-            await context.SaveChangesAsync();
-            return course.CourseId;
-        }
-
-
     }
 }

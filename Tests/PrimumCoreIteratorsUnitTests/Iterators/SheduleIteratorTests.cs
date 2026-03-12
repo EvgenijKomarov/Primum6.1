@@ -19,7 +19,7 @@ namespace UnitTests.Iterators
     {
         private Mock<PrimumContext> _mockContext = null!;
         private Mock<PublisherService> _mockPublisher = null!;
-        private SheduleIterator _iterator = null!;
+        private TeacherSheduleIterator _iterator = null!;
 
         [SetUp]
         public void Setup()

@@ -1,59 +1,14 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.DTOs.Inputs;
-using CoreDBModel.Constants;
-using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class SheduleIterator(PrimumContext context, PublisherService publisher)
+    public class StudentSheduleIterator(PrimumContext context, PublisherService publisher)
     {
-        public async Task<IEnumerable<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable)
-        {
-            var shedules = await context.Set<TeacherShedule>()
-                .Include(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Include(x => x.AbonementShedule)
-                .ThenInclude(x => x.Abonement)
-                .ThenInclude(x => x.Student)
-                .ThenInclude(x => x.User)
-                .Include(x => x.AbonementShedule)
-                .ThenInclude(x => x.Abonement)
-                .ThenInclude(x => x.Course)
-                .Where(x => x.Teacher.User.Id == teacherId)
-                .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherSheduleAvailable)
-                .ToArrayAsync();
-
-            return shedules
-                .Select(x => new TeacherSheduleDto
-                {
-                    TeacherSheduleId = x.TeacherSheduleId,
-                    DayOfWeek = x.DayOfWeek,
-                    Time = x.Time,
-                    IsAvailable = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
-                    StudentName = x.AbonementShedule?.Abonement?.Student?.User?.DisplayName,
-                    StudentId = x.AbonementShedule?.Abonement?.Student?.User?.Id,
-                    CourseName = x.AbonementShedule?.Abonement?.Course?.Name,
-                    CourseId = x.AbonementShedule?.Abonement?.Course?.CourseId,
-                }
-                )
-                .ToArray();
-        }
-
-        public async Task<TeacherSheduleDto> GetTeacherShedule(int teacherId, int sheduleId, bool isOnlyAvailable)
-        {
-            var shedule = (await GetTeacherShedules(teacherId, isOnlyAvailable))
-                .FirstOrDefault(x => x.TeacherSheduleId == sheduleId);
-            if (shedule is null) { throw new NotFoundException("Shedule"); }
-
-            return shedule;
-        }
-
         public async Task<IEnumerable<StudentSheduleDto>> GetAbonementShedules(int abonementId)
         {
             var abonement = await context.Set<Abonement>()
@@ -75,48 +30,6 @@ namespace PrimumCore.Services.Iterators
                 TeacherId = x.Abonement.Course.Teacher.User.Id,
                 AbonementSheduleId = x.AbonementSheduleId
             });
-        }
-
-        public async Task<int> CreateTeacherShedule(int teacherId, TeacherSheduleInputDto sheduleDto)
-        {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(a => a.TeacherShedules)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new NotAvailableException("Teacher"); }
-
-            if (user.TeacherProfile.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) 
-                { throw new BusinessLogicException("Shedule already exists"); }
-
-            var shedule = new TeacherShedule
-            {
-                Time = sheduleDto.Time,
-                DayOfWeek = sheduleDto.DayOfWeek,
-            };
-
-            user.TeacherProfile.TeacherShedules.Add(shedule);
-            await context.SaveChangesAsync();
-            return shedule.TeacherSheduleId;
-        }
-
-        public async Task<int> DeleteTeacherShedule(int teacherId, int sheduleId)
-        {
-            var user = await context.Set<User>()
-                .Include(u => u.TeacherProfile)
-                .ThenInclude(a => a.TeacherShedules)
-                .ThenInclude(e => e.AbonementShedule)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
-            if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user)) { throw new BusinessLogicException("Teacher"); }
-
-            var shedule = user.TeacherProfile.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
-            if (shedule is null) { throw new NotFoundException("Shedule"); }
-            if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new BusinessLogicException("Shedule already busy"); }
-
-            user.TeacherProfile.TeacherShedules.Remove(shedule);
-            await context.SaveChangesAsync();
-            return shedule.TeacherSheduleId;
         }
 
         public async Task<IEnumerable<StudentSheduleDto>> GetStudentShedules(int studentId)

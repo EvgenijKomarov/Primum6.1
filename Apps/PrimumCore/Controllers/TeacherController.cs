@@ -11,10 +11,11 @@ namespace PrimumCore.Controllers
     public class TeacherController(
         TeacherIterator teacherIterator,
         CourseIterator courseIterator,
-        SheduleIterator sheduleIterator,
+        TeacherSheduleIterator sheduleIterator,
         ThemeIterator themeIterator,
         LessonIterator lessonIterator,
         AbonementIterator abonementIterator,
+        StudentSheduleIterator studentSheduleIterator,
         GradingIterator gradingIterator) : PrimumController
     {
         [HttpGet("profile")]
@@ -59,7 +60,7 @@ namespace PrimumCore.Controllers
 
         [HttpGet("abonement-shedules/{abonementId}")]
         public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await sheduleIterator.GetAbonementShedules(abonementId));
+            => Ok(await studentSheduleIterator.GetAbonementShedules(abonementId));
 
         [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
@@ -75,11 +76,11 @@ namespace PrimumCore.Controllers
 
         [HttpPatch("course-activate/{courseId}")]
         public async Task<ActionResult<int>> ActivateCourse([FromRoute] int userId, [FromRoute] int courseId) 
-            => Ok(await courseIterator.ActivateCourse(userId, courseId));
+            => Ok(await courseIterator.SwitchCourseActivity(userId, courseId, true));
 
         [HttpPatch("course-deactivate/{courseId}")]
         public async Task<ActionResult<int>> DeactivateCourse([FromRoute] int userId, [FromRoute] int courseId) 
-            => Ok(await courseIterator.DeactivateCourse(userId, courseId));
+            => Ok(await courseIterator.SwitchCourseActivity(userId, courseId, false));
 
         [HttpPost("shedule-create")]
         public async Task<ActionResult<int>> CreateShedule([FromRoute] int userId, [FromBody] TeacherSheduleInputDto sheduleDto = null!) 
