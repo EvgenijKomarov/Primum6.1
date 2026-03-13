@@ -73,13 +73,13 @@ namespace PrimumCore.Services.Iterators
                 ).FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
         }
 
-        public async Task<int> DeleteAbonement(int studentId, int abonementId)
+        public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)
         {
             var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
                 .FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
 
-            abonement.AbonementStatus = AbonementStatus.Deleted;
-            abonement.AbonementShedules.Clear();
+            abonement.AbonementStatus = status;
+            if (status == AbonementStatus.Deleted) { abonement.AbonementShedules.Clear(); }
             await context.SaveChangesAsync();
             await publisher.Push(new AbonementChangeStatusEvent
             {
@@ -91,47 +91,6 @@ namespace PrimumCore.Services.Iterators
                 AbonementId = abonement.AbonementId,
                 AbonementStatus = abonement.AbonementStatus.ToString()
             });
-            return abonement.AbonementId;
-        }
-
-        public async Task<int> FreezeAbonement(int studentId, int abonementId)
-        {
-            var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
-                .FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
-
-            abonement.AbonementStatus = AbonementStatus.Freezed;
-            await context.SaveChangesAsync();
-            await publisher.Push(new AbonementChangeStatusEvent
-            {
-                StudentName = abonement.Student.User.DisplayName,
-                StudentUserId = abonement.Student.User.Id,
-                TeacherName = abonement.Course.Teacher.User.DisplayName,
-                TeacherUserId = abonement.Course.Teacher.User.Id,
-                CourseName = abonement.Course.Name,
-                AbonementId = abonement.AbonementId,
-                AbonementStatus = abonement.AbonementStatus.ToString()
-            });
-            return abonement.AbonementId;
-        }
-
-        public async Task<int> ActivateAbonement(int studentId, int abonementId)
-        {
-            var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
-                .FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
-
-            abonement.AbonementStatus = AbonementStatus.Active;
-            await context.SaveChangesAsync();
-            await publisher.Push(new AbonementChangeStatusEvent
-            {
-                StudentName = abonement.Student.User.DisplayName,
-                StudentUserId = abonement.Student.User.Id,
-                TeacherName = abonement.Course.Teacher.User.DisplayName,
-                TeacherUserId = abonement.Course.Teacher.User.Id,
-                CourseName = abonement.Course.Name,
-                AbonementId = abonement.AbonementId,
-                AbonementStatus = abonement.AbonementStatus.ToString()
-            });
-
             return abonement.AbonementId;
         }
     }

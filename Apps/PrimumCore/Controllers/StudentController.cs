@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreDBModel.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
@@ -69,11 +70,11 @@ namespace PrimumCore.Controllers
 
         [HttpPatch("abonement-activate/{abonementId}")]
         public async Task<ActionResult<int>> ActivateAbonement([FromRoute] int userId, [FromRoute] int abonementId) 
-            => Ok(await abonementIterator.ActivateAbonement(userId, abonementId));
+            => Ok(await abonementIterator.AbonementChangeStatus(userId, abonementId, AbonementStatus.Active));
 
         [HttpPatch("abonement-freeze/{abonementId}")]
         public async Task<ActionResult<int>> FreezeAbonement([FromRoute] int userId, [FromRoute] int abonementId) 
-            => Ok(await abonementIterator.FreezeAbonement(userId, abonementId));
+            => Ok(await abonementIterator.AbonementChangeStatus(userId, abonementId, AbonementStatus.Freezed));
 
         [HttpPost("course-subscribe/{courseId}/{teacherSheduleId}")]
         public async Task<ActionResult<int>> SubscribeToCourse([FromRoute] int userId, [FromRoute] int courseId, [FromRoute] int teacherSheduleId)
@@ -89,6 +90,6 @@ namespace PrimumCore.Controllers
 
         [HttpDelete("abonement-delete/{abonementId}")]
         public async Task<ActionResult<int>> DeleteAbonement([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await abonementIterator.DeleteAbonement(userId, abonementId));
+            => Ok(await abonementIterator.AbonementChangeStatus(userId, abonementId, AbonementStatus.Deleted));
     }
 }
