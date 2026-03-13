@@ -1,6 +1,7 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
+using CoreConnection.DTOs;
 using Engine;
 using Engine.Nodes;
 using Resourses;
@@ -16,7 +17,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             var teacherId = input.Arguments[1];
             var themeId = input.Arguments[2];
 
-            var shedules = await publicClient.TeacherShedulesAsync(int.Parse(teacherId));
+            var shedules = (await publicClient.TeacherShedulesAsync(int.Parse(teacherId), 0, 20)).Items ?? new List<TeacherSheduleDto>();
 
             var backButton = new EngineOutputButton
             {

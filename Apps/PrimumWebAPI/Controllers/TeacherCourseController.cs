@@ -16,15 +16,17 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
-            => Ok(await client.CoursesAsync(User.GetUserId()));
+        public async Task<ActionResult<CourseDtoPageResult>> GetCourses(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.CoursesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Все курсы преподавателя
         /// </summary>
         /// <returns></returns>
         [HttpGet("{courseId}")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses([FromRoute] int courseId)
+        public async Task<ActionResult<CourseDto>> GetCourses([FromRoute] int courseId)
             => Ok(await client.CourseAsync(courseId, User.GetUserId()));
 
         /// <summary>

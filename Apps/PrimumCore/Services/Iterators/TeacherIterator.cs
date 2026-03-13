@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,28 +12,20 @@ namespace PrimumCore.Services.Iterators
 {
     public class TeacherIterator(PrimumContext context)
     {
-        private IQueryable<TeacherProfileDto> Teachers(bool isOnlyAvailable) => context
+        private IQueryable<User> Teachers(bool isOnlyAvailable) => context
             .Set<User>()
             .Include(x => x.TeacherProfile)
             .Where(x => x.TeacherProfile != null)
-            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherAvailable)
-            .Select(x => new TeacherProfileDto
-            {
-                DisplayName = x.DisplayName,
-                About = x.TeacherProfile.About,
-                UserId = x.Id,
-                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
-            });
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherAvailable);
 
-        public async Task<IEnumerable<TeacherProfileDto>> GetTeachers(bool isOnlyAvailable)
+        public async Task<PageResult<TeacherProfileDto>> GetTeachers(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Teachers(isOnlyAvailable).ToArrayAsync();
+            return await Teachers(isOnlyAvailable).Select(x => x.TeacherProfile!).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<TeacherProfileDto> GetTeacher(int teacherId, bool isOnlyAvailable)
         {
-            return await Teachers(isOnlyAvailable)
-                .FirstOrDefaultAsync(x => x.UserId == teacherId) ?? throw new NotFoundException("Teacher");
+            return await Teachers(isOnlyAvailable).Select(x => x.TeacherProfile!).ToDto().One(x => x.UserId == teacherId);
         }
     }
 }

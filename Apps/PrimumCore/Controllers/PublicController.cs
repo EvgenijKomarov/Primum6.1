@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 using Swashbuckle.AspNetCore.Annotations;
@@ -26,25 +27,25 @@ namespace PrimumCore.Controllers
             => Ok(await userIterator.RegUser(dto));
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<UserDtoLite>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetLiteUser(userId, true));
+        public async Task<ActionResult<UserDtoLite>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUserLite(userId, true));
 
         [HttpGet("teacher/{teacherId}")]
         public async Task<ActionResult<TeacherProfileDto>> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId, true));
 
         [HttpGet("teachers")]
-        public async Task<ActionResult<IEnumerable<TeacherProfileDto>>> GetTeachers() => Ok(await teacherIterator.GetTeachers(true));
+        public async Task<ActionResult<PageResult<TeacherProfileDto>>> GetTeachers([FromQuery] int page = 0, [FromQuery] int pageSize = 10) => Ok(await teacherIterator.GetTeachers(true, page, pageSize));
 
         [HttpGet("courses-by-teacher/{teacherId}")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesByTeacher([FromRoute] int teacherId) 
-            => Ok(await courseIterator.GetCoursesByTeacher(teacherId, true));
+        public async Task<ActionResult<PageResult<CourseDto>>> GetCoursesByTeacher([FromRoute] int teacherId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await courseIterator.GetCoursesByTeacher(teacherId, true, page, pageSize));
 
         [HttpGet("teacher-shedules/{teacherId}")]
-        public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetTeacherShedules([FromRoute] int teacherId)
-            => Ok(await sheduleIterator.GetTeacherShedules(teacherId, true));
+        public async Task<ActionResult<PageResult<TeacherSheduleDto>>> GetTeacherShedules([FromRoute] int teacherId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await sheduleIterator.GetTeacherShedules(teacherId, true, page, pageSize));
 
         [HttpGet("themes")]
-        public async Task<ActionResult<IEnumerable<CourseThemeDto>>> GetThemes()
-            => Ok(await themeIterator.GetThemes(true));
+        public async Task<ActionResult<PageResult<CourseThemeDto>>> GetThemes([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await themeIterator.GetThemes(true, page, pageSize));
 
         [HttpGet("theme/{themeId}")]
         public async Task<ActionResult<CourseThemeDto>> GetTheme([FromRoute] int themeId)
@@ -55,16 +56,16 @@ namespace PrimumCore.Controllers
             => Ok(await courseIterator.GetCourse(courseId, true));
 
         [HttpGet("courses")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
-            => Ok(await courseIterator.GetCourses(true));
+        public async Task<ActionResult<PageResult<CourseDto>>> GetCourses([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await courseIterator.GetCourses(true, page, pageSize));
 
         [HttpGet("courses-by-theme/{themeId}")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesByTheme([FromRoute] int themeId)
-            => Ok(await courseIterator.GetCoursesByTheme(themeId, true));
+        public async Task<ActionResult<PageResult<CourseDto>>> GetCoursesByTheme([FromRoute] int themeId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await courseIterator.GetCoursesByTheme(themeId, true, page, pageSize));
 
         [HttpGet("available-promocodes")]
-        public async Task<ActionResult<IEnumerable<PromocodeDto>>> GetPromocodes()
-            => Ok(await promocodeIterator.GetPromocodes(true));
+        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await promocodeIterator.GetPromocodes(true, page, pageSize));
 
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int promocodeId)

@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreConnection.Entities;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -11,65 +12,39 @@ namespace PrimumCore.Services.Iterators
 {
     public class IncidentIterator(PrimumContext context, IncidentCollector collector, IncidentSolver solver, AdminProfileHelper helper)
     {
-        public async Task<IEnumerable<IncidentDto>> GetIncedents(int userId)
+        public async Task<PageResult<IncidentDto>> GetIncedents(int userId, int _page, int _pageSize)
         {
-            Permission[] userPermissions = (await helper.GetIteratingUser(userId)).AdminProfile.Permissions.Select(x => x.Permission).ToArray();
+            Permission[] userPermissions = (await helper.GetIteratingUser(userId)).Permissions.Select(x => x.Permission).ToArray();
 
-            return await collector.GetIncedents(userPermissions);
+            return await collector.GetIncedents(userPermissions, _page, _pageSize);
         }
 
-        public async Task<IEnumerable<IncidentLogDto>> GetIncidentLogs(int userId, bool OnlyUnrevisioned)
+        private IQueryable<IncidentLog> IncidentLogs(bool OnlyUnrevisioned) => context
+            .Set<IncidentLog>()
+            .Include(x => x.AdminProfile)
+            .ThenInclude(x => x.User)
+            .Where(x => x.AdminProfile != null)
+            .WhereIf(OnlyUnrevisioned, x => !x.IsRevisioned);
+
+        public async Task<PageResult<IncidentLogDto>> GetIncidentLogs(int userId, bool OnlyUnrevisioned, int _page, int _pageSize)
         {
             await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            return await context.Set<IncidentLog>()
-                .Include(x => x.AdminProfile)
-                .ThenInclude(x => x.User)
-                .Where(x => x.AdminProfile != null)
-                .WhereIf(OnlyUnrevisioned, x => !x.IsRevisioned)
-                .Select(x => new IncidentLogDto
-                {
-                    LogId = x.LogId,
-                    AdminUserId = x.AdminProfile.User.Id,
-                    AdminDisplayName = x.AdminProfile.User.DisplayName,
-                    DateTime = x.DecisionDate,
-                    Description = x.Description
-                })
-                .ToArrayAsync();
+            return await IncidentLogs(OnlyUnrevisioned).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<IncidentLogDto> GetIncidentLog(int userId, int logId)
         {
             await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            var log = await context.Set<IncidentLog>()
-                .Include(x => x.AdminProfile)
-                .ThenInclude(x => x.User)
-                .Where(x => x.AdminProfile != null)
-                .Select(x => new IncidentLogDto
-                {
-                    LogId = x.LogId,
-                    AdminUserId = x.AdminProfile.User.Id,
-                    AdminDisplayName = x.AdminProfile.User.DisplayName,
-                    DateTime = x.DecisionDate,
-                    Description = x.Description
-                })
-                .FirstOrDefaultAsync(x => x.LogId == logId);
-            if (log is null) { throw new NotFoundException("Log"); }
-
-            return log;
+            return await IncidentLogs(false).ToDto().One(x => x.LogId == logId);
         }
 
         public async Task<int> RevisionIncidentLog(int userId, int logId)
         {
             var user = await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            var log = await context.Set<IncidentLog>()
-                .Include(x => x.AdminProfile)
-                .ThenInclude(x => x.User)
-                .Where(x => x.AdminProfile != null)
-                .FirstOrDefaultAsync(x => x.LogId == logId);
-            if (log is null) { throw new NotFoundException("Log"); }
+            var log = await IncidentLogs(false).One(x => x.LogId == logId);
             log.IsRevisioned = true;
 
             await context.SaveChangesAsync();
@@ -78,7 +53,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> SolveIncedent(int userId, IncidentDecisionInputDto dto)
         {
-            var iteratingUserAdminProfile = (await helper.GetIteratingUser(userId)).AdminProfile;
+            var iteratingUserAdminProfile = await helper.GetIteratingUser(userId);
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
 
             var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto, userId);

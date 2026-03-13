@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
@@ -28,55 +29,30 @@ namespace PrimumCore.Services.Iterators
             .Include(x => x.Course)
             .ThenInclude(x => x.CourseTheme);
 
-        private IQueryable<AbonementDto> ToDto(IQueryable<Abonement> queryable) => queryable
-            .Select(a => new AbonementDto
-            {
-                StudentId = a.Student.User.Id,
-                StudentDisplayName = a.Student.User.DisplayName,
-                TeacherId = a.Course.Teacher.User.Id,
-                TeacherDisplayName = a.Course.Teacher.User.DisplayName,
-                AbonementId = a.AbonementId,
-                CourseName = a.Course.Name,
-                CourseId = a.Course.CourseId,
-                CourseThemeName = a.Course.CourseTheme.ThemeName,
-                CourseThemeId = a.Course.CourseTheme.CourseThemeId,
-                PricePerLesson = a.PricePerLesson,
-                AbonementStatus = a.AbonementStatus
-            });
-
-        public async Task<IEnumerable<AbonementDto>> GetTeacherAbonements(int teacherId)
+        public async Task<PageResult<AbonementDto>> GetTeacherAbonements(int teacherId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Abonements(true, x => x.Course.Teacher.User.Id == teacherId)
-                ).ToArrayAsync();
+            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<AbonementDto> GetTeacherAbonement(int teacherId, int abonementId)
         {
-            return await ToDto(
-                    Abonements(true, x => x.Course.Teacher.User.Id == teacherId)
-                    .Where(x => x.Course.Teacher.User.Id == teacherId)
-                ).FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
+            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().One(x => x.AbonementId == abonementId);
         }
 
-        public async Task<IEnumerable<AbonementDto>> GetStudentAbonements(int studentId)
+        public async Task<PageResult<AbonementDto>> GetStudentAbonements(int studentId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Abonements(false, x => x.Student.User.Id == studentId)
-                ).ToArrayAsync();
+            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<AbonementDto> GetStudentAbonement(int studentId, int abonementId)
         {
-            return await ToDto(
-                    Abonements(false, x => x.Student.User.Id == studentId)
-                ).FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
+            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().One(x => x.AbonementId == abonementId);
         }
 
         public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)
         {
             var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
-                .FirstOrDefaultAsync(x => x.AbonementId == abonementId) ?? throw new NotFoundException("Abonement");
+                .One(x => x.AbonementId == abonementId);
 
             abonement.AbonementStatus = status;
             if (status == AbonementStatus.Deleted) { abonement.AbonementShedules.Clear(); }

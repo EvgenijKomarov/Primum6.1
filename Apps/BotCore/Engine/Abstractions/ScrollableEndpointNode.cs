@@ -11,7 +11,7 @@ namespace BotCore.Engine.Abstractions
     public abstract class ScrollableEndpointNode<TItem>(string endpointId) : EndpointNode<DataBuffer, EngineOutputMessage>(endpointId)
     {
         public abstract Task<string> ItemInfo(TItem item, DataBuffer buffer);
-        public abstract Task<IEnumerable<TItem>> GetEnumerable(DataBuffer buffer);
+        public abstract Task<(TItem?, int)> GetItemAndTotalCount(int index, DataBuffer buffer);
         public abstract Task<IEnumerable<EngineOutputButton>> ItemButtons(TItem item, DataBuffer buffer);
         public abstract Task<EngineOutputButton> BackButton(DataBuffer buffer);
         public abstract Task<string> IfItemsEmptyText(DataBuffer buffer);
@@ -21,8 +21,8 @@ namespace BotCore.Engine.Abstractions
             var indexRaw = input.Arguments.FirstOrDefault() ?? "0";
             var index = int.Parse(indexRaw);
 
-            var items = await GetEnumerable(input);
-            if (!items.Any())
+            var itemAndTotal = await GetItemAndTotalCount(index, input);
+            if (itemAndTotal.Item1 is null)
             {
                 return Finish(new EngineOutputMessage
                 {
@@ -30,9 +30,6 @@ namespace BotCore.Engine.Abstractions
                     Buttons = new List<EngineOutputButton> { await BackButton(input) }
                 });
             }
-
-
-            var item = items.ElementAt(index);
 
             var buttons = new List<EngineOutputButton>();
             if (index != 0)
@@ -44,8 +41,8 @@ namespace BotCore.Engine.Abstractions
                     Args = new List<string> { (index - 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
                 });
             }
-            buttons.AddRange(await ItemButtons(item, input));
-            if (index != items.Count() - 1)
+            buttons.AddRange(await ItemButtons(itemAndTotal.Item1, input));
+            if (index != itemAndTotal.Item2 - 1)
             {
                 buttons.Add(new EngineOutputButton
                 {
@@ -58,7 +55,7 @@ namespace BotCore.Engine.Abstractions
 
             return Finish(new EngineOutputMessage
             {
-                Message = await ItemInfo(item, input),
+                Message = await ItemInfo(itemAndTotal.Item1, input),
                 Buttons = buttons
             });
         }

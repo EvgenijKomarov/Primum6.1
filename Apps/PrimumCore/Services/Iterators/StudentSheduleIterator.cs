@@ -1,91 +1,50 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
+using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
+using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
     public class StudentSheduleIterator(PrimumContext context, PublisherService publisher)
     {
-        public async Task<IEnumerable<StudentSheduleDto>> GetAbonementShedules(int abonementId)
-        {
-            var abonement = await context.Set<Abonement>()
-                .Include(x => x.AbonementShedules)
-                .ThenInclude(x => x.TeacherShedule)
-                .Include(x => x.Course)
-                .ThenInclude(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.AbonementId == abonementId);
-            if (abonement is null) { throw new NotFoundException("Abonement"); }
+        private IQueryable<AbonementShedule> AbonementShedules(Expression<Func<AbonementShedule, bool>>? predicate) => context
+            .Set<AbonementShedule>()
+            .WhereIf(predicate is not null, predicate!)
+            .Include(x => x.TeacherShedule)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Course)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Student)
+            .ThenInclude(x => x.User);
 
-            return abonement.AbonementShedules.Select(x => new StudentSheduleDto
-            {
-                DayOfWeek = x.TeacherShedule.DayOfWeek,
-                Time = x.TeacherShedule.Time,
-                CourseName = x.Abonement.Course.Name,
-                CourseId = x.Abonement.Course.CourseId,
-                TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                TeacherId = x.Abonement.Course.Teacher.User.Id,
-                AbonementSheduleId = x.AbonementSheduleId
-            });
+        public async Task<PageResult<StudentSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
+        {
+            return await AbonementShedules(x => x.Abonement.AbonementId == abonementId).ToDto().ToPageResult(_page, _pageSize);
         }
 
-        public async Task<IEnumerable<StudentSheduleDto>> GetStudentShedules(int studentId)
+        public async Task<PageResult<StudentSheduleDto>> GetStudentShedules(int studentId, int _page, int _pageSize)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(x => x.AbonementShedules)
-                .ThenInclude(x => x.TeacherShedule)
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(s => s.Course)
-                .ThenInclude(s => s.Teacher)
-                .ThenInclude(s => s.User)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
-
-            return user
-                .StudentProfile
-                .Abonements
-                .SelectMany(a => a.AbonementShedules)
-                .Select(x => new StudentSheduleDto
-                {
-                    DayOfWeek = x.TeacherShedule.DayOfWeek,
-                    Time = x.TeacherShedule.Time,
-                    TeacherId = x.Abonement.Course.Teacher.User.Id,
-                    CourseId = x.Abonement.Course.CourseId,
-                    TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                    CourseName = x.Abonement.Course.Name,
-                    AbonementSheduleId = x.AbonementSheduleId
-                })
-                .ToArray();
+            return await AbonementShedules(x => x.Abonement.Student.User.Id == studentId).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<StudentSheduleDto> GetStudentShedule(int studentId, int sheduleId)
         {
-            var shedule = (await GetStudentShedules(studentId))
-                .FirstOrDefault(x => x.AbonementSheduleId == sheduleId);
-            if (shedule is null) { throw new NotFoundException("Shedule"); }
-
-            return shedule;
+            return await AbonementShedules(x => x.Abonement.Student.User.Id == studentId).ToDto().One(x => x.AbonementSheduleId == sheduleId);
         }
 
         public async Task<int> DeleteStudentShedule(int studentId, int abonementSheduleId)
         {
-            var abonementShedule = await context.Set<AbonementShedule>()
-                .Include(x => x.TeacherShedule)
-                .ThenInclude(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Include(x => x.Abonement)
-                .ThenInclude(x => x.Course)
-                .Include(x => x.Abonement)
-                .ThenInclude(x => x.Student)
-                .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.AbonementSheduleId == abonementSheduleId);
-            if (abonementShedule is null) { throw new NotFoundException("Shedule"); }
+            var abonementShedule = await AbonementShedules(null)
+                .One(x => x.AbonementSheduleId == abonementSheduleId);
             if (abonementShedule.Abonement.Student.User.Id != studentId) { throw new BusinessLogicException("Only owner can delete shedule"); }
 
             var notification = new DeleteAbonementSheduleEvent

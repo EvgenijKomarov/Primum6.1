@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CoreConnection.Entities;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using System.Linq.Expressions;
 
@@ -26,6 +27,25 @@ namespace PrimumCore.Extentions
         {
             var entities = await queryable.ToArrayAsync();
             return entities;
+        }
+
+        public static async Task<PageResult<TEntity>> ToPageResult<TEntity>(
+            this IQueryable<TEntity> queryable, 
+            int page, 
+            int pageSize,
+            CancellationToken cancellationToken = default)
+            where TEntity : class
+        {
+            var totalCount = await queryable.CountAsync(cancellationToken);
+            var pageItems = queryable.Skip(page * pageSize).Take(pageSize);
+
+            return new PageResult<TEntity>
+            { 
+                Items = await pageItems.ToArrayAsync(cancellationToken),
+                TotalItemsCount = totalCount,
+                TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling((double)totalCount / pageSize),
+                CurrentPage = page
+            };
         }
     }
 }

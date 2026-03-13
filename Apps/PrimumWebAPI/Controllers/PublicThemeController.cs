@@ -14,8 +14,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseThemeDto>>> GetThemes()
-            => Ok(await client.ThemesAsync());
+        public async Task<ActionResult<CourseThemeDtoPageResult>> GetThemes(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.ThemesAsync(page, pageSize));
 
         /// <summary>
         /// Конкретная тема

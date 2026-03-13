@@ -20,10 +20,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Teacher}Преподаватель: {item.TeacherName}\n" +
                 $"О преподавателе: {item.TeacherAbout}";
         }
-        public override async Task<IEnumerable<CourseDto>> GetEnumerable(DataBuffer input)
+        public override async Task<(CourseDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
         {
             var themeId = input.Arguments[1];
-            return await publicClient.CoursesByThemeAsync(int.Parse(themeId));
+            var res = await publicClient.CoursesByThemeAsync(int.Parse(themeId), index, 1);
+            return (res.Items?.FirstOrDefault(), res.TotalPages);
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDto item, DataBuffer buffer)
         {

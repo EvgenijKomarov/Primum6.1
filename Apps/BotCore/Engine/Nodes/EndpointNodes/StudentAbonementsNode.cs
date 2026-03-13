@@ -1,6 +1,7 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
+using CoreConnection.DTOs;
 using Engine;
 using Engine.Nodes;
 using Resourses;
@@ -12,7 +13,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null) 
         {
-            var abonements = await client.AbonementsAsync(input.UserId!.Value);
+            var abonements = (await client.AbonementsAsync(input.UserId!.Value)).Items ?? new List<AbonementDto>();
             List<EngineOutputButton> buttons = new List<EngineOutputButton>();
             StringBuilder sb = new StringBuilder();
             foreach (var abonement in abonements)

@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreConnection.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
@@ -23,48 +24,56 @@ namespace PrimumCore.Controllers
             => Ok(await teacherIterator.GetTeacher(userId, false));
 
         [HttpGet("lessons")]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetLessons([FromRoute] int userId) 
-            => Ok(await lessonIterator.GetTeacherLessons(userId));
+        public async Task<ActionResult<PageResult<LessonDto>>> GetLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await lessonIterator.GetTeacherLessons(userId, page, pageSize));
 
         [HttpGet("future-lessons")]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetFutureLessons([FromRoute] int userId)
-            => Ok(await lessonIterator.GetTeacherFutureLessons(userId));
+        public async Task<ActionResult<PageResult<LessonDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await lessonIterator.GetTeacherFutureLessons(userId, page, pageSize));
 
         [HttpGet("lesson/{lessonId}")]
         public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
             => Ok(await lessonIterator.GetTeacherLesson(userId, lessonId));
 
         [HttpGet("courses")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses([FromRoute] int userId) 
-            => Ok(await courseIterator.GetCoursesByTeacher(userId, false));
+        public async Task<ActionResult<PageResult<CourseDto>>> GetCourses([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await courseIterator.GetCoursesByTeacher(userId, false, page, pageSize));
 
         [HttpGet("course/{courseId}")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourse([FromRoute] int userId, [FromRoute] int courseId)
+        public async Task<ActionResult<CourseDto>> GetCourse([FromRoute] int userId, [FromRoute] int courseId)
             => Ok(await courseIterator.GetCourseByTeacher(userId, courseId, false));
 
         [HttpGet("shedules")]
-        public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetShedules([FromRoute] int userId) 
-            => Ok(await sheduleIterator.GetTeacherShedules(userId, false));
+        public async Task<ActionResult<PageResult<TeacherSheduleDto>>> GetShedules([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await sheduleIterator.GetTeacherShedules(userId, false, page, pageSize));
 
         [HttpGet("shedule/{sheduleId}")]
         public async Task<ActionResult<TeacherSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
             => Ok(await sheduleIterator.GetTeacherShedule(userId, sheduleId, false));
 
         [HttpGet("abonements")]
-        public async Task<ActionResult<IEnumerable<AbonementDto>>> GetAbonements([FromRoute] int userId)
-            => Ok(await abonementIterator.GetTeacherAbonements(userId));
+        public async Task<ActionResult<PageResult<AbonementDto>>> GetAbonements([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await abonementIterator.GetTeacherAbonements(userId, page, pageSize));
 
         [HttpGet("abonement/{abonementId}")]
         public async Task<ActionResult<AbonementDto>> GetAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.GetTeacherAbonement(userId, abonementId));
 
         [HttpGet("abonement-shedules/{abonementId}")]
-        public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await studentSheduleIterator.GetAbonementShedules(abonementId));
+        public async Task<ActionResult<PageResult<StudentSheduleDto>>> GetAbonementShedules(
+            [FromRoute] int userId, 
+            [FromRoute] int abonementId, 
+            [FromQuery] int page = 0, 
+            [FromQuery] int pageSize = 10)
+            => Ok(await studentSheduleIterator.GetAbonementShedules(abonementId, page, pageSize));
 
         [HttpGet("abonement-lessons/{abonementId}")]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int userId, [FromRoute] int abonementId)
-            => Ok(await lessonIterator.GetAbonementLessons(abonementId, false));
+        public async Task<ActionResult<PageResult<LessonDto>>> GetAbonementLessons(
+            [FromRoute] int userId, 
+            [FromRoute] int abonementId, 
+            [FromQuery] int page = 0, 
+            [FromQuery] int pageSize = 10)
+            => Ok(await lessonIterator.GetAbonementLessons(abonementId, false, page, pageSize));
 
         [HttpPut("course-edit/{courseId}")]
         public async Task<ActionResult<int>> EditCourse([FromRoute] int userId, [FromRoute] int courseId, [FromBody] CourseInputDto courseDto = null!) 

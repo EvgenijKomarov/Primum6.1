@@ -16,8 +16,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetShedules()
-            => Ok(await client.ShedulesAsync(User.GetUserId()));
+        public async Task<ActionResult<TeacherSheduleDtoPageResult>> GetShedules(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.ShedulesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Конкретное расписание

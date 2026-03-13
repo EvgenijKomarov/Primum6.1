@@ -15,7 +15,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers() => Ok(await client.GetUsersAsync(User.GetUserId()));
+        public async Task<ActionResult<UserDtoPageResult>> GetUsers(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10) 
+            => Ok(await client.GetUsersAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Информация о конкретном пользователе
@@ -40,12 +43,12 @@ namespace PrimumWebAPI.Controllers
         /// Забанить/разбанить пользователя. Только для админов с правом ChangeBanStatus
         /// </summary>
         /// <param name="objectUserId"></param>
-        /// <param name="isBanned">Статус бана</param>
+        /// <param name="banStatus">Статус бана</param>
         /// <returns></returns>
         [HttpPatch("{objectUserId}/ban-status")]
-        public async Task<ActionResult<int>> BanUser([FromRoute] int objectUserId, [FromBody] bool isBanned)
+        public async Task<ActionResult<int>> BanUser([FromRoute] int objectUserId, [FromBody] bool banStatus)
         {
-            if (isBanned) 
+            if (banStatus) 
             { 
                 return Ok(await client.BanAsync(User.GetUserId(), objectUserId));
             }

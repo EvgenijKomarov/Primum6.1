@@ -16,16 +16,20 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PromocodeDto>>> GetStudentPromocodes()
-            => Ok(await client.PromocodesAsync(User.GetUserId()));
+        public async Task<ActionResult<PromocodeDtoPageResult>> GetStudentPromocodes(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.PromocodesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Посмотреть доступные ученику к покупке промокоды
         /// </summary>
         /// <returns></returns>
         [HttpGet("available")]
-        public async Task<ActionResult<IEnumerable<PromocodeDto>>> GetPromocodes()
-            => Ok(await client.AvailablePromocodesAsync(User.GetUserId()));
+        public async Task<ActionResult<PromocodeDtoPageResult>> GetPromocodes(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.AvailablePromocodesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Посмотреть конкретный купленный промокод

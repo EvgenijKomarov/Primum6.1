@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
@@ -21,31 +22,19 @@ namespace PrimumCore.Services.Iterators
             .ThenInclude(x => x.Teacher)
             .ThenInclude(x => x.User);
 
-        private IQueryable<CourseThemeDto> ToDto(IQueryable<CourseTheme> queryable) => queryable
-            .Select(x => new CourseThemeDto
-            {
-                CourseThemeId = x.CourseThemeId,
-                ThemeName = x.ThemeName,
-                IsActive = x.IsActive
-            });
-
-        public async Task<IEnumerable<CourseThemeDto>> GetThemes(bool isOnlyAvailable)
+        public async Task<PageResult<CourseThemeDto>> GetThemes(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Themes(isOnlyAvailable, null)
-                ).ToArrayAsync();
+            return await Themes(isOnlyAvailable, null).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<CourseThemeDto> GetTheme(int themeId, bool isOnlyAvailable)
         {
-            return await ToDto(
-                    Themes(isOnlyAvailable, null)
-                ).FirstOrDefaultAsync(x => x.CourseThemeId == themeId) ?? throw new NotFoundException("Theme");
+            return await Themes(isOnlyAvailable, null).ToDto().One(x => x.CourseThemeId == themeId);
         }
 
         public async Task<int> CreateTheme(int adminId, CourseThemeInputDto dto)
         {
-            var iteratingUser = await helper.CheckIteratingUser(adminId, Permission.EditCourseThemes);
+            var iteratingAdmin = await helper.CheckIteratingUser(adminId, Permission.EditCourseThemes);
 
             var theme = new CourseTheme
             {
@@ -54,9 +43,9 @@ namespace PrimumCore.Services.Iterators
             };
             await context.Set<CourseTheme>().AddAsync(theme);
 
-            iteratingUser.AdminProfile!.IncidentLogs.Add(new IncidentLog
+            iteratingAdmin.IncidentLogs.Add(new IncidentLog
             {
-                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                AdminProfileId = iteratingAdmin.AdminId,
                 Description =
                 $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}",
                 DecisionDate = DateTime.Now
@@ -67,18 +56,17 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<int> EditTheme(int adminId, int themeId, CourseThemeInputDto dto)
         {
-            var iteratingUser = await helper.CheckIteratingUser(adminId, Permission.EditCourseThemes);
+            var iteratingAdmin = await helper.CheckIteratingUser(adminId, Permission.EditCourseThemes);
 
             var theme = await Themes(false, null)
-                .FirstOrDefaultAsync(x => x.CourseThemeId == themeId);
-            if (theme is null) { throw new NotFoundException("Theme"); }
+                .One(x => x.CourseThemeId == themeId);
 
             theme.ThemeName = dto.ThemeName;
             theme.IsActive = dto.IsActive;
 
-            iteratingUser.AdminProfile!.IncidentLogs.Add(new IncidentLog
+            iteratingAdmin.IncidentLogs.Add(new IncidentLog
             {
-                AdminProfileId = iteratingUser.AdminProfile.AdminId,
+                AdminProfileId = iteratingAdmin.AdminId,
                 Description =
                 $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}",
                 DecisionDate = DateTime.Now

@@ -15,8 +15,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AbonementDto>>> GetAbonements()
-            => Ok(await client.AbonementsAsync(User.GetUserId()));
+        public async Task<ActionResult<AbonementDtoPageResult>> GetAbonements(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.AbonementsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Конкретный абонемент ученика, подписанного на курс преподавателя
@@ -33,8 +35,11 @@ namespace PrimumWebAPI.Controllers
         /// <param name="abonementId"></param>
         /// <returns></returns>
         [HttpGet("{abonementId}/shedules")]
-        public async Task<ActionResult<IEnumerable<StudentSheduleDto>>> GetAbonementShedules([FromRoute] int abonementId)
-            => Ok(await client.AbonementShedulesAsync(User.GetUserId(), abonementId));
+        public async Task<ActionResult<StudentSheduleDtoPageResult>> GetAbonementShedules(
+            [FromRoute] int abonementId,
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.AbonementShedulesAsync(User.GetUserId(), abonementId, page, pageSize));
 
         /// <summary>
         /// Все занятия абонемента ученика, подписанного на курс преподавателя, и прошедшие и будущие
@@ -42,7 +47,10 @@ namespace PrimumWebAPI.Controllers
         /// <param name="abonementId"></param>
         /// <returns></returns>
         [HttpGet("{abonementId}/lessons")]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetAbonementLessons([FromRoute] int abonementId)
-            => Ok(await client.AbonementLessonsAsync(User.GetUserId(), abonementId));
+        public async Task<ActionResult<LessonDtoPageResult>> GetAbonementLessons(
+            [FromRoute] int abonementId,
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.AbonementLessonsAsync(User.GetUserId(), abonementId, page, pageSize));
     }
 }

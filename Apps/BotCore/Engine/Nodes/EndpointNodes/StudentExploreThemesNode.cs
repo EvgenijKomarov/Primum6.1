@@ -14,7 +14,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var themes = await publicClient.ThemesAsync();
+            var themes = (await publicClient.ThemesAsync(0, 20)).Items ?? new List<CourseThemeDto>();
 
             var backButton = new EngineOutputButton
             {

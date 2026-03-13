@@ -1,47 +1,43 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
+using System.Data;
 
 namespace PrimumCore.Services.Utilities
 {
     public class IncidentCollector(PrimumContext context)
     {
-        public virtual async Task<IEnumerable<IncidentDto>> GetIncedents(Permission[] permissions)
+        public virtual async Task<PageResult<IncidentDto>> GetIncedents(Permission[] permissions, int _page, int _pageSize)
         {
-            var incidents = new List<IncidentDto>();
+            IQueryable<IncidentDto>? query = null;
             foreach (var permission in permissions)
             {
                 if(collectionRules.TryGetValue(permission, out var rule))
                 {
-                    incidents.AddRange(rule.Invoke());
+                    var ruleQuery = rule.Invoke();
+                    query = query == null ? ruleQuery : query.Union(ruleQuery);
                 }
             }
-
-            foreach (var incident in incidents) 
+            if (query == null)
             {
-                incident.LinkedLogs = await context.Set<IncidentLog>()
-                    .Include(x => x.AdminProfile)
-                    .ThenInclude(x => x.User)
-                    .Where(x => x.ObjectId != null && x.Meaning != null)
-                    .Where(x => x.ObjectId == incident.ObjectId && x.Meaning == incident.Meaning)
-                    .Select(x => new IncidentLogDto
-                    {
-                        AdminUserId = x.AdminProfile.UserId,
-                        AdminDisplayName = x.AdminProfile.User.DisplayName,
-                        LogId = x.LogId,
-                        Description = x.Description,
-                        DateTime = x.DecisionDate
-                    })
-                    .ToArrayAsync();
+                return new PageResult<IncidentDto> 
+                { 
+                    Items = new List<IncidentDto>(),
+                    TotalItemsCount = 0,
+                    CurrentPage = _page,
+                    TotalPages = 0,
+                };
             }
 
-            return incidents;
+            return await query.ToPageResult(_page, _pageSize);
         }
 
-        private Dictionary<Permission, Func<IEnumerable<IncidentDto>>> collectionRules = new Dictionary<Permission, Func<IEnumerable<IncidentDto>>>
+
+        private Dictionary<Permission, Func<IQueryable<IncidentDto>>> collectionRules = new Dictionary<Permission, Func<IQueryable<IncidentDto>>>
         {
             {
                 Permission.ModerateTeachers,
@@ -60,9 +56,8 @@ namespace PrimumCore.Services.Utilities
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.Id, IncidentMeaning.Teacher).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.ModerateStudents,
@@ -80,9 +75,8 @@ namespace PrimumCore.Services.Utilities
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.Id, IncidentMeaning.Student).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.ModerateCourses,
@@ -102,9 +96,8 @@ namespace PrimumCore.Services.Utilities
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
                         $"Free lessons: {x}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.CourseId, IncidentMeaning.Course).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.AdministrateCourses,
@@ -124,9 +117,8 @@ namespace PrimumCore.Services.Utilities
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
                         $"Free lessons: {x.FreeLessons}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.CourseId, IncidentMeaning.Course).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.AdministrateTeachers,
@@ -145,9 +137,8 @@ namespace PrimumCore.Services.Utilities
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.Id, IncidentMeaning.Teacher).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.AdministrateStudents,
@@ -165,9 +156,8 @@ namespace PrimumCore.Services.Utilities
                         $"Surname: {x.Surname}\n" +
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.Id, IncidentMeaning.Student).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.ApproveCourses,
@@ -188,9 +178,8 @@ namespace PrimumCore.Services.Utilities
                         $"Price per lesson: {x.Price}\n" +
                         $"Maximum lessons: {x.MaxLessons}\n" +
                         $"Free lessons: {x.FreeLessons}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set <IncidentLog>().LoadIncidentLogs(x.CourseId, IncidentMeaning.Course).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.ApproveTeachers,
@@ -209,9 +198,8 @@ namespace PrimumCore.Services.Utilities
                         $"Patronymic: {x.Patronymic}\n" +
                         $"Mail: {x.MailAdress}\n" +
                         $"About: {x.TeacherProfile.About}",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.Id, IncidentMeaning.Teacher).ToArray()
                     })
-                    .ToList()
             },
             {
                 Permission.InspectMissedLessons,
@@ -242,9 +230,8 @@ namespace PrimumCore.Services.Utilities
                         $"Course: {x.Abonement.Course.Name}\n" +
                         $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
                         $"DateTime: {x.DateTime.ToString("HH:mm dd:MM:yyyy")}\n",
-                        LinkedLogs = null
+                        LinkedLogs = context.Set<IncidentLog>().LoadIncidentLogs(x.LessonId, IncidentMeaning.Lesson).ToArray()
                     })
-                    .ToList()
             },
         };
     }

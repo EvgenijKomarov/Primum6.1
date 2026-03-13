@@ -1,7 +1,7 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
-using CoreDBModel.Models;
+using CoreConnection.DTOs;
 using Engine;
 using Engine.Nodes;
 using Resourses;
@@ -15,7 +15,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         {
             var abonId = input.Arguments[0];
             var abon = await client.AbonementAsync(input.UserId!.Value, int.Parse(abonId));
-            var shedules = await client.AbonementShedulesAsync(input.UserId!.Value, int.Parse(abonId));
+            var shedules = (await client.AbonementShedulesAsync(input.UserId!.Value, int.Parse(abonId))).Items ?? new List<StudentSheduleDto>();
 
             List<EngineOutputButton> buttons = new List<EngineOutputButton>();
             StringBuilder sb = new StringBuilder();

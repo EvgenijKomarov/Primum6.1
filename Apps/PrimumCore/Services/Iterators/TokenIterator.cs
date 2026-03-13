@@ -2,6 +2,7 @@
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
+using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
@@ -19,8 +20,7 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+                .One(x => x.Id == userId);
             if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
@@ -50,8 +50,7 @@ namespace PrimumCore.Services.Iterators
             var user = await context.Set<User>()
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { throw new NotFoundException("User"); }
+                .One(x => x.Id == userId);
 
             var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);
             if (token is null) { throw new NotFoundException("Token"); }

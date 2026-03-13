@@ -15,16 +15,20 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetLessons()
-            => Ok(await client.LessonsAsync(User.GetUserId()));
+        public async Task<ActionResult<LessonDtoPageResult>> GetLessons(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.LessonsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Только будущие занятия
         /// </summary>
         /// <returns></returns>
         [HttpGet("future")]
-        public async Task<ActionResult<IEnumerable<LessonDto>>> GetFututreLessons()
-            => Ok(await client.FutureLessonsAsync(User.GetUserId()));
+        public async Task<ActionResult<LessonDtoPageResult>> GetFututreLessons(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.FutureLessonsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Конкретное занятие

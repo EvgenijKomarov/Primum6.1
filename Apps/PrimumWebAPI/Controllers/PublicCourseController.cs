@@ -14,8 +14,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
-            => Ok(await client.CoursesAsync());
+        public async Task<ActionResult<CourseDtoPageResult>> GetCourses(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.CoursesAsync(page, pageSize));
 
         /// <summary>
         /// Конкретный курс
@@ -32,7 +34,10 @@ namespace PrimumWebAPI.Controllers
         /// <param name="themeId">Id темы</param>
         /// <returns></returns>
         [HttpGet("by-theme/{themeId}")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesByTheme([FromRoute] int themeId)
-            => Ok(await client.CoursesByThemeAsync(themeId));
+        public async Task<ActionResult<CourseDtoPageResult>> GetCoursesByTheme(
+            [FromRoute] int themeId,
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.CoursesByThemeAsync(themeId, page, pageSize));
     }
 }

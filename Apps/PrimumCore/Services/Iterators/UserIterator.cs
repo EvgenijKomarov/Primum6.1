@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
@@ -21,41 +22,6 @@ namespace PrimumCore.Services.Iterators
             .Include(u => u.StudentProfile)
             .Include(u => u.AdminProfile)
             .IgnoreQueryFilters();
-
-        private IQueryable<UserDto> ToDto(IQueryable<User> queryable) => queryable
-            .Select(user => new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                DisplayName = user.DisplayName,
-                Cash = user.Cash,
-                IsApprovedStudent = user.StudentProfile != null ?
-                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsApprovedTeacher = user.TeacherProfile != null ?
-                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsAdmin = user.AdminProfile != null,
-                IsBanned = user.IsBanned,
-                MailConfirmed = user.IsMailChecked,
-                IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
-            });
-
-        private IQueryable<UserDtoLite> ToDtoLite(IQueryable<User> queryable) => queryable
-            .Select(user => new UserDtoLite
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                Patronymic = user.Patronymic,
-                DisplayName = user.DisplayName,
-                IsApprovedStudent = user.StudentProfile != null ?
-                        user.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsApprovedTeacher = user.TeacherProfile != null ?
-                        user.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
-                IsAdmin = user.AdminProfile != null,
-                IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(user)
-            });
 
         public async Task<int> Login(string mailAdress, string password)
         {
@@ -135,37 +101,22 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<UserDto> GetUser(int id, bool isOnlyAvailable)
         {
-            var user = await ToDto(
-                    Users(isOnlyAvailable, null)
-                ).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("User");
-
-            return user;
+            return await Users(isOnlyAvailable, null).ToDto().One(x => x.Id == id);
         }
 
-        public async Task<UserDtoLite> GetLiteUser(int id, bool isOnlyAvailable)
+        public async Task<UserDtoLite> GetUserLite(int id, bool isOnlyAvailable)
         {
-            var user = await ToDtoLite(
-                    Users(isOnlyAvailable, null)
-                ).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("User");
-
-            return user;
+            return await Users(isOnlyAvailable, null).ToDtoLite().One(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<UserDto>> GetUsers(bool isOnlyAvailable)
+        public async Task<PageResult<UserDto>> GetUsers(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            var user = await ToDto(
-                    Users(isOnlyAvailable, null)
-                ).ToArrayAsync();
-
-            return user;
+            return await Users(isOnlyAvailable, null).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<string> GetMail(int userId)
         {
-            var user = await Users(true, null)
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is null) { return string.Empty; }
-            return user.MailAdress;
+            return (await Users(true, null).One(x => x.Id == userId)).MailAdress;
         }
     }
 }

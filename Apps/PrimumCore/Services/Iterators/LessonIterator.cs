@@ -1,4 +1,5 @@
 ﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,73 +22,47 @@ namespace PrimumCore.Services.Iterators
             .ThenInclude(x => x.Student)
             .ThenInclude(x => x.User);
 
-        private IQueryable<LessonDto> ToDto(IQueryable<Lesson> queryable, bool isStudentLink) => queryable
-            .Select(x => new LessonDto
-            {
-                DateTime = x.DateTime,
-                CourseName = x.Abonement.Course.Name,
-                CourseId = x.Abonement.Course.CourseId,
-                TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                TeacherId = x.Abonement.Course.Teacher.User.Id,
-                StudentDisplayName = x.Abonement.Student.User.DisplayName,
-                StudentId = x.Abonement.Student.User.Id,
-                LessonLink = isStudentLink ? (x.StudentLink ?? string.Empty) : (x.TeacherLink ?? string.Empty),
-                AbonementId = x.Abonement.AbonementId,
-                Price = x.Price,
-                LessonId = x.LessonId,
-                LessonStatus = x.Status,
-                Grade = x.Grading == null ? null : x.Grading.GetFinalGrade()
-            });
-
-        public async Task<IEnumerable<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink)
+        public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.AbonementId == abonementId), isStudentLink
-                ).ToArrayAsync();
+            return await Lessons(x => x.Abonement.AbonementId == abonementId).ToDto(isStudentLink).ToPageResult(_page, _pageSize);
         }
 
-        public async Task<IEnumerable<LessonDto>> GetTeacherLessons(int teacherId)
+        public async Task<PageResult<LessonDto>> GetTeacherLessons(int teacherId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId), false
-                ).ToArrayAsync();
+            return await Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId).ToDto(false).ToPageResult(_page, _pageSize);
         }
 
         public async Task<LessonDto> GetTeacherLesson(int teacherId, int lessonId)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId), false
-                ).FirstOrDefaultAsync(x => x.LessonId == lessonId) ?? throw new NotFoundException("Lesson");
+            return await Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId).ToDto(false).One(x => x.LessonId == lessonId);
         }
 
-        public async Task<IEnumerable<LessonDto>> GetTeacherFutureLessons(int teacherId)
+        public async Task<PageResult<LessonDto>> GetTeacherFutureLessons(int teacherId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId).Where(x => x.DateTime > DateTime.Now).OrderBy(x => x.DateTime), 
-                    false
-                ).ToArrayAsync();
+            return await Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId)
+                .Where(x => x.DateTime > DateTime.Now)
+                .ToDto(false)
+                .ToPageResult(_page, _pageSize);
         }
 
-        public async Task<IEnumerable<LessonDto>> GetStudentLessons(int studentId)
+        public async Task<PageResult<LessonDto>> GetStudentLessons(int studentId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Student.User.Id == studentId), true
-                ).ToArrayAsync();
+            return await Lessons(x => x.Abonement.Student.User.Id == studentId).ToDto(true).ToPageResult(_page, _pageSize);
         }
 
-        public async Task<IEnumerable<LessonDto>> GetStudentFutureLessons(int studentId)
+        public async Task<PageResult<LessonDto>> GetStudentFutureLessons(int studentId, int _page, int _pageSize)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Student.User.Id == studentId).Where(x => x.DateTime > DateTime.Now).OrderBy(x => x.DateTime),
-                    true
-                ).ToArrayAsync();
+            return await Lessons(x => x.Abonement.Student.User.Id == studentId)
+                .Where(x => x.DateTime > DateTime.Now)
+                .ToDto(false)
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<LessonDto> GetStudentLesson(int studentId, int lessonId)
         {
-            return await ToDto(
-                    Lessons(x => x.Abonement.Student.User.Id == studentId), true
-                ).FirstOrDefaultAsync(x => x.LessonId == lessonId) ?? throw new NotFoundException("Lesson");
+            return await Lessons(x => x.Abonement.Student.User.Id == studentId)
+                .ToDto(true)
+                .One(x => x.LessonId == lessonId);
         }
     }
 }

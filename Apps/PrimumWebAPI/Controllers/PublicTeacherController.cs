@@ -15,7 +15,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeacherProfileDto>>> GetTeachers() => Ok(await client.TeachersAsync());
+        public async Task<ActionResult<TeacherProfileDtoPageResult>> GetTeachers(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.TeachersAsync(page, pageSize));
 
         /// <summary>
         /// Информация о преподавателе
@@ -31,8 +34,11 @@ namespace PrimumWebAPI.Controllers
         /// <param name="teacherId">Id преподавателя</param>
         /// <returns></returns>
         [HttpGet("{teacherId}/courses")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesByTeacher([FromRoute] int teacherId)
-            => Ok(await client.CoursesByTeacherAsync(teacherId));
+        public async Task<ActionResult<CourseDtoPageResult>> GetCoursesByTeacher(
+            [FromRoute] int teacherId,
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.CoursesByTeacherAsync(teacherId, page, pageSize));
 
         /// <summary>
         /// Все расписания преподавателя
@@ -40,7 +46,10 @@ namespace PrimumWebAPI.Controllers
         /// <param name="teacherId">Id преподавателя</param>
         /// <returns></returns>
         [HttpGet("{teacherId}/shedules")]
-        public async Task<ActionResult<IEnumerable<TeacherSheduleDto>>> GetTeacherShedules([FromRoute] int teacherId)
-            => Ok(await client.TeacherShedulesAsync(teacherId));
+        public async Task<ActionResult<TeacherSheduleDtoPageResult>> GetTeacherShedules(
+            [FromRoute] int teacherId,
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.TeacherShedulesAsync(teacherId, page, pageSize));
     }
 }

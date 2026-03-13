@@ -16,7 +16,10 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IncidentDto>>> GetIncidents() => Ok(await client.IncidentsAsync(User.GetUserId()));
+        public async Task<ActionResult<IncidentDtoPageResult>> GetIncidents(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 10) 
+            => Ok(await client.IncidentsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Решение инцидента. Доступно всем
@@ -33,8 +36,11 @@ namespace PrimumWebAPI.Controllers
         /// <param name="OnlyUnrevisioned"></param>
         /// <returns></returns>
         [HttpGet("logs")]
-        public async Task<ActionResult<IEnumerable<IncidentLogDto>>> GetIncidentLogs([FromQuery] bool OnlyUnrevisioned = true)
-            => Ok(await client.IncidentLogsAsync(User.GetUserId(), OnlyUnrevisioned));
+        public async Task<ActionResult<IncidentLogDtoPageResult>> GetIncidentLogs(
+            [FromQuery] bool OnlyUnrevisioned = true,
+            [FromQuery] int page = 0, 
+            [FromQuery] int pageSize = 10)
+            => Ok(await client.IncidentLogsAsync(User.GetUserId(), OnlyUnrevisioned, page, pageSize));
 
         /// <summary>
         /// Конкретный лог действия админа. Только для админов с правом InspectIncidentLogs
