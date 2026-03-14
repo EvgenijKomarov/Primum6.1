@@ -22,7 +22,7 @@ namespace PrimumCore.Extentions
                     AdminDisplayName = log.AdminProfile.User.DisplayName,
                     Id = log.Id,
                     Description = log.Description,
-                    DateTime = log.DecisionDate
+                    DateTime = log.CreatedAt
                 });
         }
     }

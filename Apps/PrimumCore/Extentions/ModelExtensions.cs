@@ -65,7 +65,7 @@ namespace PrimumCore.Extentions
                 Id = x.Id,
                 AdminUserId = x.AdminProfile.User.Id,
                 AdminDisplayName = x.AdminProfile.User.DisplayName,
-                DateTime = x.DecisionDate,
+                DateTime = x.CreatedAt,
                 Description = x.Description
             });
 

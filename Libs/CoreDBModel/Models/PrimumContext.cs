@@ -189,7 +189,7 @@ public partial class PrimumContext : DbContext
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            entity.Property(e => e.DecisionDate).HasColumnType("datetime2");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime2");
 
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.IncidentLogs)
@@ -268,18 +268,9 @@ public partial class PrimumContext : DbContext
         var addedEntries = ChangeTracker.Entries<BaseEntity>()
             .Where(e => e.State == EntityState.Added);
 
-        var modifiedEntries = ChangeTracker.Entries<BaseEntity>()
-            .Where(e => e.State == EntityState.Modified);
-
         foreach (var entry in addedEntries)
         {
             entry.Entity.CreatedAt = utcNow;
-            entry.Entity.UpdatedAt = utcNow;
-        }
-
-        foreach (var entry in modifiedEntries)
-        {
-            entry.Entity.UpdatedAt = utcNow;
         }
     }
 

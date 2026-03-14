@@ -47,8 +47,7 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingAdmin.Id,
                 Description =
-                $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}",
-                DecisionDate = DateTime.Now
+                $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}"
             });
             await context.SaveChangesAsync();
             return theme.Id;
@@ -68,8 +67,7 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingAdmin.Id,
                 Description =
-                $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}",
-                DecisionDate = DateTime.Now
+                $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}"
             });
             await context.SaveChangesAsync();
             return theme.Id;

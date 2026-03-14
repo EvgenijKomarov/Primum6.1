@@ -38,8 +38,7 @@ namespace PrimumCore.Services.Iterators
             iteratingAdmin.IncidentLogs.Add(new IncidentLog
             {
                 AdminProfileId = iteratingAdmin.Id,
-                Description = $"Added cash ({cash}) to user with Id {objUserId}",
-                DecisionDate = DateTime.Now
+                Description = $"Added cash ({cash}) to user with Id {objUserId}"
             });
             await context.SaveChangesAsync();
             return objUserId;
@@ -94,8 +93,7 @@ namespace PrimumCore.Services.Iterators
                 AdminProfileId = iteratingAdmin.Id,
                 Description = 
                 $"Given permissions: [{string.Join(", ", permissionsToGive)}]\n" +
-                $"Taken permissions: [{string.Join(", ", permissionsToTake)}]",
-                DecisionDate = DateTime.Now
+                $"Taken permissions: [{string.Join(", ", permissionsToTake)}]"
             });
 
             await context.SaveChangesAsync();
@@ -119,8 +117,7 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingAdmin.Id,
                 Description =
-                $"Created AdminProfile to {objUserId}",
-                DecisionDate = DateTime.Now
+                $"Created AdminProfile to {objUserId}"
             });
             await context.SaveChangesAsync();
             return user.Id;
@@ -144,8 +141,7 @@ namespace PrimumCore.Services.Iterators
             {
                 AdminProfileId = iteratingAdmin.Id,
                 Description =
-                $"Deleted AdminProfile to {objUserId}",
-                DecisionDate = DateTime.Now
+                $"Deleted AdminProfile to {objUserId}"
             });
             await context.SaveChangesAsync();
             return user.Id;

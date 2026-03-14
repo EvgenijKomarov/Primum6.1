@@ -116,7 +116,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<string> GetMail(int userId)
         {
-            return (await Users(true, null).One(x => x.Id == userId)).MailAdress;
+            return (await Users(false, null).One(x => x.Id == userId)).MailAdress;
         }
     }
 }

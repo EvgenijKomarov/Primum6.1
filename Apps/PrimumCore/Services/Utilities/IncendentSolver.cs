@@ -27,7 +27,6 @@ namespace PrimumCore.Services.Utilities
                 $"{dto.DecisionExplanation}\n" +
                 $"Object: {dto.Meaning.ToString()} with Id {dto.ObjectId}\n" +
                 $"Decision: {dto.Decision.ToString()}",
-                DecisionDate = DateTime.Now,
                 Meaning = (IncidentMeaning)dto.Meaning,
                 ObjectId = dto.ObjectId
             });
