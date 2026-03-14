@@ -17,8 +17,10 @@ namespace CoreConnection.DTOs
 
         public required IncidentMeaning Meaning { get; set; }
 
+        public required Permission PermissionBy { get; set; }
+
         public required IEnumerable<IncidentDecision> Decisions { get; set; }
 
-        public required IEnumerable<IncidentLogDto>? LinkedLogs { get; set; }
+        public required IEnumerable<IncidentLogDto> LinkedLogs { get; set; }
     }
 }
