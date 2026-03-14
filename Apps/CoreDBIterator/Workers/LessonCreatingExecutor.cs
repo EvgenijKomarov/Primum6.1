@@ -45,18 +45,18 @@ namespace CoreDBIterator.Workers
                 var freeDateTime = datetimeService.GetNextSuitableDateThisWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
 
                 s.LastIteration = freeDateTime;
-                logger.LogInformation($"Set LastIterationTime of {s.AbonementSheduleId} for {freeDateTime}");
+                logger.LogInformation($"Set LastIterationTime of {s.Id} for {freeDateTime}");
                 if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {
                     var lesson = new Lesson()
                     {
-                        AbonementId = s.Abonement.AbonementId,
+                        AbonementId = s.Abonement.Id,
                         DateTime = freeDateTime,
                         Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
                         Status = LessonStatus.Waiting
                     };
                     context.Set<Lesson>().Add(lesson);
-                    logger?.LogInformation($"Created lesson with Id: {lesson.LessonId} for {lesson.AbonementId} at {lesson.DateTime}");
+                    logger?.LogInformation($"Created lesson with Id: {lesson.Id} for {lesson.AbonementId} at {lesson.DateTime}");
                 }
             }
 

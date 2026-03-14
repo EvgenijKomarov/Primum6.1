@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace CoreDBModel.Models;
 
-public partial class AbonementShedule
+public partial class AbonementShedule: BaseEntity
 {
-    public int AbonementSheduleId { get; set; }
-
     public int AbonementId { get; set; }
 
     public int TeacherSheduleId { get; set; }

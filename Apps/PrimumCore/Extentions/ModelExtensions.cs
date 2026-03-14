@@ -15,11 +15,11 @@ namespace PrimumCore.Extentions
                 StudentDisplayName = x.Student.User.DisplayName,
                 TeacherId = x.Course.Teacher.User.Id,
                 TeacherDisplayName = x.Course.Teacher.User.DisplayName,
-                AbonementId = x.AbonementId,
+                AbonementId = x.Id,
                 CourseName = x.Course.Name,
-                CourseId = x.Course.CourseId,
+                CourseId = x.Course.Id,
                 CourseThemeName = x.Course.CourseTheme.ThemeName,
-                CourseThemeId = x.Course.CourseTheme.CourseThemeId,
+                CourseThemeId = x.Course.CourseTheme.Id,
                 PricePerLesson = x.PricePerLesson,
                 AbonementStatus = x.AbonementStatus
             });
@@ -27,7 +27,7 @@ namespace PrimumCore.Extentions
         public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x => 
             new CourseDto
             {
-                CourseId = x.CourseId,
+                CourseId = x.Id,
                 Name = x.Name,
                 TeacherName = x.Teacher.User.DisplayName,
                 CourseThemeName = x.CourseTheme.ThemeName,
@@ -54,7 +54,7 @@ namespace PrimumCore.Extentions
         public static IQueryable<CourseThemeDto> ToDto(this IQueryable<CourseTheme> queryable) => queryable.Select(x => 
             new CourseThemeDto
             {
-                CourseThemeId = x.CourseThemeId,
+                CourseThemeId = x.Id,
                 ThemeName = x.ThemeName,
                 IsActive = x.IsActive
             });
@@ -62,7 +62,7 @@ namespace PrimumCore.Extentions
         public static IQueryable<IncidentLogDto> ToDto(this IQueryable<IncidentLog> queryable) => queryable.Select(x => 
             new IncidentLogDto
             {
-                LogId = x.LogId,
+                LogId = x.Id,
                 AdminUserId = x.AdminProfile.User.Id,
                 AdminDisplayName = x.AdminProfile.User.DisplayName,
                 DateTime = x.DecisionDate,
@@ -74,15 +74,15 @@ namespace PrimumCore.Extentions
             {
                 DateTime = x.DateTime,
                 CourseName = x.Abonement.Course.Name,
-                CourseId = x.Abonement.Course.CourseId,
+                CourseId = x.Abonement.Course.Id,
                 TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
                 TeacherId = x.Abonement.Course.Teacher.User.Id,
                 StudentDisplayName = x.Abonement.Student.User.DisplayName,
                 StudentId = x.Abonement.Student.User.Id,
                 LessonLink = isStudentLink ? (x.StudentLink ?? string.Empty) : (x.TeacherLink ?? string.Empty),
-                AbonementId = x.Abonement.AbonementId,
+                AbonementId = x.Abonement.Id,
                 Price = x.Price,
-                LessonId = x.LessonId,
+                LessonId = x.Id,
                 LessonStatus = x.Status,
                 Grade = x.Grading == null ? null : x.Grading.GetFinalGrade()
             });
@@ -90,8 +90,8 @@ namespace PrimumCore.Extentions
         public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => queryable.Select(x => 
             new PromocodeDto
             {
-                PromocodeId = x.PromocodeId,
-                StudentId = x.Student!.StudentId,
+                PromocodeId = x.Id,
+                StudentId = x.Student!.Id,
                 Code = isCodeSecured == true ? null : x.Code,
                 CoinsPrice = x.CoinsPrice,
                 Title = x.Title,
@@ -122,23 +122,23 @@ namespace PrimumCore.Extentions
                 DayOfWeek = x.TeacherShedule.DayOfWeek,
                 Time = x.TeacherShedule.Time,
                 CourseName = x.Abonement.Course.Name,
-                CourseId = x.Abonement.Course.CourseId,
+                CourseId = x.Abonement.Course.Id,
                 TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
                 TeacherId = x.Abonement.Course.Teacher.User.Id,
-                AbonementSheduleId = x.AbonementSheduleId
+                AbonementSheduleId = x.Id
             });
 
         public static IQueryable<TeacherSheduleDto> ToDto(this IQueryable<TeacherShedule> queryable) => queryable.Select(x => 
             new TeacherSheduleDto
             {
-                TeacherSheduleId = x.TeacherSheduleId,
+                TeacherSheduleId = x.Id,
                 DayOfWeek = x.DayOfWeek,
                 Time = x.Time,
                 IsAvailable = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
                 StudentName = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Student.User.DisplayName,
                 StudentId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Student.User.Id,
                 CourseName = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.Name,
-                CourseId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.CourseId,
+                CourseId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.Id,
             });
 
         public static IQueryable<UserDto> ToDto(this IQueryable<User> queryable) => queryable.Select(x => 

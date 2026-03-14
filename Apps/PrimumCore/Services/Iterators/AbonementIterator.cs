@@ -52,7 +52,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)
         {
             var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
-                .One(x => x.AbonementId == abonementId);
+                .One(x => x.Id == abonementId);
 
             abonement.AbonementStatus = status;
             if (status == AbonementStatus.Deleted) { abonement.AbonementShedules.Clear(); }
@@ -64,10 +64,10 @@ namespace PrimumCore.Services.Iterators
                 TeacherName = abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = abonement.Course.Teacher.User.Id,
                 CourseName = abonement.Course.Name,
-                AbonementId = abonement.AbonementId,
+                AbonementId = abonement.Id,
                 AbonementStatus = abonement.AbonementStatus.ToString()
             });
-            return abonement.AbonementId;
+            return abonement.Id;
         }
     }
 }

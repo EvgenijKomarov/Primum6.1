@@ -2,10 +2,8 @@
 
 namespace CoreDBModel.Models
 {
-    public class AdminPermission
+    public class AdminPermission: BaseEntity
     {
-        public int AdminPermissionId {  get; set; }
-
         public int AdminProfileId { get; set; }
 
         public Permission Permission { get; set; }

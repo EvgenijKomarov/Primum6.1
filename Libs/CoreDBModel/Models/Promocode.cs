@@ -2,10 +2,8 @@
 
 namespace CoreDBModel.Models
 {
-    public class Promocode
+    public class Promocode: BaseEntity
     {
-        public int PromocodeId { get; set; }
-
         public int? StudentId {  get; set; }
 
         public string Code { get; set; } = null!;

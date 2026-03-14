@@ -2,10 +2,8 @@
 
 namespace CoreDBModel.Models
 {
-    public class IncidentLog
+    public class IncidentLog: BaseEntity
     {
-        public int LogId { get; set; }
-
         public int AdminProfileId { get; set; }
 
         public string Description { get; set; }

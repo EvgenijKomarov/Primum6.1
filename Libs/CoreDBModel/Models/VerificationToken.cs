@@ -2,10 +2,8 @@
 
 namespace CoreDBModel.Models
 {
-    public class VerificationToken
+    public class VerificationToken: BaseEntity
     {
-        public int TokenId { get; set; }
-
         public string Token {  get; set; }
 
         public DateTime LifeTime { get; set; }

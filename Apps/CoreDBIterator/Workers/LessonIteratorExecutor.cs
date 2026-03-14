@@ -68,13 +68,13 @@ namespace CoreDBIterator.Workers
                         TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                         TeacherUserId = lesson.Abonement.Course.TeacherId,
                         CourseName = lesson.Abonement.Course.Name,
-                        AbonementId = lesson.Abonement.AbonementId,
-                        LessonId = lesson.LessonId,
+                        AbonementId = lesson.Abonement.Id,
+                        LessonId = lesson.Id,
                         DateTime = lesson.DateTime,
                         StudentLink = tuple.guestLink,
                         TeacherLink = tuple.adminLink
                     });
-                    logger?.LogInformation($"Lesson {lesson.LessonId} happened successfully");
+                    logger?.LogInformation($"Lesson {lesson.Id} happened successfully");
                 }
                 else if (lesson.Abonement.Student.User.Cash < lesson.Price &&
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
@@ -87,16 +87,16 @@ namespace CoreDBIterator.Workers
                         TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                         TeacherUserId = lesson.Abonement.Course.TeacherId,
                         CourseName = lesson.Abonement.Course.Name,
-                        AbonementId = lesson.Abonement.AbonementId,
-                        LessonId = lesson.LessonId,
+                        AbonementId = lesson.Abonement.Id,
+                        LessonId = lesson.Id,
                         DateTime = lesson.DateTime
                     };
                     await publisher.Push(notification);
-                    logger?.LogInformation($"Lesson {lesson.LessonId} not happened");
+                    logger?.LogInformation($"Lesson {lesson.Id} not happened");
                 }
                 else //Занятие пропущено по сторонним причинам
                 {
-                    logger?.LogInformation($"Lesson {lesson.LessonId} missed due to non-active abonement");
+                    logger?.LogInformation($"Lesson {lesson.Id} missed due to non-active abonement");
                     context.Set<Lesson>().Remove(lesson);
                 }
             }

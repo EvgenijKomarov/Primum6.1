@@ -55,12 +55,12 @@ namespace CoreDBIterator.Workers
                     TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                     TeacherUserId = lesson.Abonement.Course.TeacherId,
                     CourseName = lesson.Abonement.Course.Name,
-                    AbonementId = lesson.Abonement.AbonementId,
-                    LessonId = lesson.LessonId,
+                    AbonementId = lesson.Abonement.Id,
+                    LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
                     IsEnoughMoney = lesson.Abonement.Student.User.Cash >= lesson.Price
                 });
-                logger.LogInformation($"Lesson {lesson.LessonId} warned");
+                logger.LogInformation($"Lesson {lesson.Id} warned");
             }
 
             await context.SaveChangesAsync();

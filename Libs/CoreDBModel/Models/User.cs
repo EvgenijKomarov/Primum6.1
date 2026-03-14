@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace CoreDBModel.Models;
 
-public partial class User
+public partial class User: BaseEntity
 {
-    public int Id { get; set; }
-
     public string Password { get; set; } = null!;
 
     public string MailAdress { get; set; } = null!;

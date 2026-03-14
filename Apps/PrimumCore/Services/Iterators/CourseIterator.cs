@@ -43,20 +43,20 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<PageResult<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Courses(isOnlyAvailable, x => x.CourseTheme.CourseThemeId == themeId).ToDto().ToPageResult(_page, _pageSize);
+            return await Courses(isOnlyAvailable, x => x.CourseTheme.Id == themeId).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
         {   
             var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
-                .One(x => x.CourseId == courseId);
+                .One(x => x.Id == courseId);
 
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
             course.FreeLessons = courseDto.FreeLessons;
 
             await context.SaveChangesAsync();
-            return course.CourseId;
+            return course.Id;
         }
 
         public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto)
@@ -78,17 +78,17 @@ namespace PrimumCore.Services.Iterators
 
             teacher.Courses.Add(course);
             await context.SaveChangesAsync();
-            return course.CourseId;
+            return course.Id;
         }
 
         public async Task<int> SwitchCourseActivity(int teacherId, int courseId, bool activity)
         {
             var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
-                .One(x => x.CourseId == courseId);
+                .One(x => x.Id == courseId);
 
             course.IsActive = activity;
             await context.SaveChangesAsync();
-            return course.CourseId;
+            return course.Id;
         }
     }
 }

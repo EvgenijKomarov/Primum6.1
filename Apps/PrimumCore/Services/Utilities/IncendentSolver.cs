@@ -114,7 +114,7 @@ namespace PrimumCore.Services.Utilities
                         .ThenInclude(x => x.Lessons)
                         .Include(x => x.Abonements)
                         .ThenInclude(x => x.AbonementShedules)
-                        .FirstOrDefault(x => x.CourseId == id);
+                        .FirstOrDefault(x => x.Id == id);
                     if (course is null) { throw new NotFoundException("Course"); }
 
                     switch(decision)
@@ -135,7 +135,7 @@ namespace PrimumCore.Services.Utilities
                             context.Set<Course>().Remove(course);
                             break;
                     }
-                    return course.CourseId;
+                    return course.Id;
                 }
             },
             {
@@ -151,7 +151,7 @@ namespace PrimumCore.Services.Utilities
                         .Include(x => x.Abonement)
                         .ThenInclude(x => x.Student)
                         .ThenInclude(x => x.Abonements)
-                        .FirstOrDefault(x => x.LessonId == id);
+                        .FirstOrDefault(x => x.Id == id);
                     if (lesson is null) { throw new NotFoundException("Lesson"); }
 
                     switch(decision)
@@ -169,7 +169,7 @@ namespace PrimumCore.Services.Utilities
                             context.Set<Abonement>().RemoveRange(lesson.Abonement.Student.Abonements);
                             break;
                     }
-                    return lesson.LessonId;
+                    return lesson.Id;
                 }
             },
         };

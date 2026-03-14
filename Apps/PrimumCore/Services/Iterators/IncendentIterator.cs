@@ -44,11 +44,11 @@ namespace PrimumCore.Services.Iterators
         {
             var user = await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            var log = await IncidentLogs(false).One(x => x.LogId == logId);
+            var log = await IncidentLogs(false).One(x => x.Id == logId);
             log.IsRevisioned = true;
 
             await context.SaveChangesAsync();
-            return log.LogId;
+            return log.Id;
         }
 
         public async Task<int> SolveIncedent(int userId, IncidentDecisionInputDto dto)
@@ -56,7 +56,7 @@ namespace PrimumCore.Services.Iterators
             var iteratingUserAdminProfile = await helper.GetIteratingUser(userId);
             Permission[] userPermissions = iteratingUserAdminProfile.Permissions.Select(x => x.Permission).ToArray();
 
-            var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.AdminId, userPermissions, dto, userId);
+            var subjectId = await solver.SolveIncident(iteratingUserAdminProfile.Id, userPermissions, dto, userId);
             return subjectId;
         }
     }

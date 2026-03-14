@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace CoreDBModel.Models;
 
-public partial class Course
+public partial class Course: BaseEntity
 {
-    public int CourseId { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string About { get; set; } = null!;

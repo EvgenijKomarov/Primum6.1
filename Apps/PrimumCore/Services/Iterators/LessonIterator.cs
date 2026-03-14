@@ -24,7 +24,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
-            return await Lessons(x => x.Abonement.AbonementId == abonementId).ToDto(isStudentLink).ToPageResult(_page, _pageSize);
+            return await Lessons(x => x.Abonement.Id == abonementId).ToDto(isStudentLink).ToPageResult(_page, _pageSize);
         }
 
         public async Task<PageResult<LessonDto>> GetTeacherLessons(int teacherId, int _page, int _pageSize)

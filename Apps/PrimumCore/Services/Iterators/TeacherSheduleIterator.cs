@@ -58,7 +58,7 @@ namespace PrimumCore.Services.Iterators
 
             teacher.TeacherShedules.Add(shedule);
             await context.SaveChangesAsync();
-            return shedule.TeacherSheduleId;
+            return shedule.Id;
         }
 
         public async Task<int> DeleteTeacherShedule(int teacherId, int sheduleId)
@@ -70,13 +70,13 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.User.Id == teacherId);
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher.User)) { throw new NotAvailableException("Teacher"); }
 
-            var shedule = teacher.TeacherShedules.FirstOrDefault(s => s.TeacherSheduleId == sheduleId);
+            var shedule = teacher.TeacherShedules.FirstOrDefault(s => s.Id == sheduleId);
             if (shedule is null) { throw new NotFoundException("Shedule"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new BusinessLogicException("Shedule already busy"); }
 
             teacher.TeacherShedules.Remove(shedule);
             await context.SaveChangesAsync();
-            return shedule.TeacherSheduleId;
+            return shedule.Id;
         }
     }
 }

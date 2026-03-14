@@ -1,9 +1,7 @@
 ﻿namespace CoreDBModel.Models
 {
-    public partial class CourseTheme
+    public partial class CourseTheme: BaseEntity
     {
-        public int CourseThemeId { get; set; }
-
         public string ThemeName { get; set; } = null!;
 
         public bool IsActive { get; set; }

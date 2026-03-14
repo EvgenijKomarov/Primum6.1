@@ -28,7 +28,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<PageResult<StudentSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
         {
-            return await AbonementShedules(x => x.Abonement.AbonementId == abonementId).ToDto().ToPageResult(_page, _pageSize);
+            return await AbonementShedules(x => x.Abonement.Id == abonementId).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<PageResult<StudentSheduleDto>> GetStudentShedules(int studentId, int _page, int _pageSize)
@@ -44,7 +44,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> DeleteStudentShedule(int studentId, int abonementSheduleId)
         {
             var abonementShedule = await AbonementShedules(null)
-                .One(x => x.AbonementSheduleId == abonementSheduleId);
+                .One(x => x.Id == abonementSheduleId);
             if (abonementShedule.Abonement.Student.User.Id != studentId) { throw new BusinessLogicException("Only owner can delete shedule"); }
 
             var notification = new DeleteAbonementSheduleEvent
@@ -54,8 +54,8 @@ namespace PrimumCore.Services.Iterators
                 TeacherName = abonementShedule.TeacherShedule.Teacher.User.DisplayName,
                 TeacherUserId = abonementShedule.TeacherShedule.Teacher.User.Id,
                 CourseName = abonementShedule.Abonement.Course.Name,
-                AbonementId = abonementShedule.Abonement.AbonementId,
-                AbonementSheduleId = abonementShedule.AbonementSheduleId,
+                AbonementId = abonementShedule.Abonement.Id,
+                AbonementSheduleId = abonementShedule.Id,
                 DayOfWeek = abonementShedule.TeacherShedule.DayOfWeek.ToString(),
                 Time = abonementShedule.TeacherShedule.Time
             };
@@ -63,7 +63,7 @@ namespace PrimumCore.Services.Iterators
             await context.SaveChangesAsync();
 
             await publisher.Push(notification);
-            return abonementShedule.AbonementSheduleId;
+            return abonementShedule.Id;
         }
     }
 }

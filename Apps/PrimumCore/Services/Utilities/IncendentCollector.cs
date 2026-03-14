@@ -113,25 +113,25 @@ namespace PrimumCore.Services.Utilities
                 Permission.ModerateCourses =>
                     await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedModeratorReview)
-                        .Select(x => new IncidentKey(x.CourseId, IncidentMeaning.Course, permission, x.CourseId))
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateCourses =>
                     await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedAdministratorReview)
-                        .Select(x => new IncidentKey(x.CourseId, IncidentMeaning.Course, permission, x.CourseId))
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ApproveCourses =>
                     await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedManagerReview)
-                        .Select(x => new IncidentKey(x.CourseId, IncidentMeaning.Course, permission, x.CourseId))
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.InspectMissedLessons =>
                     await context.Set<Lesson>()
                         .Where(x => x.Status == LessonStatus.Missed)
-                        .Select(x => new IncidentKey(x.LessonId, IncidentMeaning.Lesson, permission, x.LessonId))
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Lesson, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 _ => new List<IncidentKey>()
@@ -188,10 +188,10 @@ namespace PrimumCore.Services.Utilities
 
                 IncidentMeaning.Course => await context.Set<Course>()
                     .Include(x => x.Teacher).ThenInclude(t => t.User)
-                    .Where(x => x.CourseId == key.ObjectId)
+                    .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
-                        ObjectId = x.CourseId,
+                        ObjectId = x.Id,
                         Status = IncidentStatus.NeedModeration,
                         Meaning = IncidentMeaning.Course,
                         PermissionBy = key.PermissionBy,
@@ -209,10 +209,10 @@ namespace PrimumCore.Services.Utilities
                     .Include(x => x.Abonement).ThenInclude(a => a.Student).ThenInclude(s => s.User)
                     .Include(x => x.Abonement).ThenInclude(a => a.Course).ThenInclude(c => c.Teacher).ThenInclude(t => t.User)
                     .Include(x => x.Abonement).ThenInclude(a => a.Course).ThenInclude(c => c.CourseTheme)
-                    .Where(x => x.LessonId == key.ObjectId)
+                    .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
-                        ObjectId = x.LessonId,
+                        ObjectId = x.Id,
                         Status = IncidentStatus.NeedInspectation,
                         Meaning = IncidentMeaning.Lesson,
                         PermissionBy = key.PermissionBy,

@@ -34,7 +34,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PromocodeDto> BuyPromocode(int studentId, int promocodeId)
         {
             var code = await Promocodes(true, null)
-                .One(x => x.PromocodeId == promocodeId);
+                .One(x => x.Id == promocodeId);
 
             var student = await context.Set<User>()
                 .Include(x => x.StudentProfile)
@@ -48,7 +48,7 @@ namespace PrimumCore.Services.Iterators
 
             return new PromocodeDto
             {
-                PromocodeId = code.PromocodeId,
+                PromocodeId = code.Id,
                 StudentId = code.Student.UserId,
                 Code = code.Code,
                 CoinsPrice = code.CoinsPrice,
@@ -77,7 +77,7 @@ namespace PrimumCore.Services.Iterators
             await context.Set<Promocode>().AddAsync(promocode);
 
             await context.SaveChangesAsync();
-            return promocode.PromocodeId;
+            return promocode.Id;
         }
 
         public async Task<int> DeletePromocode(int adminId, int promocodeId)
@@ -85,7 +85,7 @@ namespace PrimumCore.Services.Iterators
             await helper.CheckIteratingUser(adminId, Permission.DeletePromocodes);
 
             var code = await Promocodes(false, null)
-                .One(x => x.PromocodeId == promocodeId);
+                .One(x => x.Id == promocodeId);
             if (!AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)) 
                 { throw new BusinessLogicException("Promocode was sold"); }
 

@@ -45,13 +45,13 @@ namespace PrimumCore.Services.Iterators
 
             iteratingAdmin.IncidentLogs.Add(new IncidentLog
             {
-                AdminProfileId = iteratingAdmin.AdminId,
+                AdminProfileId = iteratingAdmin.Id,
                 Description =
                 $"Created course theme with name: {theme.ThemeName}, active: {theme.IsActive}",
                 DecisionDate = DateTime.Now
             });
             await context.SaveChangesAsync();
-            return theme.CourseThemeId;
+            return theme.Id;
         }
 
         public async Task<int> EditTheme(int adminId, int themeId, CourseThemeInputDto dto)
@@ -59,20 +59,20 @@ namespace PrimumCore.Services.Iterators
             var iteratingAdmin = await helper.CheckIteratingUser(adminId, Permission.EditCourseThemes);
 
             var theme = await Themes(false, null)
-                .One(x => x.CourseThemeId == themeId);
+                .One(x => x.Id == themeId);
 
             theme.ThemeName = dto.ThemeName;
             theme.IsActive = dto.IsActive;
 
             iteratingAdmin.IncidentLogs.Add(new IncidentLog
             {
-                AdminProfileId = iteratingAdmin.AdminId,
+                AdminProfileId = iteratingAdmin.Id,
                 Description =
                 $"Edited course theme ({themeId}) to name: {theme.ThemeName}, active: {theme.IsActive}",
                 DecisionDate = DateTime.Now
             });
             await context.SaveChangesAsync();
-            return theme.CourseThemeId;
+            return theme.Id;
         }
     }
 }

@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoreDBModel.Models;
 
-public partial class TeacherShedule
+public partial class TeacherShedule: BaseEntity
 {
-    public int TeacherSheduleId { get; set; }
-
     public int TeacherId { get; set; }
 
     public DayOfWeek DayOfWeek { get; set; }

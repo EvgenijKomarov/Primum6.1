@@ -50,10 +50,10 @@ public partial class PrimumContext : DbContext
     {
         modelBuilder.Entity<Abonement>(entity =>
         {
-            entity.HasKey(e => e.AbonementId);
-            entity.HasIndex(e => e.AbonementId).IsUnique();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
 
-            entity.Property(e => e.AbonementId)
+            entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
 
             entity.HasOne(d => d.Course).WithMany(p => p.Abonements)
@@ -67,8 +67,8 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<AbonementShedule>(entity =>
         {
-            entity.HasKey(e => e.AbonementSheduleId);
-            entity.Property(e => e.AbonementSheduleId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.LastIteration).HasColumnType("datetime2");
 
@@ -85,18 +85,18 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<AdminProfile>(entity =>
         {
-            entity.HasKey(e => e.AdminId);
-            entity.HasIndex(e => e.AdminId).IsUnique();
-            entity.Property(e => e.AdminId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<Course>(entity =>
         {
-            entity.HasKey(e => e.CourseId);
-            entity.HasIndex(e => e.CourseId).IsUnique();
-            entity.Property(e => e.CourseId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.FreeLessons).HasDefaultValue(1);
             entity.Property(e => e.MaxLessons).HasDefaultValue(1);
@@ -109,9 +109,9 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<Lesson>(entity =>
         {
-            entity.HasKey(e => e.LessonId);
-            entity.HasIndex(e => e.LessonId).IsUnique();
-            entity.Property(e => e.LessonId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.DateTime).HasColumnType("datetime2");
 
@@ -123,34 +123,34 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<StudentGrading>(entity =>
         {
-            entity.HasKey(e => e.StudentGradingId);
-            entity.HasIndex(e => e.StudentGradingId).IsUnique();
-            entity.Property(e => e.StudentGradingId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<StudentProfile>(entity =>
         {
-            entity.HasKey(e => e.StudentId);
-            entity.HasIndex(e => e.StudentId).IsUnique();
-            entity.Property(e => e.StudentId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<TeacherProfile>(entity =>
         {
-            entity.HasKey(e => e.TeacherId);
-            entity.HasIndex(e => e.TeacherId).IsUnique();
-            entity.Property(e => e.TeacherId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<TeacherShedule>(entity =>
         {
-            entity.HasKey(e => e.TeacherSheduleId);
-            entity.HasIndex(e => e.TeacherSheduleId).IsUnique();
-            entity.Property(e => e.TeacherSheduleId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.HasOne(d => d.Teacher)
                 .WithMany(p => p.TeacherShedules)
@@ -160,16 +160,16 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<CourseTheme>(entity =>
         {
-            entity.HasKey(e => e.CourseThemeId);
-            entity.HasIndex(e => e.CourseThemeId).IsUnique();
-            entity.Property(e => e.CourseThemeId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<AdminPermission>(entity =>
         {
-            entity.HasKey(e => e.AdminPermissionId);
-            entity.HasIndex(e => e.AdminPermissionId).IsUnique();
-            entity.Property(e => e.AdminPermissionId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.PromotionDate).HasColumnType("datetime2");
 
@@ -185,9 +185,9 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<IncidentLog>(entity =>
         {
-            entity.HasKey(e => e.LogId);
-            entity.HasIndex(e => e.LogId).IsUnique();
-            entity.Property(e => e.LogId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.DecisionDate).HasColumnType("datetime2");
 
@@ -199,9 +199,9 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<Promocode>(entity =>
         {
-            entity.HasKey(e => e.PromocodeId);
-            entity.HasIndex(e => e.PromocodeId).IsUnique();
-            entity.Property(e => e.PromocodeId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.HasOne(e => e.Student)
                 .WithMany(e => e.Promocodes)
@@ -211,9 +211,9 @@ public partial class PrimumContext : DbContext
 
         modelBuilder.Entity<VerificationToken>(entity =>
         {
-            entity.HasKey(e => e.TokenId);
-            entity.HasIndex(e => e.TokenId).IsUnique();
-            entity.Property(e => e.TokenId).ValueGeneratedOnAdd();
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.HasOne(e => e.User)
                 .WithMany(e => e.VerificationTokens)
@@ -247,6 +247,40 @@ public partial class PrimumContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimestamps()
+    {
+        var utcNow = DateTime.UtcNow;
+
+        var addedEntries = ChangeTracker.Entries<BaseEntity>()
+            .Where(e => e.State == EntityState.Added);
+
+        var modifiedEntries = ChangeTracker.Entries<BaseEntity>()
+            .Where(e => e.State == EntityState.Modified);
+
+        foreach (var entry in addedEntries)
+        {
+            entry.Entity.CreatedAt = utcNow;
+            entry.Entity.UpdatedAt = utcNow;
+        }
+
+        foreach (var entry in modifiedEntries)
+        {
+            entry.Entity.UpdatedAt = utcNow;
+        }
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

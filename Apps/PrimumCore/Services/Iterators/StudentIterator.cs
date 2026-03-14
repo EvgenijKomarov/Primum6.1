@@ -48,7 +48,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.CourseTheme)
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.CourseId == courseId) ?? throw new NotFoundException("Course");
+                .FirstOrDefaultAsync(x => x.Id == courseId) ?? throw new NotFoundException("Course");
 
             // strict availability check executed in-memory
             if (!AvailabilityExpressions.IsCourseAvailable.Compile()(course)) { throw new NotFoundException("Course"); }
@@ -56,7 +56,7 @@ namespace PrimumCore.Services.Iterators
             var teacherShedule = await context.Set<TeacherShedule>()
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.TeacherSheduleId == teacherSheduleId) ?? throw new NotFoundException("Shedule");
+                .FirstOrDefaultAsync(x => x.Id == teacherSheduleId) ?? throw new NotFoundException("Shedule");
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }
             if (teacherShedule.Teacher.User?.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }
@@ -110,7 +110,7 @@ namespace PrimumCore.Services.Iterators
 
             if (!context.Set<Lesson>()
                 .Include(x => x.Abonement)
-                .Any(x => x.DateTime == suitableDate && x.Abonement.AbonementId == abonement.AbonementId))
+                .Any(x => x.DateTime == suitableDate && x.Abonement.Id == abonement.Id))
             {
                 await context.Set<Lesson>().AddAsync(new Lesson
                 {
@@ -130,13 +130,13 @@ namespace PrimumCore.Services.Iterators
                 TeacherName = teacherShedule.Teacher.User.DisplayName,
                 TeacherUserId = teacherShedule.Teacher.User.Id,
                 CourseName = course.Name,
-                AbonementId = abonement.AbonementId,
-                AbonementSheduleId = abonementShedule.AbonementSheduleId,
+                AbonementId = abonement.Id,
+                AbonementSheduleId = abonementShedule.Id,
                 DayOfWeek = teacherShedule.DayOfWeek.ToString(),
                 Time = teacherShedule.Time
             });
 
-            return abonementShedule.AbonementSheduleId;
+            return abonementShedule.Id;
         }
     }
 }
