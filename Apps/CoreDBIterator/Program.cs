@@ -28,6 +28,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHostedService<LessonCreatingExecutor>();
         services.AddHostedService<LessonWarningExecutor>();
         services.AddHostedService<LessonIteratorExecutor>();
+        services.AddHostedService<ExpiredTokenDeleteExecutor>();
 
         services.AddCoreContext(solutionEnvironment.CoreDatabaseConnection);
     });
