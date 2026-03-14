@@ -36,7 +36,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<AbonementDto> GetTeacherAbonement(int teacherId, int abonementId)
         {
-            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().One(x => x.AbonementId == abonementId);
+            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == abonementId);
         }
 
         public async Task<PageResult<AbonementDto>> GetStudentAbonements(int studentId, int _page, int _pageSize)
@@ -46,7 +46,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<AbonementDto> GetStudentAbonement(int studentId, int abonementId)
         {
-            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().One(x => x.AbonementId == abonementId);
+            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().One(x => x.Id == abonementId);
         }
 
         public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)

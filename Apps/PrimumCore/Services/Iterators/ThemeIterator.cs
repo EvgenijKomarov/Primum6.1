@@ -29,7 +29,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<CourseThemeDto> GetTheme(int themeId, bool isOnlyAvailable)
         {
-            return await Themes(isOnlyAvailable, null).ToDto().One(x => x.CourseThemeId == themeId);
+            return await Themes(isOnlyAvailable, null).ToDto().One(x => x.Id == themeId);
         }
 
         public async Task<int> CreateTheme(int adminId, CourseThemeInputDto dto)

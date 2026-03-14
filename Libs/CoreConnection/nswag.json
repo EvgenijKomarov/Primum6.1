@@ -19,6 +19,7 @@
       "excludedTypeNames": [
         "AbonementDto",
         "AdminProfileDto",
+        "AbonementSheduleDto",
         "CourseDto",
         "CourseThemeDto",
         "AdminProfileDto",
@@ -27,7 +28,6 @@
         "LessonDto",
         "PromocodeDto",
         "StudentProfileDto",
-        "StudentSheduleDto",
         "TeacherProfileDto",
         "TeacherSheduleDto",
         "UserDto",

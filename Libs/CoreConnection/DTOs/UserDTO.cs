@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class UserDto
+    public class UserDto : IHasId
     {
         public required int Id { get; set; }
 

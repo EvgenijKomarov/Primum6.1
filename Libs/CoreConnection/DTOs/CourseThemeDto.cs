@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class CourseThemeDto
+    public class CourseThemeDto : IHasId
     {
-        public required int CourseThemeId { get; set; }
+        public required int Id { get; set; }
 
         public required string ThemeName { get; set; }
 

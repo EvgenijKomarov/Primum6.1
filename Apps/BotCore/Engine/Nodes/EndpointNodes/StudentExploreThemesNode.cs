@@ -36,7 +36,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = Emoticons.Theme + theme.ThemeName,
                     EndpointNode = typeof(StudentExploreCoursesByThemeNode),
-                    Args = new List<string> { "0", theme.CourseThemeId.ToString() }
+                    Args = new List<string> { "0", theme.Id.ToString() }
                 });
             }
             buttons.Add(backButton);

@@ -26,19 +26,19 @@ namespace PrimumCore.Services.Iterators
             .ThenInclude(x => x.Student)
             .ThenInclude(x => x.User);
 
-        public async Task<PageResult<StudentSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
+        public async Task<PageResult<AbonementSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
         {
             return await AbonementShedules(x => x.Abonement.Id == abonementId).ToDto().ToPageResult(_page, _pageSize);
         }
 
-        public async Task<PageResult<StudentSheduleDto>> GetStudentShedules(int studentId, int _page, int _pageSize)
+        public async Task<PageResult<AbonementSheduleDto>> GetStudentShedules(int studentId, int _page, int _pageSize)
         {
             return await AbonementShedules(x => x.Abonement.Student.User.Id == studentId).ToDto().ToPageResult(_page, _pageSize);
         }
 
-        public async Task<StudentSheduleDto> GetStudentShedule(int studentId, int sheduleId)
+        public async Task<AbonementSheduleDto> GetStudentShedule(int studentId, int sheduleId)
         {
-            return await AbonementShedules(x => x.Abonement.Student.User.Id == studentId).ToDto().One(x => x.AbonementSheduleId == sheduleId);
+            return await AbonementShedules(x => x.Abonement.Student.User.Id == studentId).ToDto().One(x => x.Id == sheduleId);
         }
 
         public async Task<int> DeleteStudentShedule(int studentId, int abonementSheduleId)

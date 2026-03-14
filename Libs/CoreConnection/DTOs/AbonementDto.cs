@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class AbonementDto
+    public class AbonementDto: IHasId
     {
         public required string StudentDisplayName { get; set; }
 
@@ -23,7 +23,7 @@ namespace CoreConnection.DTOs
 
         public required string CourseThemeName { get; set; }
 
-        public required int AbonementId { get; set; }
+        public required int Id { get; set; }
 
         public required int CourseThemeId { get; set; }
 

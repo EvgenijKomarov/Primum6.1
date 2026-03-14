@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CoreConnection.DTOs
 {
-    public class UserDtoLite
+    public class UserDtoLite : IHasId
     {
         public required int Id { get; set; }
 

@@ -16,7 +16,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<StudentSheduleDtoPageResult>> GetShedules(
+        public async Task<ActionResult<AbonementSheduleDtoPageResult>> GetShedules(
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)
             => Ok(await client.ShedulesAsync(User.GetUserId(), page, pageSize));
@@ -27,7 +27,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="sheduleId"></param>
         /// <returns></returns>
         [HttpGet("{sheduleId}")]
-        public async Task<ActionResult<StudentSheduleDto>> GetShedule([FromRoute] int sheduleId)
+        public async Task<ActionResult<AbonementSheduleDto>> GetShedule([FromRoute] int sheduleId)
             => Ok(await client.SheduleGetAsync(User.GetUserId(), sheduleId));
 
         /// <summary>

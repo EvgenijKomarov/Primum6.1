@@ -42,15 +42,15 @@ namespace PrimumCore.Controllers
             => Ok(await abonementIterator.GetStudentAbonement(userId, abonementId));
 
         [HttpGet("shedules")]
-        public async Task<ActionResult<PageResult<StudentSheduleDto>>> GetShedules([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PageResult<AbonementSheduleDto>>> GetShedules([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
             => Ok(await sheduleIterator.GetStudentShedules(userId, page, pageSize));
 
         [HttpGet("shedule/{sheduleId}")]
-        public async Task<ActionResult<StudentSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
+        public async Task<ActionResult<AbonementSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)
             => Ok(await sheduleIterator.GetStudentShedule(userId, sheduleId));
 
         [HttpGet("abonement-shedules/{abonementId}")]
-        public async Task<ActionResult<PageResult<StudentSheduleDto>>> GetAbonementShedules(
+        public async Task<ActionResult<PageResult<AbonementSheduleDto>>> GetAbonementShedules(
             [FromRoute] int userId, 
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 

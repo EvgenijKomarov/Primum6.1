@@ -33,7 +33,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = $"{Emoticons.Shedule}{DayOfWeekRes.ResourceManager.GetString(shedule.DayOfWeek.ToString())} {shedule.Time}:00",
                     EndpointNode = typeof(StudentSubscribeCourseNode),
-                    Args = new List<string> { courseId, teacherId, themeId, shedule.TeacherSheduleId.ToString() }
+                    Args = new List<string> { courseId, teacherId, themeId, shedule.Id.ToString() }
                 });
             }
             buttons.Add(backButton);

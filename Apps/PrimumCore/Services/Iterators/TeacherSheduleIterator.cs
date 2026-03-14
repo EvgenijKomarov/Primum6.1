@@ -36,7 +36,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<TeacherSheduleDto> GetTeacherShedule(int teacherId, int sheduleId, bool isOnlyAvailable)
         {
-            return await TeacherShedules(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.TeacherSheduleId == sheduleId);
+            return await TeacherShedules(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == sheduleId);
         }
 
         public async Task<int> CreateTeacherShedule(int teacherId, TeacherSheduleInputDto sheduleDto)

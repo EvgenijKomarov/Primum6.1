@@ -28,7 +28,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<PromocodeDto> GetPromocode(int promocodeId, bool onlyAvailable)
         {
-            return await Promocodes(onlyAvailable, null).ToDto(true).One(x => x.PromocodeId == promocodeId);
+            return await Promocodes(onlyAvailable, null).ToDto(true).One(x => x.Id == promocodeId);
         }
 
         public async Task<PromocodeDto> BuyPromocode(int studentId, int promocodeId)
@@ -48,7 +48,7 @@ namespace PrimumCore.Services.Iterators
 
             return new PromocodeDto
             {
-                PromocodeId = code.Id,
+                Id = code.Id,
                 StudentId = code.Student.UserId,
                 Code = code.Code,
                 CoinsPrice = code.CoinsPrice,

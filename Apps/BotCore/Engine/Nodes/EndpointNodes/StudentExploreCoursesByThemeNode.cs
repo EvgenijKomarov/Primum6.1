@@ -34,7 +34,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text=$"{Emoticons.Teacher}Расписание преподавателя",
                     EndpointNode = typeof(StudentExploreTeacherShedulesNode),
-                    Args = new List<string>{ item.CourseId.ToString(), item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
+                    Args = new List<string>{ item.Id.ToString(), item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
                 }
             };
         }

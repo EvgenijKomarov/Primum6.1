@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class StudentSheduleDto
+    public class AbonementSheduleDto : IHasId
     {
         public required DayOfWeek DayOfWeek { get; set; }
 
@@ -20,6 +20,6 @@ namespace CoreConnection.DTOs
 
         public required int TeacherId { get; set; }
 
-        public required int AbonementSheduleId { get; set; }
+        public required int Id { get; set; }
     }
 }

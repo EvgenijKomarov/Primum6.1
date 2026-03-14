@@ -34,7 +34,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<LessonDto> GetTeacherLesson(int teacherId, int lessonId)
         {
-            return await Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId).ToDto(false).One(x => x.LessonId == lessonId);
+            return await Lessons(x => x.Abonement.Course.Teacher.User.Id == teacherId).ToDto(false).One(x => x.Id == lessonId);
         }
 
         public async Task<PageResult<LessonDto>> GetTeacherFutureLessons(int teacherId, int _page, int _pageSize)
@@ -62,7 +62,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await Lessons(x => x.Abonement.Student.User.Id == studentId)
                 .ToDto(true)
-                .One(x => x.LessonId == lessonId);
+                .One(x => x.Id == lessonId);
         }
     }
 }

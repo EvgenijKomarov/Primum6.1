@@ -37,7 +37,7 @@ namespace PrimumCore.Services.Iterators
         {
             await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            return await IncidentLogs(false).ToDto().One(x => x.LogId == logId);
+            return await IncidentLogs(false).ToDto().One(x => x.Id == logId);
         }
 
         public async Task<int> RevisionIncidentLog(int userId, int logId)

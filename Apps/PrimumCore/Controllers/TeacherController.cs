@@ -60,7 +60,7 @@ namespace PrimumCore.Controllers
             => Ok(await abonementIterator.GetTeacherAbonement(userId, abonementId));
 
         [HttpGet("abonement-shedules/{abonementId}")]
-        public async Task<ActionResult<PageResult<StudentSheduleDto>>> GetAbonementShedules(
+        public async Task<ActionResult<PageResult<AbonementSheduleDto>>> GetAbonementShedules(
             [FromRoute] int userId, 
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class IncidentLogDto
+    public class IncidentLogDto : IHasId
     {
-        public required int LogId { get; set; }
+        public required int Id { get; set; }
 
         public required int AdminUserId { get; set; }
 

@@ -15,7 +15,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         {
             var abonId = input.Arguments[0];
             var abon = await client.AbonementAsync(input.UserId!.Value, int.Parse(abonId));
-            var shedules = (await client.AbonementShedulesAsync(input.UserId!.Value, int.Parse(abonId))).Items ?? new List<StudentSheduleDto>();
+            var shedules = (await client.AbonementShedulesAsync(input.UserId!.Value, int.Parse(abonId))).Items ?? new List<AbonementSheduleDto>();
 
             List<EngineOutputButton> buttons = new List<EngineOutputButton>();
             StringBuilder sb = new StringBuilder();
@@ -26,7 +26,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = $"{Emoticons.Shedule}{DayOfWeekRes.ResourceManager.GetString(shedule.DayOfWeek.ToString())} {shedule.Time}:00\n",
                     EndpointNode = typeof(StudentAbonementSheduleNode),
-                    Args = new List<string> { abonId, shedule.AbonementSheduleId.ToString() }
+                    Args = new List<string> { abonId, shedule.Id.ToString() }
                 });
             }
 

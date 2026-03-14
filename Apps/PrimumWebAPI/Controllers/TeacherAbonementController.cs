@@ -35,7 +35,7 @@ namespace PrimumWebAPI.Controllers
         /// <param name="abonementId"></param>
         /// <returns></returns>
         [HttpGet("{abonementId}/shedules")]
-        public async Task<ActionResult<StudentSheduleDtoPageResult>> GetAbonementShedules(
+        public async Task<ActionResult<AbonementSheduleDtoPageResult>> GetAbonementShedules(
             [FromRoute] int abonementId,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)

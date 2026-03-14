@@ -24,7 +24,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = $"{Emoticons.Abonement}{abonement.CourseName}",
                     EndpointNode = typeof(StudentAbonementNode),
-                    Args = new List<string> { abonement.AbonementId.ToString() }
+                    Args = new List<string> { abonement.Id.ToString() }
                 });
             }
             buttons.Add(new EngineOutputButton

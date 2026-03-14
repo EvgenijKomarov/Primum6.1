@@ -1,4 +1,6 @@
-﻿using CoreConnection.Entities;
+﻿using CoreConnection.DTOs;
+using CoreConnection.Entities;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using System.Linq.Expressions;
@@ -34,10 +36,10 @@ namespace PrimumCore.Extentions
             int page, 
             int pageSize,
             CancellationToken cancellationToken = default)
-            where TEntity : class
+            where TEntity : IHasId
         {
             var totalCount = await queryable.CountAsync(cancellationToken);
-            var pageItems = queryable.Skip(page * pageSize).Take(pageSize);
+            var pageItems = queryable.Skip(page * pageSize).Take(pageSize).OrderBy(x => x.Id);
 
             return new PageResult<TEntity>
             { 

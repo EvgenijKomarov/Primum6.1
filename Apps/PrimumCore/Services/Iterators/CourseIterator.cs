@@ -28,7 +28,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<CourseDto> GetCourseByTeacher(int teacherId, int courseId, bool isOnlyAvailable)
         {
-            return await Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.CourseId == courseId);
+            return await Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == courseId);
         }
 
         public async Task<PageResult<CourseDto>> GetCourses(bool isOnlyAvailable, int _page, int _pageSize)
@@ -38,7 +38,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
         {
-            return await Courses(isOnlyAvailable, null).ToDto().One(x => x.CourseId == courseId);
+            return await Courses(isOnlyAvailable, null).ToDto().One(x => x.Id == courseId);
         }
 
         public async Task<PageResult<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)

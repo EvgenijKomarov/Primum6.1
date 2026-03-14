@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class TeacherProfileDto
+    public class TeacherProfileDto : IHasId
     {
         public required string DisplayName { get; set; }
 
@@ -15,5 +15,7 @@ namespace CoreConnection.DTOs
         public required int UserId { get; set; }
 
         public required bool IsAvailable { get; set; }
+
+        public int Id => UserId;
     }
 }
