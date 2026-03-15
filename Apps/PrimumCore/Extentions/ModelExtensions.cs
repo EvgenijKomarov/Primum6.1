@@ -48,6 +48,7 @@ namespace PrimumCore.Extentions
                 DisplayName = x.User.DisplayName,
                 UserId = x.User.Id,
                 Status = x.Status ?? string.Empty,
+                Id = x.Id,
                 Permissions = helper.GetAllPermissions(x)
             });
 
@@ -105,7 +106,8 @@ namespace PrimumCore.Extentions
                 DisplayName = x.User.DisplayName,
                 About = x.About,
                 UserId = x.User.Id,
-                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x.User)
+                Id = x.Id,
+                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
@@ -113,6 +115,7 @@ namespace PrimumCore.Extentions
             {
                 DisplayName = x.User.DisplayName,
                 UserId = x.User.Id,
+                Id = x.Id,
                 Coins = x.Coins
             });
 

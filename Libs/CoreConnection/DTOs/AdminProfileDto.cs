@@ -10,7 +10,7 @@ namespace CoreConnection.DTOs
     {
         public required string DisplayName { get; set; }
 
-        public int Id => UserId;
+        public required int Id {  get; set; }
 
         public required int UserId { get; set; }
 

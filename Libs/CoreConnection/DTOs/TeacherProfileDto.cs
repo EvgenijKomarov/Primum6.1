@@ -16,6 +16,6 @@ namespace CoreConnection.DTOs
 
         public required bool IsAvailable { get; set; }
 
-        public int Id => UserId;
+        public required int Id {  get; set; }
     }
 }

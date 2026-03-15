@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class TeacherSheduleIterator(PrimumContext context, PublisherService publisher)
+    public class TeacherSheduleIterator(PrimumContext context)
     {
         private IQueryable<TeacherShedule> TeacherShedules(bool isOnlyAvailable, Expression<Func<TeacherShedule, bool>>? predicate) => context
             .Set<TeacherShedule>()
@@ -45,7 +45,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(a => a.TeacherShedules)
                 .Include(a => a.User)
                 .One(x => x.User.Id == teacherId);
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher.User)) { throw new NotAvailableException("Teacher"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }
 
             if (teacher.TeacherShedules.Any(s => s.DayOfWeek == sheduleDto.DayOfWeek && s.Time == sheduleDto.Time)) 
                 { throw new BusinessLogicException("Shedule already exists"); }
@@ -68,7 +68,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(a => a.TeacherShedules)
                 .ThenInclude(e => e.AbonementShedule)
                 .One(x => x.User.Id == teacherId);
-            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher.User)) { throw new NotAvailableException("Teacher"); }
+            if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }
 
             var shedule = teacher.TeacherShedules.FirstOrDefault(s => s.Id == sheduleId);
             if (shedule is null) { throw new NotFoundException("Shedule"); }

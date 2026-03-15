@@ -15,14 +15,14 @@ namespace CoreDBModel.Constants
             IsPromocodeAvailableBase;
 
         public static Expression<Func<TeacherShedule, bool>> IsTeacherSheduleAvailable =>
-            IsTeacherSheduleAvailableBase.AndWithProperty(s => s.Teacher.User, IsTeacherAvailable);
+            IsTeacherSheduleAvailableBase.AndWithProperty(s => s.Teacher, IsTeacherAvailable);
 
-        public static Expression<Func<User, bool>> IsTeacherAvailable =>
-            IsUserAvailable.And(IsTeacherAvailableBase);
+        public static Expression<Func<TeacherProfile, bool>> IsTeacherAvailable =>
+            IsTeacherAvailableBase.AndWithProperty(t => t.User, IsUserAvailable);
 
         public static Expression<Func<Course, bool>> IsCourseAvailable =>
             IsCourseAvailableBase
-            .AndWithProperty(s => s.Teacher.User, IsTeacherAvailable)
+            .AndWithProperty(s => s.Teacher, IsTeacherAvailable)
             .AndWithProperty(s => s.CourseTheme, IsThemeAvailable);
 
         public static Expression<Func<Abonement, bool>> IsAbonementAvailable =>
@@ -44,8 +44,8 @@ namespace CoreDBModel.Constants
         private static Expression<Func<TeacherShedule, bool>> IsTeacherSheduleAvailableBase =>
             u => u.AbonementShedule == null;
 
-        private static Expression<Func<User, bool>> IsTeacherAvailableBase =>
-            u => u.TeacherProfile != null && u.TeacherProfile.ApproveStatus == ApproveStatus.Approved;
+        private static Expression<Func<TeacherProfile, bool>> IsTeacherAvailableBase =>
+            t => t.ApproveStatus == ApproveStatus.Approved;
 
         private static Expression<Func<Course, bool>> IsCourseAvailableBase =>
             u => u.ApproveStatus == ApproveStatus.Approved && u.IsActive;

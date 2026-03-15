@@ -38,7 +38,7 @@ namespace PrimumCore.Extentions
             where TEntity : IHasId
         {
             var totalCount = await queryable.CountAsync(cancellationToken);
-            var pageItems = queryable.Skip(page * pageSize).Take(pageSize).OrderBy(x => x.Id);
+            var pageItems = queryable.OrderBy(x => x.Id).Skip(page * pageSize).Take(pageSize);
 
             return new PageResult<TEntity>
             { 

@@ -14,6 +14,6 @@ namespace CoreConnection.DTOs
 
         public required int Coins { get; set; }
 
-        public int Id => UserId;
+        public required int Id {  get; set; }
     }
 }

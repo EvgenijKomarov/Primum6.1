@@ -27,6 +27,7 @@ namespace PrimumCore.Services.Iterators
             { 
                 DisplayName = user.DisplayName,
                 UserId = user.Id,
+                Id = user.Id,
                 Coins = user.StudentProfile.Coins
             };
         }
