@@ -10,15 +10,14 @@ using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class TokenIterator(PrimumContext context,
+    public class TokenIterator(DatabaseIterator dbIterator,
         RandomStringGenerator randomGenerator,
         PublisherService publisher,
         SolutionEnvironment environment)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
-            var user = await context.Set<User>()
-                .Include(x => x.VerificationTokens)
+            var user = await dbIterator.Users(false)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
             if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
@@ -41,14 +40,13 @@ namespace PrimumCore.Services.Iterators
                 UserId = user.Id
             });
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return user.Id;
         }
 
         public async Task<int> ConfirmToken(int userId, string inputToken)
         {
-            var user = await context.Set<User>()
-                .Include(x => x.VerificationTokens)
+            var user = await dbIterator.Users(false)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
 
@@ -64,7 +62,7 @@ namespace PrimumCore.Services.Iterators
                     user.IsMailChecked = true;
                     break;
             }
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return user.Id;
         }
     }

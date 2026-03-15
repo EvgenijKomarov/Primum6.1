@@ -40,6 +40,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<IncidentCollector>();
             builder.Services.AddScoped<IncidentSolver>();
             builder.Services.AddScoped<AdminProfileHelper>();
+            builder.Services.AddScoped<DatabaseIterator>();
 
             return builder;
         }

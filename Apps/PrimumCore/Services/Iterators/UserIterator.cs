@@ -2,30 +2,20 @@
 using CoreConnection.Entities;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
-using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(PrimumContext context, PasswordHasher passwordHasher)
+    public class UserIterator(DatabaseIterator dbIterator, PasswordHasher passwordHasher)
     {
-        private IQueryable<User> Users(bool isOnlyAvailable, Expression<Func<User, bool>>? predicate) => context
-            .Set<User>()
-            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
-            .WhereIf(predicate is not null, predicate!)
-            .Include(u => u.TeacherProfile)
-            .Include(u => u.StudentProfile)
-            .Include(u => u.AdminProfile)
-            .IgnoreQueryFilters();
-
         public async Task<int> Login(string mailAdress, string password)
         {
-            var user = await Users(false, null).FirstOrDefaultAsync(x => x.MailAdress == mailAdress) ?? throw new NotFoundException("User");
+            var user = await dbIterator.Users(false)
+                .FirstOrDefaultAsync(x => x.MailAdress == mailAdress) ?? throw new NotFoundException("User");
 
             if (user.IsBanned) { throw new BusinessLogicException("User is banned"); }
 
@@ -35,12 +25,12 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<long> AddMoney(int userId, long cash)
         {
-            var user = await Users(true, null)
+            var user = await dbIterator.Users(true)
                 .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
 
             user.Cash += cash;
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return user.Cash;
         }
 
@@ -49,7 +39,7 @@ namespace PrimumCore.Services.Iterators
             if (!new EmailAddressAttribute().IsValid(dto.MailAdress))
             { throw new BusinessLogicException("Adress not valid"); }
 
-            if (await Users(false, null)
+            if (await dbIterator.Users(false)
                 .AnyAsync(x => x.MailAdress == dto.MailAdress))
             { throw new BusinessLogicException("User with the same adress already exists"); }
 
@@ -62,15 +52,15 @@ namespace PrimumCore.Services.Iterators
                 Password = passwordHasher.HashPassword(dto.Password),
                 Cash = 0
             };
-            context.Set<User>().Add(user);
-            await context.SaveChangesAsync();
+            await dbIterator.AddAsync(user);
+            await dbIterator.SaveChangesAsync();
 
             return user.Id;
         }
 
         public async Task<int> CreateTeacherProfile(int userId, string about)
         {
-            var user = await Users(false, null)
+            var user = await dbIterator.Users(false)
                 .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
             if (user.TeacherProfile is not null) { throw new BusinessLogicException("User is already teacher"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
@@ -80,43 +70,43 @@ namespace PrimumCore.Services.Iterators
                 About = about
             };
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
 
             return user.Id;
         }
 
         public async Task<int> CreateStudentProfile(int userId)
         {
-            var user = await Users(false, null)
+            var user = await dbIterator.Users(false)
                 .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
             if (user.StudentProfile is not null) { throw new BusinessLogicException("User is already student"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
             user.StudentProfile = new StudentProfile();
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
 
             return user.Id;
         }
 
         public async Task<UserDto> GetUser(int id, bool isOnlyAvailable)
         {
-            return await Users(isOnlyAvailable, null).ToDto().One(x => x.Id == id);
+            return await dbIterator.Users(isOnlyAvailable).ToDto().One(x => x.Id == id);
         }
 
         public async Task<UserDtoLite> GetUserLite(int id, bool isOnlyAvailable)
         {
-            return await Users(isOnlyAvailable, null).ToDtoLite().One(x => x.Id == id);
+            return await dbIterator.Users(isOnlyAvailable).ToDtoLite().One(x => x.Id == id);
         }
 
         public async Task<PageResult<UserDto>> GetUsers(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Users(isOnlyAvailable, null).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Users(isOnlyAvailable).ToDto().ToPageResult(_page, _pageSize);
         }
 
         public async Task<string> GetMail(int userId)
         {
-            return (await Users(false, null).One(x => x.Id == userId)).MailAdress;
+            return (await dbIterator.Users(false).One(x => x.Id == userId)).MailAdress;
         }
     }
 }

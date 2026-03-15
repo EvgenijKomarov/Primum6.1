@@ -9,19 +9,11 @@ using PublishServiceConnection.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class GradingIterator(PrimumContext context, PublisherService publisherService)
+    public class GradingIterator(DatabaseIterator dbIterator, PublisherService publisherService)
     {
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
-            var lesson = await context.Set<Lesson>()
-                .Include(x => x.Grading)
-                .Include(x => x.Abonement)
-                .ThenInclude(x => x.Course)
-                .ThenInclude(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .Include(x => x.Abonement)
-                .ThenInclude(x => x.Student)
-                .ThenInclude(x => x.User)
+            var lesson = await dbIterator.Lessons()
                 .One(x => x.Id == lessonId);
             if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
             if (lesson.Grading is not null) { throw new BusinessLogicException("Lesson already gradet"); }
@@ -41,8 +33,8 @@ namespace PrimumCore.Services.Iterators
 
             lesson.Abonement.Student.Coins += addedCoins;
 
-            context.Set<StudentGrading>().Add(lessonGrading);
-            await context.SaveChangesAsync();
+            await dbIterator.AddAsync(lessonGrading);
+            await dbIterator.SaveChangesAsync();
 
             await publisherService.Push(new LessonGradedEvent
             {

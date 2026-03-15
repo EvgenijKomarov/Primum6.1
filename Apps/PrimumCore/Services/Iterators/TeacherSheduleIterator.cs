@@ -13,37 +13,28 @@ using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class TeacherSheduleIterator(PrimumContext context)
+    public class TeacherSheduleIterator(DatabaseIterator dbIterator)
     {
-        private IQueryable<TeacherShedule> TeacherShedules(bool isOnlyAvailable, Expression<Func<TeacherShedule, bool>>? predicate) => context
-            .Set<TeacherShedule>()
-            .WhereIf(predicate is not null, predicate!)
-            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherSheduleAvailable)
-            .Include(x => x.Teacher)
-            .ThenInclude(x => x.User)
-            .Include(x => x.AbonementShedule)
-            .ThenInclude(x => x.Abonement)
-            .ThenInclude(x => x.Student)
-            .ThenInclude(x => x.User)
-            .Include(x => x.AbonementShedule)
-            .ThenInclude(x => x.Abonement)
-            .ThenInclude(x => x.Course);
-
         public async Task<PageResult<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await TeacherShedules(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.TeacherShedules(isOnlyAvailable)
+                .Where(x => x.Teacher.User.Id == teacherId)
+                .ToDto()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<TeacherSheduleDto> GetTeacherShedule(int teacherId, int sheduleId, bool isOnlyAvailable)
         {
-            return await TeacherShedules(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == sheduleId);
+            return await dbIterator.TeacherShedules(isOnlyAvailable)
+                .Where(x => x.Teacher.User.Id == teacherId)
+                .ToDto()
+                .One(x => x.Id == sheduleId);
         }
 
         public async Task<int> CreateTeacherShedule(int teacherId, TeacherSheduleInputDto sheduleDto)
         {
-            var teacher = await context.Set<TeacherProfile>()
-                .Include(a => a.TeacherShedules)
-                .Include(a => a.User)
+            var teacher = await dbIterator.Teachers(true)
+                .Include(x => x.TeacherShedules)
                 .One(x => x.User.Id == teacherId);
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }
 
@@ -57,16 +48,14 @@ namespace PrimumCore.Services.Iterators
             };
 
             teacher.TeacherShedules.Add(shedule);
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return shedule.Id;
         }
 
         public async Task<int> DeleteTeacherShedule(int teacherId, int sheduleId)
         {
-            var teacher = await context.Set<TeacherProfile>()
-                .Include(u => u.User)
-                .Include(a => a.TeacherShedules)
-                .ThenInclude(e => e.AbonementShedule)
+            var teacher = await dbIterator.Teachers(true)
+                .Include(x => x.TeacherShedules)
                 .One(x => x.User.Id == teacherId);
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }
 
@@ -75,7 +64,7 @@ namespace PrimumCore.Services.Iterators
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(shedule)) { throw new BusinessLogicException("Shedule already busy"); }
 
             teacher.TeacherShedules.Remove(shedule);
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return shedule.Id;
         }
     }

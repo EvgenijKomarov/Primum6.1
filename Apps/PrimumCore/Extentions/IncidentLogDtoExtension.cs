@@ -13,8 +13,6 @@ namespace PrimumCore.Extentions
         IncidentMeaning meaning)
         {
             return logs
-                .Include(log => log.AdminProfile)
-                .ThenInclude(profile => profile.User)
                 .Where(log => log.ObjectId == objectId && log.Meaning == meaning)
                 .Select(log => new IncidentLogDto
                 {

@@ -3,66 +3,50 @@ using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
-using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
-using System.Linq;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(PrimumContext context, ConverterToDateTimeService dateTimeService, PublisherService publisher)
+    public class StudentIterator(DatabaseIterator dbIterator, ConverterToDateTimeService dateTimeService, PublisherService publisher)
     {
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
+            var student = await dbIterator.Students()
+                .One(x => x.Id == studentId);
 
             return new StudentProfileDto 
             { 
-                DisplayName = user.DisplayName,
-                UserId = user.Id,
-                Id = user.Id,
-                Coins = user.StudentProfile.Coins
+                DisplayName = student.User.DisplayName,
+                UserId = student.User.Id,
+                Id = student.User.Id,
+                Coins = student.Coins
             };
         }
 
         public async Task<int> SubscribeToCourse(int studentId, int courseId, int teacherSheduleId)
         {
-            var user = await context.Set<User>()
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
+            var student = await dbIterator.Students()
+                .Include(x => x.Abonements)
                 .ThenInclude(x => x.AbonementShedules)
                 .ThenInclude(x => x.TeacherShedule)
-                .Include(u => u.StudentProfile)
-                .ThenInclude(s => s.Abonements)
-                .ThenInclude(s => s.Course)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
-            if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
+                .One(x => x.User.Id == studentId);
 
-            var course = await context.Set<Course>()
-                .Include(x => x.CourseTheme)
-                .Include(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == courseId) ?? throw new NotFoundException("Course");
+            var course = await dbIterator.Courses(false)
+                .One(x => x.Id == courseId);
 
             // strict availability check executed in-memory
             if (!AvailabilityExpressions.IsCourseAvailable.Compile()(course)) { throw new NotFoundException("Course"); }
 
-            var teacherShedule = await context.Set<TeacherShedule>()
-                .Include(x => x.Teacher)
-                .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == teacherSheduleId) ?? throw new NotFoundException("Shedule");
+            var teacherShedule = await dbIterator.TeacherShedules(true)
+                .One(x => x.Id == teacherSheduleId);
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }
             if (teacherShedule.Teacher.User?.Id == studentId) { throw new BusinessLogicException("Student can't subscribe on himself"); }
-            if (user
-                .StudentProfile
+            if (student
                 .Abonements
                 .SelectMany(x => x.AbonementShedules)
                 .Any(x => x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek && x.TeacherShedule.Time == teacherShedule.Time))
@@ -70,7 +54,7 @@ namespace PrimumCore.Services.Iterators
                 throw new BusinessLogicException("Same shedule already exists");
             }
 
-            var abonement = user.StudentProfile.Abonements.FirstOrDefault(a => a.CourseId == courseId);
+            var abonement = student.Abonements.FirstOrDefault(a => a.CourseId == courseId);
 
             if (abonement is null)
             {
@@ -80,7 +64,7 @@ namespace PrimumCore.Services.Iterators
                     PricePerLesson = course.Price,
                     FreeLessons = course.FreeLessons
                 };
-                user.StudentProfile.Abonements.Add(abonement);
+                student.Abonements.Add(abonement);
             } else if (abonement.AbonementStatus == AbonementStatus.Deleted)
             {
                 abonement.AbonementStatus = AbonementStatus.Active;
@@ -90,8 +74,7 @@ namespace PrimumCore.Services.Iterators
             {
                 throw new BusinessLogicException("Can't create more shedules than course's maximum shedules per week");
             }
-            if (user
-                .StudentProfile
+            if (student
                 .Abonements
                 .SelectMany(x => x.AbonementShedules)
                 .Any(x => x.TeacherShedule.Time == teacherShedule.Time && x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek))
@@ -107,13 +90,12 @@ namespace PrimumCore.Services.Iterators
             };
             abonement.AbonementShedules.Add(abonementShedule);
 
-            await context.Set<AbonementShedule>().AddAsync(abonementShedule);
+            await dbIterator.AddAsync(abonementShedule);
 
-            if (!context.Set<Lesson>()
-                .Include(x => x.Abonement)
+            if (!dbIterator.Lessons()
                 .Any(x => x.DateTime == suitableDate && x.Abonement.Id == abonement.Id))
             {
-                await context.Set<Lesson>().AddAsync(new Lesson
+                await dbIterator.AddAsync(new Lesson
                 {
                     Abonement = abonement,
                     Price = abonement.Course.FreeLessons >= abonement.Lessons.Count() ? 0 : abonement.PricePerLesson,
@@ -122,12 +104,12 @@ namespace PrimumCore.Services.Iterators
                 });
             }
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
 
             await publisher.Push(new NewAbonementSheduleEvent
             {
-                StudentName = user.DisplayName,
-                StudentUserId = user.Id,
+                StudentName = student.User.DisplayName,
+                StudentUserId = student.User.Id,
                 TeacherName = teacherShedule.Teacher.User.DisplayName,
                 TeacherUserId = teacherShedule.Teacher.User.Id,
                 CourseName = course.Name,
