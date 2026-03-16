@@ -109,6 +109,7 @@ namespace PrimumCore.Services.Iterators
             .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
             .Include(u => u.TeacherProfile)
             .Include(u => u.StudentProfile)
-            .Include(u => u.AdminProfile);
+            .Include(u => u.AdminProfile)
+            .IgnoreQueryFilters();
     }
 }

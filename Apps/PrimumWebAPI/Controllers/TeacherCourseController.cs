@@ -22,7 +22,7 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.CoursesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
-        /// Все курсы преподавателя
+        /// Конкретный курс преподавателя
         /// </summary>
         /// <returns></returns>
         [HttpGet("{courseId}")]
