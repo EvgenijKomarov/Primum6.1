@@ -18,6 +18,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
             var user = await dbIterator.Users(false)
+                .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
             if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
@@ -47,6 +48,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> ConfirmToken(int userId, string inputToken)
         {
             var user = await dbIterator.Users(false)
+                .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
 
