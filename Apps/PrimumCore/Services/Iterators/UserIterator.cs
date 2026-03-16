@@ -15,7 +15,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> Login(string mailAdress, string password)
         {
             var user = await dbIterator.Users(false)
-                .FirstOrDefaultAsync(x => x.MailAdress == mailAdress) ?? throw new NotFoundException("User");
+                .One(x => x.MailAdress == mailAdress);
 
             if (user.IsBanned) { throw new BusinessLogicException("User is banned"); }
 
@@ -26,7 +26,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<long> AddMoney(int userId, long cash)
         {
             var user = await dbIterator.Users(true)
-                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
+                .One(x => x.Id == userId);
 
             user.Cash += cash;
 
@@ -42,6 +42,9 @@ namespace PrimumCore.Services.Iterators
             if (await dbIterator.Users(false)
                 .AnyAsync(x => x.MailAdress == dto.MailAdress))
             { throw new BusinessLogicException("User with the same adress already exists"); }
+
+            if (dto.Password.Length <= 5) { throw new BusinessLogicException("Password too short. Minimum 5 chars"); }
+            if (dto.Password.Length > 20) { throw new BusinessLogicException("Password too long. Maximum 20 chars"); }
 
             var user = new User
             {
@@ -61,7 +64,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateTeacherProfile(int userId, string about)
         {
             var user = await dbIterator.Users(false)
-                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
+                .One(x => x.Id == userId);
             if (user.TeacherProfile is not null) { throw new BusinessLogicException("User is already teacher"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
@@ -78,7 +81,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateStudentProfile(int userId)
         {
             var user = await dbIterator.Users(false)
-                .FirstOrDefaultAsync(x => x.Id == userId) ?? throw new NotFoundException("User");
+                .One(x => x.Id == userId);
             if (user.StudentProfile is not null) { throw new BusinessLogicException("User is already student"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
 
