@@ -1,5 +1,5 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using CoreDBModel.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;

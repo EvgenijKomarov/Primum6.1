@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreConnection.Entities
+namespace PrimumCore.Entities
 {
     public class PageResult<TEntity>
     {

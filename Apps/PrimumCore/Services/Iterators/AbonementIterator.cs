@@ -1,5 +1,5 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using CoreDBModel.Models.Enums;
 using PrimumCore.Extentions;
 using PublishServiceConnection;

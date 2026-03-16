@@ -1,4 +1,4 @@
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using CoreDBModel.Models;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;

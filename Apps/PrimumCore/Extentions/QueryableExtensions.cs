@@ -1,5 +1,5 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using System.Linq.Expressions;

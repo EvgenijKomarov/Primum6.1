@@ -1,6 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using CoreDBModel.Models;
 using PrimumCore.Extentions;
 

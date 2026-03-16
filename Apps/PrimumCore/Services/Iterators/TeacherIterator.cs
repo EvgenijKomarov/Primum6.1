@@ -1,5 +1,5 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using PrimumCore.Extentions;
 
 namespace PrimumCore.Services.Iterators
