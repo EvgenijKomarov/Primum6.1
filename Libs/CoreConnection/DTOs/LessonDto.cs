@@ -1,4 +1,5 @@
-﻿using CoreDBModel.Models.Enums;
+﻿using CoreConnection.DTOs.Abstractions;
+using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
