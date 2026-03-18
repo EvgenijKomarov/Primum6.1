@@ -2,6 +2,7 @@
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PublishServiceConnection;
@@ -9,7 +10,7 @@ using PublishServiceConnection.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class GradingIterator(DatabaseIterator dbIterator, PublisherService publisherService)
+    public class GradingIterator(DatabaseIterator dbIterator, PublisherService publisherService, MathFormulas formulas)
     {
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
@@ -29,9 +30,12 @@ namespace PrimumCore.Services.Iterators
             lesson.Grading = lessonGrading;
 
             var avgGrade = lessonGrading.GetFinalGrade();
-            var addedCoins = CoinFormula(avgGrade, lesson.Price);
 
+            var addedCoins = formulas.CoinFormula(avgGrade, lesson.Price);
             lesson.Abonement.Student.Coins += addedCoins;
+            lesson.Abonement.Student.Experience += formulas.StudentExpFormula(avgGrade);
+            lesson.Abonement.Course.Experience += formulas.CourseExpFormula();
+            lesson.Abonement.Course.Teacher.Experience += formulas.TeacherExpFormula();
 
             await dbIterator.AddAsync(lessonGrading);
             await dbIterator.SaveChangesAsync();
@@ -50,16 +54,6 @@ namespace PrimumCore.Services.Iterators
             });
 
             return lesson.Id;
-        }
-
-        public int CoinFormula(float finalGrade, int lessonCost)
-        {
-            const float maximumCashback = 0.1f;
-            const int maximumGradeValue = 5;
-
-            float cashBackIndex = (finalGrade / maximumGradeValue * maximumCashback);
-
-            return (int)(lessonCost * cashBackIndex);
         }
     }
 }

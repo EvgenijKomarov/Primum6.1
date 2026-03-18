@@ -183,5 +183,34 @@ namespace PrimumCore.Extentions
                 IsAdmin = x.AdminProfile != null,
                 IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(x)
             });
+
+        public static IQueryable<StudentRankDto> ToDto(this IQueryable<StudentRank> queryable) => queryable.Select(x =>
+            new StudentRankDto
+            {
+                Id = x.Id,
+                Level = x.Level,
+                Rank = x.Rank,
+                RequiredExperience = x.RequiredExperience,
+                CoinDiscount = x.CoinDiscount,
+            });
+
+        public static IQueryable<CourseRankDto> ToDto(this IQueryable<CourseRank> queryable) => queryable.Select(x =>
+            new CourseRankDto
+            {
+                Id = x.Id,
+                Level = x.Level,
+                Rank = x.Rank,
+                RequiredExperience = x.RequiredExperience,
+            });
+
+        public static IQueryable<TeacherRankDto> ToDto(this IQueryable<TeacherRank> queryable) => queryable.Select(x =>
+            new TeacherRankDto
+            {
+                Id = x.Id,
+                Level = x.Level,
+                Rank = x.Rank,
+                RequiredExperience = x.RequiredExperience,
+                EarningMultiplier = x.EarningMultiplier,
+            });
     }
 }

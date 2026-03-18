@@ -114,5 +114,14 @@ namespace PrimumCore.Services.Iterators
             .Include(u => u.StudentProfile)
             .Include(u => u.AdminProfile)
             .IgnoreQueryFilters();
+
+        public IQueryable<StudentRank> StudentRanks() => context
+            .Set<StudentRank>();
+
+        public IQueryable<TeacherRank> TeacherRanks() => context
+            .Set<TeacherRank>();
+
+        public IQueryable<CourseRank> CourseRanks() => context
+            .Set<CourseRank>();
     }
 }

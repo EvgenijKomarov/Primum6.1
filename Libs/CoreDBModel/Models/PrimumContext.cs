@@ -335,12 +335,13 @@ public partial class PrimumContext : DbContext
 
     private void SavingProcedures()
     {
-        UpdateTimestamps();
         UpdateTeacherRanks();
         UpdateCourseRanks();
         UpdateStudentRanks();
         UpdateAbonementRatings();
         UpdateStudentRatings();
+
+        UpdateTimestamps();
     }
 
     private void UpdateTimestamps()
