@@ -16,5 +16,9 @@ namespace CoreConnection.DTOs
         public required int Coins { get; set; }
 
         public required float? Rating { get; set; }
+
+        public required int Level { get; set; }
+
+        public required string Rank { get; set; }
     }
 }

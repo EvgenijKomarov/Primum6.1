@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class AdminProfileDto : IHasId
+    public class AdminProfileDto
     {
         public required string DisplayName { get; set; }
-
-        public required int Id {  get; set; }
 
         public required int UserId { get; set; }
 

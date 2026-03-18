@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class TeacherProfileDto : IHasRating
+    public class TeacherProfileDto : IHasLevel
     {
         public required string DisplayName { get; set; }
 
@@ -17,6 +17,8 @@ namespace CoreConnection.DTOs
 
         public required bool IsAvailable { get; set; }
 
-        public required float? Rating { get; set; }
+        public required int Level { get; set; }
+
+        public required string Rank { get; set; }
     }
 }

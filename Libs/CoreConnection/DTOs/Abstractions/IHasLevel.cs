@@ -4,8 +4,10 @@ using System.Text;
 
 namespace CoreConnection.DTOs.Abstractions
 {
-    public interface IHasRating : IOrderable
+    public interface IHasLevel: IOrderable
     {
-        float? Rating { get; } // from 0 to 5
+        int Level { get; }
+
+        string Rank { get; }
     }
 }

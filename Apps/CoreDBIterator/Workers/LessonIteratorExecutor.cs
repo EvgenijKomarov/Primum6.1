@@ -54,7 +54,7 @@ namespace CoreDBIterator.Workers
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                 {
                     lesson.Abonement.Student.User.Cash -= lesson.Price;
-                    lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.EarningMultiplier);
+                    lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(

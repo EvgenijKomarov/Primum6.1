@@ -43,18 +43,18 @@ namespace PrimumCore.Extentions
             {
                 IOrderedQueryable<TEntity> orderedQuery = null;
 
+                if (typeof(IHasLevel).IsAssignableFrom(typeof(TEntity)))
+                {
+                    orderedQuery = orderedQuery is null ?
+                        queryable.OrderByDescending(x => ((IHasLevel)(object)x).Level) :
+                        orderedQuery.ThenByDescending(x => ((IHasLevel)(object)x).Level);
+                }
+
                 if (typeof(IHasRating).IsAssignableFrom(typeof(TEntity)))
                 {
                     orderedQuery = orderedQuery is null ?
                         queryable.OrderByDescending(x => ((IHasRating)(object)x).Rating) :
                         orderedQuery.ThenByDescending(x => ((IHasRating)(object)x).Rating);
-                }
-
-                if (typeof(IHasDateTime).IsAssignableFrom(typeof(TEntity)))
-                {
-                    orderedQuery = orderedQuery is null ?
-                        queryable.OrderByDescending(x => ((IHasDateTime)(object)x).CreatedAt) :
-                        orderedQuery.ThenByDescending(x => ((IHasDateTime)(object)x).CreatedAt);
                 }
 
                 if (typeof(IHasId).IsAssignableFrom(typeof(TEntity)))

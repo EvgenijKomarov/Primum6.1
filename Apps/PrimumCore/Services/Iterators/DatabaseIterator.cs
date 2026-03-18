@@ -38,7 +38,8 @@ namespace PrimumCore.Services.Iterators
             .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
             .Include(x => x.CourseTheme)
             .Include(x => x.Teacher)
-            .ThenInclude(x => x.User);
+            .ThenInclude(x => x.User)
+            .Include(x => x.Rank);
 
         public IQueryable<AdminProfile> Admins() => context.Set<AdminProfile>()
             .Include(x => x.User)
@@ -77,11 +78,13 @@ namespace PrimumCore.Services.Iterators
         public IQueryable<TeacherProfile> Teachers(bool isOnlyAvailable) => context
             .Set<TeacherProfile>()
             .Include(x => x.User)
+            .Include(x => x.Rank)
             .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsTeacherAvailable);
 
         public IQueryable<StudentProfile> Students() => context
             .Set<StudentProfile>()
-            .Include(x => x.User);
+            .Include(x => x.User)
+            .Include(x => x.Rank);
 
         public IQueryable<AbonementShedule> AbonementShedules() => context
             .Set<AbonementShedule>()

@@ -22,7 +22,13 @@ public partial class Course: BaseEntity
 
     public bool IsActive { get; set; } = true;
 
+    public int Experience { get; set; } = 0;
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
+
+    public int RankId { get; set; } = -1;
+
+    public CourseRank Rank { get; set; } = null!;
 
     public virtual ICollection<Abonement> Abonements { get; set; } = new List<Abonement>();
 

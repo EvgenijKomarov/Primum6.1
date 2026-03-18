@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class CourseDto : IHasId, IHasRating
+    public class CourseDto : IHasId, IHasLevel
     {
         public required int Id { get; set; }
 
@@ -34,7 +34,9 @@ namespace CoreConnection.DTOs
 
         public required bool IsActive { get; set; }
 
-        public required float? Rating { get; set; }
+        public required int Level { get; set; }
+
+        public required string Rank { get; set; }
 
         public required ApproveStatus ApproveStatus { get; set; }
     }

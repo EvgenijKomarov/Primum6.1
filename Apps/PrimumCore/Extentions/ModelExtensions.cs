@@ -21,7 +21,8 @@ namespace PrimumCore.Extentions
                 CourseThemeName = x.Course.CourseTheme.ThemeName,
                 CourseThemeId = x.Course.CourseTheme.Id,
                 PricePerLesson = x.PricePerLesson,
-                AbonementStatus = x.AbonementStatus
+                AbonementStatus = x.AbonementStatus,
+                Rating = x.Rating
             });
 
         public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x => 
@@ -39,7 +40,9 @@ namespace PrimumCore.Extentions
                 FreeLessons = x.FreeLessons,
                 TeacherAbout = x.Teacher.About,
                 IsActive = x.IsActive,
-                ApproveStatus = x.ApproveStatus
+                ApproveStatus = x.ApproveStatus,
+                Rank = x.Rank.Rank,
+                Level = x.Rank.Level
             });
 
         public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 
@@ -48,7 +51,6 @@ namespace PrimumCore.Extentions
                 DisplayName = x.User.DisplayName,
                 UserId = x.User.Id,
                 Status = x.Status ?? string.Empty,
-                Id = x.Id,
                 Permissions = helper.GetAllPermissions(x)
             });
 
@@ -106,8 +108,9 @@ namespace PrimumCore.Extentions
                 DisplayName = x.User.DisplayName,
                 About = x.About,
                 UserId = x.User.Id,
-                Id = x.Id,
-                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x)
+                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x),
+                Rank = x.Rank.Rank,
+                Level = x.Rank.Level
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
@@ -115,8 +118,10 @@ namespace PrimumCore.Extentions
             {
                 DisplayName = x.User.DisplayName,
                 UserId = x.User.Id,
-                Id = x.Id,
-                Coins = x.Coins
+                Coins = x.Coins,
+                Rank = x.Rank.Rank,
+                Level = x.Rank.Level,
+                Rating = x.Rating
             });
 
         public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) => queryable.Select(x => 
