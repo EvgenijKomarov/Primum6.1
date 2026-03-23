@@ -3,6 +3,7 @@ using CoreConnection.DTOs.Inputs;
 using PrimumCore.Entities;
 using CoreDBModel.Models;
 using PrimumCore.Extentions;
+using CoreDBModel.Models.Enums;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -47,6 +48,13 @@ namespace PrimumCore.Services.Iterators
             var course = await dbIterator.Courses(false)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
+
+            if(courseDto.Name != course.Name || courseDto.Description != course.About)
+            {
+                course.ApproveStatus = ApproveStatus.NeedModeratorReview;
+                course.Name = courseDto.Name;
+                course.About = courseDto.Description;
+            }
 
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
