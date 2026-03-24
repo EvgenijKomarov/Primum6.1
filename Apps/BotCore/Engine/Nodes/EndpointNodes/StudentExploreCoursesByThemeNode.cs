@@ -22,7 +22,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         }
         public override async Task Initialize(int index, DataBuffer input)
         {
-            var themeId = input.Arguments[1];
+            var themeId = input.Arguments[0];
             var res = await publicClient.CoursesByThemeAsync(int.Parse(themeId), index, 1);
             TotalCount = res.TotalPages;
             Item = res.Items?.FirstOrDefault();
@@ -35,7 +35,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text=$"{Emoticons.Teacher}Расписание преподавателя",
                     EndpointNode = typeof(StudentExploreTeacherShedulesNode),
-                    Args = new List<string>{ item.Id.ToString(), item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
+                    Args = new List<string>{ item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
                 }
             };
         }

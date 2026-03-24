@@ -15,9 +15,10 @@ namespace BotCore.Engine.Entities.Inputs
 
             if (parts.Length == 0)
                 throw new ArgumentException("Invalid command format", nameof(input.Data));
+            var pageIndex = parts.FirstOrDefault(x => x.StartsWith("&"))?.Skip(1).ToString() ?? null;
 
             EndpointNodeId = parts.First();
-            Object = new DataBuffer(userId, parts.Skip(1).ToList(), input.Sign);
+            Object = new DataBuffer(userId, parts.Skip(1).ToList(), input.Sign, pageIndex is not null ? int.Parse(pageIndex) : null);
             UserId = userId;
         }
     }

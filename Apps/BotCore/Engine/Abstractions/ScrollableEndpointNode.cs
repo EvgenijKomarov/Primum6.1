@@ -26,8 +26,7 @@ namespace BotCore.Engine.Abstractions
 
         public async sealed override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var indexRaw = input.Arguments.FirstOrDefault() ?? "0";
-            var index = int.Parse(indexRaw);
+            var index = input.PageIndex ?? 0;
 
             await Initialize(index, input);
             if (TotalCount is null) { throw new ArgumentNullException("TotalCount not initialized"); }
@@ -47,7 +46,8 @@ namespace BotCore.Engine.Abstractions
                 {
                     Text = Emoticons.Up,
                     EndpointNode = GetType(),
-                    Args = new List<string> { (index - 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
+                    Args = input.Arguments,
+                    PageIndex = index-1
                 });
             }
             buttons.AddRange(await ItemButtons(Item, input));
@@ -57,7 +57,8 @@ namespace BotCore.Engine.Abstractions
                 {
                     Text = Emoticons.Down,
                     EndpointNode = GetType(),
-                    Args = new List<string> { (index + 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
+                    Args = input.Arguments,
+                    PageIndex = index+1
                 });
             }
             buttons.Add(await BackButton(input));
