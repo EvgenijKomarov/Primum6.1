@@ -10,14 +10,14 @@ using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class TokenIterator(DatabaseIterator dbIterator,
+    public class TokenIterator(PrimumContext context,
         RandomStringGenerator randomGenerator,
         PublisherService publisher,
         SolutionEnvironment environment)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
-            var user = await dbIterator.Users(false)
+            var user = await context.Set<User>()
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
@@ -41,13 +41,13 @@ namespace PrimumCore.Services.Iterators
                 UserId = user.Id
             });
 
-            await dbIterator.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return user.Id;
         }
 
         public async Task<int> ConfirmToken(int userId, string inputToken)
         {
-            var user = await dbIterator.Users(false)
+            var user = await context.Set<User>()
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
@@ -64,7 +64,7 @@ namespace PrimumCore.Services.Iterators
                     user.IsMailChecked = true;
                     break;
             }
-            await dbIterator.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return user.Id;
         }
     }

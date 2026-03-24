@@ -49,12 +49,7 @@
         "LessonStatus",
         "Permission",
         "TokenMeaning",
-        "DayOfWeek",
-        "TeacherRankDto",
-        "StudentRankDto",
-        "CourseRankDto",
-        "LessonsByDateDto",
-        "FutureLessonDto"
+        "DayOfWeek"
       ],
       "generateNullableReferenceTypes": true, // Учитывать C# 11 required / nullable
       "generateRequiredProperties": true, // Генерировать модификатор 'required' в клиенте (если целевая версия .NET поддерживает)

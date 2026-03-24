@@ -10,27 +10,19 @@ namespace BotCore.Engine.Abstractions
 {
     public abstract class ScrollableEndpointNode<TItem>(string endpointId) : EndpointNode<DataBuffer, EngineOutputMessage>(endpointId)
     {
-        protected int? TotalCount { get; set; }
-        protected TItem? Item { get; set; }
         public abstract Task<string> ItemInfo(TItem item, DataBuffer buffer);
-        /// <summary>
-        /// Use this to initialize item and total count
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        public abstract Task Initialize(int index, DataBuffer buffer);
+        public abstract Task<(TItem?, int)> GetItemAndTotalCount(int index, DataBuffer buffer);
         public abstract Task<IEnumerable<EngineOutputButton>> ItemButtons(TItem item, DataBuffer buffer);
         public abstract Task<EngineOutputButton> BackButton(DataBuffer buffer);
         public abstract Task<string> IfItemsEmptyText(DataBuffer buffer);
 
         public async sealed override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var index = input.PageIndex ?? 0;
+            var indexRaw = input.Arguments.FirstOrDefault() ?? "0";
+            var index = int.Parse(indexRaw);
 
-            await Initialize(index, input);
-            if (TotalCount is null) { throw new ArgumentNullException("TotalCount not initialized"); }
-            if (Item is null)
+            var itemAndTotal = await GetItemAndTotalCount(index, input);
+            if (itemAndTotal.Item1 is null)
             {
                 return Finish(new EngineOutputMessage
                 {
@@ -46,26 +38,24 @@ namespace BotCore.Engine.Abstractions
                 {
                     Text = Emoticons.Up,
                     EndpointNode = GetType(),
-                    Args = input.Arguments,
-                    PageIndex = index-1
+                    Args = new List<string> { (index - 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
                 });
             }
-            buttons.AddRange(await ItemButtons(Item, input));
-            if (index != TotalCount - 1)
+            buttons.AddRange(await ItemButtons(itemAndTotal.Item1, input));
+            if (index != itemAndTotal.Item2 - 1)
             {
                 buttons.Add(new EngineOutputButton
                 {
                     Text = Emoticons.Down,
                     EndpointNode = GetType(),
-                    Args = input.Arguments,
-                    PageIndex = index+1
+                    Args = new List<string> { (index + 1).ToString() }.Concat(input.Arguments.Skip(1)).ToList()
                 });
             }
             buttons.Add(await BackButton(input));
 
             return Finish(new EngineOutputMessage
             {
-                Message = await ItemInfo(Item, input),
+                Message = await ItemInfo(itemAndTotal.Item1, input),
                 Buttons = buttons
             });
         }

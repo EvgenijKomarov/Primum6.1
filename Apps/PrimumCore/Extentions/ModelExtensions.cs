@@ -21,8 +21,7 @@ namespace PrimumCore.Extentions
                 CourseThemeName = x.Course.CourseTheme.ThemeName,
                 CourseThemeId = x.Course.CourseTheme.Id,
                 PricePerLesson = x.PricePerLesson,
-                AbonementStatus = x.AbonementStatus,
-                Rating = x.Rating
+                AbonementStatus = x.AbonementStatus
             });
 
         public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x => 
@@ -33,16 +32,14 @@ namespace PrimumCore.Extentions
                 TeacherName = x.Teacher.User.DisplayName,
                 CourseThemeName = x.CourseTheme.ThemeName,
                 About = x.About,
-                CourseThemeId = x.CourseTheme.Id,
-                TeacherId = x.Teacher.Id,
+                CourseThemeId = x.CourseThemeId,
+                TeacherId = x.TeacherId,
                 Price = x.Price,
                 MaxLessons = x.MaxLessons,
                 FreeLessons = x.FreeLessons,
                 TeacherAbout = x.Teacher.About,
                 IsActive = x.IsActive,
-                ApproveStatus = x.ApproveStatus,
-                Rank = x.Rank.Rank,
-                Level = x.Rank.Level
+                ApproveStatus = x.ApproveStatus
             });
 
         public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 
@@ -72,8 +69,8 @@ namespace PrimumCore.Extentions
                 Description = x.Description
             });
 
-        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
-            .Select(x => new LessonDto
+        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable.Select(x => 
+            new LessonDto
             {
                 DateTime = x.DateTime,
                 CourseName = x.Abonement.Course.Name,
@@ -108,9 +105,7 @@ namespace PrimumCore.Extentions
                 DisplayName = x.User.DisplayName,
                 About = x.About,
                 UserId = x.User.Id,
-                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x),
-                Rank = x.Rank.Rank,
-                Level = x.Rank.Level
+                IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x.User)
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
@@ -118,10 +113,7 @@ namespace PrimumCore.Extentions
             {
                 DisplayName = x.User.DisplayName,
                 UserId = x.User.Id,
-                Coins = x.Coins,
-                Rank = x.Rank.Rank,
-                Level = x.Rank.Level,
-                Rating = x.Rating
+                Coins = x.Coins
             });
 
         public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) => queryable.Select(x => 
@@ -182,58 +174,6 @@ namespace PrimumCore.Extentions
                             x.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
                 IsAdmin = x.AdminProfile != null,
                 IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(x)
-            });
-
-        public static IQueryable<StudentRankDto> ToDto(this IQueryable<StudentRank> queryable) => queryable.Select(x =>
-            new StudentRankDto
-            {
-                Id = x.Id,
-                Level = x.Level,
-                Rank = x.Rank,
-                RequiredExperience = x.RequiredExperience,
-                CoinDiscount = x.CoinDiscount,
-            });
-
-        public static IQueryable<CourseRankDto> ToDto(this IQueryable<CourseRank> queryable) => queryable.Select(x =>
-            new CourseRankDto
-            {
-                Id = x.Id,
-                Level = x.Level,
-                Rank = x.Rank,
-                RequiredExperience = x.RequiredExperience,
-            });
-
-        public static IQueryable<TeacherRankDto> ToDto(this IQueryable<TeacherRank> queryable) => queryable.Select(x =>
-            new TeacherRankDto
-            {
-                Id = x.Id,
-                Level = x.Level,
-                Rank = x.Rank,
-                RequiredExperience = x.RequiredExperience,
-                EarningMultiplier = x.EarningMultiplier,
-            });
-
-        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
-            .OrderBy(x => x.DateTime)
-            .GroupBy(x => x.DateTime)
-            .Select(x => new LessonsByDateDto
-            {
-                Date = DateOnly.FromDateTime(x.Key),
-                DayOfWeek = x.Key.DayOfWeek,
-                Lessons = x.Select(x => new FutureLessonDto
-                {
-                    AbonementId = x.AbonementId,
-                    Time = x.DateTime.TimeOfDay,
-                    TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                    TeacherId = x.Abonement.Course.Teacher.User.Id,
-                    StudentId = x.Abonement.Student.User.Id,
-                    StudentDisplayName = x.Abonement.Student.User.DisplayName,
-                    Price = x.Price,
-                    LessonStatus = x.Status,
-                    Id = x.Id,
-                    CourseName = x.Abonement.Course.Name,
-                    CourseId = x.Abonement.Course.Id
-                }).ToList()
             });
     }
 }

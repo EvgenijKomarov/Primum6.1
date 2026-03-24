@@ -13,14 +13,14 @@ namespace BotCore.Services
                 Message = outputMessage.Message,
                 Buttons = outputMessage.Buttons.ToDictionary(
                     b => b.Text, 
-                    b => GenerateCallbackData(availableEndpoints.FirstOrDefault(x => x.Value == b.EndpointNode).Key, b.Args, b.PageIndex))
+                    b => GenerateCallbackData(availableEndpoints.FirstOrDefault(x => x.Value == b.EndpointNode).Key, b.Args))
             };
         }
 
-        private string GenerateCallbackData(string endpointNodeId, List<string> args, int? pageindex = null)
+        private string GenerateCallbackData(string endpointNodeId, List<string> args)
         {
-            if (args.Count == 0 && pageindex is null) { return endpointNodeId; }
-            return $"{endpointNodeId}_{string.Join("_", args)}" + (pageindex is not null ? $"&{pageindex}" : string.Empty);
+            if (args.Count == 0) { return endpointNodeId; }
+            return $"{endpointNodeId}_{string.Join("_", args)}";
         }
     }
 }

@@ -1,7 +1,8 @@
-using PrimumCore.Entities;
+using CoreConnection.Entities;
 using CoreDBModel.Models;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;
+using PrimumCore.Services.GenerationProcessors;
 using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -13,7 +14,7 @@ builder.Services.AddSingleton(sp => solutionEnvironment);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument();
+builder.Services.AddOpenApiDocument(s => s.DocumentProcessors.Add(new ExcludeNamespaceProcessor()));
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();

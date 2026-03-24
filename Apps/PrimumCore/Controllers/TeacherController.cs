@@ -1,6 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using PrimumCore.Entities;
+using CoreConnection.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
 
@@ -13,6 +13,7 @@ namespace PrimumCore.Controllers
         TeacherIterator teacherIterator,
         CourseIterator courseIterator,
         TeacherSheduleIterator sheduleIterator,
+        ThemeIterator themeIterator,
         LessonIterator lessonIterator,
         AbonementIterator abonementIterator,
         StudentSheduleIterator studentSheduleIterator,
@@ -27,11 +28,11 @@ namespace PrimumCore.Controllers
             => Ok(await lessonIterator.GetTeacherLessons(userId, page, pageSize));
 
         [HttpGet("future-lessons")]
-        public async Task<ActionResult<PageResult<LessonsByDateDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PageResult<LessonDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
             => Ok(await lessonIterator.GetTeacherFutureLessons(userId, page, pageSize));
 
         [HttpGet("lesson/{lessonId}")]
-        public async Task<ActionResult<LessonsByDateDto>> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
+        public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int userId, [FromRoute] int lessonId)
             => Ok(await lessonIterator.GetTeacherLesson(userId, lessonId));
 
         [HttpGet("courses")]

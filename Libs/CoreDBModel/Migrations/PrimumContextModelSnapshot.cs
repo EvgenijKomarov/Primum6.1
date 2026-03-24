@@ -45,9 +45,6 @@ namespace CoreDBModel.Migrations
                     b.Property<int>("PricePerLesson")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Rating")
-                        .HasColumnType("real");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -177,9 +174,6 @@ namespace CoreDBModel.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
-
                     b.Property<int>("FreeLessons")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -200,9 +194,6 @@ namespace CoreDBModel.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("RankId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
@@ -213,50 +204,9 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("RankId");
-
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("CoreDBModel.Models.CourseRank", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Rank")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequiredExperience")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("CourseRanks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Level = 1,
-                            Rank = "Новый",
-                            RequiredExperience = 0
-                        });
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.CourseTheme", b =>
@@ -434,7 +384,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("StudentGradings");
+                    b.ToTable("StudentGrading");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.StudentProfile", b =>
@@ -454,15 +404,6 @@ namespace CoreDBModel.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RankId")
-                        .HasColumnType("int");
-
-                    b.Property<float?>("Rating")
-                        .HasColumnType("real");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -471,55 +412,10 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("RankId");
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("StudentProfiles");
-                });
-
-            modelBuilder.Entity("CoreDBModel.Models.StudentRank", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("CoinDiscount")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Rank")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequiredExperience")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("StudentRanks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1,
-                            CoinDiscount = 0f,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Level = 1,
-                            Rank = "Новенький",
-                            RequiredExperience = 0
-                        });
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
@@ -540,11 +436,8 @@ namespace CoreDBModel.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RankId")
-                        .HasColumnType("int");
+                    b.Property<float>("EarningMultiplier")
+                        .HasColumnType("real");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -554,55 +447,10 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("RankId");
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("TeacherProfiles");
-                });
-
-            modelBuilder.Entity("CoreDBModel.Models.TeacherRank", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("EarningMultiplier")
-                        .HasColumnType("real");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Rank")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequiredExperience")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("TeacherRanks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EarningMultiplier = 0.3f,
-                            Level = 1,
-                            Rank = "Начинающий наставник",
-                            RequiredExperience = 0
-                        });
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherShedule", b =>
@@ -797,12 +645,6 @@ namespace CoreDBModel.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreDBModel.Models.CourseRank", "Rank")
-                        .WithMany("Courses")
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("CoreDBModel.Models.TeacherProfile", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
@@ -810,8 +652,6 @@ namespace CoreDBModel.Migrations
                         .IsRequired();
 
                     b.Navigation("CourseTheme");
-
-                    b.Navigation("Rank");
 
                     b.Navigation("Teacher");
                 });
@@ -861,38 +701,22 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.StudentProfile", b =>
                 {
-                    b.HasOne("CoreDBModel.Models.StudentRank", "Rank")
-                        .WithMany("Students")
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("CoreDBModel.Models.User", "User")
                         .WithOne("StudentProfile")
                         .HasForeignKey("CoreDBModel.Models.StudentProfile", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Rank");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
                 {
-                    b.HasOne("CoreDBModel.Models.TeacherRank", "Rank")
-                        .WithMany("Teachers")
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("CoreDBModel.Models.User", "User")
                         .WithOne("TeacherProfile")
                         .HasForeignKey("CoreDBModel.Models.TeacherProfile", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Rank");
 
                     b.Navigation("User");
                 });
@@ -940,11 +764,6 @@ namespace CoreDBModel.Migrations
                     b.Navigation("Abonements");
                 });
 
-            modelBuilder.Entity("CoreDBModel.Models.CourseRank", b =>
-                {
-                    b.Navigation("Courses");
-                });
-
             modelBuilder.Entity("CoreDBModel.Models.CourseTheme", b =>
                 {
                     b.Navigation("Courses");
@@ -962,21 +781,11 @@ namespace CoreDBModel.Migrations
                     b.Navigation("Promocodes");
                 });
 
-            modelBuilder.Entity("CoreDBModel.Models.StudentRank", b =>
-                {
-                    b.Navigation("Students");
-                });
-
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
                 {
                     b.Navigation("Courses");
 
                     b.Navigation("TeacherShedules");
-                });
-
-            modelBuilder.Entity("CoreDBModel.Models.TeacherRank", b =>
-                {
-                    b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherShedule", b =>

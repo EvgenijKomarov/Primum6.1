@@ -2,7 +2,6 @@
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PublishServiceConnection;
@@ -10,11 +9,19 @@ using PublishServiceConnection.Events;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class GradingIterator(DatabaseIterator dbIterator, PublisherService publisherService, MathFormulas formulas)
+    public class GradingIterator(PrimumContext context, PublisherService publisherService)
     {
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
-            var lesson = await dbIterator.Lessons()
+            var lesson = await context.Set<Lesson>()
+                .Include(x => x.Grading)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .One(x => x.Id == lessonId);
             if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
             if (lesson.Grading is not null) { throw new BusinessLogicException("Lesson already gradet"); }
@@ -30,15 +37,12 @@ namespace PrimumCore.Services.Iterators
             lesson.Grading = lessonGrading;
 
             var avgGrade = lessonGrading.GetFinalGrade();
+            var addedCoins = CoinFormula(avgGrade, lesson.Price);
 
-            var addedCoins = formulas.CoinFormula(avgGrade, lesson.Price);
             lesson.Abonement.Student.Coins += addedCoins;
-            lesson.Abonement.Student.Experience += formulas.StudentExpFormula(avgGrade);
-            lesson.Abonement.Course.Experience += formulas.CourseExpFormula();
-            lesson.Abonement.Course.Teacher.Experience += formulas.TeacherExpFormula();
 
-            await dbIterator.AddAsync(lessonGrading);
-            await dbIterator.SaveChangesAsync();
+            context.Set<StudentGrading>().Add(lessonGrading);
+            await context.SaveChangesAsync();
 
             await publisherService.Push(new LessonGradedEvent
             {
@@ -54,6 +58,16 @@ namespace PrimumCore.Services.Iterators
             });
 
             return lesson.Id;
+        }
+
+        public int CoinFormula(float finalGrade, int lessonCost)
+        {
+            const float maximumCashback = 0.1f;
+            const int maximumGradeValue = 5;
+
+            float cashBackIndex = (finalGrade / maximumGradeValue * maximumCashback);
+
+            return (int)(lessonCost * cashBackIndex);
         }
     }
 }

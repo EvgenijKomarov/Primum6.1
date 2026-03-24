@@ -10,48 +10,42 @@ using System.Text;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentExploreThemesNode(PublicClient publicClient) : ScrollableEndpointNode<IEnumerable<CourseThemeDto>>("stExplrThemes")
+    public class StudentExploreThemesNode(PublicClient publicClient) : EndpointNode<DataBuffer, EngineOutputMessage>("stExplrThemes")
     {
-        public override async Task<string> ItemInfo(IEnumerable<CourseThemeDto> item, DataBuffer buffer)
+        public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            return $"{Emoticons.Theme}Доступные темы курсов:";
-        }
+            var themes = (await publicClient.ThemesAsync(0, 20)).Items ?? new List<CourseThemeDto>();
 
-        public override async Task Initialize(int index, DataBuffer input)
-        {
-            var res = (await publicClient.ThemesAsync(index, 10));
-            TotalCount = res.TotalPages;
-            var items = res.Items;
-            Item = items is null || !items.Any() ? null : items;
-        }
-
-        public override async Task<string> IfItemsEmptyText(DataBuffer input)
-        {
-            return $"{Emoticons.Theme}Тем пока не существует";
-        }
-
-        public override async Task<EngineOutputButton> BackButton(DataBuffer input)
-        {
-            return new EngineOutputButton
+            var backButton = new EngineOutputButton
             {
                 Text = $"{Emoticons.Back}Назад",
                 EndpointNode = typeof(StudentProfileNode)
             };
-        }
-
-        public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(IEnumerable<CourseThemeDto> items, DataBuffer buffer)
-        {
-            var buttons = new List<EngineOutputButton>();
-            foreach (var theme in items)
+            if (themes.Count == 0)
             {
+                return Finish(new EngineOutputMessage
+                {
+                    Message = $"{Emoticons.Theme}Нет доступных тем на площадке!",
+                    Buttons = new List<EngineOutputButton> { backButton }
+                });
+            }
+            StringBuilder sb = new StringBuilder();
+            var buttons = new List<EngineOutputButton>();
+            foreach (var theme in themes) {
                 buttons.Add(new EngineOutputButton()
                 {
                     Text = Emoticons.Theme + theme.ThemeName,
                     EndpointNode = typeof(StudentExploreCoursesByThemeNode),
-                    Args = new List<string> { theme.Id.ToString() }
+                    Args = new List<string> { "0", theme.Id.ToString() }
                 });
             }
-            return buttons;
+            buttons.Add(backButton);
+
+            return Finish(new EngineOutputMessage
+            {
+                Message = "Доступные темы курсов:",
+                Buttons = buttons
+            });
         }
     }
 }

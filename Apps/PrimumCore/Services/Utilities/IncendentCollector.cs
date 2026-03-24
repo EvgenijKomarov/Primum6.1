@@ -1,16 +1,15 @@
 ﻿using CoreConnection.DTOs;
-using PrimumCore.Entities;
+using CoreConnection.Entities;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
-using PrimumCore.Services.Iterators;
 using System.Data;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncidentCollector(DatabaseIterator dbIterator)
+    public class IncidentCollector(PrimumContext context)
     {
         private record IncidentKey(int ObjectId, IncidentMeaning Meaning, Permission PermissionBy, int SortKey);
 
@@ -58,7 +57,7 @@ namespace PrimumCore.Services.Utilities
                 if (dto != null)
                 {
                     // Загрузка связанных логов (отдельный запрос, только для страницы)
-                    dto.LinkedLogs = await dbIterator.IncidentLogs(false)
+                    dto.LinkedLogs = await context.Set<IncidentLog>()
                         .LoadIncidentLogs(dto.ObjectId, dto.Meaning)
                         .ToListAsync(cancellationToken);
                     items.Add(dto);
@@ -82,55 +81,55 @@ namespace PrimumCore.Services.Utilities
             return permission switch
             {
                 Permission.ModerateTeachers =>
-                    await dbIterator.Users(false)
+                    await context.Set<User>()
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedModeratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateTeachers =>
-                    await dbIterator.Users(false)
+                    await context.Set<User>()
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedAdministratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ApproveTeachers =>
-                    await dbIterator.Users(false)
+                    await context.Set<User>()
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedManagerReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ModerateStudents =>
-                    await dbIterator.Users(false)
+                    await context.Set<User>()
                         .Where(x => x.StudentProfile.ApproveStatus == ApproveStatus.NeedModeratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Student, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateStudents =>
-                    await dbIterator.Users(false)
+                    await context.Set<User>()
                         .Where(x => x.StudentProfile.ApproveStatus == ApproveStatus.NeedAdministratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Student, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ModerateCourses =>
-                    await dbIterator.Courses(false)
+                    await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedModeratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateCourses =>
-                    await dbIterator.Courses(false)
+                    await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedAdministratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ApproveCourses =>
-                    await dbIterator.Courses(false)
+                    await context.Set<Course>()
                         .Where(x => x.ApproveStatus == ApproveStatus.NeedManagerReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Course, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.InspectMissedLessons =>
-                    await dbIterator.Lessons()
+                    await context.Set<Lesson>()
                         .Where(x => x.Status == LessonStatus.Missed)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Lesson, permission, x.Id))
                         .ToListAsync(cancellationToken),
@@ -150,7 +149,8 @@ namespace PrimumCore.Services.Utilities
 
             return key.Meaning switch
             {
-                IncidentMeaning.Teacher => await dbIterator.Users(false)
+                IncidentMeaning.Teacher => await context.Set<User>()
+                    .Include(x => x.TeacherProfile)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
@@ -168,7 +168,8 @@ namespace PrimumCore.Services.Utilities
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 
-                IncidentMeaning.Student => await dbIterator.Users(false)
+                IncidentMeaning.Student => await context.Set<User>()
+                    .Include(x => x.StudentProfile)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
@@ -185,7 +186,8 @@ namespace PrimumCore.Services.Utilities
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 
-                IncidentMeaning.Course => await dbIterator.Courses(false)
+                IncidentMeaning.Course => await context.Set<Course>()
+                    .Include(x => x.Teacher).ThenInclude(t => t.User)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
@@ -203,7 +205,10 @@ namespace PrimumCore.Services.Utilities
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 
-                IncidentMeaning.Lesson => await dbIterator.Lessons()
+                IncidentMeaning.Lesson => await context.Set<Lesson>()
+                    .Include(x => x.Abonement).ThenInclude(a => a.Student).ThenInclude(s => s.User)
+                    .Include(x => x.Abonement).ThenInclude(a => a.Course).ThenInclude(c => c.Teacher).ThenInclude(t => t.User)
+                    .Include(x => x.Abonement).ThenInclude(a => a.Course).ThenInclude(c => c.CourseTheme)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {

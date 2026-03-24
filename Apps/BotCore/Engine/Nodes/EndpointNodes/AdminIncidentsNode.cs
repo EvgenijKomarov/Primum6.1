@@ -18,11 +18,10 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Info}Контекст: \n" +
                 $"{item.CommonInfo}";
         }
-        public override async Task Initialize(int index, DataBuffer input)
+        public override async Task<(IncidentDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
         {
             var res = await client.IncidentsAsync(input.UserId!.Value, index, 1);
-            TotalCount = res.TotalPages;
-            Item = res.Items?.FirstOrDefault();
+            return (res.Items?.FirstOrDefault(), res.TotalPages);
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(IncidentDto item, DataBuffer buffer)
         {   

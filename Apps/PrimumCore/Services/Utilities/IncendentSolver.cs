@@ -1,15 +1,14 @@
 ﻿using CoreConnection.DTOs.Inputs;
-using CoreDBModel.Extensions;
 using CoreDBModel.Models;
+using CoreDBModel.Extensions;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
-using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncidentSolver(DatabaseIterator dbIterator)
+    public class IncidentSolver(PrimumContext context)
     {
         //User should be identified
         public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto, int userId)
@@ -21,7 +20,7 @@ namespace PrimumCore.Services.Utilities
                     )
                 ) { throw new NoPermissionException(userId, dto.Meaning, dto.Decision); }
 
-            await dbIterator.AddAsync(new IncidentLog
+            context.Set<IncidentLog>().Add(new IncidentLog
             {
                 AdminProfileId = adminProfileId,
                 Description = $"Explanation:\n" +
@@ -33,7 +32,7 @@ namespace PrimumCore.Services.Utilities
             });
 
             var ruleResult = await rule.Invoke(dto.ObjectId, dto.Decision);
-            await dbIterator.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return ruleResult;
         }
@@ -45,62 +44,77 @@ namespace PrimumCore.Services.Utilities
                 IncidentMeaning.Teacher,
                 async (id, decision) =>
                 {
-                    var teacher = await dbIterator.Teachers(false)
-                        .Include(x => x.TeacherShedules)
-                        .Include(x => x.Courses)
-                        .One(x => x.User.Id == id);
+                    var user = context.Set<User>()
+                        .Include(x => x.TeacherProfile)
+                        .ThenInclude(x => x.TeacherShedules)
+                        .Include(x => x.TeacherProfile)
+                        .ThenInclude(x => x.Courses)
+                        .FirstOrDefault(x => x.Id == id);
+                    if (user is null || user.TeacherProfile is null) { throw new NotFoundException("Teacher"); }
 
                     switch(decision) 
                     {
                         case IncidentDecision.SendToAdministrator:
-                            teacher.ApproveStatus = ApproveStatus.NeedAdministratorReview;
+                            user.TeacherProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
                         case IncidentDecision.SendToManager:
-                            teacher.ApproveStatus = ApproveStatus.NeedManagerReview;
+                            user.TeacherProfile.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
                         case IncidentDecision.Approve:
-                            teacher.ApproveStatus = ApproveStatus.Approved;
+                            user.TeacherProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncidentDecision.Delete:
-                            await dbIterator.RemoveRangeAsync(teacher.TeacherShedules);
-                            await dbIterator.RemoveRangeAsync(teacher.Courses);
-                            await dbIterator.RemoveAsync(teacher);
+                            context.Set<TeacherShedule>().RemoveRange(user.TeacherProfile.TeacherShedules);
+                            context.Set<Course>().RemoveRange(user.TeacherProfile.Courses);
+                            context.Set<TeacherProfile>().Remove(user.TeacherProfile);
                             break;
                     }
-                    return teacher.User.Id;
+                    return user.Id;
                 }
             },
             {
                 IncidentMeaning.Student,
                 async (id, decision) =>
                 {
-                    var student = await dbIterator.Students()
-                        .One(x => x.User.Id == id);
+                    var user = context.Set<User>()
+                        .Include(x => x.StudentProfile)
+                        .ThenInclude(x => x.Abonements)
+                        .ThenInclude(x => x.Lessons)
+                        .Include(x => x.StudentProfile)
+                        .ThenInclude(x => x.Abonements)
+                        .ThenInclude(x => x.AbonementShedules)
+                        .FirstOrDefault(x => x.Id == id);
+                    if (user is null || user.StudentProfile is null) { throw new NotFoundException("Student"); }
 
                     switch(decision)
                     {
                         case IncidentDecision.SendToAdministrator:
-                            student.ApproveStatus = ApproveStatus.NeedAdministratorReview;
+                            user.StudentProfile.ApproveStatus = ApproveStatus.NeedAdministratorReview;
                             break;
                         case IncidentDecision.Approve:
-                            student.ApproveStatus = ApproveStatus.Approved;
+                            user.StudentProfile.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncidentDecision.Delete:
-                            await dbIterator.RemoveRangeAsync(student.Abonements.SelectMany(x => x.AbonementShedules));
-                            await dbIterator.RemoveRangeAsync(student.Abonements.SelectMany(x => x.Lessons));
-                            await dbIterator.RemoveRangeAsync(student.Abonements);
-                            await dbIterator.RemoveAsync(student);
+                            context.Set<AbonementShedule>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.AbonementShedules));
+                            context.Set<Lesson>().RemoveRange(user.StudentProfile.Abonements.SelectMany(x => x.Lessons));
+                            context.Set<Abonement>().RemoveRange(user.StudentProfile.Abonements);
+                            context.Set<StudentProfile>().Remove(user.StudentProfile);
                             break;
                     }
-                    return student.User.Id;
+                    return user.Id;
                 }
             },
             {
                 IncidentMeaning.Course,
                 async (id, decision) =>
                 {
-                    var course = await dbIterator.Courses(false)
-                        .One(x => x.Id == id);
+                    var course = context.Set<Course>()
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.Lessons)
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.AbonementShedules)
+                        .FirstOrDefault(x => x.Id == id);
+                    if (course is null) { throw new NotFoundException("Course"); }
 
                     switch(decision)
                     {
@@ -114,10 +128,10 @@ namespace PrimumCore.Services.Utilities
                             course.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
                         case IncidentDecision.Delete:
-                            await dbIterator.RemoveRangeAsync(course.Abonements.SelectMany(x => x.AbonementShedules));
-                            await dbIterator.RemoveRangeAsync(course.Abonements.SelectMany(x => x.Lessons));
-                            await dbIterator.RemoveRangeAsync(course.Abonements);
-                            await dbIterator.RemoveAsync(course);
+                            context.Set<AbonementShedule>().RemoveRange(course.Abonements.SelectMany(x => x.AbonementShedules));
+                            context.Set<Lesson>().RemoveRange(course.Abonements.SelectMany(x => x.Lessons));
+                            context.Set<Abonement>().RemoveRange(course.Abonements);
+                            context.Set<Course>().Remove(course);
                             break;
                     }
                     return course.Id;
@@ -127,22 +141,31 @@ namespace PrimumCore.Services.Utilities
                 IncidentMeaning.Lesson,
                 async (id, decision) =>
                 {
-                    var lesson = await dbIterator.Lessons()
-                        .One(x => x.Id == id);
+                    var lesson = context.Set<Lesson>()
+                        .Include(x => x.Abonement)
+                        .ThenInclude(a => a.Lessons)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.User)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.Abonements)
+                        .FirstOrDefault(x => x.Id == id);
+                    if (lesson is null) { throw new NotFoundException("Lesson"); }
 
                     switch(decision)
                     {
                         case IncidentDecision.Delete:
-                            await dbIterator.RemoveAsync(lesson);
+                            context.Set<Lesson>().Remove(lesson);
                             break;
                         case IncidentDecision.Revisioned:
                             lesson.Status = LessonStatus.MissedWithoutReason;
                             break;
                         case IncidentDecision.BanUser:
                             lesson.Abonement.Student.User.IsBanned = true;
-                            await dbIterator.RemoveRangeAsync(lesson.Abonement.Lessons);
-                            await dbIterator.RemoveRangeAsync(lesson.Abonement.AbonementShedules);
-                            await dbIterator.RemoveRangeAsync(lesson.Abonement.Student.Abonements);
+                            context.Set<Lesson>().RemoveRange(lesson.Abonement.Lessons);
+                            context.Set<AbonementShedule>().RemoveRange(lesson.Abonement.AbonementShedules);
+                            context.Set<Abonement>().RemoveRange(lesson.Abonement.Student.Abonements);
                             break;
                     }
                     return lesson.Id;

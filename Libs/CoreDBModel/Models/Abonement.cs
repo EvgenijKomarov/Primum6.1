@@ -14,8 +14,6 @@ public partial class Abonement: BaseEntity
 
     public int FreeLessons { get; set; }
 
-    public float? Rating { get; set; } = null;
-
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 
     public virtual Course Course { get; set; } = null!;

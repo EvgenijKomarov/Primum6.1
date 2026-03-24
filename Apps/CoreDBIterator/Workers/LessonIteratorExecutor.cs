@@ -16,7 +16,7 @@ namespace CoreDBIterator.Workers
             {
                 logger.LogInformation("Lesson iteration running at: {time}", DateTimeOffset.Now);
                 await Action();
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
 
@@ -54,7 +54,7 @@ namespace CoreDBIterator.Workers
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                 {
                     lesson.Abonement.Student.User.Cash -= lesson.Price;
-                    lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
+                    lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.EarningMultiplier);
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(

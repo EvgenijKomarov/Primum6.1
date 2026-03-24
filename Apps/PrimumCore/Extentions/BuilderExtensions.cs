@@ -3,7 +3,6 @@ using CoreConnection.DTOs;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
-using PrimumCore.Constants;
 using PrimumCore.Controllers;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
@@ -41,9 +40,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<IncidentCollector>();
             builder.Services.AddScoped<IncidentSolver>();
             builder.Services.AddScoped<AdminProfileHelper>();
-            builder.Services.AddScoped<DatabaseIterator>();
-            builder.Services.AddScoped<RanksIterator>();
-            builder.Services.AddScoped<MathFormulas>();
 
             return builder;
         }

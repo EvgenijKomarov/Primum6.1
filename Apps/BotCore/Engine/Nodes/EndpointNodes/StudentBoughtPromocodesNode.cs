@@ -15,11 +15,10 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"Описание:{item.Description}\n\n" +
                 $"Код: {item.Code}";
         }
-        public override async Task Initialize(int index, DataBuffer input)
+        public override async Task<(PromocodeDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
         {
             var res = await client.PromocodesAsync(input.UserId!.Value, index, 1);
-            TotalCount = res.TotalPages;
-            Item = res.Items?.FirstOrDefault();
+            return (res.Items?.FirstOrDefault(), res.TotalPages);
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(PromocodeDto item, DataBuffer buffer)
         {

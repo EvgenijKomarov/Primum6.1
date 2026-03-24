@@ -1,5 +1,4 @@
-﻿using CoreConnection.DTOs.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class AdminProfileDto
+    public class AdminProfileDto : IHasId
     {
         public required string DisplayName { get; set; }
+
+        public int Id => UserId;
 
         public required int UserId { get; set; }
 

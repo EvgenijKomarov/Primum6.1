@@ -4,7 +4,6 @@
     {
         public required string Text { get; set; } = null!;
         public required Type EndpointNode { get; set; } = null!;
-        public int? PageIndex { get; set; } = null;
 
         public List<string> Args { get; set; } = new List<string>();
     }

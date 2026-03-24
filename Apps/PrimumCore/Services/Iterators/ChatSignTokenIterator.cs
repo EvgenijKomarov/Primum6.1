@@ -1,20 +1,21 @@
-﻿using CoreDBModel.Constants;
+﻿using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
-using PrimumCore.Extentions;
+using PublishServiceConnection;
+using PublishServiceConnection.Events;
 using SignServiceConnection;
 using SignServiceConnection.Models;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class ChatSignTokenIterator(DatabaseIterator dbIterator, SignServiceClient client, ChatSignTokenWorker tokenWorker)
+    public class ChatSignTokenIterator(PrimumContext context, SignServiceClient client, ChatSignTokenWorker tokenWorker)
     {
         public async Task<int> AddChat(int userId, string token)
         {
-            var user = await dbIterator.Users(true)
+            var user = await context.Set<User>()
                 .IgnoreQueryFilters()
-                .One(x => x.Id == userId);
-            if (AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new BusinessLogicException("User should be available"); }
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            if (user is null) { throw new NotFoundException("User"); }
 
             var decryptedToken = tokenWorker.DecryptSign(token);
             if (decryptedToken is null) { throw new BusinessLogicException("Invalid token"); }

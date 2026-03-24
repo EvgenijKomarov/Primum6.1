@@ -1,5 +1,4 @@
-﻿using CoreConnection.DTOs.Abstractions;
-using CoreDBModel.Models.Enums;
+﻿using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class CourseDto : IHasId, IHasLevel
+    public class CourseDto : IHasId
     {
         public required int Id { get; set; }
 
@@ -33,10 +32,6 @@ namespace CoreConnection.DTOs
         public required string TeacherAbout { get; set; }
 
         public required bool IsActive { get; set; }
-
-        public required int Level { get; set; }
-
-        public required string Rank { get; set; }
 
         public required ApproveStatus ApproveStatus { get; set; }
     }

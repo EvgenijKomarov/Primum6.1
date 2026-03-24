@@ -14,11 +14,10 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             return $"{Emoticons.Shedule}Расписание: {DayOfWeekRes.ResourceManager.GetString(item.DayOfWeek.ToString()) ?? string.Empty} {item.Time}:00\n" +
                 $"{Emoticons.Student}Ученик: {(item.IsAvailable ? item.StudentName : "отсутствует")}";
         }
-        public override async Task Initialize(int index, DataBuffer input)
+        public override async Task<(TeacherSheduleDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
         {
             var res = await client.ShedulesAsync(input.UserId!.Value, index, 1);
-            TotalCount = res.TotalPages;
-            Item = res.Items?.FirstOrDefault();
+            return (res.Items?.FirstOrDefault(), res.TotalPages);
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(TeacherSheduleDto item, DataBuffer buffer)
         {

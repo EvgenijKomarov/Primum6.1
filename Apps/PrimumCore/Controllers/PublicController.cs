@@ -1,7 +1,8 @@
 ﻿using CoreConnection.DTOs;
-using PrimumCore.Entities;
+using CoreConnection.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace PrimumCore.Controllers
 {
@@ -14,25 +15,12 @@ namespace PrimumCore.Controllers
         CourseIterator courseIterator,
         TeacherSheduleIterator sheduleIterator,
         ThemeIterator themeIterator,
-        RanksIterator ranksIterator,
         PromocodeIterator promocodeIterator
         ) : PrimumController
     {
         [HttpGet("login")]
         public async Task<ActionResult<int>> Login([FromQuery] string mailAdress, [FromQuery] string password)
             => Ok(await userIterator.Login(mailAdress, password));
-
-        [HttpGet("course-ranks")]
-        public async Task<ActionResult<PageResult<CourseRankDto>>> GetCourseRanks([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await ranksIterator.GetCourseRanks(page, pageSize));
-
-        [HttpGet("teacher-ranks")]
-        public async Task<ActionResult<PageResult<TeacherRankDto>>> GetTeacherRanks([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await ranksIterator.GetTeacherRanks(page, pageSize));
-
-        [HttpGet("student-ranks")]
-        public async Task<ActionResult<PageResult<StudentRankDto>>> GetStudentRanks([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await ranksIterator.GetStudentRanks(page, pageSize));
 
         [HttpPost("register")]
         public async Task<ActionResult<int>> RegUser([FromBody] RegistrationInputDto dto)

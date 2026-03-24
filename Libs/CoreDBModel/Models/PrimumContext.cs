@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CoreDBModel.Models;
 
@@ -46,14 +45,6 @@ public partial class PrimumContext : DbContext
     public virtual DbSet<Promocode> Promocodes { get; set; }
 
     public virtual DbSet<VerificationToken> VerificationTokens { get; set; }
-
-    public virtual DbSet<StudentGrading> StudentGradings { get; set; }
-
-    public virtual DbSet<CourseRank> CourseRanks { get; set; }
-
-    public virtual DbSet<TeacherRank> TeacherRanks { get; set; }
-
-    public virtual DbSet<StudentRank> StudentRanks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -114,11 +105,6 @@ public partial class PrimumContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(e => e.CourseTheme).WithMany(p => p.Courses).HasForeignKey(e => e.CourseThemeId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(u => u.Rank)
-                .WithMany(p => p.Courses)
-                .HasForeignKey(p => p.RankId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Lesson>(entity =>
@@ -149,10 +135,6 @@ public partial class PrimumContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.UserId).IsRequired();
-            entity.HasOne(u => u.Rank)
-                .WithMany(p => p.Students)
-                .HasForeignKey(p => p.RankId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<TeacherProfile>(entity =>
@@ -162,10 +144,6 @@ public partial class PrimumContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.UserId).IsRequired();
-            entity.HasOne(u => u.Rank)
-                .WithMany(p => p.Teachers)
-                .HasForeignKey(p => p.RankId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<TeacherShedule>(entity =>
@@ -268,80 +246,19 @@ public partial class PrimumContext : DbContext
             entity.HasQueryFilter(AvailabilityExpressions.IsUserAvailable);
         });
 
-        modelBuilder.Entity<CourseRank>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.Id).IsUnique();
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-            entity.HasData(
-                new CourseRank
-                {
-                    Id = -1,
-                    Level = 1,
-                    Rank = "Новый",
-                    RequiredExperience = 0
-                });
-        });
-
-        modelBuilder.Entity<TeacherRank>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.Id).IsUnique();
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-            entity.HasData(
-                new TeacherRank
-                {
-                    Id = -1,
-                    Level = 1,
-                    Rank = "Начинающий наставник",
-                    RequiredExperience = 0,
-                    EarningMultiplier = 0.3f
-                });
-        });
-
-        modelBuilder.Entity<StudentRank>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.Id).IsUnique();
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-            entity.HasData(
-                new StudentRank
-                {
-                    Id = -1,
-                    Level = 1,
-                    Rank = "Новенький",
-                    RequiredExperience = 0,
-                    CoinDiscount = 0f
-                });
-        });
-
         OnModelCreatingPartial(modelBuilder);
     }
 
     public override int SaveChanges()
     {
-        SavingProcedures();
+        UpdateTimestamps();
         return base.SaveChanges();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        SavingProcedures();
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private void SavingProcedures()
-    {
-        UpdateTeacherRanks();
-        UpdateCourseRanks();
-        UpdateStudentRanks();
-        UpdateAbonementRatings();
-        UpdateStudentRatings();
-
         UpdateTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
     private void UpdateTimestamps()
@@ -354,103 +271,6 @@ public partial class PrimumContext : DbContext
         foreach (var entry in addedEntries)
         {
             entry.Entity.CreatedAt = utcNow;
-        }
-    }
-
-    private void UpdateTeacherRanks()
-    {
-        var teacherEntries = ChangeTracker.Entries<TeacherProfile>()
-            .Where(e => e.State == EntityState.Added || e.Property(p => p.Experience).IsModified);
-
-        foreach (var entry in teacherEntries)
-        {
-            var profile = entry.Entity;
-
-            var suitableRank = TeacherRanks
-                .OrderByDescending(r => r.RequiredExperience)
-                .First(r => r.RequiredExperience <= profile.Experience);
-            profile.Rank = suitableRank;
-            profile.RankId = suitableRank.Id;
-        }
-    }
-
-    private void UpdateStudentRanks()
-    {
-        var teacherEntries = ChangeTracker.Entries<StudentProfile>()
-            .Where(e => e.State == EntityState.Added || e.Property(p => p.Experience).IsModified);
-
-        foreach (var entry in teacherEntries)
-        {
-            var profile = entry.Entity;
-
-            var suitableRank = StudentRanks
-                .OrderByDescending(r => r.RequiredExperience)
-                .First(r => r.RequiredExperience <= profile.Experience);
-            profile.Rank = suitableRank;
-            profile.RankId = suitableRank.Id;
-        }
-    }
-
-    private void UpdateCourseRanks()
-    {
-        var teacherEntries = ChangeTracker.Entries<Course>()
-            .Where(e => e.State == EntityState.Added || e.Property(p => p.Experience).IsModified);
-
-        foreach (var entry in teacherEntries)
-        {
-            var profile = entry.Entity;
-
-            var suitableRank = CourseRanks
-                .OrderByDescending(r => r.RequiredExperience)
-                .First(r => r.RequiredExperience <= profile.Experience);
-            profile.Rank = suitableRank;
-            profile.RankId = suitableRank.Id;
-        }
-    }
-
-    private void UpdateAbonementRatings()
-    {
-        var gradeEntries = ChangeTracker.Entries<StudentGrading>()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-
-        foreach (var entry in gradeEntries)
-        {
-            var abonement = Abonements
-                .Include(x => x.Lessons)
-                .First(x => x.Lessons.Any(y => y.Id == entry.Entity.LessonId));
-
-            IEnumerable<StudentGrading> grades = abonement.Lessons.Where(x => x.Grading != null).Select(x => x.Grading!).ToArray();
-            if (!grades.Any()) 
-            {
-                abonement.Rating = null;
-            }
-            else
-            {
-                abonement.Rating = grades.Select(x => x.GetFinalGrade()).Average();
-            }
-        }
-    }
-
-    private void UpdateStudentRatings()
-    {
-        var gradeEntries = ChangeTracker.Entries<Abonement>()
-            .Where(e => e.Property(p => p.Rating).IsModified);
-
-        foreach (var entry in gradeEntries)
-        {
-            var student = StudentProfiles
-                .Include(x => x.Abonements)
-                .First(x => x.Abonements.Any(y => y.Id == entry.Entity.Id));
-
-            IEnumerable<float> abonGrades = student.Abonements.Where(x => x.Rating != null).Select(x => x.Rating!.Value).ToArray();
-            if (!abonGrades.Any())
-            {
-                student.Rating = null;
-            }
-            else
-            {
-                student.Rating = abonGrades.Average();
-            }
         }
     }
 

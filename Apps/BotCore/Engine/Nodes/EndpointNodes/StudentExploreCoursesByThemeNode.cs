@@ -20,12 +20,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Teacher}Преподаватель: {item.TeacherName}\n" +
                 $"О преподавателе: {item.TeacherAbout}";
         }
-        public override async Task Initialize(int index, DataBuffer input)
+        public override async Task<(CourseDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
         {
-            var themeId = input.Arguments[0];
+            var themeId = input.Arguments[1];
             var res = await publicClient.CoursesByThemeAsync(int.Parse(themeId), index, 1);
-            TotalCount = res.TotalPages;
-            Item = res.Items?.FirstOrDefault();
+            return (res.Items?.FirstOrDefault(), res.TotalPages);
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDto item, DataBuffer buffer)
         {
@@ -35,7 +34,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text=$"{Emoticons.Teacher}Расписание преподавателя",
                     EndpointNode = typeof(StudentExploreTeacherShedulesNode),
-                    Args = new List<string>{ item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
+                    Args = new List<string>{ item.Id.ToString(), item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
                 }
             };
         }

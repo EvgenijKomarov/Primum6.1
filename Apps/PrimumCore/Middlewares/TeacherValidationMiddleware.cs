@@ -32,7 +32,7 @@ namespace PrimumCore.Middlewares
                 {
                     throw new ProfileNotExistException("Teacher", userId);
                 }
-                else if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user.TeacherProfile))
+                else if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(user))
                 {
                     throw new NotAvailableException("Teacher");
                 }

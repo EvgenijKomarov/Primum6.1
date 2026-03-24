@@ -22,7 +22,7 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.CoursesAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
-        /// Конкретный курс преподавателя
+        /// Все курсы преподавателя
         /// </summary>
         /// <returns></returns>
         [HttpGet("{courseId}")]
@@ -58,7 +58,7 @@ namespace PrimumWebAPI.Controllers
         }
 
         /// <summary>
-        /// Реадктирование курса. При изменении названия и описания, курс отправляется заново на процедуру утверждения и пропадает из видимости у остальных пользователей
+        /// Реадктирование курса. Применится только Price, FreeLessons, и MaxLessonsMaxLessons. Остальные поля не редактируются, так как после редактирования модерация не предполагается
         /// </summary>
         /// <param name="courseId"></param>
         /// <param name="courseDto"></param>

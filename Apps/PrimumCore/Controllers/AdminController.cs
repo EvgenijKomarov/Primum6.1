@@ -1,8 +1,9 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using PrimumCore.Entities;
+using CoreConnection.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace PrimumCore.Controllers
 {

@@ -9,12 +9,13 @@ using System.Text;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentExploreTeacherShedulesNode(PublicClient publicClient) : EndpointNode<DataBuffer, EngineOutputMessage>("stExplrShedules")
+    public class StudentExploreTeacherShedulesNode(PublicClient publicClient, StudentClient studentClient) : EndpointNode<DataBuffer, EngineOutputMessage>("stExplrShedules")
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
             var courseId = input.Arguments[0];
             var teacherId = input.Arguments[1];
+            var themeId = input.Arguments[2];
 
             var shedules = (await publicClient.TeacherShedulesAsync(int.Parse(teacherId), 0, 20)).Items ?? new List<TeacherSheduleDto>();
 
@@ -22,7 +23,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             {
                 Text = $"{Emoticons.Back}Назад",
                 EndpointNode = typeof(StudentExploreCoursesByThemeNode),
-                Args = new List<string>()
+                Args = new List<string> { "0", themeId }
             };
 
             var buttons = new List<EngineOutputButton>();
@@ -32,7 +33,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = $"{Emoticons.Shedule}{DayOfWeekRes.ResourceManager.GetString(shedule.DayOfWeek.ToString())} {shedule.Time}:00",
                     EndpointNode = typeof(StudentSubscribeCourseNode),
-                    Args = new List<string> { courseId, teacherId, shedule.Id.ToString() }
+                    Args = new List<string> { courseId, teacherId, themeId, shedule.Id.ToString() }
                 });
             }
             buttons.Add(backButton);
