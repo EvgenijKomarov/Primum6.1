@@ -11,11 +11,12 @@ namespace BotCore.Engine.Entities.Inputs
             if (string.IsNullOrWhiteSpace(input.Data))
                 throw new ArgumentException("Input string is null or empty", nameof(input.Data));
 
-            var parts = input.Data.Split('_', StringSplitOptions.RemoveEmptyEntries);
+            var partsRaw = input.Data.Split('_', StringSplitOptions.RemoveEmptyEntries);
 
-            if (parts.Length == 0)
+            var parts = partsRaw.Where(x => !x.StartsWith("&"));
+            if (parts.Count() == 0)
                 throw new ArgumentException("Invalid command format", nameof(input.Data));
-            var pageIndex = parts.FirstOrDefault(x => x.StartsWith("&"))?.Skip(1).ToString() ?? null;
+            var pageIndex = partsRaw.FirstOrDefault(x => x.StartsWith("&"))?.Substring(1) ?? null;
 
             EndpointNodeId = parts.First();
             Object = new DataBuffer(userId, parts.Skip(1).ToList(), input.Sign, pageIndex is not null ? int.Parse(pageIndex) : null);
