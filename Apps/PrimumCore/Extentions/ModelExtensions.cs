@@ -72,8 +72,8 @@ namespace PrimumCore.Extentions
                 Description = x.Description
             });
 
-        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable.Select(x => 
-            new LessonDto
+        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
+            .Select(x => new LessonDto
             {
                 DateTime = x.DateTime,
                 CourseName = x.Abonement.Course.Name,
@@ -211,6 +211,29 @@ namespace PrimumCore.Extentions
                 Rank = x.Rank,
                 RequiredExperience = x.RequiredExperience,
                 EarningMultiplier = x.EarningMultiplier,
+            });
+
+        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
+            .OrderBy(x => x.DateTime)
+            .GroupBy(x => x.DateTime)
+            .Select(x => new LessonsByDateDto
+            {
+                Date = DateOnly.FromDateTime(x.Key),
+                DayOfWeek = x.Key.DayOfWeek,
+                Lessons = x.Select(x => new FutureLessonDto
+                {
+                    AbonementId = x.AbonementId,
+                    Time = x.DateTime.TimeOfDay,
+                    TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
+                    TeacherId = x.Abonement.Course.Teacher.User.Id,
+                    StudentId = x.Abonement.Student.User.Id,
+                    StudentDisplayName = x.Abonement.Student.User.DisplayName,
+                    Price = x.Price,
+                    LessonStatus = x.Status,
+                    Id = x.Id,
+                    CourseName = x.Abonement.Course.Name,
+                    CourseId = x.Abonement.Course.Id
+                }).ToList()
             });
     }
 }

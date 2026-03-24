@@ -35,12 +35,12 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == lessonId);
         }
 
-        public async Task<PageResult<LessonDto>> GetTeacherFutureLessons(int teacherId, int _page, int _pageSize)
+        public async Task<PageResult<LessonsByDateDto>> GetTeacherFutureLessons(int teacherId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
                 .Where(x => x.DateTime > DateTime.Now)
-                .ToDto(false)
+                .ToByDateDto(false)
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -52,12 +52,12 @@ namespace PrimumCore.Services.Iterators
                 .ToPageResult(_page, _pageSize);
         }
 
-        public async Task<PageResult<LessonDto>> GetStudentFutureLessons(int studentId, int _page, int _pageSize)
+        public async Task<PageResult<LessonsByDateDto>> GetStudentFutureLessons(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .Where(x => x.DateTime > DateTime.Now)
-                .ToDto(false)
+                .ToByDateDto(false)
                 .ToPageResult(_page, _pageSize);
         }
 
