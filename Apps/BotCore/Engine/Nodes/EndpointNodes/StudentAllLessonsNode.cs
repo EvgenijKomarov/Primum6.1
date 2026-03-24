@@ -21,10 +21,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Cash}Стоимость: {item.Price}\n" +
                 $"Статус: {LessonStatusRes.ResourceManager.GetString(item.LessonStatus.ToString()) ?? string.Empty}";
         }
-        public override async Task<(LessonDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
+        public override async Task Initialize(int index, DataBuffer input)
         {
             var res = (await client.LessonsAsync(input.UserId!.Value, index, 1));
-            return (res.Items?.FirstOrDefault(), res.TotalPages);
+            TotalCount = res.TotalPages;
+            Item = res.Items?.FirstOrDefault();
         }
         public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(LessonDto item, DataBuffer buffer)
         {
