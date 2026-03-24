@@ -16,7 +16,7 @@ namespace CoreDBIterator.Workers
             {
                 logger.LogInformation("Lesson iteration running at: {time}", DateTimeOffset.Now);
                 await Action();
-                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
             }
         }
 
