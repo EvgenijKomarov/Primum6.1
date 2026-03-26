@@ -16,10 +16,22 @@ namespace BotCore.Services.Iterators
         InOutConverter converter
         )
     {
+        private string[] availableCommands = 
+            [
+                "/start"
+            ];
+        private bool isAvailableCommand(string input)
+        {
+            foreach (string command in availableCommands) 
+            {
+                if(input.StartsWith(command)) return true;
+            }
+            return false;
+        }
         public async Task<BotOutput> ProcessTextMessage(BotInput input, CancellationToken token)
         {
             EngineOutputMessage? result = null;
-            if (input.Data.StartsWith('/')) 
+            if (isAvailableCommand(input.Data)) 
             { 
                 result = await engine.Process(new TextCommand(await GetId(input.Sign), input)); 
             }
