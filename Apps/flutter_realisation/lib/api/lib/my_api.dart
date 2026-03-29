@@ -1,0 +1,87 @@
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+
+export 'package:my_api/src/api.dart';
+export 'package:my_api/src/auth/api_key_auth.dart';
+export 'package:my_api/src/auth/basic_auth.dart';
+export 'package:my_api/src/auth/bearer_auth.dart';
+export 'package:my_api/src/auth/oauth.dart';
+export 'package:my_api/src/serializers.dart';
+export 'package:my_api/src/model/date.dart';
+
+export 'package:my_api/src/api/admin_api.dart';
+export 'package:my_api/src/api/admin_course_theme_api.dart';
+export 'package:my_api/src/api/admin_incident_api.dart';
+export 'package:my_api/src/api/admin_other_admins_api.dart';
+export 'package:my_api/src/api/admin_promocode_api.dart';
+export 'package:my_api/src/api/admin_user_api.dart';
+export 'package:my_api/src/api/public_api.dart';
+export 'package:my_api/src/api/public_course_api.dart';
+export 'package:my_api/src/api/public_ranks_api.dart';
+export 'package:my_api/src/api/public_teacher_api.dart';
+export 'package:my_api/src/api/public_theme_api.dart';
+export 'package:my_api/src/api/public_user_api.dart';
+export 'package:my_api/src/api/student_api.dart';
+export 'package:my_api/src/api/student_abonement_api.dart';
+export 'package:my_api/src/api/student_lesson_api.dart';
+export 'package:my_api/src/api/student_promocode_api.dart';
+export 'package:my_api/src/api/student_shedule_api.dart';
+export 'package:my_api/src/api/teacher_api.dart';
+export 'package:my_api/src/api/teacher_abonement_api.dart';
+export 'package:my_api/src/api/teacher_course_api.dart';
+export 'package:my_api/src/api/teacher_lesson_api.dart';
+export 'package:my_api/src/api/teacher_shedule_api.dart';
+export 'package:my_api/src/api/user_api.dart';
+
+export 'package:my_api/src/model/abonement_dto.dart';
+export 'package:my_api/src/model/abonement_dto_page_result.dart';
+export 'package:my_api/src/model/abonement_input_status.dart';
+export 'package:my_api/src/model/abonement_shedule_dto.dart';
+export 'package:my_api/src/model/abonement_shedule_dto_page_result.dart';
+export 'package:my_api/src/model/abonement_status.dart';
+export 'package:my_api/src/model/admin_profile_dto.dart';
+export 'package:my_api/src/model/admin_profile_dto_page_result.dart';
+export 'package:my_api/src/model/approve_status.dart';
+export 'package:my_api/src/model/course_dto.dart';
+export 'package:my_api/src/model/course_dto_page_result.dart';
+export 'package:my_api/src/model/course_input_dto.dart';
+export 'package:my_api/src/model/course_rank_dto.dart';
+export 'package:my_api/src/model/course_rank_dto_page_result.dart';
+export 'package:my_api/src/model/course_theme_dto.dart';
+export 'package:my_api/src/model/course_theme_dto_page_result.dart';
+export 'package:my_api/src/model/course_theme_input_dto.dart';
+export 'package:my_api/src/model/day_of_week.dart';
+export 'package:my_api/src/model/grading.dart';
+export 'package:my_api/src/model/grading_input_dto.dart';
+export 'package:my_api/src/model/incident_decision.dart';
+export 'package:my_api/src/model/incident_decision_input_dto.dart';
+export 'package:my_api/src/model/incident_dto.dart';
+export 'package:my_api/src/model/incident_dto_page_result.dart';
+export 'package:my_api/src/model/incident_log_dto.dart';
+export 'package:my_api/src/model/incident_log_dto_page_result.dart';
+export 'package:my_api/src/model/incident_meaning.dart';
+export 'package:my_api/src/model/incident_status.dart';
+export 'package:my_api/src/model/lesson_dto.dart';
+export 'package:my_api/src/model/lesson_dto_page_result.dart';
+export 'package:my_api/src/model/lesson_status.dart';
+export 'package:my_api/src/model/logging_input_dto.dart';
+export 'package:my_api/src/model/permission.dart';
+export 'package:my_api/src/model/promocode_dto.dart';
+export 'package:my_api/src/model/promocode_dto_page_result.dart';
+export 'package:my_api/src/model/promocode_input_dto.dart';
+export 'package:my_api/src/model/registration_input_dto.dart';
+export 'package:my_api/src/model/student_profile_dto.dart';
+export 'package:my_api/src/model/student_rank_dto.dart';
+export 'package:my_api/src/model/student_rank_dto_page_result.dart';
+export 'package:my_api/src/model/teacher_profile_dto.dart';
+export 'package:my_api/src/model/teacher_profile_dto_page_result.dart';
+export 'package:my_api/src/model/teacher_rank_dto.dart';
+export 'package:my_api/src/model/teacher_rank_dto_page_result.dart';
+export 'package:my_api/src/model/teacher_shedule_dto.dart';
+export 'package:my_api/src/model/teacher_shedule_dto_page_result.dart';
+export 'package:my_api/src/model/teacher_shedule_input_dto.dart';
+export 'package:my_api/src/model/user_dto.dart';
+export 'package:my_api/src/model/user_dto_lite.dart';
+export 'package:my_api/src/model/user_dto_page_result.dart';
+
