@@ -21,13 +21,13 @@ class _$StudentRankDto extends StudentRankDto {
   factory _$StudentRankDto([void Function(StudentRankDtoBuilder)? updates]) =>
       (StudentRankDtoBuilder()..update(updates))._build();
 
-  _$StudentRankDto._(
-      {required this.id,
-      required this.level,
-      this.rank,
-      required this.requiredExperience,
-      required this.coinDiscount})
-      : super._();
+  _$StudentRankDto._({
+    required this.id,
+    required this.level,
+    this.rank,
+    required this.requiredExperience,
+    required this.coinDiscount,
+  }) : super._();
   @override
   StudentRankDto rebuild(void Function(StudentRankDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -126,17 +126,30 @@ class StudentRankDtoBuilder
   StudentRankDto build() => _build();
 
   _$StudentRankDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$StudentRankDto._(
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'StudentRankDto', 'id'),
+            id,
+            r'StudentRankDto',
+            'id',
+          ),
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'StudentRankDto', 'level'),
+            level,
+            r'StudentRankDto',
+            'level',
+          ),
           rank: rank,
           requiredExperience: BuiltValueNullFieldError.checkNotNull(
-              requiredExperience, r'StudentRankDto', 'requiredExperience'),
+            requiredExperience,
+            r'StudentRankDto',
+            'requiredExperience',
+          ),
           coinDiscount: BuiltValueNullFieldError.checkNotNull(
-              coinDiscount, r'StudentRankDto', 'coinDiscount'),
+            coinDiscount,
+            r'StudentRankDto',
+            'coinDiscount',
+          ),
         );
     replace(_$result);
     return _$result;

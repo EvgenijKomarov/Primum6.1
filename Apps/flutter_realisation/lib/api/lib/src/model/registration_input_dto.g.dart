@@ -18,21 +18,21 @@ class _$RegistrationInputDto extends RegistrationInputDto {
   @override
   final String? password;
 
-  factory _$RegistrationInputDto(
-          [void Function(RegistrationInputDtoBuilder)? updates]) =>
-      (RegistrationInputDtoBuilder()..update(updates))._build();
+  factory _$RegistrationInputDto([
+    void Function(RegistrationInputDtoBuilder)? updates,
+  ]) => (RegistrationInputDtoBuilder()..update(updates))._build();
 
-  _$RegistrationInputDto._(
-      {this.name,
-      this.surname,
-      this.patronymic,
-      this.mailAdress,
-      this.password})
-      : super._();
+  _$RegistrationInputDto._({
+    this.name,
+    this.surname,
+    this.patronymic,
+    this.mailAdress,
+    this.password,
+  }) : super._();
   @override
   RegistrationInputDto rebuild(
-          void Function(RegistrationInputDtoBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(RegistrationInputDtoBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   RegistrationInputDtoBuilder toBuilder() =>
@@ -128,7 +128,8 @@ class RegistrationInputDtoBuilder
   RegistrationInputDto build() => _build();
 
   _$RegistrationInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$RegistrationInputDto._(
           name: name,
           surname: surname,

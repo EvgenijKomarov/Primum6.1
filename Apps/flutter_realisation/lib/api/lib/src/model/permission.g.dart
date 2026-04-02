@@ -113,7 +113,7 @@ class _$PermissionMeta {
   BuiltSet<Permission> get values => _$values;
 }
 
-abstract class _$PermissionMixin {
+mixin _$PermissionMixin {
   // ignore: non_constant_identifier_names
   _$PermissionMeta get Permission => const _$PermissionMeta();
 }
@@ -168,15 +168,20 @@ class _$PermissionSerializer implements PrimitiveSerializer<Permission> {
   final String wireName = 'Permission';
 
   @override
-  Object serialize(Serializers serializers, Permission object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    Permission object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  Permission deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      Permission.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  Permission deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => Permission.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

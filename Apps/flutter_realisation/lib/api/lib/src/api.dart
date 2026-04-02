@@ -2,7 +2,9 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
 
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:built_value/serializer.dart';
 import 'package:my_api/src/serializers.dart';
 import 'package:my_api/src/auth/api_key_auth.dart';
@@ -34,7 +36,7 @@ import 'package:my_api/src/api/teacher_shedule_api.dart';
 import 'package:my_api/src/api/user_api.dart';
 
 class MyApi {
-  static const String basePath = r'http://localhost';
+  static const String basePath = r'https://localhost:5002';
 
   final Dio dio;
   final Serializers serializers;
@@ -44,13 +46,28 @@ class MyApi {
     Serializers? serializers,
     String? basePathOverride,
     List<Interceptor>? interceptors,
-  })  : this.serializers = serializers ?? standardSerializers,
-        this.dio = dio ??
-            Dio(BaseOptions(
-              baseUrl: basePathOverride ?? basePath,
-              connectTimeout: const Duration(milliseconds: 5000),
-              receiveTimeout: const Duration(milliseconds: 3000),
-            )) {
+  }) : this.serializers = serializers ?? standardSerializers,
+       this.dio =
+           dio ??
+           Dio(
+             BaseOptions(
+               // Always use the fixed base path for generated clients
+               baseUrl: basePath,
+               connectTimeout: const Duration(milliseconds: 5000),
+               receiveTimeout: const Duration(milliseconds: 3000),
+             ),
+           ) {
+    // Configure Dio to accept self-signed certificates for localhost HTTPS
+    if (this.dio.httpClientAdapter is IOHttpClientAdapter) {
+      (this.dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
+          () {
+            final client = HttpClient();
+            client.badCertificateCallback =
+                (X509Certificate cert, String host, int port) => true;
+            return client;
+          };
+    }
+
     if (interceptors == null) {
       this.dio.interceptors.addAll([
         OAuthInterceptor(),
@@ -65,25 +82,41 @@ class MyApi {
 
   void setOAuthToken(String name, String token) {
     if (this.dio.interceptors.any((i) => i is OAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is OAuthInterceptor) as OAuthInterceptor).tokens[name] = token;
+      (this.dio.interceptors.firstWhere((i) => i is OAuthInterceptor)
+                  as OAuthInterceptor)
+              .tokens[name] =
+          token;
     }
   }
 
   void setBearerAuth(String name, String token) {
     if (this.dio.interceptors.any((i) => i is BearerAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is BearerAuthInterceptor) as BearerAuthInterceptor).tokens[name] = token;
+      (this.dio.interceptors.firstWhere((i) => i is BearerAuthInterceptor)
+                  as BearerAuthInterceptor)
+              .tokens[name] =
+          token;
     }
   }
 
   void setBasicAuth(String name, String username, String password) {
     if (this.dio.interceptors.any((i) => i is BasicAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is BasicAuthInterceptor) as BasicAuthInterceptor).authInfo[name] = BasicAuthInfo(username, password);
+      (this.dio.interceptors.firstWhere((i) => i is BasicAuthInterceptor)
+              as BasicAuthInterceptor)
+          .authInfo[name] = BasicAuthInfo(
+        username,
+        password,
+      );
     }
   }
 
   void setApiKey(String name, String apiKey) {
     if (this.dio.interceptors.any((i) => i is ApiKeyAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((element) => element is ApiKeyAuthInterceptor) as ApiKeyAuthInterceptor).apiKeys[name] = apiKey;
+      (this.dio.interceptors.firstWhere(
+                    (element) => element is ApiKeyAuthInterceptor,
+                  )
+                  as ApiKeyAuthInterceptor)
+              .apiKeys[name] =
+          apiKey;
     }
   }
 

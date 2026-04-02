@@ -16,17 +16,20 @@ class _$AbonementDtoPageResult extends AbonementDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$AbonementDtoPageResult(
-          [void Function(AbonementDtoPageResultBuilder)? updates]) =>
-      (AbonementDtoPageResultBuilder()..update(updates))._build();
+  factory _$AbonementDtoPageResult([
+    void Function(AbonementDtoPageResultBuilder)? updates,
+  ]) => (AbonementDtoPageResultBuilder()..update(updates))._build();
 
-  _$AbonementDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$AbonementDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   AbonementDtoPageResult rebuild(
-          void Function(AbonementDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(AbonementDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   AbonementDtoPageResultBuilder toBuilder() =>
@@ -118,7 +121,8 @@ class AbonementDtoPageResultBuilder
   _$AbonementDtoPageResult _build() {
     _$AbonementDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$AbonementDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -132,7 +136,10 @@ class AbonementDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'AbonementDtoPageResult', _$failedField, e.toString());
+          r'AbonementDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

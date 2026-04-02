@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'pages/home_page.dart';
+import 'pages/api_demo_page.dart';
+import 'pages/about_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +33,12 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/api-demo': (context) => const ApiDemoPage(),
+        '/about': (context) => const AboutPage(),
+      },
     );
   }
 }

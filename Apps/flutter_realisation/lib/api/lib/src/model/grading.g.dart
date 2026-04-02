@@ -53,7 +53,7 @@ class _$GradingMeta {
   BuiltSet<Grading> get values => _$values;
 }
 
-abstract class _$GradingMixin {
+mixin _$GradingMixin {
   // ignore: non_constant_identifier_names
   _$GradingMeta get Grading => const _$GradingMeta();
 }
@@ -84,15 +84,20 @@ class _$GradingSerializer implements PrimitiveSerializer<Grading> {
   final String wireName = 'Grading';
 
   @override
-  Object serialize(Serializers serializers, Grading object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    Grading object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  Grading deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      Grading.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  Grading deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => Grading.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

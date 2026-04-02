@@ -16,17 +16,20 @@ class _$StudentRankDtoPageResult extends StudentRankDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$StudentRankDtoPageResult(
-          [void Function(StudentRankDtoPageResultBuilder)? updates]) =>
-      (StudentRankDtoPageResultBuilder()..update(updates))._build();
+  factory _$StudentRankDtoPageResult([
+    void Function(StudentRankDtoPageResultBuilder)? updates,
+  ]) => (StudentRankDtoPageResultBuilder()..update(updates))._build();
 
-  _$StudentRankDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$StudentRankDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   StudentRankDtoPageResult rebuild(
-          void Function(StudentRankDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(StudentRankDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   StudentRankDtoPageResultBuilder toBuilder() =>
@@ -119,7 +122,8 @@ class StudentRankDtoPageResultBuilder
   _$StudentRankDtoPageResult _build() {
     _$StudentRankDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$StudentRankDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -133,7 +137,10 @@ class StudentRankDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'StudentRankDtoPageResult', _$failedField, e.toString());
+          r'StudentRankDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

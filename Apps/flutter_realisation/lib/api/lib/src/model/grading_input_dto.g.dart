@@ -19,12 +19,12 @@ class _$GradingInputDto extends GradingInputDto {
   factory _$GradingInputDto([void Function(GradingInputDtoBuilder)? updates]) =>
       (GradingInputDtoBuilder()..update(updates))._build();
 
-  _$GradingInputDto._(
-      {this.homeworkGrade,
-      this.lessonActivityGrade,
-      this.repetitionOfMaterialGrade,
-      this.studyInitiativeGrade})
-      : super._();
+  _$GradingInputDto._({
+    this.homeworkGrade,
+    this.lessonActivityGrade,
+    this.repetitionOfMaterialGrade,
+    this.studyInitiativeGrade,
+  }) : super._();
   @override
   GradingInputDto rebuild(void Function(GradingInputDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -118,7 +118,8 @@ class GradingInputDtoBuilder
   GradingInputDto build() => _build();
 
   _$GradingInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$GradingInputDto._(
           homeworkGrade: homeworkGrade,
           lessonActivityGrade: lessonActivityGrade,

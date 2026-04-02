@@ -41,23 +41,23 @@ class _$CourseDto extends CourseDto {
   factory _$CourseDto([void Function(CourseDtoBuilder)? updates]) =>
       (CourseDtoBuilder()..update(updates))._build();
 
-  _$CourseDto._(
-      {required this.id,
-      this.name,
-      this.teacherName,
-      this.courseThemeName,
-      this.about,
-      required this.courseThemeId,
-      required this.teacherId,
-      required this.price,
-      required this.maxLessons,
-      required this.freeLessons,
-      this.teacherAbout,
-      required this.isActive,
-      required this.level,
-      this.rank,
-      required this.approveStatus})
-      : super._();
+  _$CourseDto._({
+    required this.id,
+    this.name,
+    this.teacherName,
+    this.courseThemeName,
+    this.about,
+    required this.courseThemeId,
+    required this.teacherId,
+    required this.price,
+    required this.maxLessons,
+    required this.freeLessons,
+    this.teacherAbout,
+    required this.isActive,
+    required this.level,
+    this.rank,
+    required this.approveStatus,
+  }) : super._();
   @override
   CourseDto rebuild(void Function(CourseDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -237,7 +237,8 @@ class CourseDtoBuilder implements Builder<CourseDto, CourseDtoBuilder> {
   CourseDto build() => _build();
 
   _$CourseDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$CourseDto._(
           id: BuiltValueNullFieldError.checkNotNull(id, r'CourseDto', 'id'),
           name: name,
@@ -245,23 +246,47 @@ class CourseDtoBuilder implements Builder<CourseDto, CourseDtoBuilder> {
           courseThemeName: courseThemeName,
           about: about,
           courseThemeId: BuiltValueNullFieldError.checkNotNull(
-              courseThemeId, r'CourseDto', 'courseThemeId'),
+            courseThemeId,
+            r'CourseDto',
+            'courseThemeId',
+          ),
           teacherId: BuiltValueNullFieldError.checkNotNull(
-              teacherId, r'CourseDto', 'teacherId'),
+            teacherId,
+            r'CourseDto',
+            'teacherId',
+          ),
           price: BuiltValueNullFieldError.checkNotNull(
-              price, r'CourseDto', 'price'),
+            price,
+            r'CourseDto',
+            'price',
+          ),
           maxLessons: BuiltValueNullFieldError.checkNotNull(
-              maxLessons, r'CourseDto', 'maxLessons'),
+            maxLessons,
+            r'CourseDto',
+            'maxLessons',
+          ),
           freeLessons: BuiltValueNullFieldError.checkNotNull(
-              freeLessons, r'CourseDto', 'freeLessons'),
+            freeLessons,
+            r'CourseDto',
+            'freeLessons',
+          ),
           teacherAbout: teacherAbout,
           isActive: BuiltValueNullFieldError.checkNotNull(
-              isActive, r'CourseDto', 'isActive'),
+            isActive,
+            r'CourseDto',
+            'isActive',
+          ),
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'CourseDto', 'level'),
+            level,
+            r'CourseDto',
+            'level',
+          ),
           rank: rank,
           approveStatus: BuiltValueNullFieldError.checkNotNull(
-              approveStatus, r'CourseDto', 'approveStatus'),
+            approveStatus,
+            r'CourseDto',
+            'approveStatus',
+          ),
         );
     replace(_$result);
     return _$result;

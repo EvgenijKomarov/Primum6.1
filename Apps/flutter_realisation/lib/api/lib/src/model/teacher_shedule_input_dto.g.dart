@@ -12,15 +12,15 @@ class _$TeacherSheduleInputDto extends TeacherSheduleInputDto {
   @override
   final DayOfWeek? dayOfWeek;
 
-  factory _$TeacherSheduleInputDto(
-          [void Function(TeacherSheduleInputDtoBuilder)? updates]) =>
-      (TeacherSheduleInputDtoBuilder()..update(updates))._build();
+  factory _$TeacherSheduleInputDto([
+    void Function(TeacherSheduleInputDtoBuilder)? updates,
+  ]) => (TeacherSheduleInputDtoBuilder()..update(updates))._build();
 
   _$TeacherSheduleInputDto._({this.time, this.dayOfWeek}) : super._();
   @override
   TeacherSheduleInputDto rebuild(
-          void Function(TeacherSheduleInputDtoBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(TeacherSheduleInputDtoBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   TeacherSheduleInputDtoBuilder toBuilder() =>
@@ -92,11 +92,8 @@ class TeacherSheduleInputDtoBuilder
   TeacherSheduleInputDto build() => _build();
 
   _$TeacherSheduleInputDto _build() {
-    final _$result = _$v ??
-        _$TeacherSheduleInputDto._(
-          time: time,
-          dayOfWeek: dayOfWeek,
-        );
+    final _$result =
+        _$v ?? _$TeacherSheduleInputDto._(time: time, dayOfWeek: dayOfWeek);
     replace(_$result);
     return _$result;
   }

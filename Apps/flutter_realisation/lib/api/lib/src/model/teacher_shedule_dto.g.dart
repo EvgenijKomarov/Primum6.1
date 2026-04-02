@@ -24,20 +24,20 @@ class _$TeacherSheduleDto extends TeacherSheduleDto {
   @override
   final int? courseId;
 
-  factory _$TeacherSheduleDto(
-          [void Function(TeacherSheduleDtoBuilder)? updates]) =>
-      (TeacherSheduleDtoBuilder()..update(updates))._build();
+  factory _$TeacherSheduleDto([
+    void Function(TeacherSheduleDtoBuilder)? updates,
+  ]) => (TeacherSheduleDtoBuilder()..update(updates))._build();
 
-  _$TeacherSheduleDto._(
-      {required this.id,
-      required this.dayOfWeek,
-      required this.time,
-      required this.isAvailable,
-      this.studentName,
-      this.studentId,
-      this.courseName,
-      this.courseId})
-      : super._();
+  _$TeacherSheduleDto._({
+    required this.id,
+    required this.dayOfWeek,
+    required this.time,
+    required this.isAvailable,
+    this.studentName,
+    this.studentId,
+    this.courseName,
+    this.courseId,
+  }) : super._();
   @override
   TeacherSheduleDto rebuild(void Function(TeacherSheduleDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -160,16 +160,29 @@ class TeacherSheduleDtoBuilder
   TeacherSheduleDto build() => _build();
 
   _$TeacherSheduleDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$TeacherSheduleDto._(
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'TeacherSheduleDto', 'id'),
+            id,
+            r'TeacherSheduleDto',
+            'id',
+          ),
           dayOfWeek: BuiltValueNullFieldError.checkNotNull(
-              dayOfWeek, r'TeacherSheduleDto', 'dayOfWeek'),
+            dayOfWeek,
+            r'TeacherSheduleDto',
+            'dayOfWeek',
+          ),
           time: BuiltValueNullFieldError.checkNotNull(
-              time, r'TeacherSheduleDto', 'time'),
+            time,
+            r'TeacherSheduleDto',
+            'time',
+          ),
           isAvailable: BuiltValueNullFieldError.checkNotNull(
-              isAvailable, r'TeacherSheduleDto', 'isAvailable'),
+            isAvailable,
+            r'TeacherSheduleDto',
+            'isAvailable',
+          ),
           studentName: studentName,
           studentId: studentId,
           courseName: courseName,

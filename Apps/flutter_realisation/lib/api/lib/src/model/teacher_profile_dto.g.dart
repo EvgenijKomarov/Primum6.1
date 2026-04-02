@@ -20,18 +20,18 @@ class _$TeacherProfileDto extends TeacherProfileDto {
   @override
   final String? rank;
 
-  factory _$TeacherProfileDto(
-          [void Function(TeacherProfileDtoBuilder)? updates]) =>
-      (TeacherProfileDtoBuilder()..update(updates))._build();
+  factory _$TeacherProfileDto([
+    void Function(TeacherProfileDtoBuilder)? updates,
+  ]) => (TeacherProfileDtoBuilder()..update(updates))._build();
 
-  _$TeacherProfileDto._(
-      {this.displayName,
-      this.about,
-      required this.userId,
-      required this.isAvailable,
-      required this.level,
-      this.rank})
-      : super._();
+  _$TeacherProfileDto._({
+    this.displayName,
+    this.about,
+    required this.userId,
+    required this.isAvailable,
+    required this.level,
+    this.rank,
+  }) : super._();
   @override
   TeacherProfileDto rebuild(void Function(TeacherProfileDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -138,16 +138,26 @@ class TeacherProfileDtoBuilder
   TeacherProfileDto build() => _build();
 
   _$TeacherProfileDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$TeacherProfileDto._(
           displayName: displayName,
           about: about,
           userId: BuiltValueNullFieldError.checkNotNull(
-              userId, r'TeacherProfileDto', 'userId'),
+            userId,
+            r'TeacherProfileDto',
+            'userId',
+          ),
           isAvailable: BuiltValueNullFieldError.checkNotNull(
-              isAvailable, r'TeacherProfileDto', 'isAvailable'),
+            isAvailable,
+            r'TeacherProfileDto',
+            'isAvailable',
+          ),
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'TeacherProfileDto', 'level'),
+            level,
+            r'TeacherProfileDto',
+            'level',
+          ),
           rank: rank,
         );
     replace(_$result);

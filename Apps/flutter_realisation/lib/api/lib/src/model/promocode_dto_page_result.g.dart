@@ -16,17 +16,20 @@ class _$PromocodeDtoPageResult extends PromocodeDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$PromocodeDtoPageResult(
-          [void Function(PromocodeDtoPageResultBuilder)? updates]) =>
-      (PromocodeDtoPageResultBuilder()..update(updates))._build();
+  factory _$PromocodeDtoPageResult([
+    void Function(PromocodeDtoPageResultBuilder)? updates,
+  ]) => (PromocodeDtoPageResultBuilder()..update(updates))._build();
 
-  _$PromocodeDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$PromocodeDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   PromocodeDtoPageResult rebuild(
-          void Function(PromocodeDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PromocodeDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PromocodeDtoPageResultBuilder toBuilder() =>
@@ -118,7 +121,8 @@ class PromocodeDtoPageResultBuilder
   _$PromocodeDtoPageResult _build() {
     _$PromocodeDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$PromocodeDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -132,7 +136,10 @@ class PromocodeDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'PromocodeDtoPageResult', _$failedField, e.toString());
+          r'PromocodeDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

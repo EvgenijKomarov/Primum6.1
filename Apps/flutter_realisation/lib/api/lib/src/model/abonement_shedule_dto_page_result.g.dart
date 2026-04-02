@@ -16,17 +16,20 @@ class _$AbonementSheduleDtoPageResult extends AbonementSheduleDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$AbonementSheduleDtoPageResult(
-          [void Function(AbonementSheduleDtoPageResultBuilder)? updates]) =>
-      (AbonementSheduleDtoPageResultBuilder()..update(updates))._build();
+  factory _$AbonementSheduleDtoPageResult([
+    void Function(AbonementSheduleDtoPageResultBuilder)? updates,
+  ]) => (AbonementSheduleDtoPageResultBuilder()..update(updates))._build();
 
-  _$AbonementSheduleDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$AbonementSheduleDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   AbonementSheduleDtoPageResult rebuild(
-          void Function(AbonementSheduleDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(AbonementSheduleDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   AbonementSheduleDtoPageResultBuilder toBuilder() =>
@@ -66,8 +69,10 @@ class _$AbonementSheduleDtoPageResult extends AbonementSheduleDtoPageResult {
 
 class AbonementSheduleDtoPageResultBuilder
     implements
-        Builder<AbonementSheduleDtoPageResult,
-            AbonementSheduleDtoPageResultBuilder> {
+        Builder<
+          AbonementSheduleDtoPageResult,
+          AbonementSheduleDtoPageResultBuilder
+        > {
   _$AbonementSheduleDtoPageResult? _$v;
 
   ListBuilder<AbonementSheduleDto>? _items;
@@ -120,7 +125,8 @@ class AbonementSheduleDtoPageResultBuilder
   _$AbonementSheduleDtoPageResult _build() {
     _$AbonementSheduleDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$AbonementSheduleDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -134,7 +140,10 @@ class AbonementSheduleDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'AbonementSheduleDtoPageResult', _$failedField, e.toString());
+          r'AbonementSheduleDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

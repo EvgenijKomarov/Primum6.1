@@ -16,17 +16,20 @@ class _$IncidentDecisionInputDto extends IncidentDecisionInputDto {
   @override
   final String? decisionExplanation;
 
-  factory _$IncidentDecisionInputDto(
-          [void Function(IncidentDecisionInputDtoBuilder)? updates]) =>
-      (IncidentDecisionInputDtoBuilder()..update(updates))._build();
+  factory _$IncidentDecisionInputDto([
+    void Function(IncidentDecisionInputDtoBuilder)? updates,
+  ]) => (IncidentDecisionInputDtoBuilder()..update(updates))._build();
 
-  _$IncidentDecisionInputDto._(
-      {this.objectId, this.meaning, this.decision, this.decisionExplanation})
-      : super._();
+  _$IncidentDecisionInputDto._({
+    this.objectId,
+    this.meaning,
+    this.decision,
+    this.decisionExplanation,
+  }) : super._();
   @override
   IncidentDecisionInputDto rebuild(
-          void Function(IncidentDecisionInputDtoBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IncidentDecisionInputDtoBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IncidentDecisionInputDtoBuilder toBuilder() =>
@@ -116,7 +119,8 @@ class IncidentDecisionInputDtoBuilder
   IncidentDecisionInputDto build() => _build();
 
   _$IncidentDecisionInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$IncidentDecisionInputDto._(
           objectId: objectId,
           meaning: meaning,

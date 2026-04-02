@@ -16,17 +16,20 @@ class _$TeacherRankDtoPageResult extends TeacherRankDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$TeacherRankDtoPageResult(
-          [void Function(TeacherRankDtoPageResultBuilder)? updates]) =>
-      (TeacherRankDtoPageResultBuilder()..update(updates))._build();
+  factory _$TeacherRankDtoPageResult([
+    void Function(TeacherRankDtoPageResultBuilder)? updates,
+  ]) => (TeacherRankDtoPageResultBuilder()..update(updates))._build();
 
-  _$TeacherRankDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$TeacherRankDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   TeacherRankDtoPageResult rebuild(
-          void Function(TeacherRankDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(TeacherRankDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   TeacherRankDtoPageResultBuilder toBuilder() =>
@@ -119,7 +122,8 @@ class TeacherRankDtoPageResultBuilder
   _$TeacherRankDtoPageResult _build() {
     _$TeacherRankDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$TeacherRankDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -133,7 +137,10 @@ class TeacherRankDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'TeacherRankDtoPageResult', _$failedField, e.toString());
+          r'TeacherRankDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

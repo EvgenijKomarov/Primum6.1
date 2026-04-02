@@ -58,7 +58,7 @@ class _$DayOfWeekMeta {
   BuiltSet<DayOfWeek> get values => _$values;
 }
 
-abstract class _$DayOfWeekMixin {
+mixin _$DayOfWeekMixin {
   // ignore: non_constant_identifier_names
   _$DayOfWeekMeta get DayOfWeek => const _$DayOfWeekMeta();
 }
@@ -91,15 +91,20 @@ class _$DayOfWeekSerializer implements PrimitiveSerializer<DayOfWeek> {
   final String wireName = 'DayOfWeek';
 
   @override
-  Object serialize(Serializers serializers, DayOfWeek object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    DayOfWeek object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  DayOfWeek deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      DayOfWeek.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  DayOfWeek deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => DayOfWeek.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -20,18 +20,18 @@ class _$StudentProfileDto extends StudentProfileDto {
   @override
   final String? rank;
 
-  factory _$StudentProfileDto(
-          [void Function(StudentProfileDtoBuilder)? updates]) =>
-      (StudentProfileDtoBuilder()..update(updates))._build();
+  factory _$StudentProfileDto([
+    void Function(StudentProfileDtoBuilder)? updates,
+  ]) => (StudentProfileDtoBuilder()..update(updates))._build();
 
-  _$StudentProfileDto._(
-      {this.displayName,
-      required this.userId,
-      required this.coins,
-      this.rating,
-      required this.level,
-      this.rank})
-      : super._();
+  _$StudentProfileDto._({
+    this.displayName,
+    required this.userId,
+    required this.coins,
+    this.rating,
+    required this.level,
+    this.rank,
+  }) : super._();
   @override
   StudentProfileDto rebuild(void Function(StudentProfileDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -138,16 +138,26 @@ class StudentProfileDtoBuilder
   StudentProfileDto build() => _build();
 
   _$StudentProfileDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$StudentProfileDto._(
           displayName: displayName,
           userId: BuiltValueNullFieldError.checkNotNull(
-              userId, r'StudentProfileDto', 'userId'),
+            userId,
+            r'StudentProfileDto',
+            'userId',
+          ),
           coins: BuiltValueNullFieldError.checkNotNull(
-              coins, r'StudentProfileDto', 'coins'),
+            coins,
+            r'StudentProfileDto',
+            'coins',
+          ),
           rating: rating,
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'StudentProfileDto', 'level'),
+            level,
+            r'StudentProfileDto',
+            'level',
+          ),
           rank: rank,
         );
     replace(_$result);

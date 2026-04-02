@@ -16,17 +16,20 @@ class _$IncidentLogDtoPageResult extends IncidentLogDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$IncidentLogDtoPageResult(
-          [void Function(IncidentLogDtoPageResultBuilder)? updates]) =>
-      (IncidentLogDtoPageResultBuilder()..update(updates))._build();
+  factory _$IncidentLogDtoPageResult([
+    void Function(IncidentLogDtoPageResultBuilder)? updates,
+  ]) => (IncidentLogDtoPageResultBuilder()..update(updates))._build();
 
-  _$IncidentLogDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$IncidentLogDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   IncidentLogDtoPageResult rebuild(
-          void Function(IncidentLogDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IncidentLogDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IncidentLogDtoPageResultBuilder toBuilder() =>
@@ -119,7 +122,8 @@ class IncidentLogDtoPageResultBuilder
   _$IncidentLogDtoPageResult _build() {
     _$IncidentLogDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$IncidentLogDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -133,7 +137,10 @@ class IncidentLogDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'IncidentLogDtoPageResult', _$failedField, e.toString());
+          r'IncidentLogDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -35,20 +35,20 @@ class _$AbonementDto extends AbonementDto {
   factory _$AbonementDto([void Function(AbonementDtoBuilder)? updates]) =>
       (AbonementDtoBuilder()..update(updates))._build();
 
-  _$AbonementDto._(
-      {this.studentDisplayName,
-      required this.studentId,
-      this.teacherDisplayName,
-      required this.teacherId,
-      this.courseName,
-      this.courseId,
-      this.courseThemeName,
-      required this.id,
-      required this.courseThemeId,
-      required this.pricePerLesson,
-      this.rating,
-      required this.abonementStatus})
-      : super._();
+  _$AbonementDto._({
+    this.studentDisplayName,
+    required this.studentId,
+    this.teacherDisplayName,
+    required this.teacherId,
+    this.courseName,
+    this.courseId,
+    this.courseThemeName,
+    required this.id,
+    required this.courseThemeId,
+    required this.pricePerLesson,
+    this.rating,
+    required this.abonementStatus,
+  }) : super._();
   @override
   AbonementDto rebuild(void Function(AbonementDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -208,25 +208,41 @@ class AbonementDtoBuilder
   AbonementDto build() => _build();
 
   _$AbonementDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$AbonementDto._(
           studentDisplayName: studentDisplayName,
           studentId: BuiltValueNullFieldError.checkNotNull(
-              studentId, r'AbonementDto', 'studentId'),
+            studentId,
+            r'AbonementDto',
+            'studentId',
+          ),
           teacherDisplayName: teacherDisplayName,
           teacherId: BuiltValueNullFieldError.checkNotNull(
-              teacherId, r'AbonementDto', 'teacherId'),
+            teacherId,
+            r'AbonementDto',
+            'teacherId',
+          ),
           courseName: courseName,
           courseId: courseId,
           courseThemeName: courseThemeName,
           id: BuiltValueNullFieldError.checkNotNull(id, r'AbonementDto', 'id'),
           courseThemeId: BuiltValueNullFieldError.checkNotNull(
-              courseThemeId, r'AbonementDto', 'courseThemeId'),
+            courseThemeId,
+            r'AbonementDto',
+            'courseThemeId',
+          ),
           pricePerLesson: BuiltValueNullFieldError.checkNotNull(
-              pricePerLesson, r'AbonementDto', 'pricePerLesson'),
+            pricePerLesson,
+            r'AbonementDto',
+            'pricePerLesson',
+          ),
           rating: rating,
           abonementStatus: BuiltValueNullFieldError.checkNotNull(
-              abonementStatus, r'AbonementDto', 'abonementStatus'),
+            abonementStatus,
+            r'AbonementDto',
+            'abonementStatus',
+          ),
         );
     replace(_$result);
     return _$result;

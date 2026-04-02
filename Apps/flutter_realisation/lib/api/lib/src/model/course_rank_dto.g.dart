@@ -19,12 +19,12 @@ class _$CourseRankDto extends CourseRankDto {
   factory _$CourseRankDto([void Function(CourseRankDtoBuilder)? updates]) =>
       (CourseRankDtoBuilder()..update(updates))._build();
 
-  _$CourseRankDto._(
-      {required this.id,
-      required this.level,
-      this.rank,
-      required this.requiredExperience})
-      : super._();
+  _$CourseRankDto._({
+    required this.id,
+    required this.level,
+    this.rank,
+    required this.requiredExperience,
+  }) : super._();
   @override
   CourseRankDto rebuild(void Function(CourseRankDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -115,14 +115,21 @@ class CourseRankDtoBuilder
   CourseRankDto build() => _build();
 
   _$CourseRankDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$CourseRankDto._(
           id: BuiltValueNullFieldError.checkNotNull(id, r'CourseRankDto', 'id'),
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'CourseRankDto', 'level'),
+            level,
+            r'CourseRankDto',
+            'level',
+          ),
           rank: rank,
           requiredExperience: BuiltValueNullFieldError.checkNotNull(
-              requiredExperience, r'CourseRankDto', 'requiredExperience'),
+            requiredExperience,
+            r'CourseRankDto',
+            'requiredExperience',
+          ),
         );
     replace(_$result);
     return _$result;

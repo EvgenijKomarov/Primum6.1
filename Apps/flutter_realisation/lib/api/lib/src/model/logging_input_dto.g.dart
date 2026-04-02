@@ -89,11 +89,8 @@ class LoggingInputDtoBuilder
   LoggingInputDto build() => _build();
 
   _$LoggingInputDto _build() {
-    final _$result = _$v ??
-        _$LoggingInputDto._(
-          email: email,
-          password: password,
-        );
+    final _$result =
+        _$v ?? _$LoggingInputDto._(email: email, password: password);
     replace(_$result);
     return _$result;
   }

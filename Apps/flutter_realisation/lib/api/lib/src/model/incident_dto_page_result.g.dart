@@ -16,17 +16,20 @@ class _$IncidentDtoPageResult extends IncidentDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$IncidentDtoPageResult(
-          [void Function(IncidentDtoPageResultBuilder)? updates]) =>
-      (IncidentDtoPageResultBuilder()..update(updates))._build();
+  factory _$IncidentDtoPageResult([
+    void Function(IncidentDtoPageResultBuilder)? updates,
+  ]) => (IncidentDtoPageResultBuilder()..update(updates))._build();
 
-  _$IncidentDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$IncidentDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   IncidentDtoPageResult rebuild(
-          void Function(IncidentDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IncidentDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IncidentDtoPageResultBuilder toBuilder() =>
@@ -118,7 +121,8 @@ class IncidentDtoPageResultBuilder
   _$IncidentDtoPageResult _build() {
     _$IncidentDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$IncidentDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -132,7 +136,10 @@ class IncidentDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'IncidentDtoPageResult', _$failedField, e.toString());
+          r'IncidentDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

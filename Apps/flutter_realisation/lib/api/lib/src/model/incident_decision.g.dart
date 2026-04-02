@@ -32,15 +32,16 @@ IncidentDecision _$valueOf(String name) {
   }
 }
 
-final BuiltSet<IncidentDecision> _$values =
-    BuiltSet<IncidentDecision>(const <IncidentDecision>[
-  _$number0,
-  _$number1,
-  _$number2,
-  _$number3,
-  _$number4,
-  _$number5,
-]);
+final BuiltSet<IncidentDecision> _$values = BuiltSet<IncidentDecision>(
+  const <IncidentDecision>[
+    _$number0,
+    _$number1,
+    _$number2,
+    _$number3,
+    _$number4,
+    _$number5,
+  ],
+);
 
 class _$IncidentDecisionMeta {
   const _$IncidentDecisionMeta();
@@ -54,7 +55,7 @@ class _$IncidentDecisionMeta {
   BuiltSet<IncidentDecision> get values => _$values;
 }
 
-abstract class _$IncidentDecisionMixin {
+mixin _$IncidentDecisionMixin {
   // ignore: non_constant_identifier_names
   _$IncidentDecisionMeta get IncidentDecision => const _$IncidentDecisionMeta();
 }
@@ -87,15 +88,20 @@ class _$IncidentDecisionSerializer
   final String wireName = 'IncidentDecision';
 
   @override
-  Object serialize(Serializers serializers, IncidentDecision object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    IncidentDecision object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  IncidentDecision deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      IncidentDecision.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  IncidentDecision deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => IncidentDecision.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

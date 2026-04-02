@@ -20,11 +20,9 @@ AbonementInputStatus _$valueOf(String name) {
   }
 }
 
-final BuiltSet<AbonementInputStatus> _$values =
-    BuiltSet<AbonementInputStatus>(const <AbonementInputStatus>[
-  _$number0,
-  _$number1,
-]);
+final BuiltSet<AbonementInputStatus> _$values = BuiltSet<AbonementInputStatus>(
+  const <AbonementInputStatus>[_$number0, _$number1],
+);
 
 class _$AbonementInputStatusMeta {
   const _$AbonementInputStatusMeta();
@@ -34,7 +32,7 @@ class _$AbonementInputStatusMeta {
   BuiltSet<AbonementInputStatus> get values => _$values;
 }
 
-abstract class _$AbonementInputStatusMixin {
+mixin _$AbonementInputStatusMixin {
   // ignore: non_constant_identifier_names
   _$AbonementInputStatusMeta get AbonementInputStatus =>
       const _$AbonementInputStatusMeta();
@@ -60,15 +58,20 @@ class _$AbonementInputStatusSerializer
   final String wireName = 'AbonementInputStatus';
 
   @override
-  Object serialize(Serializers serializers, AbonementInputStatus object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    AbonementInputStatus object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  AbonementInputStatus deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      AbonementInputStatus.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  AbonementInputStatus deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => AbonementInputStatus.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

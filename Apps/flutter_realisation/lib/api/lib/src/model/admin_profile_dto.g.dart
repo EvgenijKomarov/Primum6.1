@@ -19,9 +19,12 @@ class _$AdminProfileDto extends AdminProfileDto {
   factory _$AdminProfileDto([void Function(AdminProfileDtoBuilder)? updates]) =>
       (AdminProfileDtoBuilder()..update(updates))._build();
 
-  _$AdminProfileDto._(
-      {this.displayName, required this.userId, this.status, this.permissions})
-      : super._();
+  _$AdminProfileDto._({
+    this.displayName,
+    required this.userId,
+    this.status,
+    this.permissions,
+  }) : super._();
   @override
   AdminProfileDto rebuild(void Function(AdminProfileDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -115,11 +118,15 @@ class AdminProfileDtoBuilder
   _$AdminProfileDto _build() {
     _$AdminProfileDto _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$AdminProfileDto._(
             displayName: displayName,
             userId: BuiltValueNullFieldError.checkNotNull(
-                userId, r'AdminProfileDto', 'userId'),
+              userId,
+              r'AdminProfileDto',
+              'userId',
+            ),
             status: status,
             permissions: _permissions?.build(),
           );
@@ -130,7 +137,10 @@ class AdminProfileDtoBuilder
         _permissions?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'AdminProfileDto', _$failedField, e.toString());
+          r'AdminProfileDto',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -23,14 +23,14 @@ class _$CourseInputDto extends CourseInputDto {
   factory _$CourseInputDto([void Function(CourseInputDtoBuilder)? updates]) =>
       (CourseInputDtoBuilder()..update(updates))._build();
 
-  _$CourseInputDto._(
-      {this.name,
-      this.description,
-      this.price,
-      this.freeLessons,
-      this.maxLessons,
-      this.courseThemeId})
-      : super._();
+  _$CourseInputDto._({
+    this.name,
+    this.description,
+    this.price,
+    this.freeLessons,
+    this.maxLessons,
+    this.courseThemeId,
+  }) : super._();
   @override
   CourseInputDto rebuild(void Function(CourseInputDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -137,7 +137,8 @@ class CourseInputDtoBuilder
   CourseInputDto build() => _build();
 
   _$CourseInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$CourseInputDto._(
           name: name,
           description: description,

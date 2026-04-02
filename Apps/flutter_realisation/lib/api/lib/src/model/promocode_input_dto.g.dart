@@ -16,13 +16,16 @@ class _$PromocodeInputDto extends PromocodeInputDto {
   @override
   final String? description;
 
-  factory _$PromocodeInputDto(
-          [void Function(PromocodeInputDtoBuilder)? updates]) =>
-      (PromocodeInputDtoBuilder()..update(updates))._build();
+  factory _$PromocodeInputDto([
+    void Function(PromocodeInputDtoBuilder)? updates,
+  ]) => (PromocodeInputDtoBuilder()..update(updates))._build();
 
-  _$PromocodeInputDto._(
-      {this.code, required this.coinsPrice, this.title, this.description})
-      : super._();
+  _$PromocodeInputDto._({
+    this.code,
+    required this.coinsPrice,
+    this.title,
+    this.description,
+  }) : super._();
   @override
   PromocodeInputDto rebuild(void Function(PromocodeInputDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -113,11 +116,15 @@ class PromocodeInputDtoBuilder
   PromocodeInputDto build() => _build();
 
   _$PromocodeInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$PromocodeInputDto._(
           code: code,
           coinsPrice: BuiltValueNullFieldError.checkNotNull(
-              coinsPrice, r'PromocodeInputDto', 'coinsPrice'),
+            coinsPrice,
+            r'PromocodeInputDto',
+            'coinsPrice',
+          ),
           title: title,
           description: description,
         );

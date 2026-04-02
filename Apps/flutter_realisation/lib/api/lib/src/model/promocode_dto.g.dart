@@ -25,15 +25,15 @@ class _$PromocodeDto extends PromocodeDto {
   factory _$PromocodeDto([void Function(PromocodeDtoBuilder)? updates]) =>
       (PromocodeDtoBuilder()..update(updates))._build();
 
-  _$PromocodeDto._(
-      {required this.id,
-      this.studentId,
-      this.code,
-      required this.coinsPrice,
-      this.title,
-      this.description,
-      required this.isAvailable})
-      : super._();
+  _$PromocodeDto._({
+    required this.id,
+    this.studentId,
+    this.code,
+    required this.coinsPrice,
+    this.title,
+    this.description,
+    required this.isAvailable,
+  }) : super._();
   @override
   PromocodeDto rebuild(void Function(PromocodeDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -147,17 +147,24 @@ class PromocodeDtoBuilder
   PromocodeDto build() => _build();
 
   _$PromocodeDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$PromocodeDto._(
           id: BuiltValueNullFieldError.checkNotNull(id, r'PromocodeDto', 'id'),
           studentId: studentId,
           code: code,
           coinsPrice: BuiltValueNullFieldError.checkNotNull(
-              coinsPrice, r'PromocodeDto', 'coinsPrice'),
+            coinsPrice,
+            r'PromocodeDto',
+            'coinsPrice',
+          ),
           title: title,
           description: description,
           isAvailable: BuiltValueNullFieldError.checkNotNull(
-              isAvailable, r'PromocodeDto', 'isAvailable'),
+            isAvailable,
+            r'PromocodeDto',
+            'isAvailable',
+          ),
         );
     replace(_$result);
     return _$result;

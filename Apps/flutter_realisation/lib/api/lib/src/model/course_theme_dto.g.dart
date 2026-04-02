@@ -18,7 +18,7 @@ class _$CourseThemeDto extends CourseThemeDto {
       (CourseThemeDtoBuilder()..update(updates))._build();
 
   _$CourseThemeDto._({required this.id, this.themeName, required this.isActive})
-      : super._();
+    : super._();
   @override
   CourseThemeDto rebuild(void Function(CourseThemeDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -100,13 +100,20 @@ class CourseThemeDtoBuilder
   CourseThemeDto build() => _build();
 
   _$CourseThemeDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$CourseThemeDto._(
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'CourseThemeDto', 'id'),
+            id,
+            r'CourseThemeDto',
+            'id',
+          ),
           themeName: themeName,
           isActive: BuiltValueNullFieldError.checkNotNull(
-              isActive, r'CourseThemeDto', 'isActive'),
+            isActive,
+            r'CourseThemeDto',
+            'isActive',
+          ),
         );
     replace(_$result);
     return _$result;

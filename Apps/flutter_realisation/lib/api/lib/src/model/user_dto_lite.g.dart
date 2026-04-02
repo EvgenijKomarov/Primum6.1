@@ -29,17 +29,17 @@ class _$UserDtoLite extends UserDtoLite {
   factory _$UserDtoLite([void Function(UserDtoLiteBuilder)? updates]) =>
       (UserDtoLiteBuilder()..update(updates))._build();
 
-  _$UserDtoLite._(
-      {required this.id,
-      this.name,
-      this.surname,
-      this.patronymic,
-      this.displayName,
-      this.isApprovedStudent,
-      this.isApprovedTeacher,
-      this.isAdmin,
-      required this.isAvailable})
-      : super._();
+  _$UserDtoLite._({
+    required this.id,
+    this.name,
+    this.surname,
+    this.patronymic,
+    this.displayName,
+    this.isApprovedStudent,
+    this.isApprovedTeacher,
+    this.isAdmin,
+    required this.isAvailable,
+  }) : super._();
   @override
   UserDtoLite rebuild(void Function(UserDtoLiteBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -170,7 +170,8 @@ class UserDtoLiteBuilder implements Builder<UserDtoLite, UserDtoLiteBuilder> {
   UserDtoLite build() => _build();
 
   _$UserDtoLite _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$UserDtoLite._(
           id: BuiltValueNullFieldError.checkNotNull(id, r'UserDtoLite', 'id'),
           name: name,
@@ -181,7 +182,10 @@ class UserDtoLiteBuilder implements Builder<UserDtoLite, UserDtoLiteBuilder> {
           isApprovedTeacher: isApprovedTeacher,
           isAdmin: isAdmin,
           isAvailable: BuiltValueNullFieldError.checkNotNull(
-              isAvailable, r'UserDtoLite', 'isAvailable'),
+            isAvailable,
+            r'UserDtoLite',
+            'isAvailable',
+          ),
         );
     replace(_$result);
     return _$result;

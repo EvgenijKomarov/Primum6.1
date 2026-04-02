@@ -22,23 +22,23 @@ class _$AbonementSheduleDto extends AbonementSheduleDto {
   @override
   final int id;
 
-  factory _$AbonementSheduleDto(
-          [void Function(AbonementSheduleDtoBuilder)? updates]) =>
-      (AbonementSheduleDtoBuilder()..update(updates))._build();
+  factory _$AbonementSheduleDto([
+    void Function(AbonementSheduleDtoBuilder)? updates,
+  ]) => (AbonementSheduleDtoBuilder()..update(updates))._build();
 
-  _$AbonementSheduleDto._(
-      {required this.dayOfWeek,
-      required this.time,
-      this.courseName,
-      required this.courseId,
-      this.teacherDisplayName,
-      required this.teacherId,
-      required this.id})
-      : super._();
+  _$AbonementSheduleDto._({
+    required this.dayOfWeek,
+    required this.time,
+    this.courseName,
+    required this.courseId,
+    this.teacherDisplayName,
+    required this.teacherId,
+    required this.id,
+  }) : super._();
   @override
   AbonementSheduleDto rebuild(
-          void Function(AbonementSheduleDtoBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(AbonementSheduleDtoBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   AbonementSheduleDtoBuilder toBuilder() =>
@@ -151,20 +151,36 @@ class AbonementSheduleDtoBuilder
   AbonementSheduleDto build() => _build();
 
   _$AbonementSheduleDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$AbonementSheduleDto._(
           dayOfWeek: BuiltValueNullFieldError.checkNotNull(
-              dayOfWeek, r'AbonementSheduleDto', 'dayOfWeek'),
+            dayOfWeek,
+            r'AbonementSheduleDto',
+            'dayOfWeek',
+          ),
           time: BuiltValueNullFieldError.checkNotNull(
-              time, r'AbonementSheduleDto', 'time'),
+            time,
+            r'AbonementSheduleDto',
+            'time',
+          ),
           courseName: courseName,
           courseId: BuiltValueNullFieldError.checkNotNull(
-              courseId, r'AbonementSheduleDto', 'courseId'),
+            courseId,
+            r'AbonementSheduleDto',
+            'courseId',
+          ),
           teacherDisplayName: teacherDisplayName,
           teacherId: BuiltValueNullFieldError.checkNotNull(
-              teacherId, r'AbonementSheduleDto', 'teacherId'),
+            teacherId,
+            r'AbonementSheduleDto',
+            'teacherId',
+          ),
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'AbonementSheduleDto', 'id'),
+            id,
+            r'AbonementSheduleDto',
+            'id',
+          ),
         );
     replace(_$result);
     return _$result;

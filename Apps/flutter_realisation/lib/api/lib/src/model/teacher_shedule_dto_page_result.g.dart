@@ -16,17 +16,20 @@ class _$TeacherSheduleDtoPageResult extends TeacherSheduleDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$TeacherSheduleDtoPageResult(
-          [void Function(TeacherSheduleDtoPageResultBuilder)? updates]) =>
-      (TeacherSheduleDtoPageResultBuilder()..update(updates))._build();
+  factory _$TeacherSheduleDtoPageResult([
+    void Function(TeacherSheduleDtoPageResultBuilder)? updates,
+  ]) => (TeacherSheduleDtoPageResultBuilder()..update(updates))._build();
 
-  _$TeacherSheduleDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$TeacherSheduleDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   TeacherSheduleDtoPageResult rebuild(
-          void Function(TeacherSheduleDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(TeacherSheduleDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   TeacherSheduleDtoPageResultBuilder toBuilder() =>
@@ -66,8 +69,10 @@ class _$TeacherSheduleDtoPageResult extends TeacherSheduleDtoPageResult {
 
 class TeacherSheduleDtoPageResultBuilder
     implements
-        Builder<TeacherSheduleDtoPageResult,
-            TeacherSheduleDtoPageResultBuilder> {
+        Builder<
+          TeacherSheduleDtoPageResult,
+          TeacherSheduleDtoPageResultBuilder
+        > {
   _$TeacherSheduleDtoPageResult? _$v;
 
   ListBuilder<TeacherSheduleDto>? _items;
@@ -120,7 +125,8 @@ class TeacherSheduleDtoPageResultBuilder
   _$TeacherSheduleDtoPageResult _build() {
     _$TeacherSheduleDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$TeacherSheduleDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -134,7 +140,10 @@ class TeacherSheduleDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'TeacherSheduleDtoPageResult', _$failedField, e.toString());
+          r'TeacherSheduleDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

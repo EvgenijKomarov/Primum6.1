@@ -26,13 +26,9 @@ ApproveStatus _$valueOf(String name) {
   }
 }
 
-final BuiltSet<ApproveStatus> _$values =
-    BuiltSet<ApproveStatus>(const <ApproveStatus>[
-  _$number0,
-  _$number1,
-  _$number2,
-  _$number3,
-]);
+final BuiltSet<ApproveStatus> _$values = BuiltSet<ApproveStatus>(
+  const <ApproveStatus>[_$number0, _$number1, _$number2, _$number3],
+);
 
 class _$ApproveStatusMeta {
   const _$ApproveStatusMeta();
@@ -44,7 +40,7 @@ class _$ApproveStatusMeta {
   BuiltSet<ApproveStatus> get values => _$values;
 }
 
-abstract class _$ApproveStatusMixin {
+mixin _$ApproveStatusMixin {
   // ignore: non_constant_identifier_names
   _$ApproveStatusMeta get ApproveStatus => const _$ApproveStatusMeta();
 }
@@ -72,15 +68,20 @@ class _$ApproveStatusSerializer implements PrimitiveSerializer<ApproveStatus> {
   final String wireName = 'ApproveStatus';
 
   @override
-  Object serialize(Serializers serializers, ApproveStatus object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    ApproveStatus object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  ApproveStatus deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      ApproveStatus.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  ApproveStatus deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => ApproveStatus.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

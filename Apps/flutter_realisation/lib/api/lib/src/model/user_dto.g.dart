@@ -35,20 +35,20 @@ class _$UserDto extends UserDto {
   factory _$UserDto([void Function(UserDtoBuilder)? updates]) =>
       (UserDtoBuilder()..update(updates))._build();
 
-  _$UserDto._(
-      {required this.id,
-      this.name,
-      this.surname,
-      this.patronymic,
-      this.displayName,
-      required this.cash,
-      required this.isBanned,
-      required this.mailConfirmed,
-      this.isApprovedStudent,
-      this.isApprovedTeacher,
-      this.isAdmin,
-      required this.isAvailable})
-      : super._();
+  _$UserDto._({
+    required this.id,
+    this.name,
+    this.surname,
+    this.patronymic,
+    this.displayName,
+    required this.cash,
+    required this.isBanned,
+    required this.mailConfirmed,
+    this.isApprovedStudent,
+    this.isApprovedTeacher,
+    this.isAdmin,
+    required this.isAvailable,
+  }) : super._();
   @override
   UserDto rebuild(void Function(UserDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -204,7 +204,8 @@ class UserDtoBuilder implements Builder<UserDto, UserDtoBuilder> {
   UserDto build() => _build();
 
   _$UserDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$UserDto._(
           id: BuiltValueNullFieldError.checkNotNull(id, r'UserDto', 'id'),
           name: name,
@@ -213,14 +214,23 @@ class UserDtoBuilder implements Builder<UserDto, UserDtoBuilder> {
           displayName: displayName,
           cash: BuiltValueNullFieldError.checkNotNull(cash, r'UserDto', 'cash'),
           isBanned: BuiltValueNullFieldError.checkNotNull(
-              isBanned, r'UserDto', 'isBanned'),
+            isBanned,
+            r'UserDto',
+            'isBanned',
+          ),
           mailConfirmed: BuiltValueNullFieldError.checkNotNull(
-              mailConfirmed, r'UserDto', 'mailConfirmed'),
+            mailConfirmed,
+            r'UserDto',
+            'mailConfirmed',
+          ),
           isApprovedStudent: isApprovedStudent,
           isApprovedTeacher: isApprovedTeacher,
           isAdmin: isAdmin,
           isAvailable: BuiltValueNullFieldError.checkNotNull(
-              isAvailable, r'UserDto', 'isAvailable'),
+            isAvailable,
+            r'UserDto',
+            'isAvailable',
+          ),
         );
     replace(_$result);
     return _$result;

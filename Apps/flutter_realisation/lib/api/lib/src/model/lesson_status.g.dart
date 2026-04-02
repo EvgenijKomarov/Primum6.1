@@ -29,14 +29,9 @@ LessonStatus _$valueOf(String name) {
   }
 }
 
-final BuiltSet<LessonStatus> _$values =
-    BuiltSet<LessonStatus>(const <LessonStatus>[
-  _$number0,
-  _$number1,
-  _$number2,
-  _$number3,
-  _$number4,
-]);
+final BuiltSet<LessonStatus> _$values = BuiltSet<LessonStatus>(
+  const <LessonStatus>[_$number0, _$number1, _$number2, _$number3, _$number4],
+);
 
 class _$LessonStatusMeta {
   const _$LessonStatusMeta();
@@ -49,7 +44,7 @@ class _$LessonStatusMeta {
   BuiltSet<LessonStatus> get values => _$values;
 }
 
-abstract class _$LessonStatusMixin {
+mixin _$LessonStatusMixin {
   // ignore: non_constant_identifier_names
   _$LessonStatusMeta get LessonStatus => const _$LessonStatusMeta();
 }
@@ -78,15 +73,20 @@ class _$LessonStatusSerializer implements PrimitiveSerializer<LessonStatus> {
   final String wireName = 'LessonStatus';
 
   @override
-  Object serialize(Serializers serializers, LessonStatus object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    LessonStatus object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  LessonStatus deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      LessonStatus.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  LessonStatus deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => LessonStatus.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -16,17 +16,20 @@ class _$AdminProfileDtoPageResult extends AdminProfileDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$AdminProfileDtoPageResult(
-          [void Function(AdminProfileDtoPageResultBuilder)? updates]) =>
-      (AdminProfileDtoPageResultBuilder()..update(updates))._build();
+  factory _$AdminProfileDtoPageResult([
+    void Function(AdminProfileDtoPageResultBuilder)? updates,
+  ]) => (AdminProfileDtoPageResultBuilder()..update(updates))._build();
 
-  _$AdminProfileDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$AdminProfileDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   AdminProfileDtoPageResult rebuild(
-          void Function(AdminProfileDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(AdminProfileDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   AdminProfileDtoPageResultBuilder toBuilder() =>
@@ -119,7 +122,8 @@ class AdminProfileDtoPageResultBuilder
   _$AdminProfileDtoPageResult _build() {
     _$AdminProfileDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$AdminProfileDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -133,7 +137,10 @@ class AdminProfileDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'AdminProfileDtoPageResult', _$failedField, e.toString());
+          r'AdminProfileDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -21,13 +21,13 @@ class _$TeacherRankDto extends TeacherRankDto {
   factory _$TeacherRankDto([void Function(TeacherRankDtoBuilder)? updates]) =>
       (TeacherRankDtoBuilder()..update(updates))._build();
 
-  _$TeacherRankDto._(
-      {required this.id,
-      required this.level,
-      this.rank,
-      required this.requiredExperience,
-      required this.earningMultiplier})
-      : super._();
+  _$TeacherRankDto._({
+    required this.id,
+    required this.level,
+    this.rank,
+    required this.requiredExperience,
+    required this.earningMultiplier,
+  }) : super._();
   @override
   TeacherRankDto rebuild(void Function(TeacherRankDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -127,17 +127,30 @@ class TeacherRankDtoBuilder
   TeacherRankDto build() => _build();
 
   _$TeacherRankDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$TeacherRankDto._(
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'TeacherRankDto', 'id'),
+            id,
+            r'TeacherRankDto',
+            'id',
+          ),
           level: BuiltValueNullFieldError.checkNotNull(
-              level, r'TeacherRankDto', 'level'),
+            level,
+            r'TeacherRankDto',
+            'level',
+          ),
           rank: rank,
           requiredExperience: BuiltValueNullFieldError.checkNotNull(
-              requiredExperience, r'TeacherRankDto', 'requiredExperience'),
+            requiredExperience,
+            r'TeacherRankDto',
+            'requiredExperience',
+          ),
           earningMultiplier: BuiltValueNullFieldError.checkNotNull(
-              earningMultiplier, r'TeacherRankDto', 'earningMultiplier'),
+            earningMultiplier,
+            r'TeacherRankDto',
+            'earningMultiplier',
+          ),
         );
     replace(_$result);
     return _$result;

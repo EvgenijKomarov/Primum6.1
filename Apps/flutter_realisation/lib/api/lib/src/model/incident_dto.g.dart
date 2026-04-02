@@ -25,15 +25,15 @@ class _$IncidentDto extends IncidentDto {
   factory _$IncidentDto([void Function(IncidentDtoBuilder)? updates]) =>
       (IncidentDtoBuilder()..update(updates))._build();
 
-  _$IncidentDto._(
-      {required this.objectId,
-      this.commonInfo,
-      required this.status,
-      required this.meaning,
-      required this.permissionBy,
-      this.decisions,
-      this.linkedLogs})
-      : super._();
+  _$IncidentDto._({
+    required this.objectId,
+    this.commonInfo,
+    required this.status,
+    required this.meaning,
+    required this.permissionBy,
+    this.decisions,
+    this.linkedLogs,
+  }) : super._();
   @override
   IncidentDto rebuild(void Function(IncidentDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -153,17 +153,30 @@ class IncidentDtoBuilder implements Builder<IncidentDto, IncidentDtoBuilder> {
   _$IncidentDto _build() {
     _$IncidentDto _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$IncidentDto._(
             objectId: BuiltValueNullFieldError.checkNotNull(
-                objectId, r'IncidentDto', 'objectId'),
+              objectId,
+              r'IncidentDto',
+              'objectId',
+            ),
             commonInfo: commonInfo,
             status: BuiltValueNullFieldError.checkNotNull(
-                status, r'IncidentDto', 'status'),
+              status,
+              r'IncidentDto',
+              'status',
+            ),
             meaning: BuiltValueNullFieldError.checkNotNull(
-                meaning, r'IncidentDto', 'meaning'),
+              meaning,
+              r'IncidentDto',
+              'meaning',
+            ),
             permissionBy: BuiltValueNullFieldError.checkNotNull(
-                permissionBy, r'IncidentDto', 'permissionBy'),
+              permissionBy,
+              r'IncidentDto',
+              'permissionBy',
+            ),
             decisions: _decisions?.build(),
             linkedLogs: _linkedLogs?.build(),
           );
@@ -176,7 +189,10 @@ class IncidentDtoBuilder implements Builder<IncidentDto, IncidentDtoBuilder> {
         _linkedLogs?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'IncidentDto', _$failedField, e.toString());
+          r'IncidentDto',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

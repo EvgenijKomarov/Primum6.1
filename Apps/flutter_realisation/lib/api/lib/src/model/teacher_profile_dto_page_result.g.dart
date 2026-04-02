@@ -16,17 +16,20 @@ class _$TeacherProfileDtoPageResult extends TeacherProfileDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$TeacherProfileDtoPageResult(
-          [void Function(TeacherProfileDtoPageResultBuilder)? updates]) =>
-      (TeacherProfileDtoPageResultBuilder()..update(updates))._build();
+  factory _$TeacherProfileDtoPageResult([
+    void Function(TeacherProfileDtoPageResultBuilder)? updates,
+  ]) => (TeacherProfileDtoPageResultBuilder()..update(updates))._build();
 
-  _$TeacherProfileDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$TeacherProfileDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   TeacherProfileDtoPageResult rebuild(
-          void Function(TeacherProfileDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(TeacherProfileDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   TeacherProfileDtoPageResultBuilder toBuilder() =>
@@ -66,8 +69,10 @@ class _$TeacherProfileDtoPageResult extends TeacherProfileDtoPageResult {
 
 class TeacherProfileDtoPageResultBuilder
     implements
-        Builder<TeacherProfileDtoPageResult,
-            TeacherProfileDtoPageResultBuilder> {
+        Builder<
+          TeacherProfileDtoPageResult,
+          TeacherProfileDtoPageResultBuilder
+        > {
   _$TeacherProfileDtoPageResult? _$v;
 
   ListBuilder<TeacherProfileDto>? _items;
@@ -120,7 +125,8 @@ class TeacherProfileDtoPageResultBuilder
   _$TeacherProfileDtoPageResult _build() {
     _$TeacherProfileDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$TeacherProfileDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -134,7 +140,10 @@ class TeacherProfileDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'TeacherProfileDtoPageResult', _$failedField, e.toString());
+          r'TeacherProfileDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

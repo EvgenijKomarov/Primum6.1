@@ -16,17 +16,20 @@ class _$LessonDtoPageResult extends LessonDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$LessonDtoPageResult(
-          [void Function(LessonDtoPageResultBuilder)? updates]) =>
-      (LessonDtoPageResultBuilder()..update(updates))._build();
+  factory _$LessonDtoPageResult([
+    void Function(LessonDtoPageResultBuilder)? updates,
+  ]) => (LessonDtoPageResultBuilder()..update(updates))._build();
 
-  _$LessonDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$LessonDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   LessonDtoPageResult rebuild(
-          void Function(LessonDtoPageResultBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(LessonDtoPageResultBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   LessonDtoPageResultBuilder toBuilder() =>
@@ -118,7 +121,8 @@ class LessonDtoPageResultBuilder
   _$LessonDtoPageResult _build() {
     _$LessonDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$LessonDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -132,7 +136,10 @@ class LessonDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'LessonDtoPageResult', _$failedField, e.toString());
+          r'LessonDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

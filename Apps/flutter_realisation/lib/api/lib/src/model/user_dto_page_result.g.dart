@@ -16,13 +16,16 @@ class _$UserDtoPageResult extends UserDtoPageResult {
   @override
   final int? currentPage;
 
-  factory _$UserDtoPageResult(
-          [void Function(UserDtoPageResultBuilder)? updates]) =>
-      (UserDtoPageResultBuilder()..update(updates))._build();
+  factory _$UserDtoPageResult([
+    void Function(UserDtoPageResultBuilder)? updates,
+  ]) => (UserDtoPageResultBuilder()..update(updates))._build();
 
-  _$UserDtoPageResult._(
-      {this.items, this.totalItemsCount, this.totalPages, this.currentPage})
-      : super._();
+  _$UserDtoPageResult._({
+    this.items,
+    this.totalItemsCount,
+    this.totalPages,
+    this.currentPage,
+  }) : super._();
   @override
   UserDtoPageResult rebuild(void Function(UserDtoPageResultBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -116,7 +119,8 @@ class UserDtoPageResultBuilder
   _$UserDtoPageResult _build() {
     _$UserDtoPageResult _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$UserDtoPageResult._(
             items: _items?.build(),
             totalItemsCount: totalItemsCount,
@@ -130,7 +134,10 @@ class UserDtoPageResultBuilder
         _items?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'UserDtoPageResult', _$failedField, e.toString());
+          r'UserDtoPageResult',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

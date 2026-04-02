@@ -37,21 +37,21 @@ class _$LessonDto extends LessonDto {
   factory _$LessonDto([void Function(LessonDtoBuilder)? updates]) =>
       (LessonDtoBuilder()..update(updates))._build();
 
-  _$LessonDto._(
-      {this.courseName,
-      required this.courseId,
-      required this.id,
-      this.teacherDisplayName,
-      required this.teacherId,
-      this.studentDisplayName,
-      required this.studentId,
-      required this.abonementId,
-      required this.price,
-      required this.lessonStatus,
-      required this.dateTime,
-      this.lessonLink,
-      this.grade})
-      : super._();
+  _$LessonDto._({
+    this.courseName,
+    required this.courseId,
+    required this.id,
+    this.teacherDisplayName,
+    required this.teacherId,
+    this.studentDisplayName,
+    required this.studentId,
+    required this.abonementId,
+    required this.price,
+    required this.lessonStatus,
+    required this.dateTime,
+    this.lessonLink,
+    this.grade,
+  }) : super._();
   @override
   LessonDto rebuild(void Function(LessonDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -215,26 +215,48 @@ class LessonDtoBuilder implements Builder<LessonDto, LessonDtoBuilder> {
   LessonDto build() => _build();
 
   _$LessonDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$LessonDto._(
           courseName: courseName,
           courseId: BuiltValueNullFieldError.checkNotNull(
-              courseId, r'LessonDto', 'courseId'),
+            courseId,
+            r'LessonDto',
+            'courseId',
+          ),
           id: BuiltValueNullFieldError.checkNotNull(id, r'LessonDto', 'id'),
           teacherDisplayName: teacherDisplayName,
           teacherId: BuiltValueNullFieldError.checkNotNull(
-              teacherId, r'LessonDto', 'teacherId'),
+            teacherId,
+            r'LessonDto',
+            'teacherId',
+          ),
           studentDisplayName: studentDisplayName,
           studentId: BuiltValueNullFieldError.checkNotNull(
-              studentId, r'LessonDto', 'studentId'),
+            studentId,
+            r'LessonDto',
+            'studentId',
+          ),
           abonementId: BuiltValueNullFieldError.checkNotNull(
-              abonementId, r'LessonDto', 'abonementId'),
+            abonementId,
+            r'LessonDto',
+            'abonementId',
+          ),
           price: BuiltValueNullFieldError.checkNotNull(
-              price, r'LessonDto', 'price'),
+            price,
+            r'LessonDto',
+            'price',
+          ),
           lessonStatus: BuiltValueNullFieldError.checkNotNull(
-              lessonStatus, r'LessonDto', 'lessonStatus'),
+            lessonStatus,
+            r'LessonDto',
+            'lessonStatus',
+          ),
           dateTime: BuiltValueNullFieldError.checkNotNull(
-              dateTime, r'LessonDto', 'dateTime'),
+            dateTime,
+            r'LessonDto',
+            'dateTime',
+          ),
           lessonLink: lessonLink,
           grade: grade,
         );

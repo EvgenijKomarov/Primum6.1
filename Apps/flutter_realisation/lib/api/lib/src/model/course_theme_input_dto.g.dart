@@ -12,15 +12,15 @@ class _$CourseThemeInputDto extends CourseThemeInputDto {
   @override
   final bool isActive;
 
-  factory _$CourseThemeInputDto(
-          [void Function(CourseThemeInputDtoBuilder)? updates]) =>
-      (CourseThemeInputDtoBuilder()..update(updates))._build();
+  factory _$CourseThemeInputDto([
+    void Function(CourseThemeInputDtoBuilder)? updates,
+  ]) => (CourseThemeInputDtoBuilder()..update(updates))._build();
 
   _$CourseThemeInputDto._({this.themeName, required this.isActive}) : super._();
   @override
   CourseThemeInputDto rebuild(
-          void Function(CourseThemeInputDtoBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(CourseThemeInputDtoBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   CourseThemeInputDtoBuilder toBuilder() =>
@@ -92,11 +92,15 @@ class CourseThemeInputDtoBuilder
   CourseThemeInputDto build() => _build();
 
   _$CourseThemeInputDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$CourseThemeInputDto._(
           themeName: themeName,
           isActive: BuiltValueNullFieldError.checkNotNull(
-              isActive, r'CourseThemeInputDto', 'isActive'),
+            isActive,
+            r'CourseThemeInputDto',
+            'isActive',
+          ),
         );
     replace(_$result);
     return _$result;

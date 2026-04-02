@@ -21,13 +21,13 @@ class _$IncidentLogDto extends IncidentLogDto {
   factory _$IncidentLogDto([void Function(IncidentLogDtoBuilder)? updates]) =>
       (IncidentLogDtoBuilder()..update(updates))._build();
 
-  _$IncidentLogDto._(
-      {required this.id,
-      required this.adminUserId,
-      required this.dateTime,
-      this.adminDisplayName,
-      this.description})
-      : super._();
+  _$IncidentLogDto._({
+    required this.id,
+    required this.adminUserId,
+    required this.dateTime,
+    this.adminDisplayName,
+    this.description,
+  }) : super._();
   @override
   IncidentLogDto rebuild(void Function(IncidentLogDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -126,14 +126,24 @@ class IncidentLogDtoBuilder
   IncidentLogDto build() => _build();
 
   _$IncidentLogDto _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$IncidentLogDto._(
           id: BuiltValueNullFieldError.checkNotNull(
-              id, r'IncidentLogDto', 'id'),
+            id,
+            r'IncidentLogDto',
+            'id',
+          ),
           adminUserId: BuiltValueNullFieldError.checkNotNull(
-              adminUserId, r'IncidentLogDto', 'adminUserId'),
+            adminUserId,
+            r'IncidentLogDto',
+            'adminUserId',
+          ),
           dateTime: BuiltValueNullFieldError.checkNotNull(
-              dateTime, r'IncidentLogDto', 'dateTime'),
+            dateTime,
+            r'IncidentLogDto',
+            'dateTime',
+          ),
           adminDisplayName: adminDisplayName,
           description: description,
         );
