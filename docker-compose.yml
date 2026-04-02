@@ -1,0 +1,138 @@
+version: '3.9'
+
+services:
+  configservice:
+    image: python:3.11-slim
+    container_name: configservice
+    working_dir: /app
+    volumes:
+      - /Apps/ConfigService:/app:ro
+    environment:
+      - PORT=5000
+      - ENVIRONMENT=Production
+    command: ["python", "ConfigService.py"]
+    ports:
+      - "5000:5000"
+    networks:
+      - primum-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: primum-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1234567890
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - primum-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: primum-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - primum-network
+
+  signservice:
+    build:
+      context: /Apps/SignService
+      dockerfile: Dockerfile
+    container_name: signservice
+    ports:
+      - "8000:8000"
+    networks:
+      - primum-network
+
+  primumcore:
+    build:
+      context: /Apps/PrimumCore
+      dockerfile: Dockerfile
+    container_name: primumcore
+    environment:
+      - CONFIG_SERVICE_URL=http://configservice:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5001:5001"
+    depends_on:
+      - configservice
+      - sqlserver
+      - rabbitmq
+    networks:
+      - primum-network
+
+  primumwebapi:
+    build:
+      context: /Apps/PrimumWebApi
+      dockerfile: Dockerfile.primumwebapi
+    container_name: primumwebapi
+    environment:
+      - CONFIG_SERVICE_URL=http://configservice:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5002:5002"
+    depends_on:
+      - configservice
+    networks:
+      - primum-network
+
+  botcore:
+    build:
+      context: /Apps/BotCore
+      dockerfile: Dockerfile.botcore
+    container_name: botcore
+    environment:
+      - CONFIG_SERVICE_URL=http://configservice:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5003:5003"
+    depends_on:
+      - configservice
+    networks:
+      - primum-network
+
+  publisherservice:
+    build:
+      context: /Apps/PublisherService
+      dockerfile: Dockerfile.publishersvc
+    container_name: publisherservice
+    environment:
+      - CONFIG_SERVICE_URL=http://configservice:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5004:5004"
+    depends_on:
+      - configservice
+      - rabbitmq
+    networks:
+      - primum-network
+
+  coredbiterator:
+    build:
+      context: /Apps/CoreDBIterator
+      dockerfile: Dockerfile.coredbiterator
+    container_name: coredbiterator
+    environment:
+      - CONFIG_SERVICE_URL=http://configservice:5000
+    depends_on:
+      - configservice
+      - sqlserver
+    networks:
+      - primum-network
+
+networks:
+  primum-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+  rabbitmq-data:

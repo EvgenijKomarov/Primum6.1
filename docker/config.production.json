@@ -1,0 +1,25 @@
+{
+  "PrimumCore": {
+    "SelfUrl": "http://0.0.0.0:5001",
+    "PublicUrl": "http://primumcore:5001"
+  },
+  "PrimumWebAPI": {
+    "SelfUrl": "http://0.0.0.0:5002",
+    "PublicUrl": "http://primumwebapi:5002"
+  },
+  "BotCore": {
+    "SelfUrl": "http://0.0.0.0:5003",
+    "PublicUrl": "http://botcore:5003"
+  },
+  "PublisherService": {
+    "SelfUrl": "http://0.0.0.0:5004",
+    "PublicUrl": "http://publisherservice:5004"
+  },
+  "SignService": {
+    "SelfUrl": "http://0.0.0.0:8000",
+    "PublicUrl": "http://signservice:8000"
+  },
+  "GatewayURL": "http://primumwebapi:5002",
+  "CoreDatabaseConnection": "Server=sqlserver;Database=PrimumDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;",
+  "RabbitMQConnection": "amqp://guest:guest@rabbitmq:5672/"
+}
