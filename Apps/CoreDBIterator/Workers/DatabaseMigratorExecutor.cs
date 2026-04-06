@@ -11,6 +11,7 @@ namespace CoreDBIterator.Workers
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            Thread.Sleep(5000);
             logger.LogInformation("Starting database migration check...");
 
             using var scope = serviceProvider.CreateScope();

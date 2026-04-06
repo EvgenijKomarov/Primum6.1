@@ -1,25 +1,25 @@
 {
   "PrimumCore": {
-    "SelfUrl": "https://localhost:5001",
-    "PublicUrl": "https://localhost:5001"
+    "SelfUrl": "http://0.0.0.0:5001",
+    "PublicUrl": "http://primumcore:5001"
   },
   "PrimumWebAPI": {
-    "SelfUrl": "https://localhost:5002",
-    "PublicUrl": "https://localhost:5002"
+    "SelfUrl": "http://0.0.0.0:5002",
+    "PublicUrl": "http://primumwebapi:5002"
   },
   "BotCore": {
-    "SelfUrl": "https://localhost:5003",
-    "PublicUrl": "https://localhost:5003"
+    "SelfUrl": "http://0.0.0.0:5003",
+    "PublicUrl": "http://botcore:5003"
   },
   "PublisherService": {
-    "SelfUrl": "https://localhost:5004",
-    "PublicUrl": "https://localhost:5004"
+    "SelfUrl": "http://0.0.0.0:5004",
+    "PublicUrl": "http://publisherservice:5004"
   },
   "SignService": {
-    "SelfUrl": "http://localhost:5005",
-    "PublicUrl": "http://localhost:5005"
+    "SelfUrl": "http://0.0.0.0:8000",
+    "PublicUrl": "http://signservice:8000"
   },
-  "GatewayURL": "https://localhost:5002",
-  "CoreDatabaseConnection": "Server=primum-sqlserver,1433;User Id=sa;Password=1234567890;TrustServerCertificate=True;",
-  "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
+  "GatewayURL": "http://primumwebapi:5002",
+  "CoreDatabaseConnection": "Server=primum-sqlserver,1433;User Id=sa;Password=_pAss1234567890;TrustServerCertificate=True;",
+  "RabbitMQConnection": "amqp://guest:guest@primum-rabbitmq:5672/"
 }
