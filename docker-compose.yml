@@ -47,6 +47,8 @@ services:
       - "8000:8000"
     networks:
       - primum-network
+    depends_on:
+      - configservice
 
   primumcore:
     build:

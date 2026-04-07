@@ -29,10 +29,22 @@ namespace SolutionConfiguration
 
         public async Task<SolutionEnvironment> GetConfigurationAsync(CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.GetAsync("/config", cancellationToken);
-            response.EnsureSuccessStatusCode();
+            SolutionEnvironment config = null;
+            while(config == null)
+            {
+                try
+                {
+                    var response = await _httpClient.GetAsync("/config", cancellationToken);
+                    response.EnsureSuccessStatusCode();
 
-            var config = await response.Content.ReadFromJsonAsync<SolutionEnvironment>(_jsonOptions, cancellationToken);
+                    config = await response.Content.ReadFromJsonAsync<SolutionEnvironment>(_jsonOptions, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to fetch configuration: {ex.Message}. Retrying in 5 seconds...");
+                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+                }
+            }
 
             return config ?? throw new InvalidOperationException("Failed to parse configuration: received null");
         }
