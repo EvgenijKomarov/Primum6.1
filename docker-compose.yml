@@ -1,7 +1,7 @@
 services:
   configservice:
     build:
-      context: ./Apps/ConfigService
+      context: Apps/ConfigService
       dockerfile: Dockerfile
     environment:
       ENVIRONMENT: "Production"
@@ -40,7 +40,7 @@ services:
 
   signservice:
     build:
-      context: ./Apps/SignService
+      context: Apps/SignService
       dockerfile: Dockerfile
     container_name: signservice
     ports:

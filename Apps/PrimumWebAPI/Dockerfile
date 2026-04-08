@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ../Apps/PrimumWebAPI Apps/PrimumWebAPI
-COPY ../../Libs/CoreConnection Libs/CoreConnection
-COPY ../../Libs/CoreDBModel Libs/CoreDBModel
-COPY ../../Libs/SignServiceConnection Libs/SignServiceConnection
-COPY ../../Libs/ConfigurationServiceClient Libs/ConfigurationServiceClient
+COPY Apps/PrimumWebAPI Apps/PrimumWebAPI
+COPY Libs/CoreConnection Libs/CoreConnection
+COPY Libs/CoreDBModel Libs/CoreDBModel
+COPY Libs/SignServiceConnection Libs/SignServiceConnection
+COPY Libs/ConfigurationServiceClient Libs/ConfigurationServiceClient
 WORKDIR /src/Apps/PrimumWebAPI
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish --no-restore -p:UseAppHost=false
