@@ -12,7 +12,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+var solutionEnvironment = await new ConfigurationClient().GetRoutesAsync();
 builder.WebHost.UseUrls(solutionEnvironment.PrimumWebAPI.SelfUrl);
 
 builder.Services.AddControllers();
@@ -39,8 +39,6 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseAuthorization();
 
 app.MapControllers();

@@ -27,17 +27,44 @@ namespace SolutionConfiguration
             _httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("CONFIG_SERVICE_URL") ?? "http://localhost:5000");
         }
 
-        public async Task<SolutionEnvironment> GetConfigurationAsync(CancellationToken cancellationToken = default)
+        public async Task<ServiceRoutes> GetRoutesAsync(CancellationToken cancellationToken = default)
         {
-            SolutionEnvironment config = null;
+            ServiceRoutes config = null;
             while(config == null)
             {
                 try
                 {
-                    var response = await _httpClient.GetAsync("/config", cancellationToken);
+                    var response = await _httpClient.GetAsync("/routes", cancellationToken);
                     response.EnsureSuccessStatusCode();
 
-                    config = await response.Content.ReadFromJsonAsync<SolutionEnvironment>(_jsonOptions, cancellationToken);
+                    config = await response.Content.ReadFromJsonAsync<ServiceRoutes>(_jsonOptions, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to fetch routes: {ex.Message}. Retrying in 5 seconds...");
+                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+                }
+            }
+
+            return config ?? throw new InvalidOperationException("Failed to parse routes: received null");
+        }
+
+        public async Task<string> GetCoreDatabaseConnectionAsync(CancellationToken cancellationToken = default) => 
+            await GetVariableAsync("CoreDatabaseConnection", cancellationToken);
+
+        public async Task<string> GetRabbitMQConnectionAsync(CancellationToken cancellationToken = default) =>
+            await GetVariableAsync("RabbitMQConnection", cancellationToken);
+
+        private async Task<string> GetVariableAsync(string variableName, CancellationToken cancellationToken = default)
+        {
+            string response = null;
+            while (response == null)
+            {
+                try
+                {
+                    var rawResponse = await _httpClient.GetAsync($"/variable/{variableName}", cancellationToken);
+                    rawResponse.EnsureSuccessStatusCode();
+                    response = await rawResponse.Content.ReadFromJsonAsync<string>(_jsonOptions, cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -46,7 +73,7 @@ namespace SolutionConfiguration
                 }
             }
 
-            return config ?? throw new InvalidOperationException("Failed to parse configuration: received null");
+            return response ?? throw new InvalidOperationException("Failed to parse configuration: received null");
         }
     }
 }

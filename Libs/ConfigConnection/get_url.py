@@ -17,7 +17,7 @@ def load_url(route: str) -> tuple[str, int]:
     Загружает конфигурацию и возвращает URL.
     """
     config_base_url = os.getenv("CONFIG_URL", "http://127.0.0.1:5000")
-    url = f"{config_base_url}/config/{route}"
+    url = f"{config_base_url}/routes/{route}"
     
     response = requests.get(url, timeout=20.0)
     response.raise_for_status()  # выбросит исключение при 4xx/5xx

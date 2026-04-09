@@ -103,10 +103,8 @@ namespace PrimumWebAPI.Extensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                        Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("WEBAPI_JWT_SEED") ?? "your-super-secret-key-that-should-be-at-least-32-characters-long"))
                 };
             });
             return builder;

@@ -10,7 +10,10 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+var configClient = new ConfigurationClient();
+var solutionEnvironment = await configClient.GetRoutesAsync();
+var rabbitMqConnectionString = await configClient.GetRabbitMQConnectionAsync();
+
 builder.WebHost.UseUrls(solutionEnvironment.PublisherService.SelfUrl);
 builder.Services.AddHttpClient<SignServiceClient>()
     .AddTypedClient((httpclient, sp) => new SignServiceClient(solutionEnvironment.SignService.PublicUrl, httpclient));
@@ -57,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.AddPublisher(solutionEnvironment.RabbitMQConnection);
+builder.AddPublisher(rabbitMqConnectionString);
 builder.AddLogging();
 var app = builder.Build();
 
@@ -69,7 +72,7 @@ if (app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

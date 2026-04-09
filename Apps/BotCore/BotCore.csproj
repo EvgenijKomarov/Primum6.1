@@ -31,4 +31,8 @@
     <ProjectReference Include="..\..\Libs\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

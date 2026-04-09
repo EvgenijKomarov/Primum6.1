@@ -19,7 +19,5 @@
     "SelfUrl": "http://localhost:5005",
     "PublicUrl": "http://localhost:5005"
   },
-  "GatewayURL": "http://localhost:5002",
-  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
-  "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
+  "GatewayURL": "http://localhost:5002"
 }

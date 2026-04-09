@@ -13,7 +13,7 @@ namespace PrimumCore.Services.Iterators
     public class TokenIterator(DatabaseIterator dbIterator,
         RandomStringGenerator randomGenerator,
         PublisherService publisher,
-        SolutionEnvironment environment)
+        ServiceRoutes environment)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {

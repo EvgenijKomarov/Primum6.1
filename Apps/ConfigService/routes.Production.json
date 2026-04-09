@@ -19,7 +19,5 @@
     "SelfUrl": "http://0.0.0.0:8000",
     "PublicUrl": "http://signservice:8000"
   },
-  "GatewayURL": "http://primumwebapi:5002",
-  "CoreDatabaseConnection": "Server=primum-sqlserver,1433;User Id=sa;Password=_pAss1234567890;TrustServerCertificate=True;",
-  "RabbitMQConnection": "amqp://guest:guest@primum-rabbitmq:5672/"
+  "GatewayURL": "http://primumwebapi:5002"
 }

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SolutionConfiguration
 {
-    public class SolutionEnvironment
+    public class ServiceRoutes
     {
         [JsonPropertyName("PrimumCore")]
         public ServiceConfiguration PrimumCore { get; set; } = null!;
@@ -24,11 +24,5 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("GatewayURL")]
         public string GatewayURL { get; set; } = string.Empty;
-
-        [JsonPropertyName("CoreDatabaseConnection")]
-        public string CoreDatabaseConnection { get; set; } = string.Empty;
-
-        [JsonPropertyName("RabbitMQConnection")]
-        public string RabbitMQConnection { get; set; } = string.Empty;
     }
 }

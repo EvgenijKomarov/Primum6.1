@@ -7,7 +7,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+var configClient = new ConfigurationClient();
+var solutionEnvironment = await configClient.GetRoutesAsync();
+var coreDbConnectionString = await configClient.GetCoreDatabaseConnectionAsync();
+
 builder.WebHost.UseUrls(solutionEnvironment.PrimumCore.SelfUrl);
 builder.Services.AddSingleton(sp => solutionEnvironment);
 
@@ -37,7 +40,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.AddDI();
-builder.AddContext(solutionEnvironment.CoreDatabaseConnection);
+builder.AddContext(coreDbConnectionString);
 builder.AddProjectControllers();
 builder.AddPublishers(solutionEnvironment.PublisherService.PublicUrl);
 builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
@@ -51,7 +54,7 @@ if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseRouting();
 app.UseAuthorization();

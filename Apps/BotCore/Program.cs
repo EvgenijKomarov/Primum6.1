@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.Services.AddSingleton<SolutionEnvironment>(sp => solutionEnvironment);
+var solutionEnvironment = await new ConfigurationClient().GetRoutesAsync();
+builder.Services.AddSingleton<ServiceRoutes>(sp => solutionEnvironment);
 builder.WebHost.UseUrls(solutionEnvironment.BotCore.SelfUrl);
 builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
 
@@ -51,7 +51,7 @@ if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 

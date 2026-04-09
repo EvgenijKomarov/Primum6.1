@@ -5,6 +5,13 @@ services:
       dockerfile: Dockerfile
     environment:
       ENVIRONMENT: "Production"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_USER: ${RABBITMQ_USER}
     container_name: configservice
     ports:
       - "5000:8000"
@@ -16,7 +23,7 @@ services:
     container_name: primum-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "_pAss1234567890"
+      SA_PASSWORD: ${DB_PASSWORD}
     ports:
       - "1433:1433"
     volumes:
@@ -28,8 +35,8 @@ services:
     image: rabbitmq:3.13-management-alpine
     container_name: primum-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -56,7 +63,7 @@ services:
       dockerfile: Apps/PrimumCore/Dockerfile
     container_name: primumcore
     environment:
-      CONFIG_SERVICE_URL: http://configservice:5000
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "5001:5001"
@@ -73,7 +80,7 @@ services:
       dockerfile: Apps/PrimumWebAPI/Dockerfile
     container_name: primumwebapi
     environment:
-      CONFIG_SERVICE_URL: http://configservice:5000
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "5002:5002"
@@ -88,7 +95,7 @@ services:
       dockerfile: Apps/BotCore/Dockerfile
     container_name: botcore
     environment:
-      CONFIG_SERVICE_URL: http://configservice:5000
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "5003:5003"
@@ -103,7 +110,7 @@ services:
       dockerfile: Apps/PublisherService/Dockerfile
     container_name: publisherservice
     environment:
-      CONFIG_SERVICE_URL: http://configservice:5000
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "5004:5004"
@@ -119,7 +126,7 @@ services:
       dockerfile: Apps/CoreDBIterator/Dockerfile
     container_name: coredbiterator
     environment:
-      CONFIG_SERVICE_URL: http://configservice:5000
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
     depends_on:
       - configservice
       - sqlserver

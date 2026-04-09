@@ -9,8 +9,9 @@ using SolutionConfiguration;
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true).AddEnvironmentVariables().Build())
     .CreateLogger();
-
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
+var configClient = new ConfigurationClient();
+var solutionEnvironment = await configClient.GetRoutesAsync();
+var coreDbConnectionString = await configClient.GetCoreDatabaseConnectionAsync();
 
 var hostBuilder = Host.CreateDefaultBuilder(args)
     .UseSerilog((context, services, configuration) =>
@@ -30,7 +31,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHostedService<LessonIteratorExecutor>();
         services.AddHostedService<ExpiredTokenDeleteExecutor>();
 
-        services.AddCoreContext(solutionEnvironment.CoreDatabaseConnection);
+        services.AddCoreContext(coreDbConnectionString);
     });
 
 var host = hostBuilder.Build();

@@ -24,8 +24,8 @@
     <Compile Include="ConfigService.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.Production.json" />
-    <Content Include="config.json" />
+    <Content Include="routes.Production.json" />
+    <Content Include="routes.json" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

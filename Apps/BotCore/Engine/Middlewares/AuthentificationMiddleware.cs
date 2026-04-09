@@ -9,7 +9,7 @@ using SignServiceConnection.Models;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, SolutionEnvironment configuration) : Middleware<DataBuffer, EngineOutputMessage>
+    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, ServiceRoutes configuration) : Middleware<DataBuffer, EngineOutputMessage>
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
