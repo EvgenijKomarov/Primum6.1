@@ -90,6 +90,9 @@ namespace PrimumWebAPI.Extensions
 
         public static WebApplicationBuilder AddAuth(this WebApplicationBuilder builder)
         {
+            var settings = new JwtSettings();
+            builder.Services.AddSingleton<JwtSettings>(x => settings);
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -102,9 +105,10 @@ namespace PrimumWebAPI.Extensions
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("WEBAPI_JWT_SEED") ?? "your-super-secret-key-that-should-be-at-least-32-characters-long"))
+                    IssuerSigningKey = settings.Seed
                 };
             });
             return builder;
