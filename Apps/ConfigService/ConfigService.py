@@ -6,17 +6,18 @@ from typing import Any
 
 app = FastAPI(title="Config Service")
 
-is_prod_env = os.getenv("ENVIRONMENT", "Development") == "Production"
-ROUTES_FILE = "routes.Production.json" if is_prod_env else "routes.json"
+is_prod_mode = os.getenv("MODE", "Development") == "Production"
+ROUTES_FILE = "routes.Production.json" if is_prod_mode else "routes.json"
 DEFAULT_VARIABLES_FILE = "defaultVariables.json"
 
 _HOST = os.getenv("HOST", "localhost")
 _PORT = int(os.getenv("PORT", 5000))
 
-if is_prod_env:
+if is_prod_mode:
     VARIABLES = {
         "CoreDatabaseConnection": f"Server={os.environ.get('DB_HOST')},{os.environ.get('DB_PORT')};User Id=sa;Password={os.environ.get('DB_PASSWORD')};TrustServerCertificate=True;",
-        "RabbitMQConnection": f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASSWORD')}@{os.environ.get('RABBITMQ_HOST')}:{os.environ.get('RABBITMQ_PORT')}/"
+        "RabbitMQConnection": f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASSWORD')}@{os.environ.get('RABBITMQ_HOST')}:{os.environ.get('RABBITMQ_PORT')}/",
+        "GatewayUrl": os.environ.get('GATEWAY_URL')
     }
 else:
     with open(DEFAULT_VARIABLES_FILE, "r", encoding="utf-8") as f:

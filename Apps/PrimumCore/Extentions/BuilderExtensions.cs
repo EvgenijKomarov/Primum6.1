@@ -45,6 +45,8 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<RanksIterator>();
             builder.Services.AddScoped<MathFormulas>();
 
+            builder.Services.AddHttpClient<ConfigurationClient>();
+
             return builder;
         }
 

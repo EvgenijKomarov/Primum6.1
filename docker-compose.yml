@@ -4,7 +4,7 @@ services:
       context: Apps/ConfigService
       dockerfile: Dockerfile
     environment:
-      ENVIRONMENT: "Production"
+      MODE: "Production"
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -12,6 +12,7 @@ services:
       RABBITMQ_PORT: ${RABBITMQ_PORT}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       RABBITMQ_USER: ${RABBITMQ_USER}
+      GATEWAY_URL: ${GATEWAY_URL}
     container_name: configservice
     networks:
       - primum-network

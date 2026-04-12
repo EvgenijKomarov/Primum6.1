@@ -55,6 +55,9 @@ namespace SolutionConfiguration
         public async Task<string> GetRabbitMQConnectionAsync(CancellationToken cancellationToken = default) =>
             await GetVariableAsync("RabbitMQConnection", cancellationToken);
 
+        public async Task<string> GetGatewayUrl(CancellationToken cancellationToken = default) =>
+            await GetVariableAsync("GatewayUrl", cancellationToken);
+
         private async Task<string> GetVariableAsync(string variableName, CancellationToken cancellationToken = default)
         {
             string response = null;

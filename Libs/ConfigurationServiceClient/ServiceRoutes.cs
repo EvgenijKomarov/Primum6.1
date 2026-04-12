@@ -21,8 +21,5 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("SignService")]
         public ServiceConfiguration SignService { get; set; } = null!;
-
-        [JsonPropertyName("GatewayURL")]
-        public string GatewayURL { get; set; } = string.Empty;
     }
 }

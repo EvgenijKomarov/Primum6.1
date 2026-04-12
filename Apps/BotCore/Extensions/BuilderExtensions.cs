@@ -11,6 +11,7 @@ using Engine.Extensions;
 using Serilog;
 using SignServiceConnection;
 using SignServiceConnection.Models;
+using SolutionConfiguration;
 
 namespace BotCore.Extensions
 {
@@ -103,7 +104,7 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<InOutConverter>();
 
             builder.Services.AddTransient<ChatSignTokenWorker>();
-
+            builder.Services.AddHttpClient<ConfigurationClient>();
 
             return builder;
         }

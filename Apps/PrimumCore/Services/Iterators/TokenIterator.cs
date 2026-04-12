@@ -13,7 +13,7 @@ namespace PrimumCore.Services.Iterators
     public class TokenIterator(DatabaseIterator dbIterator,
         RandomStringGenerator randomGenerator,
         PublisherService publisher,
-        ServiceRoutes environment)
+        ConfigurationClient configClient)
     {
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
@@ -37,7 +37,7 @@ namespace PrimumCore.Services.Iterators
             await publisher.Push(new UserEmailVerificationEvent
             {
                 EmailAdress = user.MailAdress,
-                VerificationLink = $"{environment.GatewayURL}/api/user/confirm-email?token={token.Token}",
+                VerificationLink = $"{configClient.GetGatewayUrl()}/api/user/confirm-email?token={token.Token}",
                 UserId = user.Id
             });
 
