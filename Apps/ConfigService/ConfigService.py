@@ -8,6 +8,7 @@ app = FastAPI(title="Config Service")
 
 is_prod_env = os.getenv("ENVIRONMENT", "Development") == "Production"
 ROUTES_FILE = "routes.Production.json" if is_prod_env else "routes.json"
+DEFAULT_VARIABLES_FILE = "defaultVariables.json"
 
 _HOST = os.getenv("HOST", "localhost")
 _PORT = int(os.getenv("PORT", 5000))
@@ -18,10 +19,8 @@ if is_prod_env:
         "RabbitMQConnection": f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASSWORD')}@{os.environ.get('RABBITMQ_HOST')}:{os.environ.get('RABBITMQ_PORT')}/"
     }
 else:
-    VARIABLES = {
-        "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
-        "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
-    }
+    with open(DEFAULT_VARIABLES_FILE, "r", encoding="utf-8") as f:
+        VARIABLES = json.load(f)
 
 # загрузка конфига каждый раз (hot reload)
 def load_routes() -> dict:

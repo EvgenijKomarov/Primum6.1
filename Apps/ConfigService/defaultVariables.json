@@ -1,0 +1,4 @@
+{
+  "CoreDatabaseConnection": "Server=KOMAROVE;Database=PrimumDB;Trusted_Connection=true;TrustServerCertificate=True;",
+  "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
+}

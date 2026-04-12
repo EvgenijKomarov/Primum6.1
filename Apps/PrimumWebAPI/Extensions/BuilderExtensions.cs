@@ -102,12 +102,12 @@ namespace PrimumWebAPI.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = !string.IsNullOrEmpty(settings.Issuer),
+                    ValidateAudience = !string.IsNullOrEmpty(settings.Audience),
                     ValidateLifetime = true,
                     ValidIssuer = settings.Issuer,
                     ValidAudience = settings.Audience,
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = settings.Seed != null,
                     IssuerSigningKey = settings.Seed
                 };
             });

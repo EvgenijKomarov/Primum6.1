@@ -24,6 +24,7 @@
     <Compile Include="ConfigService.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="defaultVariables.json" />
     <Content Include="routes.Production.json" />
     <Content Include="routes.json" />
     <Content Include="requirements.txt" />
