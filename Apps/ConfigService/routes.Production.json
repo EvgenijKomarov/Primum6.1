@@ -26,6 +26,5 @@
   "EmailNotificationService": {
     "SelfUrl": "http://0.0.0.0:5007",
     "PublicUrl": "http://email-notification-service:5007"
-  },
-  "GatewayURL": "http://primumwebapi:5002"
+  }
 }

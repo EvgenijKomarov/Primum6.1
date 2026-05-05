@@ -26,6 +26,5 @@
   "EmailNotificationService": {
     "SelfUrl": "http://localhost:5007",
     "PublicUrl": "http://localhost:5007"
-  },
-  "GatewayURL": "http://localhost:5002"
+  }
 }
