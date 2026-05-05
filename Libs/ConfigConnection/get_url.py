@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 import requests
 import os
 
-CONFIG_URL=os.getenv("CONFIG_URL", "http://127.0.0.1:5000")
+CONFIG_URL=os.getenv("CONFIG_SERVICE_URL", "http://127.0.0.1:5000")
 
 def parse_url_to_host_port(url: str) -> tuple[str, int]:
     """

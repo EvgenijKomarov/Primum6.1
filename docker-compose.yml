@@ -49,6 +49,34 @@ services:
       context: Apps/SignService
       dockerfile: Dockerfile
     container_name: signservice
+    environment:
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+    networks:
+      - primum-network
+    depends_on:
+      - configservice
+      
+  email-notification-service:
+    build:
+      context: Apps/EmailNotificationService
+      dockerfile: Dockerfile
+    container_name: email-notification-service
+    environment:
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      MODE: "Production"
+    networks:
+      - primum-network
+    depends_on:
+      - configservice
+      
+  chat-bot-notification-service:
+    build:
+      context: Apps/ChatBotNotificationService
+      dockerfile: Dockerfile
+    container_name: chat-bot-notification-service
+    environment:
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      MODE: "Production"
     networks:
       - primum-network
     depends_on:
@@ -100,20 +128,6 @@ services:
       - "5003:5003"
     depends_on:
       - configservice
-    networks:
-      - primum-network
-
-  publisherservice:
-    build:
-      context: .
-      dockerfile: Apps/PublisherService/Dockerfile
-    container_name: publisherservice
-    environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
-      ASPNETCORE_ENVIRONMENT: Production
-    depends_on:
-      - configservice
-      - rabbitmq
     networks:
       - primum-network
 

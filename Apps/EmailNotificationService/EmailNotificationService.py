@@ -23,7 +23,7 @@ if __name__ == "__main__":
     print(f"Binding to http://{HOST}:{PORT}")
     
     uvicorn.run(
-        "EmailNotificationService:app",
+        f"EmailNotificationService:app",
         host=HOST,
         port=PORT,
         log_level="info"
