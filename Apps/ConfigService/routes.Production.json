@@ -19,5 +19,13 @@
     "SelfUrl": "http://0.0.0.0:8000",
     "PublicUrl": "http://signservice:8000"
   },
+  "ChatBotNotificationService": {
+    "SelfUrl": "http://0.0.0.0:5006",
+    "PublicUrl": "http://chatbotnotificationservice:5006"
+  },
+  "EmailNotificationService": {
+    "SelfUrl": "http://0.0.0.0:5007",
+    "PublicUrl": "http://emailnotificationservice:5007"
+  },
   "GatewayURL": "http://primumwebapi:5002"
 }

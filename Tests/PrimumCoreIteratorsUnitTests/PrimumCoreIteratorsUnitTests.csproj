@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Apps\PrimumCore\PrimumCore.csproj" />
-    <ProjectReference Include="..\..\Apps\PublisherService\PublisherService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

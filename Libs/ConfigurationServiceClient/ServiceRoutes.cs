@@ -21,5 +21,11 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("SignService")]
         public ServiceConfiguration SignService { get; set; } = null!;
+
+        [JsonPropertyName("ChatBotNotificationService")]
+        public ServiceConfiguration ChatBotNotificationService { get; set; } = null!;
+
+        [JsonPropertyName("EmailNotificationService")]
+        public ServiceConfiguration EmailNotificationService { get; set; } = null!;
     }
 }

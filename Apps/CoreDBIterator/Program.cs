@@ -23,7 +23,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddTransient<ConverterToDateTimeService>();
 
         services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment.PublisherService.PublicUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment, httpClient, sp.GetRequiredService<ILogger<PublisherService>>()));
 
         services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();
