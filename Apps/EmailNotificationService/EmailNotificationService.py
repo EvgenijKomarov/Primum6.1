@@ -32,10 +32,12 @@ def send_email(address: str, subject: str, body: str):
     msg.set_content(body)
 
     try:
-        with smtplib.SMTP("smtp.yandex.ru", 465) as server:
-            server.starttls()
+        with smtplib.SMTP_SSL("smtp.yandex.ru", 465) as server:
+            server.set_debuglevel(1)
             server.login(EMAIL, EMAIL_PASSWORD)
+            server.auth_plain()
             server.send_message(msg)
+            server.quit()
         print("✅ Письмо успешно отправлено!")
     except smtplib.SMTPAuthenticationError:
         print("❌ Ошибка авторизации: проверьте пароль приложения и наличие 2FA.")
