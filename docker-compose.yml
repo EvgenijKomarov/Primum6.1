@@ -64,6 +64,8 @@ services:
     environment:
       CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       MODE: "Production"
+      EMAIL: ${EMAIL}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     networks:
       - primum-network
     depends_on:
