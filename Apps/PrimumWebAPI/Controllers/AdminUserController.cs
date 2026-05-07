@@ -30,16 +30,6 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.GetUserAsync(User.GetUserId(), objectUserId));
 
         /// <summary>
-        /// Добавить (отнять при отрицательном значении cash) деньги у пользователя. Только для админов с правом AddCash
-        /// </summary>
-        /// <param name="objectUserId"></param>
-        /// <param name="cash"></param>
-        /// <returns></returns>
-        [HttpPatch("{objectUserId}/cash")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int objectUserId, [FromBody] int cash = 0)
-            => Ok(await client.AddCashAsync(User.GetUserId(), objectUserId, cash));
-
-        /// <summary>
         /// Забанить/разбанить пользователя. Только для админов с правом ChangeBanStatus
         /// </summary>
         /// <param name="objectUserId"></param>

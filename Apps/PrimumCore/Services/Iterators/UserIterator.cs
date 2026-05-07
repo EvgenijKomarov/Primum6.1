@@ -23,17 +23,6 @@ namespace PrimumCore.Services.Iterators
             return user.Id;
         }
 
-        public async Task<long> AddMoney(int userId, long cash)
-        {
-            var user = await dbIterator.Users(true)
-                .One(x => x.Id == userId);
-
-            user.Cash += cash;
-
-            await dbIterator.SaveChangesAsync();
-            return user.Cash;
-        }
-
         public async Task<int> RegUser(RegistrationInputDto dto)
         {
             if (!new EmailAddressAttribute().IsValid(dto.MailAdress))
@@ -52,8 +41,7 @@ namespace PrimumCore.Services.Iterators
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
                 MailAdress = dto.MailAdress,
-                Password = passwordHasher.HashPassword(dto.Password),
-                Cash = 0
+                Password = passwordHasher.HashPassword(dto.Password)
             };
             await dbIterator.AddAsync(user);
             await dbIterator.SaveChangesAsync();

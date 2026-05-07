@@ -26,5 +26,9 @@
   "EmailNotificationService": {
     "SelfUrl": "http://0.0.0.0:5007",
     "PublicUrl": "http://email-notification-service:5007"
+  },
+  "PaymentService": {
+    "SelfUrl": "http://0.0.0.0:5008",
+    "PublicUrl": "http://payment-service:5008"
   }
 }

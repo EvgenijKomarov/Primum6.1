@@ -19,8 +19,6 @@ namespace CoreConnection.DTOs
 
         public required string DisplayName { get; set; }
 
-        public required long Cash { get; set; }
-
         public required bool IsBanned { get; set; }
 
         public required bool MailConfirmed { get; set; }

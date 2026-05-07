@@ -65,10 +65,6 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
 
-        [HttpPatch("add-cash/{objectUserId}")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int cash = 0) 
-            => Ok(await iterator.AddCash(userId, objectUserId, cash));
-
         [HttpPatch("ban/{objectUserId}")]
         public async Task<ActionResult<int>> BanUser([FromRoute] int userId, [FromRoute] int objectUserId)
             => Ok(await iterator.ChangeBanStatus(userId, objectUserId, true));

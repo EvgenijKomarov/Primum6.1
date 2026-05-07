@@ -15,8 +15,6 @@ public partial class User: BaseEntity
 
     public string Patronymic { get; set; } = null!;
 
-    public long Cash { get; set; }
-
     public bool IsBanned { get; set; } = false;
 
     public bool IsMailChecked { get; set; } = false;

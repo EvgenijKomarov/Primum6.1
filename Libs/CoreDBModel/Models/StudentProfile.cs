@@ -20,6 +20,8 @@ public partial class StudentProfile: BaseEntity
 
     public int RankId { get; set; } = -1;
 
+    public decimal Cash { get; set; } = 0m;
+
     public StudentRank Rank { get; set; } = null!;
 
     public virtual ICollection<Abonement> Abonements { get; set; } = new List<Abonement>();

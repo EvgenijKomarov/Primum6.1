@@ -11,14 +11,6 @@ namespace PrimumCore.Controllers
     [Tags("User")]
     public class AvailableUserController(UserIterator iterator) : PrimumController
     {
-        [HttpPatch("deposit")]
-        public async Task<ActionResult<long>> DepositMoney([FromRoute] int userId, [FromQuery] long cash = 0)
-            => Ok(await iterator.AddMoney(userId, cash));
-
-        [HttpPatch("withdrawn")]
-        public async Task<ActionResult<long>> WithdrawnMoney([FromRoute] int userId, [FromQuery] long cash = 0)
-            => Ok(await iterator.AddMoney(userId, -cash));
-
         [HttpPost("create-teacher-profile")]
         public async Task<ActionResult<int>> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
             => Ok(await iterator.CreateTeacherProfile(userId, about));

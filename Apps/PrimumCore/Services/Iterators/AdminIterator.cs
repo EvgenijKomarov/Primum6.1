@@ -21,24 +21,6 @@ namespace PrimumCore.Services.Iterators
             return await dbIterator.Admins().ToDto(helper).One(x => x.UserId == userId);
         }
 
-        public async Task<int> AddCash(int userId, int objUserId, int cash)
-        {
-            var iteratingAdmin = await helper.CheckIteratingUser(userId, Permission.AddCash);
-
-            var user = await dbIterator.Users(false)
-                .One(x => x.Id == objUserId);
-
-            user.Cash += cash;
-
-            iteratingAdmin.IncidentLogs.Add(new IncidentLog
-            {
-                AdminProfileId = iteratingAdmin.Id,
-                Description = $"Added cash ({cash}) to user with Id {objUserId}"
-            });
-            await dbIterator.SaveChangesAsync();
-            return objUserId;
-        }
-
         public async Task<int> EditPermissions(int userId, int objUserId, Dictionary<string, bool> editedPermissions)
         {
             var iteratingAdmin = await helper.CheckIteratingUser(userId, Permission.EditPermissions);

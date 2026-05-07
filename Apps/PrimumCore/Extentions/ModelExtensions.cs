@@ -121,7 +121,8 @@ namespace PrimumCore.Extentions
                 Coins = x.Coins,
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level,
-                Rating = x.Rating
+                Rating = x.Rating,
+                Cash = x.Cash,
             });
 
         public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) => queryable.Select(x => 
@@ -157,7 +158,6 @@ namespace PrimumCore.Extentions
                 Surname = x.Surname,
                 Patronymic = x.Patronymic,
                 DisplayName = x.DisplayName,
-                Cash = x.Cash,
                 IsApprovedStudent = x.StudentProfile != null ?
                             x.StudentProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
                 IsApprovedTeacher = x.TeacherProfile != null ?

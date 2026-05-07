@@ -26,5 +26,9 @@
   "EmailNotificationService": {
     "SelfUrl": "http://localhost:5007",
     "PublicUrl": "http://localhost:5007"
+  },
+  "PaymentService": {
+    "SelfUrl": "http://localhost:5008",
+    "PublicUrl": "http://localhost:5008"
   }
 }

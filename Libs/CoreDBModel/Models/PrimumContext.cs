@@ -147,6 +147,7 @@ public partial class PrimumContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Cash).HasDefaultValue(0m);
 
             entity.Property(e => e.UserId).IsRequired();
             entity.HasOne(u => u.Rank)
@@ -247,7 +248,6 @@ public partial class PrimumContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.Id).IsUnique();
-            entity.Property(e => e.Cash).HasDefaultValue(0);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.HasOne(u => u.TeacherProfile)

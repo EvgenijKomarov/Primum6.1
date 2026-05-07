@@ -25,6 +25,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PageResult<LessonDto>>> GetLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
             => Ok(await lessonIterator.GetStudentLessons(userId, page, pageSize));
 
+        [HttpPost("add-cash")]
+        public async Task<ActionResult<decimal>> AddCash([FromRoute] int userId, [FromQuery] decimal amount)
+            => Ok(await studentIterator.AddCash(userId, amount));
+
         [HttpGet("future-lessons")]
         public async Task<ActionResult<PageResult<LessonsByDateDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
             => Ok(await lessonIterator.GetStudentFutureLessons(userId, page, pageSize));

@@ -58,7 +58,7 @@ namespace CoreDBIterator.Workers
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
-                    IsEnoughMoney = lesson.Abonement.Student.User.Cash >= lesson.Price
+                    IsEnoughMoney = lesson.Abonement.Student.Cash >= lesson.Price
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }
