@@ -16,7 +16,7 @@ EMAIL=os.getenv("EMAIL", "")
 EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD", "")
 CORE_URL=load_url("PrimumCore/PublicUrl")
 
-app = FastAPI(title="FastAPI → RabbitMQ Publisher")
+app = FastAPI(title="FastAPI → SMTP")
 
 def send_email(address: str, subject: str, body: str):
     if EMAIL == "" or EMAIL_PASSWORD == "":
