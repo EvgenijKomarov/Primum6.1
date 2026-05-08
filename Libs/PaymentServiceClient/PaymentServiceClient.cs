@@ -31,7 +31,7 @@ namespace PaymentServiceConnection
             CancellationToken ct = default)
         {
             var request = new BalanceRequest(userId, amount);
-            return await PostAsync("/force/topup-student-balance", request, ct);
+            return await PostAsync($"/force/topup-student-balance?userId={userId}&amount={amount}", ct);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PaymentServiceConnection
             CancellationToken ct = default)
         {
             var request = new BalanceRequest(userId, amount);
-            return await PostAsync("/request-topup-student-balance", request, ct);
+            return await PostAsync($"/request-topup-student-balance?userId={userId}&amount={amount}", ct);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PaymentServiceConnection
             CancellationToken ct = default)
         {
             var request = new BalanceRequest(userId, amount);
-            return await PostAsync("/withdrawn-student-balance", request, ct);
+            return await PostAsync($"/withdrawn-student-balance?userId={userId}&amount={amount}", ct);
         }
 
         /// <summary>
@@ -68,16 +68,15 @@ namespace PaymentServiceConnection
             decimal platformCash,
             CancellationToken ct = default)
         {
-            var request = new LessonPaymentRequest(studentUserId, teacherUserId, teacherCash, platformCash);
-            return await PostAsync("/process-lesson-payment", request, ct);
+            return await PostAsync($"/process-lesson-payment?studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}", ct);
         }
 
-        private async Task<PaymentResponse> PostAsync(string endpoint, object payload, CancellationToken ct)
+        private async Task<PaymentResponse> PostAsync(string endpoint, CancellationToken ct)
         {
             PaymentResponse? result;
             try
             {
-                var response = await _httpClient.PostAsJsonAsync(endpoint, payload, _jsonOptions, ct);
+                var response = await _httpClient.PostAsync(endpoint, null);
                 response.EnsureSuccessStatusCode();
 
                 result = await response.Content.ReadFromJsonAsync<PaymentResponse>(_jsonOptions, ct);
@@ -97,7 +96,7 @@ namespace PaymentServiceConnection
             }
             if (result.Success == false)
             {
-                throw new PaymentServiceException($"Payment service error: {result.Error}");
+                throw new EquiringException($"Equiring service error: {result.Error}");
             }
             return result;
         }

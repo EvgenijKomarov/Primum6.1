@@ -8,6 +8,6 @@ class CorePaymentIterator(object):
     def add_cash(self, userId: int, amount: Decimal):
         print(f"Adding {amount} RUB to user {userId}")
 
-        response = requests.post(f"{self.core_url}/api/student/{userId}/add-student-balance", params={"amount": amount})
+        response = requests.post(f"{self.core_url}/api/student/{userId}/add-cash/{amount}")
         if response.status_code != 200:
             raise Exception(f"Failed to add cash: {response.text}")

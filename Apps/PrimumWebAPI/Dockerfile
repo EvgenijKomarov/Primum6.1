@@ -5,6 +5,7 @@ COPY Libs/CoreConnection Libs/CoreConnection
 COPY Libs/CoreDBModel Libs/CoreDBModel
 COPY Libs/SignServiceConnection Libs/SignServiceConnection
 COPY Libs/ConfigurationServiceClient Libs/ConfigurationServiceClient
+COPY Libs/PaymentServiceClient Libs/PaymentServiceClient
 WORKDIR /src/Apps/PrimumWebAPI
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish --no-restore -p:UseAppHost=false

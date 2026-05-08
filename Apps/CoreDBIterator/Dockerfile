@@ -6,6 +6,7 @@ COPY Libs/CoreDBModel Libs/CoreDBModel
 COPY Libs/PublishServiceConnection Libs/PublishServiceConnection
 COPY Libs/Resourses Libs/Resourses
 COPY Libs/ConfigurationServiceClient Libs/ConfigurationServiceClient
+COPY Libs/PaymentServiceClient Libs/PaymentServiceClient
 WORKDIR /src/Apps/CoreDBIterator
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish --no-restore -p:UseAppHost=false /p:UseAppHost=false

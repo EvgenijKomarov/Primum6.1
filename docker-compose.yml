@@ -71,6 +71,19 @@ services:
     depends_on:
       - configservice
       
+  payment-service:
+    build:
+      context: Apps/PaymentService
+      dockerfile: Dockerfile
+    container_name: payment-service
+    environment:
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      MODE: "Production"
+    networks:
+      - primum-network
+    depends_on:
+      - configservice
+      
   chat-bot-notification-service:
     build:
       context: Apps/ChatBotNotificationService
