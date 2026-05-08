@@ -7,20 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="nswag.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <!-- Do not copy to publish directory to avoid duplicate publish outputs when multiple libs include nswag.json -->
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\Resourses\Resourses.csproj" />
   </ItemGroup>
 

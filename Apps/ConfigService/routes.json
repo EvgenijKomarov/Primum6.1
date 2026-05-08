@@ -19,5 +19,12 @@
     "SelfUrl": "http://localhost:5005",
     "PublicUrl": "http://localhost:5005"
   },
-  "GatewayURL": "http://localhost:5002"
+  "ChatBotNotificationService": {
+    "SelfUrl": "http://localhost:5006",
+    "PublicUrl": "http://localhost:5006"
+  },
+  "EmailNotificationService": {
+    "SelfUrl": "http://localhost:5007",
+    "PublicUrl": "http://localhost:5007"
+  }
 }

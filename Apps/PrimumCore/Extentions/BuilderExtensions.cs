@@ -61,10 +61,10 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder, string publisherUrl)
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder, ServiceRoutes routes)
         {
             builder.Services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(publisherUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(routes, httpClient, sp.GetRequiredService<ILogger<PublisherService>>()));
 
             return builder;
         }
