@@ -8,7 +8,7 @@ public partial class Lesson: BaseEntity
 {
     public int AbonementId { get; set; }
 
-    public int Price { get; set; }
+    public decimal Price { get; set; }
 
     public string? StudentLink { get; set; }
 

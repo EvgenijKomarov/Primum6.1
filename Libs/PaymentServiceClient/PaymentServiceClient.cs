@@ -62,12 +62,13 @@ namespace PaymentServiceConnection
         /// Обработка оплаты урока
         /// </summary>
         public async Task<PaymentResponse> ProcessLessonPaymentAsync(
+            int studentUserId,
             int teacherUserId,
             decimal teacherCash,
             decimal platformCash,
             CancellationToken ct = default)
         {
-            var request = new LessonPaymentRequest(teacherUserId, teacherCash, platformCash);
+            var request = new LessonPaymentRequest(studentUserId, teacherUserId, teacherCash, platformCash);
             return await PostAsync("/process-lesson-payment", request, ct);
         }
 

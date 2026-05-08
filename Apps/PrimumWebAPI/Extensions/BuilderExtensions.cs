@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using PaymentServiceConnection;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Entities;
 using PrimumWebAPI.Services;
@@ -64,7 +65,7 @@ namespace PrimumWebAPI.Extensions
             return builder;
         }
 
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl)
+        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl, string paymentUrl)
         {
             builder.Services.AddHttpClient<AdminClient>()
                 .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
@@ -76,6 +77,8 @@ namespace PrimumWebAPI.Extensions
                 .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
                 .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentUrl));
 
             return builder;
         }

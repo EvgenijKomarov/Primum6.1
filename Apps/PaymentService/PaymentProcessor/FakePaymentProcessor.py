@@ -1,8 +1,7 @@
 from decimal import Decimal
-from PaymentProcessor import PaymentProcessor
 
 
-class FakePaymentProcessor(PaymentProcessor):
+class FakePaymentProcessor(object):
 
     def topup_student_balance(self, userId: int, amount: Decimal):
         print(f"Fakely requested topup of {amount} RUB to user {userId}")

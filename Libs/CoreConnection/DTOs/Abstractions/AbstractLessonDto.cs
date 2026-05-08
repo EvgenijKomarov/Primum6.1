@@ -23,7 +23,7 @@ namespace CoreConnection.DTOs.Abstractions
 
         public required int AbonementId { get; set; }
 
-        public required int Price { get; set; }
+        public required decimal Price { get; set; }
 
         public required LessonStatus LessonStatus { get; set; }
     }

@@ -27,5 +27,8 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("EmailNotificationService")]
         public ServiceConfiguration EmailNotificationService { get; set; } = null!;
+
+        [JsonPropertyName("PaymentService")]
+        public ServiceConfiguration PaymentService { get; set; } = null!;
     }
 }

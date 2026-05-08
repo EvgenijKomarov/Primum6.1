@@ -28,7 +28,7 @@ namespace CoreConnection.DTOs
 
         public required int CourseThemeId { get; set; }
 
-        public required int PricePerLesson { get; set; }
+        public required decimal PricePerLesson { get; set; }
 
         public required float? Rating { get; set; }
 

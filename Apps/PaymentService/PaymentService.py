@@ -2,7 +2,7 @@ from decimal import Decimal
 import os
 from tkinter import E
 import uvicorn
-from PaymentProcessor import FakePaymentProcessor
+from PaymentProcessor.FakePaymentProcessor import FakePaymentProcessor
 from get_url import load_host_and_port
 from fastapi import FastAPI
 from CorePaymentIterator import CorePaymentIterator
@@ -13,7 +13,7 @@ is_prod_mode = os.getenv("MODE", "Development") == "Production"
 app = FastAPI(title="PaymentService")
 
 processor = FakePaymentProcessor()
-core_payment_iterator = CorePaymentIterator(load_host_and_port("CoreService/SelfUrl"))
+core_payment_iterator = CorePaymentIterator(load_host_and_port("PrimumCore/PublicUrl"))
 
 @app.post("/force/topup-student-balance")
 def force_topup_student_balance(userId: int, amount: Decimal):
@@ -41,9 +41,10 @@ def withdrawn_student_balance(userId: int, amount: Decimal):
     return {"success": True}
 
 @app.post("/process-lesson-payment")
-def process_lesson_payment(teacherUserId: int, teacherCash: Decimal, platformCash: Decimal):
+def process_lesson_payment(studentUserId: int, teacherUserId: int, teacherCash: Decimal, platformCash: Decimal):
     try:
         processor.process_lesson(teacherUserId, teacherCash, platformCash)
+        core_payment_iterator.add_cash(studentUserId, -(teacherCash + platformCash))
     except Exception as e:
         return {"success": False, "error": str(e)}
     return {"success": True}

@@ -52,7 +52,7 @@ namespace CoreDBIterator.Workers
                     {
                         AbonementId = s.Abonement.Id,
                         DateTime = freeDateTime,
-                        Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0 : s.Abonement.PricePerLesson,
+                        Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0m : s.Abonement.PricePerLesson,
                         Status = LessonStatus.Waiting
                     };
                     context.Set<Lesson>().Add(lesson);

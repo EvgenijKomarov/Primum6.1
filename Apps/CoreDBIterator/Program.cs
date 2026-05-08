@@ -1,6 +1,7 @@
 using Common.Utilities;
 using CoreDBIterator.Workers;
 using CoreDBModel.Extensions;
+using PaymentServiceConnection;
 using PublishServiceConnection;
 using Serilog;
 using SolutionConfiguration;
@@ -24,6 +25,9 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
 
         services.AddHttpClient<PublisherService>()
                 .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment, httpClient, sp.GetRequiredService<ILogger<PublisherService>>()));
+
+        services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, solutionEnvironment.PaymentService.PublicUrl));
 
         services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();

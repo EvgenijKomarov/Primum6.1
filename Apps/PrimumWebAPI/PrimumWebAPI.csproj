@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
+    <ProjectReference Include="..\..\Libs\PaymentServiceClient\PaymentServiceClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

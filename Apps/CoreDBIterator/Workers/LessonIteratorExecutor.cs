@@ -3,6 +3,7 @@ using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 
@@ -25,6 +26,7 @@ namespace CoreDBIterator.Workers
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
+            var paymentClient = scope.ServiceProvider.GetRequiredService<PaymentServiceClient>();
             var jitsiService = new JitsiLinkCreationService();
 
             var lessonsForIteration = context.Set<Lesson>()
@@ -53,8 +55,15 @@ namespace CoreDBIterator.Workers
                 if (lesson.Abonement.Student.Cash >= lesson.Price &&
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                 {
+                    var teacher = lesson.Abonement.Course.Teacher;
+                    var teacherCash = lesson.Price * Convert.ToDecimal(lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
+                    await paymentClient.ProcessLessonPaymentAsync(
+                        lesson.Abonement.Student.User.Id,
+                        teacher.User.Id,
+                        teacherCash,
+                        lesson.Price - teacherCash
+                        );
                     lesson.Abonement.Student.Cash -= lesson.Price;
-                    //lesson.Abonement.Course.Teacher.User.Cash += (long)(lesson.Price * lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(

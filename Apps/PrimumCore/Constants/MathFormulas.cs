@@ -8,14 +8,14 @@ namespace PrimumCore.Constants
         private Random random = new Random();
         private int GetRandomExpBonus() => random.Next(0, 101);
 
-        public int CoinFormula(float finalGrade, int lessonCost)
+        public int CoinFormula(float finalGrade, decimal lessonCost)
         {
             const float maximumCashback = 0.1f;
             const int maximumGradeValue = 5;
 
             float cashBackIndex = (finalGrade / maximumGradeValue * maximumCashback);
 
-            return (int)(lessonCost * cashBackIndex);
+            return (int)(lessonCost * (decimal)cashBackIndex);
         }
 
         public int StudentExpFormula(float finalGrade)

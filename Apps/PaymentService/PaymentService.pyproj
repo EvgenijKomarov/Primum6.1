@@ -24,7 +24,6 @@
     <Compile Include="CorePaymentIterator.py" />
     <Compile Include="get_url.py" />
     <Compile Include="PaymentProcessor\FakePaymentProcessor.py" />
-    <Compile Include="PaymentProcessor\PaymentProcessor.py" />
     <Compile Include="PaymentService.py" />
   </ItemGroup>
   <ItemGroup>

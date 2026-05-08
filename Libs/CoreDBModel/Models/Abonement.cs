@@ -10,7 +10,7 @@ public partial class Abonement: BaseEntity
 
     public int StudentId { get; set; }
 
-    public int PricePerLesson { get; set; }
+    public decimal PricePerLesson { get; set; }
 
     public int FreeLessons { get; set; }
 

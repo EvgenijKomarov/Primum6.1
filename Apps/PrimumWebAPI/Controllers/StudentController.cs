@@ -2,6 +2,7 @@
 using CoreConnection.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PaymentServiceConnection;
 using PrimumWebAPI.Extensions;
 using System.Runtime.ConstrainedExecution;
 
@@ -9,7 +10,7 @@ namespace PrimumWebAPI.Controllers
 {
     [Route("student")]
     [Authorize]
-    public class StudentController(StudentClient client): DefaultController
+    public class StudentController(StudentClient client) : DefaultController
     {
         /// <summary>
         /// Профиль ученика, включая имя, количество монет и id пользователя
