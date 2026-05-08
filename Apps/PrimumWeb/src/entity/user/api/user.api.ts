@@ -5,19 +5,19 @@ import type {
   SendEmailVerificationRequest,
   UserDto,
 } from '@/entity/user';
-import { userApiConfig } from '@/entity/user/config';
+import { api } from '@/shared/config/api.ts';
 
 export const getUserInfo = async () => {
   return await fetcherInstance<UserDto>({
     method: 'GET',
-    url: userApiConfig.getUserInfo,
+    url: api.user.getUserInfo,
   });
 };
 
 export const sendEmailVerification = async (data: SendEmailVerificationRequest) => {
   return await fetcherInstance({
     method: 'POST',
-    url: userApiConfig.sendEmailVerification,
+    url: api.user.sendEmailVerification,
     params: data,
   });
 };
@@ -25,7 +25,7 @@ export const sendEmailVerification = async (data: SendEmailVerificationRequest) 
 export const confirmEmail = async (data: ConfirmEmailRequest) => {
   return await fetcherInstance({
     method: 'POST',
-    url: userApiConfig.confirmEmail,
+    url: api.user.confirmEmail,
     data: data.token,
   });
 };
@@ -33,7 +33,7 @@ export const confirmEmail = async (data: ConfirmEmailRequest) => {
 export const createTeacherProfile = async (data: CreateTeacherProfileRequest) => {
   return await fetcherInstance({
     method: 'POST',
-    url: userApiConfig.createTeacherProfile,
+    url: api.user.createTeacherProfile,
     data: data.aboutTeacher,
   });
 };
@@ -41,6 +41,6 @@ export const createTeacherProfile = async (data: CreateTeacherProfileRequest) =>
 export const createStudentProfile = async () => {
   return await fetcherInstance({
     method: 'POST',
-    url: userApiConfig.createStudentProfile,
+    url: api.user.createStudentProfile,
   });
 };
