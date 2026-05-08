@@ -37,7 +37,7 @@ namespace PrimumCore.Services.Iterators
             await publisher.Push(new UserEmailVerificationEvent
             {
                 EmailAdress = user.MailAdress,
-                VerificationLink = $"{configClient.GetGatewayUrl()}/api/user/confirm-email?token={token.Token}",
+                VerificationLink = $"{await configClient.GetGatewayUrl()}/api/user/confirm-email?token={token.Token}",
                 UserId = user.Id
             });
 

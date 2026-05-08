@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.AddDI();
 builder.AddContext(coreDbConnectionString);
 builder.AddProjectControllers();
-builder.AddPublishers(solutionEnvironment.PublisherService.PublicUrl);
+builder.AddPublishers(solutionEnvironment);
 builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
 builder.AddLogging();
 

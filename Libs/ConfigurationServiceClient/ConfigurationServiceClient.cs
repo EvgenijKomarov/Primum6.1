@@ -21,7 +21,7 @@ namespace SolutionConfiguration
         public ConfigurationClient() : this(new HttpClient())
         {
         }
-        internal ConfigurationClient(HttpClient httpClient)
+        public ConfigurationClient(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("CONFIG_SERVICE_URL") ?? "http://localhost:5000");

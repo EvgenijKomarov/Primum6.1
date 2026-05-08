@@ -1,5 +1,7 @@
-﻿using PublishServiceConnection.Abstractions;
+﻿using Microsoft.Extensions.Logging;
+using PublishServiceConnection.Abstractions;
 using PublishServiceConnection.Events;
+using SolutionConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,18 +9,36 @@ using System.Text.Json;
 
 namespace PublishServiceConnection
 {
-    public class PublisherService(string publisherUrl, HttpClient httpClient)
+    public class PublisherService(ServiceRoutes routes, HttpClient httpClient, ILogger<PublisherService> logger)
     {
-        private PublisherClient client = new PublisherClient(publisherUrl, httpClient);
         public async Task Push(IPushable message)
         {
             if (message is IChatBotNotification chatNotification)
             {
-                await client.PushChatNotificationAsync(chatNotification.ToChatBotNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+                foreach(var notif in chatNotification.ToChatBotNotifications())
+                {
+                    await PushNotification(notif.Key, notif.Value, routes.ChatBotNotificationService.PublicUrl);
+                }
             }
             if (message is IMailNotification mailNotification) 
-            { 
-                await client.PushMailNotificationAsync(mailNotification.MailTitle, mailNotification.ToMailNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+            {
+                foreach (var notif in mailNotification.ToMailNotifications())
+                {
+                    await PushNotification(notif.Key, notif.Value, routes.EmailNotificationService.PublicUrl);
+                }
+            }
+        }
+
+        private async Task PushNotification(int userId, string message, string route)
+        {
+            try
+            {
+                HttpResponseMessage response = await httpClient.PostAsync(route + $"/publish?userId={userId}&message={Uri.EscapeDataString(message)}", content: null);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex) 
+            {
+                logger.LogError(ex.Message);
             }
         }
     }
