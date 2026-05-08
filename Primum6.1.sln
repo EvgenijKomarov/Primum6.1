@@ -49,6 +49,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "EmailNotificationService", 
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PaymentService", "Apps\PaymentService\PaymentService.pyproj", "{1B6E4639-6623-43D7-B784-062777D214CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceClient", "Libs\PaymentServiceClient\PaymentServiceClient.csproj", "{A4E52A37-951B-417D-9272-A7855DC78018}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{D007AEAB-7133-415E-89E4-9EDBD11CAF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B6E4639-6623-43D7-B784-062777D214CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B6E4639-6623-43D7-B784-062777D214CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E52A37-951B-417D-9272-A7855DC78018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E52A37-951B-417D-9272-A7855DC78018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E52A37-951B-417D-9272-A7855DC78018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E52A37-951B-417D-9272-A7855DC78018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +154,7 @@ Global
 		{4F72AF3B-FC9F-4A62-8B1E-ACF9C6EC8DB2} = {B1FDA17C-AEE1-483D-B707-276285BF8D0C}
 		{D007AEAB-7133-415E-89E4-9EDBD11CAF27} = {B1FDA17C-AEE1-483D-B707-276285BF8D0C}
 		{1B6E4639-6623-43D7-B784-062777D214CD} = {B1FDA17C-AEE1-483D-B707-276285BF8D0C}
+		{A4E52A37-951B-417D-9272-A7855DC78018} = {A3CAF226-C218-40E3-B561-0C3ADE549954}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AAF9660-D8D7-4198-B0FA-59002B2C2309}

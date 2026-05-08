@@ -3,27 +3,17 @@ from PaymentProcessor import PaymentProcessor
 
 
 class FakePaymentProcessor(PaymentProcessor):
-    def __init__(self, payment_iterator):
-        self.payment_iterator = payment_iterator
 
-    def add_student_balance(self, userId: int, amount: Decimal):
-        print(f"Start adding {amount} RUB to user {userId}")
-        try:
-            self.payment_iterator.add_cash(userId, amount)
-            print(f"Successfully added {amount} RUB to user {userId}")
-        except Exception as e:
-            print(f"Failed to add {amount} RUB to user {userId}: {str(e)}")
+    def topup_student_balance(self, userId: int, amount: Decimal):
+        print(f"Fakely requested topup of {amount} RUB to user {userId}")
+        return "http://fake-payment.com/form"
 
     def withdrawn_student_balance(self, userId: int, amount: Decimal):
-        print(f"Start withdrawning {amount} RUB to user {userId}")
-        try:
-            self.payment_iterator.add_cash(userId, -amount)
-            print(f"Successfully withdrawn {amount} RUB to user {userId}")
-        except Exception as e:
-            print(f"Failed to withdrawn {amount} RUB to user {userId}: {str(e)}")
+        print(f"Fakely withdrawned {amount} RUB to user {userId}")
 
-    def process_lesson(self, studentUserId: int, ): ...
-
+    def process_lesson(self, teacherUserId: int, teacherCash: Decimal, platformCash: Decimal):
+        print(f"Fakely sent {teacherCash} RUB to teacher {teacherUserId}")
+        print(f"Fakely sent {platformCash} RUB to platform")
 
 
 
