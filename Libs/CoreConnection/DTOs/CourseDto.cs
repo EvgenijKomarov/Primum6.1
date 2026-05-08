@@ -24,7 +24,7 @@ namespace CoreConnection.DTOs
 
         public required int TeacherId {  get; set; }
 
-        public required int Price { get; set; }
+        public required decimal Price { get; set; }
 
         public required int MaxLessons { get; set; }
 
