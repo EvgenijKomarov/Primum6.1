@@ -13,9 +13,13 @@ DEFAULT_VARIABLES_FILE = "defaultVariables.json"
 _HOST = os.getenv("HOST", "localhost")
 _PORT = int(os.getenv("PORT", 5000))
 
+def getDbUrl(db_name: str) -> str:
+    return f"Host={os.environ.get('DB_HOST')};Port={os.environ.get('DB_PORT')};Database={db_name};Username={os.environ.get('DB_USERNAME')};Password={os.environ.get('DB_PASSWORD')};SSL Mode=Disable;"
+
 if is_prod_mode:
     VARIABLES = {
-        "CoreDatabaseConnection": f"Server={os.environ.get('DB_HOST')},{os.environ.get('DB_PORT')};User Id=sa;Password={os.environ.get('DB_PASSWORD')};TrustServerCertificate=True;",
+        "CoreDatabaseConnection": getDbUrl("core_db"),
+        "SignServiceDatabaseConnection": getDbUrl("signservice_db"),
         "RabbitMQConnection": f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASSWORD')}@{os.environ.get('RABBITMQ_HOST')}:{os.environ.get('RABBITMQ_PORT')}/",
         "GatewayUrl": os.environ.get('GATEWAY_URL')
     }

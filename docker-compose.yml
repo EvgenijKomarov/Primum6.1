@@ -7,6 +7,7 @@ services:
       MODE: "Production"
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
       RABBITMQ_PORT: ${RABBITMQ_PORT}
@@ -17,18 +18,25 @@ services:
     networks:
       - primum-network
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: primum-sqlserver
+  postgres:
+    image: postgres:16-alpine
+    container_name: primum-postgres
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "4220:1433"
+      - "4100:5432"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d:ro
     networks:
       - primum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d core_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -107,7 +115,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
     depends_on:
       - configservice
-      - sqlserver
+      - postgres
       - rabbitmq
     networks:
       - primum-network
@@ -155,7 +163,7 @@ services:
       CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
     depends_on:
       - configservice
-      - sqlserver
+      - postgres
     networks:
       - primum-network
 
@@ -164,5 +172,5 @@ networks:
     driver: bridge
 
 volumes:
-  sqlserver-data:
+  postgres-data:
   rabbitmq-data:
