@@ -1,5 +1,4 @@
 ﻿using CoreDBModel.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -36,11 +35,11 @@ namespace CoreDBIterator.Workers
                     logger.LogInformation("Database is up to date");
                 }
             }
-            catch (Exception ex) when (ex is SqlException or TimeoutException)
+            /*catch (Exception ex) when (ex is SqlException or TimeoutException)
             {
                 logger.LogError(ex, "Database migration failed: connection issue");
                 throw; // Останавливаем приложение — БД критична
-            }
+            }*/
             catch (Exception ex)
             {
                 logger.LogError(ex, "Database migration failed: {Error}", ex.Message);

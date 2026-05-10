@@ -23,7 +23,7 @@ namespace CoreDBIterator.Workers
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
 
             VerificationToken[] expiredVerificationTokens = context.Set<VerificationToken>()
-                .Where(x => x.LifeTime < DateTime.Now || x.IsUsed == true)
+                .Where(x => x.LifeTime < DateTime.UtcNow || x.IsUsed == true)
                 .ToArray();
 
             if (expiredVerificationTokens.Length == 0)

@@ -3,57 +3,63 @@ using System;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CoreDBModel.Migrations
 {
     [DbContext(typeof(PrimumContext))]
-    [Migration("20260227093145_AddedCourseAbout")]
-    partial class AddedCourseAbout
+    [Migration("20260510094556_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CoreDBModel.Models.Abonement", b =>
                 {
-                    b.Property<int>("AbonementId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonementId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AbonementStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("FreeLessons")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("PricePerLesson")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PricePerLesson")
+                        .HasColumnType("numeric");
+
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("AbonementId");
-
-                    b.HasIndex("AbonementId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("StudentId");
 
@@ -62,22 +68,25 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.AbonementShedule", b =>
                 {
-                    b.Property<int>("AbonementSheduleId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonementSheduleId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AbonementId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("LastIteration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TeacherSheduleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("AbonementSheduleId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AbonementId");
 
@@ -89,30 +98,33 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.AdminPermission", b =>
                 {
-                    b.Property<int>("AdminPermissionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminPermissionId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminProfileId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Permission")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("PromoterAdminProfileId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("PromotionDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("AdminPermissionId");
-
-                    b.HasIndex("AdminPermissionId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("AdminProfileId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("PromoterAdminProfileId");
 
@@ -121,21 +133,24 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.AdminProfile", b =>
                 {
-                    b.Property<int>("AdminId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("AdminId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("AdminId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("UserId")
@@ -146,75 +161,128 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.Course", b =>
                 {
-                    b.Property<int>("CourseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("CourseThemeId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer");
 
                     b.Property<int>("FreeLessons")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("MaxLessons")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("RankId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("CourseId");
-
-                    b.HasIndex("CourseId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseThemeId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("RankId");
 
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("CoreDBModel.Models.CourseRank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RequiredExperience")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("CourseRanks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Level = 1,
+                            Rank = "Новый",
+                            RequiredExperience = 0
+                        });
+                });
+
             modelBuilder.Entity("CoreDBModel.Models.CourseTheme", b =>
                 {
-                    b.Property<int>("CourseThemeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseThemeId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("CourseThemeId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CourseThemeId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("CourseThemes");
@@ -222,36 +290,36 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.IncidentLog", b =>
                 {
-                    b.Property<int>("LogId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminProfileId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("DecisionDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsRevisioned")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("Meaning")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ObjectId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("LogId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AdminProfileId");
 
-                    b.HasIndex("LogId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("IncidentLogs");
@@ -259,35 +327,38 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.Lesson", b =>
                 {
-                    b.Property<int>("LessonId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LessonId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AbonementId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("StudentLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("TeacherLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("LessonId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AbonementId");
 
-                    b.HasIndex("LessonId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("Lessons");
@@ -295,33 +366,36 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.Promocode", b =>
                 {
-                    b.Property<int>("PromocodeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromocodeId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("CoinsPrice")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("StudentId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("PromocodeId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PromocodeId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("StudentId");
@@ -331,59 +405,81 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.StudentGrading", b =>
                 {
-                    b.Property<int>("StudentGradingId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentGradingId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("HomeworkGrade")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LessonActivityGrade")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LessonId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("RepetitionOfMaterialGrade")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("StudyInitiativeGrade")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("StudentGradingId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.HasIndex("StudentGradingId")
-                        .IsUnique();
-
-                    b.ToTable("StudentGrading");
+                    b.ToTable("StudentGradings");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.StudentProfile", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Cash")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric")
+                        .HasDefaultValue(0m);
 
                     b.Property<int>("Coins")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RankId")
+                        .HasColumnType("integer");
+
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("StudentId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("StudentId")
+                    b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("RankId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -391,31 +487,82 @@ namespace CoreDBModel.Migrations
                     b.ToTable("StudentProfiles");
                 });
 
+            modelBuilder.Entity("CoreDBModel.Models.StudentRank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("CoinDiscount")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RequiredExperience")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("StudentRanks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            CoinDiscount = 0f,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Level = 1,
+                            Rank = "Новенький",
+                            RequiredExperience = 0
+                        });
+                });
+
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
                 {
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("ApproveStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<float>("EarningMultiplier")
-                        .HasColumnType("real");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RankId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("TeacherId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TeacherId")
+                    b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("RankId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -423,29 +570,75 @@ namespace CoreDBModel.Migrations
                     b.ToTable("TeacherProfiles");
                 });
 
+            modelBuilder.Entity("CoreDBModel.Models.TeacherRank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<float>("EarningMultiplier")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RequiredExperience")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("TeacherRanks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EarningMultiplier = 0.3f,
+                            Level = 1,
+                            Rank = "Начинающий наставник",
+                            RequiredExperience = 0
+                        });
+                });
+
             modelBuilder.Entity("CoreDBModel.Models.TeacherShedule", b =>
                 {
-                    b.Property<int>("TeacherSheduleId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherSheduleId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Time")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("TeacherSheduleId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("TeacherId");
-
-                    b.HasIndex("TeacherSheduleId")
-                        .IsUnique();
 
                     b.ToTable("TeacherShedules");
                 });
@@ -454,40 +647,38 @@ namespace CoreDBModel.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("Cash")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsBanned")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsMailChecked")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("MailAdress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Patronymic")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -499,31 +690,34 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.VerificationToken", b =>
                 {
-                    b.Property<int>("TokenId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TokenId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("LifeTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Meaning")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("TokenId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TokenId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("UserId");
@@ -606,6 +800,12 @@ namespace CoreDBModel.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CoreDBModel.Models.CourseRank", "Rank")
+                        .WithMany("Courses")
+                        .HasForeignKey("RankId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("CoreDBModel.Models.TeacherProfile", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
@@ -613,6 +813,8 @@ namespace CoreDBModel.Migrations
                         .IsRequired();
 
                     b.Navigation("CourseTheme");
+
+                    b.Navigation("Rank");
 
                     b.Navigation("Teacher");
                 });
@@ -662,22 +864,38 @@ namespace CoreDBModel.Migrations
 
             modelBuilder.Entity("CoreDBModel.Models.StudentProfile", b =>
                 {
+                    b.HasOne("CoreDBModel.Models.StudentRank", "Rank")
+                        .WithMany("Students")
+                        .HasForeignKey("RankId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("CoreDBModel.Models.User", "User")
                         .WithOne("StudentProfile")
                         .HasForeignKey("CoreDBModel.Models.StudentProfile", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Rank");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
                 {
+                    b.HasOne("CoreDBModel.Models.TeacherRank", "Rank")
+                        .WithMany("Teachers")
+                        .HasForeignKey("RankId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("CoreDBModel.Models.User", "User")
                         .WithOne("TeacherProfile")
                         .HasForeignKey("CoreDBModel.Models.TeacherProfile", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Rank");
 
                     b.Navigation("User");
                 });
@@ -725,6 +943,11 @@ namespace CoreDBModel.Migrations
                     b.Navigation("Abonements");
                 });
 
+            modelBuilder.Entity("CoreDBModel.Models.CourseRank", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
             modelBuilder.Entity("CoreDBModel.Models.CourseTheme", b =>
                 {
                     b.Navigation("Courses");
@@ -742,11 +965,21 @@ namespace CoreDBModel.Migrations
                     b.Navigation("Promocodes");
                 });
 
+            modelBuilder.Entity("CoreDBModel.Models.StudentRank", b =>
+                {
+                    b.Navigation("Students");
+                });
+
             modelBuilder.Entity("CoreDBModel.Models.TeacherProfile", b =>
                 {
                     b.Navigation("Courses");
 
                     b.Navigation("TeacherShedules");
+                });
+
+            modelBuilder.Entity("CoreDBModel.Models.TeacherRank", b =>
+                {
+                    b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherShedule", b =>

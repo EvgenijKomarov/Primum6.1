@@ -52,7 +52,7 @@ namespace PrimumCore.Services.Iterators
                 {
                     AdminProfile = admin,
                     PromoterAdminProfile = iteratingAdmin,
-                    PromotionDate = DateTime.Now,
+                    PromotionDate = DateTime.UtcNow,
                     Permission = newPermission
                 });
             }

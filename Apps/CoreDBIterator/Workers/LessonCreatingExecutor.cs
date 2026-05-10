@@ -28,7 +28,7 @@ namespace CoreDBIterator.Workers
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Course)
                 .Include(x => x.TeacherShedule)
-                .Where(s => s.LastIteration.AddDays(7) <= DateTime.Now)
+                .Where(s => s.LastIteration.AddDays(7) <= DateTime.UtcNow)
                 .ToArrayAsync();
 
             if (availableForProlongation.Length != 0) 

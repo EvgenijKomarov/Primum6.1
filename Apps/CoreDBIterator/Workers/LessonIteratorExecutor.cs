@@ -38,7 +38,7 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Where(l => l.Status == LessonStatus.Warned)
-                .Where(l => l.DateTime <= DateTime.Now.AddMinutes(30))
+                .Where(l => l.DateTime <= DateTime.UtcNow.AddMinutes(30))
                 .ToArray();
 
             if (lessonsForIteration.Length != 0)
@@ -67,7 +67,7 @@ namespace CoreDBIterator.Workers
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
-                        DateTime.Now.ToString() + lesson.AbonementId.ToString());
+                        DateTime.UtcNow.ToString() + lesson.AbonementId.ToString());
                     lesson.StudentLink = tuple.guestLink;
                     lesson.TeacherLink = tuple.adminLink;
                     await publisher.Push(new LessonReadyEvent()
