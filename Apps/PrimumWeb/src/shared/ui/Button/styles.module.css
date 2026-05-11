@@ -1,0 +1,112 @@
+@reference "@/global.css";
+
+.button {
+  @apply cursor-pointer rounded-md text-sm tracking-[0.3px] border border-transparent flex gap-2 items-center justify-center;
+  white-space: nowrap;
+  user-select: none;
+}
+.button svg {
+  @apply w-[18px] h-[18px];
+}
+.size-normal {
+  @apply min-h-10 px-4;
+}
+.size-minimum {
+  @apply h-6 px-0;
+}
+.size-small {
+  @apply h-8 px-4;
+}
+.size-small-disabled {
+  @apply h-8 px-4;
+}
+.size-normal-disabled {
+  @apply min-h-10 px-4;
+}
+.primary {
+  @apply bg-primary-base text-white;
+}
+.primary svg,
+.primary svg path,
+.primary:hover svg,
+.primary:hover svg path {
+  @apply fill-white!;
+}
+.primary:hover {
+  @apply bg-primary-hover;
+}
+.primary:active {
+  @apply bg-primary-dark;
+}
+.primary-disabled {
+  @apply text-disabled-text bg-primary-disabled cursor-no-drop;
+}
+.primary-disabled svg,
+.primary-disabled svg path {
+  @apply fill-disabled-text;
+}
+.secondary {
+  @apply bg-background-secondary text-primary-base border-[rgba(0,0,0,0.02)];
+}
+.secondary svg,
+.secondary svg path {
+  @apply fill-primary-base;
+}
+.secondary:hover {
+  @apply bg-background-secondary-hover;
+}
+.secondary:active {
+  @apply bg-background-secondary-active;
+}
+.secondary-disabled {
+  @apply text-disabled-text bg-secondary-disabled cursor-no-drop;
+}
+.secondary-disabled svg,
+.secondary-disabled svg path {
+  @apply fill-disabled-text;
+}
+.text {
+  @apply p-0 bg-transparent text-primary-base;
+}
+.text svg,
+.text svg path {
+  @apply fill-primary-base;
+}
+.text:hover {
+  @apply text-primary-light;
+}
+.text:hover svg,
+.text:hover svg path {
+  @apply fill-primary-light;
+}
+.text:active {
+  @apply text-primary-pressed;
+}
+.text:active svg,
+.text:active svg path {
+  @apply fill-primary-pressed;
+}
+.text-disabled {
+  @apply p-0 bg-transparent text-disabled-text cursor-no-drop;
+}
+.text-disabled svg,
+.text-disabled svg path {
+  @apply fill-disabled-text;
+}
+.icon {
+  @apply p-0 bg-transparent w-10 h-10 flex items-center justify-center rounded-full;
+}
+.icon svg,
+.icon svg path {
+  @apply fill-primary-base;
+}
+.icon:hover {
+  @apply p-0 bg-background-primary-hover;
+}
+.icon:active {
+  @apply p-0 bg-background-primary-active;
+}
+.icon-disabled svg,
+.icon-disabled svg path {
+  @apply fill-disabled-text;
+}
