@@ -1,7 +1,10 @@
+import { AppRouter } from "@/app/providers/AppRouter.tsx";
+
 function App() {
   return (
-    <div>
-    </div>
+    <>
+      <AppRouter />
+    </>
   )
 }
 
