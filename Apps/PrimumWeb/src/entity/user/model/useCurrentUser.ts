@@ -1,6 +1,6 @@
 import useSWRImmutable from 'swr/immutable';
-import { userApiConfig } from '@/entity/user/config';
 import { getUserInfo } from '@/entity/user';
+import { api } from '@/shared/config/api.ts';
 
 export const useCurrentUser = () => {
   const {
@@ -8,7 +8,7 @@ export const useCurrentUser = () => {
     isLoading,
     mutate,
   } = useSWRImmutable(
-    [userApiConfig.getUserInfo],
+    [api.user.getUserInfo],
     async () => {
       const response = await getUserInfo();
       return response.data;
