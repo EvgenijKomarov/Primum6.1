@@ -1,0 +1,12 @@
+@reference "@/global.css";
+.formRow {
+  @apply flex w-full gap-[16px];
+}
+
+.formCol {
+  @apply min-w-0 flex-1;
+}
+
+.formActions {
+  @apply flex gap-[8px] mt-[16px];
+}

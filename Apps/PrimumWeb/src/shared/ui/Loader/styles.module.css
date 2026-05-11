@@ -1,0 +1,20 @@
+@reference "@/global.css";
+
+.miniLoader {
+  @apply animate-[spin_1s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#09f] border-t-[#09f] rounded-full h-[18px] w-[18px] static mx-auto my-1;
+}
+.loader {
+  @apply animate-[spin_1s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#09f] border-t-[#09f] rounded-full h-[5vmin] w-[5vmin] top-[calc(50%-2.5vmin)] left-[calc(50%-2.5vmin)] fixed z-[9999];
+}
+.loader:before {
+  @apply content-[''] animate-[spin_2s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#3cf] border-t-[#3cf] rounded-full absolute top-0 left-0 h-[4vmin] w-[4vmin];
+}
+.loader:after {
+  @apply content-[''] animate-[spin_3s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#6ff] border-t-[#6ff] rounded-full absolute top-[.5vmin] left-[.5vmin] h-[3vmin] w-[3vmin];
+}
+.loader.sttc {
+  @apply static mx-auto my-1;
+}
+.loader.abslt {
+  @apply absolute;
+}
