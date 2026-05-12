@@ -12,7 +12,12 @@ namespace CoreDBModel.Extensions
         public static IServiceCollection AddCoreContext(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<PrimumContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString, npgsql =>
+                {
+                    npgsql.MigrationsAssembly(typeof(PrimumContext).Assembly.FullName);
+                    npgsql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null); // Авто-ретрай при кратковременных сбоях
+                    npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                }));
 
             return services;
         }

@@ -39,7 +39,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
-                .Where(x => x.DateTime > DateTime.Now)
+                .Where(x => x.DateTime > DateTime.UtcNow)
                 .ToByDateDto(false)
                 .ToPageResult(_page, _pageSize);
         }
@@ -56,7 +56,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Student.User.Id == studentId)
-                .Where(x => x.DateTime > DateTime.Now)
+                .Where(x => x.DateTime > DateTime.UtcNow)
                 .ToByDateDto(false)
                 .ToPageResult(_page, _pageSize);
         }

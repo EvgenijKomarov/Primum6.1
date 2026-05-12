@@ -29,7 +29,7 @@ namespace PrimumCore.Services.Iterators
             {
                 User = user,
                 Token = randomGenerator.GenerateRandomString(),
-                LifeTime = DateTime.Now.AddHours(12),
+                LifeTime = DateTime.UtcNow.AddHours(12),
                 Meaning = TokenMeaning.EmailVerification
             };
             user.VerificationTokens.Add(token);
@@ -54,7 +54,7 @@ namespace PrimumCore.Services.Iterators
 
             var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);
             if (token is null) { throw new NotFoundException("Token"); }
-            if (token.LifeTime < DateTime.Now) { throw new BusinessLogicException("Token expired"); }
+            if (token.LifeTime < DateTime.UtcNow) { throw new BusinessLogicException("Token expired"); }
             if (token.IsUsed) { throw new BusinessLogicException("Token is used"); }
 
             token.IsUsed = true;

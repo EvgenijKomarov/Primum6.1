@@ -79,8 +79,6 @@ public partial class PrimumContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            entity.Property(e => e.LastIteration).HasColumnType("datetime2");
-
             entity.HasOne(d => d.Abonement)
                 .WithMany(a => a.AbonementShedules)
                 .HasForeignKey(d => d.AbonementId)
@@ -126,8 +124,6 @@ public partial class PrimumContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-            entity.Property(e => e.DateTime).HasColumnType("datetime2");
 
             entity.HasOne(d => d.Abonement).WithMany(a => a.Lessons).HasForeignKey(d => d.AbonementId)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -194,8 +190,6 @@ public partial class PrimumContext : DbContext
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            entity.Property(e => e.PromotionDate).HasColumnType("datetime2");
-
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.Permissions)
                 .HasForeignKey(e => e.AdminProfileId)
@@ -211,8 +205,6 @@ public partial class PrimumContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime2");
 
             entity.HasOne(e => e.AdminProfile)
                 .WithMany(e => e.IncidentLogs)

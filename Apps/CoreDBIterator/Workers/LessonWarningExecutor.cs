@@ -33,7 +33,7 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Where(l => l.Status == LessonStatus.Waiting)
-                .Where(l => l.DateTime <= DateTime.Now.AddDays(1))
+                .Where(l => l.DateTime <= DateTime.UtcNow.AddDays(1))
                 .ToArray();
 
             if (lessonsForPreparation.Length != 0)
