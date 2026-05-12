@@ -16,6 +16,15 @@ var solutionEnvironment = await new ConfigurationClient().GetRoutesAsync();
 builder.WebHost.UseUrls(solutionEnvironment.PrimumWebAPI.SelfUrl);
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.AddAuth();
 builder.AddLogging();
@@ -38,6 +47,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
