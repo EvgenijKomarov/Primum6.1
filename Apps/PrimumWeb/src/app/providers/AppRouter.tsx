@@ -1,4 +1,4 @@
-import { ROUTES } from "@/shared/config/router.tsx";
+import { ROUTES } from "@/app/config/router.tsx";
 import { Route, Routes } from "react-router";
 
 export const AppRouter = () => {
