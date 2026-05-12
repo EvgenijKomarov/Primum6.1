@@ -99,7 +99,7 @@ services:
     container_name: chat-bot-notification-service
     environment:
       CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
-      MODE: "Production"
+      MODE: "Development"
     networks:
       - primum-network
     depends_on:
@@ -167,14 +167,13 @@ services:
     networks:
       - primum-network
 
-  frontend:
-    image: nginx:alpine
-    container_name: primum-frontend
+  primumweb:
+    build:
+      context: Apps/PrimumWeb
+      dockerfile: Dockerfile
+    container_name: primumweb
     ports:
-      - "3000:80"
-    volumes:
-      - ./Apps/Frontend:/usr/share/nginx/html:ro
-      - ./Apps/Frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - "3001:80"
     depends_on:
       - primumwebapi
       - signservice
