@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
 import { AuthPage } from '@/pages/auth/ui/AuthPage.tsx';
+import { HomePage } from "@/pages/home/ui/HomePage.tsx";
+import type { Role } from '@/shared/enums';
 
 interface RouteDef {
   path: string;
   element: ReactNode;
-  roles?: string[];
+  roles?: Role[];
 }
 
 interface PrivateRoute extends RouteDef {
@@ -16,6 +18,10 @@ const ROUTES_DEF: RouteDef[] = [
     path: 'auth',
     element: <AuthPage />,
   },
+  {
+    path: '/',
+    element: <HomePage />,
+  }
 ];
 
 const makeRoutes = (routeDefs: RouteDef[]): PrivateRoute[] => {
