@@ -57,6 +57,19 @@ export const RegisterForm = ({ onSwitch }: RegisterFormProps) => {
               )}
             />
           </div>
+          <div className={styles.formCol}>
+            <Controller
+              name={"patronymic"}
+              control={form.control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label={"Отчество"}
+                  placeholder={"Введите ваше отчество"}
+                />
+              )}
+            />
+          </div>
         </div>
         <div className={styles.formRow}>
           <div className={styles.formCol}>
