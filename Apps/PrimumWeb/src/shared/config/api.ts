@@ -23,4 +23,8 @@ export const api = {
   publicTheme: {
     getThemes: "/public/themes",
   },
+  publicCourse: {
+    getAll:     "/public/courses",
+    getByTheme: "/public/courses/by-theme",
+  },
 }

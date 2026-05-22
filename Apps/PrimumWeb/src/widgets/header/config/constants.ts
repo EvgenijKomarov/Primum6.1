@@ -10,9 +10,14 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
   [Role.TEACHER]: [
     {
       label: "Мои курсы",
-      path: "/courses"
+      path: "/courses",
     }
   ],
-  [Role.STUDENT]: [],
+  [Role.STUDENT]: [
+    {
+      label: "Доступные курсы",
+      path: "/catalog",
+    }
+  ],
   [Role.GUEST]: [],
 };

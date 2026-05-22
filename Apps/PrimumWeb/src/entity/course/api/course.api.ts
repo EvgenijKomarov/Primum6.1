@@ -17,3 +17,19 @@ export const createCourse = async (data: CourseInputDto) => {
     data,
   });
 };
+
+export const getPublicCourses = async (page = 0, pageSize = 20) => {
+  return await fetcherInstance<CourseDtoPageResult>({
+    method: 'GET',
+    url: api.publicCourse.getAll,
+    params: { page, pageSize },
+  });
+};
+
+export const getPublicCoursesByTheme = async (themeId: number, page = 0, pageSize = 20) => {
+  return await fetcherInstance<CourseDtoPageResult>({
+    method: 'GET',
+    url: `${api.publicCourse.getByTheme}/${themeId}`,
+    params: { page, pageSize },
+  });
+};

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { AuthPage } from '@/pages/auth/ui/AuthPage.tsx';
+import { CatalogPage } from '@/pages/catalog/index.ts';
 import { CoursesPage } from '@/pages/courses/index.ts';
 import { HomePage } from "@/pages/home/ui/HomePage.tsx";
 import { ProfilePage } from "@/pages/profile/index.ts";
@@ -32,6 +33,11 @@ const ROUTES_DEF: RouteDef[] = [
     path: '/courses',
     element: <CoursesPage />,
     roles: [Role.TEACHER],
+  },
+  {
+    path: '/catalog',
+    element: <CatalogPage />,
+    roles: [Role.STUDENT],
   },
 ];
 
