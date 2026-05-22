@@ -34,7 +34,8 @@ export const createTeacherProfile = async (data: CreateTeacherProfileRequest) =>
   return await fetcherInstance({
     method: 'POST',
     url: api.user.createTeacherProfile,
-    data: data.aboutTeacher,
+    data: JSON.stringify(data.aboutTeacher),
+    headers: { 'Content-Type': 'application/json' },
   });
 };
 
