@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { useStudentProfile } from '@/entity/student';
 import { useTeacherProfile } from '@/entity/teacher';
@@ -7,6 +8,7 @@ import {
   createTeacherProfile,
   sendEmailVerification,
   useCurrentUser,
+  useUserStore,
 } from '@/entity/user';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
@@ -31,6 +33,8 @@ const EditIcon = () => (
 );
 
 export const ProfilePage = () => {
+  const navigate = useNavigate();
+  const clearStore = useUserStore((s) => s.clear);
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
 
   const { studentProfile, isLoading: studentLoading } = useStudentProfile(
@@ -76,6 +80,12 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleLogout = async () => {
+    clearStore();
+    await mutateUser(undefined, { revalidate: false });
+    navigate('/auth', { replace: true });
+  };
+
   const handleCreateTeacher = async () => {
     setIsCreatingTeacher(true);
     try {
@@ -108,7 +118,16 @@ export const ProfilePage = () => {
 
         {/* ── Personal info ── */}
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Личные данные</h2>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.cardTitle}>Личные данные</h2>
+            <Button
+              variant={ButtonTypeEnum.TEXT}
+              size={ButtonSizeEnum.SMALL}
+              onClick={handleLogout}
+            >
+              Выйти
+            </Button>
+          </div>
           <div className={styles.fields}>
             <div className={styles.field}>
               <span className={styles.fieldLabel}>Фамилия</span>
