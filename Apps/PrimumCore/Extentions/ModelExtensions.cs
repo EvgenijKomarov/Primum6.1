@@ -40,7 +40,6 @@ namespace PrimumCore.Extentions
                 FreeLessons = x.FreeLessons,
                 TeacherAbout = x.Teacher.About,
                 IsActive = x.IsActive,
-                ApproveStatus = x.ApproveStatus,
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level
             });
@@ -163,6 +162,7 @@ namespace PrimumCore.Extentions
                 IsApprovedTeacher = x.TeacherProfile != null ?
                             x.TeacherProfile.ApproveStatus == ApproveStatus.Approved : (bool?)null,
                 IsAdmin = x.AdminProfile != null,
+                Email = x.MailAdress,
                 IsBanned = x.IsBanned,
                 MailConfirmed = x.IsMailChecked,
                 IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(x)

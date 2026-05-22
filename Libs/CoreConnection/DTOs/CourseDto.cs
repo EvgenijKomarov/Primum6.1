@@ -37,7 +37,5 @@ namespace CoreConnection.DTOs
         public required int Level { get; set; }
 
         public required string Rank { get; set; }
-
-        public required ApproveStatus ApproveStatus { get; set; }
     }
 }
