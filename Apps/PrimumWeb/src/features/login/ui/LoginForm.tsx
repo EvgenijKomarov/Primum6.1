@@ -9,9 +9,10 @@ import { ButtonTypeEnum } from "@/shared/enums";
 
 interface LoginFormProps {
   onSwitch: () => void;
+  onSuccess?: () => void;
 }
 
-export const LoginForm = ({ onSwitch }: LoginFormProps) => {
+export const LoginForm = ({ onSwitch, onSuccess }: LoginFormProps) => {
   const form = useForm<LoginDto>();
   const setToken = useUserStore((s) => s.setToken);
 
@@ -20,6 +21,7 @@ export const LoginForm = ({ onSwitch }: LoginFormProps) => {
   const onSubmit = form.handleSubmit(async (data) => {
     const response = await fetchLogin(data);
     setToken(response.data);
+    onSuccess?.();
   });
 
   const handleSwitch = () => {

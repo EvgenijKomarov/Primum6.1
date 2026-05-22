@@ -1,5 +1,6 @@
 export interface UserDto {
   id: number;
+  email: string | null;
   name: string | null;
   surname: string | null;
   patronymic: string | null;
