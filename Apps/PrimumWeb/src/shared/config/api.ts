@@ -17,4 +17,10 @@ export const api = {
   teacher: {
     getProfile: "/teacher",
   },
+  teacherCourse: {
+    getCourses: "/teacher/courses",
+  },
+  publicTheme: {
+    getThemes: "/public/themes",
+  },
 }

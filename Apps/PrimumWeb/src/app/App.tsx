@@ -2,6 +2,7 @@ import { useLocation } from 'react-router';
 
 import { AppRouter } from '@/app/providers/AppRouter.tsx';
 import { Header } from '@/widgets/header';
+import { ModalRoot } from '@/widgets/modal';
 
 function App() {
   const location = useLocation();
@@ -11,6 +12,7 @@ function App() {
     <>
       {showHeader && <Header />}
       <AppRouter />
+      <ModalRoot />
     </>
   );
 }
