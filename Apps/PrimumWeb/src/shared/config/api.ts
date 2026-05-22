@@ -10,5 +10,11 @@ export const api = {
     confirmChat: "/user/confirm-chat",
     createTeacherProfile: "/user/create-teacher-profile",
     createStudentProfile: "/user/create-student-profile",
-  }
+  },
+  student: {
+    getProfile: "/student",
+  },
+  teacher: {
+    getProfile: "/teacher",
+  },
 }

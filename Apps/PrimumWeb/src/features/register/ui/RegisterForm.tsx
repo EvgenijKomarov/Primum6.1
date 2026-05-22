@@ -9,9 +9,10 @@ import { ButtonTypeEnum } from "@/shared/enums";
 
 interface RegisterFormProps {
   onSwitch: () => void;
+  onSuccess?: () => void;
 }
 
-export const RegisterForm = ({ onSwitch }: RegisterFormProps) => {
+export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
   const form = useForm<RegisterDto>();
   const setToken = useUserStore((s) => s.setToken);
 
@@ -20,6 +21,7 @@ export const RegisterForm = ({ onSwitch }: RegisterFormProps) => {
   const onSubmit = form.handleSubmit(async (data) => {
     const response = await fetchRegister(data);
     setToken(response.data);
+    onSuccess?.();
   });
 
   const handleSwitch = () => {

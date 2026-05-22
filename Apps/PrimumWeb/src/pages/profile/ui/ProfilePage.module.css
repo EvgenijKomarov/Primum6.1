@@ -1,0 +1,216 @@
+@reference "@/global.css";
+
+.page {
+  min-height: calc(100vh - 3.75rem);
+  padding: 2.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card {
+  background-color: var(--color-background-secondary);
+  border: 1px solid #334155;
+  border-radius: 0.875rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1.25rem;
+}
+
+/* ── Card 1: Personal info ── */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.fieldValue {
+  font-size: 0.9375rem;
+  color: #e2e8f0;
+  font-weight: 400;
+  min-height: 1.5rem;
+}
+
+/* ── Card 2: Email ── */
+
+.emailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.emailRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.emailInputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.emailInputWrapper > div {
+  flex: 1;
+}
+
+.checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+  color: #22c55e;
+}
+
+.checkmark svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.emailActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* ── Create profile cards ── */
+
+.cardDescription {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 1.25rem;
+  line-height: 1.55;
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  outline: none;
+  resize: vertical;
+  min-height: 6rem;
+  font-family: inherit;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  margin-bottom: 1rem;
+}
+
+.textarea::placeholder {
+  color: #64748b;
+}
+
+.textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #6366f1 20%, transparent);
+}
+
+/* ── Profile stats ── */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat {
+  background-color: #0f172a;
+  border: 1px solid #1e3a5f20;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+}
+
+.statLabel {
+  font-size: 0.6875rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.statValue {
+  font-size: 0.9375rem;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.about {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.badgeAvailable {
+  background-color: color-mix(in srgb, #22c55e 15%, transparent);
+  color: #4ade80;
+}
+
+.badgeUnavailable {
+  background-color: color-mix(in srgb, #64748b 15%, transparent);
+  color: #94a3b8;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
