@@ -15,6 +15,10 @@ export const api = {
     getProfile: "/student",
     subscribe: "/student/subscribe",
   },
+  studentLesson: {
+    getAll: "/student/lessons",
+    getFuture: "/student/lessons/future",
+  },
   teacher: {
     getProfile: "/teacher",
   },
