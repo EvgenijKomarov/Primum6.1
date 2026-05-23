@@ -13,9 +13,14 @@ export const api = {
   },
   student: {
     getProfile: "/student",
+    subscribe: "/student/subscribe",
   },
   teacher: {
     getProfile: "/teacher",
+  },
+  publicTeacher: {
+    getAll: "/public/teachers",
+    getSchedules: "/public/teachers",
   },
   teacherCourse: {
     getCourses: "/teacher/courses",
@@ -26,5 +31,8 @@ export const api = {
   publicCourse: {
     getAll:     "/public/courses",
     getByTheme: "/public/courses/by-theme",
+  },
+  teacherSchedule: {
+    base: "/teacher/shedules",
   },
 }

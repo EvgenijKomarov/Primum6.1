@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { AuthPage } from '@/pages/auth/ui/AuthPage.tsx';
 import { CatalogPage } from '@/pages/catalog/index.ts';
 import { CoursesPage } from '@/pages/courses/index.ts';
+import { SchedulePage } from '@/pages/schedule/index.ts';
 import { HomePage } from "@/pages/home/ui/HomePage.tsx";
 import { ProfilePage } from "@/pages/profile/index.ts";
 import { Role } from '@/shared/enums';
@@ -32,6 +33,11 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/courses',
     element: <CoursesPage />,
+    roles: [Role.TEACHER],
+  },
+  {
+    path: '/schedule',
+    element: <SchedulePage />,
     roles: [Role.TEACHER],
   },
   {

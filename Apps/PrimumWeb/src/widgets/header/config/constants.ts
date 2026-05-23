@@ -11,7 +11,11 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
     {
       label: "Мои курсы",
       path: "/courses",
-    }
+    },
+    {
+      label: "Расписание",
+      path: "/schedule",
+    },
   ],
   [Role.STUDENT]: [
     {

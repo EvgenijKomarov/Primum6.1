@@ -4,6 +4,8 @@ import useSWRImmutable from 'swr/immutable';
 import { usePublicCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
 import { getPublicThemes } from '@/entity/course-theme';
+import { CourseScheduleModal } from '@/features/subscribe-course';
+import { useModal } from '@/shared/lib/modal';
 import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
@@ -21,7 +23,14 @@ const EmptyIcon = () => (
   </svg>
 );
 
-const CourseCard = ({ course }: { course: CourseDto }) => {
+const MODAL_PREFIX = 'subscribe-course';
+
+interface CourseCardProps {
+  course: CourseDto;
+  onSubscribe: (course: CourseDto) => void;
+}
+
+const CourseCard = ({ course, onSubscribe }: CourseCardProps) => {
   const isFree = course.price === 0;
 
   return (
@@ -55,9 +64,17 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
 
       <div className={styles.cardFooter}>
         <span className={styles.cardTeacher}>{course.teacherName ?? '—'}</span>
-        <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
-          {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}
-        </span>
+        <div className={styles.cardFooterRight}>
+          <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
+            {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}
+          </span>
+          <button
+            className={styles.subscribeBtn}
+            onClick={(e) => { e.stopPropagation(); onSubscribe(course); }}
+          >
+            Записаться
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -65,6 +82,7 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
 
 export const CatalogPage = () => {
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
+  const { open, close } = useModal();
 
   const { data: themesResult, isLoading: themesLoading } = usePublicThemes();
   const themes = themesResult?.items?.filter((t) => t.isActive) ?? [];
@@ -72,6 +90,20 @@ export const CatalogPage = () => {
   const { courses, isLoading: coursesLoading } = usePublicCourses(selectedThemeId);
 
   const isLoading = themesLoading || coursesLoading;
+
+  const handleSubscribe = (course: CourseDto) => {
+    const id = `${MODAL_PREFIX}-${course.id}`;
+    open({
+      id,
+      title: 'Запись на курс',
+      content: (
+        <CourseScheduleModal
+          course={course}
+          onSuccess={() => close(id)}
+        />
+      ),
+    });
+  };
 
   return (
     <div className={styles.page}>
@@ -111,7 +143,13 @@ export const CatalogPage = () => {
             </p>
           </div>
         ) : (
-          courses.map((course) => <CourseCard key={course.id} course={course} />)
+          courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              onSubscribe={handleSubscribe}
+            />
+          ))
         )}
       </div>
     </div>
