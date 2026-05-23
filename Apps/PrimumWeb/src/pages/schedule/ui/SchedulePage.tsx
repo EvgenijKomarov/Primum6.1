@@ -1,4 +1,4 @@
-import { Fragment, useState, useCallback } from 'react';
+import { Fragment, useState, useCallback, useMemo } from 'react';
 import {
   DayOfWeek,
   useTeacherSchedules,
@@ -35,14 +35,18 @@ export const SchedulePage = () => {
   const { schedules, isLoading, mutate } = useTeacherSchedules();
   const [loadingKeys, setLoadingKeys] = useState<Set<string>>(new Set());
 
-  const scheduleMap = new Map<string, TeacherScheduleDto>(
-    schedules.map((s) => [slotKey(s.dayOfWeek, s.time), s]),
+  const scheduleMap = useMemo(
+    () => new Map<string, TeacherScheduleDto>(schedules.map((s) => [slotKey(s.dayOfWeek, s.time), s])),
+    [schedules],
   );
 
   const setKeyLoading = (key: string, loading: boolean) => {
     setLoadingKeys((prev) => {
       const next = new Set(prev);
-      loading ? next.add(key) : next.delete(key);
+
+      if (loading) next.add(key);
+      else next.delete(key);
+
       return next;
     });
   };
