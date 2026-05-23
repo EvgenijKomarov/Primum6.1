@@ -1,0 +1,231 @@
+import { useState } from 'react';
+import {
+  LessonStatus,
+  useStudentFutureLessons,
+  useStudentLessons,
+} from '@/entity/lesson';
+import type { LessonDto, FutureLessonDto, LessonsByDateDto } from '@/entity/lesson';
+
+import styles from './LessonsPage.module.css';
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+const RU_DAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+
+const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+const formatDateLabel = (dateStr: string) => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${d} ${RU_MONTHS[m - 1]} ${y}`;
+};
+
+const formatDateTime = (iso: string) => {
+  const dt = new Date(iso);
+  const d = dt.getDate();
+  const m = RU_MONTHS[dt.getMonth()];
+  const hh = String(dt.getHours()).padStart(2, '0');
+  const mm = String(dt.getMinutes()).padStart(2, '0');
+  return `${d} ${m}, ${hh}:${mm}`;
+};
+
+const formatTimeSlot = (timeStr: string) => {
+  const [h] = timeStr.split(':').map(Number);
+  return `${h}:00 — ${h + 1}:00`;
+};
+
+const isToday = (dateStr: string) => {
+  const now = new Date();
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return now.getFullYear() === y && now.getMonth() + 1 === m && now.getDate() === d;
+};
+
+// ── Status badge ─────────────────────────────────────────────────────────────
+
+const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: string }> = {
+  [LessonStatus.Waiting]:           { label: 'Ожидает',   cls: styles.badgeWaiting },
+  [LessonStatus.Warned]:            { label: 'Скоро',     cls: styles.badgeWarned  },
+  [LessonStatus.Happened]:          { label: 'Прошло',    cls: styles.badgeHappened },
+  [LessonStatus.Missed]:            { label: 'Пропущено', cls: styles.badgeMissed  },
+  [LessonStatus.MissedWithoutReason]: { label: 'Пропущено', cls: styles.badgeMissed },
+};
+
+const StatusBadge = ({ status }: { status: LessonStatus }) => {
+  const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
+  return <span className={`${styles.badge} ${cfg.cls}`}>{cfg.label}</span>;
+};
+
+// ── Grade circle ─────────────────────────────────────────────────────────────
+
+const GradeCircle = ({ grade }: { grade: number }) => {
+  const cls = grade >= 4 ? styles.gradeHigh : grade >= 3 ? styles.gradeMid : styles.gradeLow;
+  return <span className={`${styles.gradeBadge} ${cls}`}>{grade}</span>;
+};
+
+// ── Link icon ────────────────────────────────────────────────────────────────
+
+const ExternalLinkIcon = () => (
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M4.5 1.5H10.5V7.5M10.5 1.5L5 7M1.5 4.5H4.5V10.5H1.5V4.5Z" />
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+  </svg>
+);
+
+// ── Upcoming lesson card ──────────────────────────────────────────────────────
+
+const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
+  <div className={styles.card}>
+    <div className={styles.cardLeft}>
+      <span className={styles.cardCourseName}>{lesson.courseName}</span>
+      <div className={styles.cardMeta}>
+        <span className={styles.cardTeacher}>{lesson.teacherDisplayName}</span>
+        <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
+      </div>
+    </div>
+    <div className={styles.cardRight}>
+      <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+        {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+      </span>
+      <StatusBadge status={lesson.lessonStatus} />
+    </div>
+  </div>
+);
+
+// ── History lesson card ───────────────────────────────────────────────────────
+
+const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
+  <div className={styles.card}>
+    <div className={styles.cardLeft}>
+      <span className={styles.cardCourseName}>{lesson.courseName}</span>
+      <div className={styles.cardMeta}>
+        <span className={styles.cardTeacher}>{lesson.teacherDisplayName}</span>
+        <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
+      </div>
+    </div>
+    <div className={styles.cardRight}>
+      {lesson.grade != null && <GradeCircle grade={Math.round(lesson.grade)} />}
+      <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+        {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+      </span>
+      <StatusBadge status={lesson.lessonStatus} />
+      {lesson.lessonLink && (
+        <a
+          href={lesson.lessonLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.linkBtn}
+        >
+          <ExternalLinkIcon />
+          Открыть
+        </a>
+      )}
+    </div>
+  </div>
+);
+
+// ── Date group ────────────────────────────────────────────────────────────────
+
+const DateGroup = ({ group }: { group: LessonsByDateDto }) => {
+  const today = isToday(group.date);
+  return (
+    <div className={styles.dateGroup}>
+      <div className={styles.dateHeading}>
+        <span className={styles.dateHeadingDay}>{RU_DAYS[group.dayOfWeek]}</span>
+        <span className={styles.dateHeadingDate}>{formatDateLabel(group.date)}</span>
+        {today && <span className={styles.dateHeadingToday}>Сегодня</span>}
+      </div>
+      <div className={styles.lessonList}>
+        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} />)}
+      </div>
+    </div>
+  );
+};
+
+// ── Tab content ───────────────────────────────────────────────────────────────
+
+const UpcomingTab = () => {
+  const { groups, isLoading } = useStudentFutureLessons();
+
+  if (isLoading) return (
+    <div className={styles.lessonList}>
+      {Array.from({ length: 3 }).map((_, i) => <div key={i} className={styles.skeletonCard} />)}
+    </div>
+  );
+
+  if (groups.length === 0) return (
+    <div className={styles.empty}>
+      <CalendarIcon />
+      <p className={styles.emptyText}>Предстоящих занятий пока нет</p>
+    </div>
+  );
+
+  return <>{groups.map((g) => <DateGroup key={g.date} group={g} />)}</>;
+};
+
+const HistoryTab = () => {
+  const { lessons, isLoading } = useStudentLessons();
+
+  if (isLoading) return (
+    <div className={styles.lessonList}>
+      {Array.from({ length: 5 }).map((_, i) => <div key={i} className={styles.skeletonCard} />)}
+    </div>
+  );
+
+  if (lessons.length === 0) return (
+    <div className={styles.empty}>
+      <CalendarIcon />
+      <p className={styles.emptyText}>История занятий пуста</p>
+    </div>
+  );
+
+  return (
+    <div className={styles.lessonList}>
+      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} />)}
+    </div>
+  );
+};
+
+// ── Page ─────────────────────────────────────────────────────────────────────
+
+type Tab = 'upcoming' | 'history';
+
+export const LessonsPage = () => {
+  const [activeTab, setActiveTab] = useState<Tab>('upcoming');
+
+  const { groups } = useStudentFutureLessons();
+  const { lessons } = useStudentLessons();
+
+  const upcomingCount = groups.reduce((acc, g) => acc + g.lessons.length, 0);
+
+  return (
+    <div className={styles.page}>
+      <h1 className={styles.title}>Мои занятия</h1>
+
+      <div className={styles.tabs}>
+        <button
+          className={`${styles.tab} ${activeTab === 'upcoming' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('upcoming')}
+        >
+          Предстоящие
+          {upcomingCount > 0 && <span className={styles.tabCount}>{upcomingCount}</span>}
+        </button>
+        <button
+          className={`${styles.tab} ${activeTab === 'history' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('history')}
+        >
+          История
+          {lessons.length > 0 && <span className={styles.tabCount}>{lessons.length}</span>}
+        </button>
+      </div>
+
+      {activeTab === 'upcoming' ? <UpcomingTab /> : <HistoryTab />}
+    </div>
+  );
+};

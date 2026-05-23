@@ -1,4 +1,4 @@
-﻿using CoreConnection.DTOs;
+using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
@@ -25,7 +25,7 @@ namespace PrimumCore.Extentions
                 Rating = x.Rating
             });
 
-        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x => 
+        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x =>
             new CourseDto
             {
                 Id = x.Id,
@@ -34,7 +34,7 @@ namespace PrimumCore.Extentions
                 CourseThemeName = x.CourseTheme.ThemeName,
                 About = x.About,
                 CourseThemeId = x.CourseTheme.Id,
-                TeacherId = x.Teacher.Id,
+                TeacherId = x.Teacher.User.Id,
                 Price = x.Price,
                 MaxLessons = x.MaxLessons,
                 FreeLessons = x.FreeLessons,

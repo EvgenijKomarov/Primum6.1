@@ -8,3 +8,10 @@ export const getStudentProfile = async () => {
     url: api.student.getProfile,
   });
 };
+
+export const subscribeToCourse = async (courseId: number, teacherScheduleId: number) => {
+  return await fetcherInstance<number>({
+    method: 'POST',
+    url: `${api.student.subscribe}/${courseId}/${teacherScheduleId}`,
+  });
+};
