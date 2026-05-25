@@ -34,6 +34,8 @@ namespace CoreConnection.DTOs
 
         public required bool IsActive { get; set; }
 
+        public required bool IsAvailable { get; set; }
+
         public required int Level { get; set; }
 
         public required string Rank { get; set; }

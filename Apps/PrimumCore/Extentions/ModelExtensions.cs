@@ -40,6 +40,7 @@ namespace PrimumCore.Extentions
                 FreeLessons = x.FreeLessons,
                 TeacherAbout = x.Teacher.About,
                 IsActive = x.IsActive,
+                IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level
             });
