@@ -38,7 +38,7 @@ export const ProfilePage = () => {
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
 
   const { studentProfile, isLoading: studentLoading } = useStudentProfile(
-    user?.isApprovedStudent === true,
+    user?.isApprovedStudent !== null,
   );
   const { teacherProfile, isLoading: teacherLoading } = useTeacherProfile(
     user?.isApprovedTeacher === true,
@@ -207,7 +207,7 @@ export const ProfilePage = () => {
         {emailConfirmed ? (
           <>
             {/* ── Student card ── */}
-            {user.isApprovedStudent === true ? (
+            {user.isApprovedStudent !== null ? (
               <div className={styles.card}>
                 <h2 className={styles.cardTitle}>Профиль ученика</h2>
                 {studentLoading || !studentProfile ? (
@@ -259,60 +259,83 @@ export const ProfilePage = () => {
             )}
 
             {/* ── Teacher card ── */}
-            {user.isApprovedTeacher === true ? (
-              <div className={styles.card}>
-                <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
-                {teacherLoading || !teacherProfile ? (
-                  <div style={{ height: '4rem' }} />
-                ) : (
-                  <>
-                    <span
-                      className={`${styles.badge} ${
-                        teacherProfile.isAvailable ? styles.badgeAvailable : styles.badgeUnavailable
-                      }`}
-                    >
-                      <span className={styles.dot} />
-                      {teacherProfile.isAvailable ? 'Доступен' : 'Недоступен'}
-                    </span>
-                    <div className={styles.stats}>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>Уровень</span>
-                        <span className={styles.statValue}>{teacherProfile.level}</span>
+          {(() => {
+            switch (user.isApprovedTeacher) {
+              case true:
+                return (
+                  <div className={styles.card}>
+                  <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+                  {teacherLoading || !teacherProfile ? (
+                    <div style={{ height: '4rem' }} />
+                  ) : (
+                    <>
+                      <span
+                        className={`${styles.badge} ${
+                          teacherProfile.isAvailable ? styles.badgeAvailable : styles.badgeUnavailable
+                        }`}
+                      >
+                        <span className={styles.dot} />
+                        {teacherProfile.isAvailable ? 'Доступен' : 'Недоступен'}
+                      </span>
+                      <div className={styles.stats}>
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>Уровень</span>
+                          <span className={styles.statValue}>{teacherProfile.level}</span>
+                        </div>
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>Ранг</span>
+                          <span className={styles.statValue}>{teacherProfile.rank ?? '—'}</span>
+                        </div>
                       </div>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>Ранг</span>
-                        <span className={styles.statValue}>{teacherProfile.rank ?? '—'}</span>
-                      </div>
-                    </div>
-                    {teacherProfile.about && (
-                      <p className={styles.about}>{teacherProfile.about}</p>
-                    )}
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className={styles.card}>
-                <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
-                <p className={styles.cardDescription}>
-                  Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
-                </p>
-                <textarea
-                  className={styles.textarea}
-                  value={aboutTeacher}
-                  onChange={(e) => setAboutTeacher(e.target.value)}
-                  placeholder="Расскажите о себе: опыт, специализация, подход к обучению…"
-                />
-                <Button
-                  variant={ButtonTypeEnum.PRIMARY}
-                  size={ButtonSizeEnum.NORMAL}
-                  onClick={handleCreateTeacher}
-                  isLoading={isCreatingTeacher}
-                  disabled={!aboutTeacher.trim()}
-                >
-                  Создать профиль преподавателя
-                </Button>
-              </div>
-            )}
+                      {teacherProfile.about && (
+                        <p className={styles.about}>{teacherProfile.about}</p>
+                      )}
+                    </>
+                  )}
+                </div>
+                );
+
+              case false:
+                return (
+                  <div className={styles.card}>
+                    <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+                    <p className={styles.warning}>
+                      Пожалуйста, подождите. Ваш профиль преподавателя находится на рассмотрении. Обычно это занимает от нескольких часов до пары дней.
+                    </p>
+                  </div>
+                );
+
+              case null:
+                return (
+                  <div className={styles.card}>
+                  <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+                  <p className={styles.cardDescription}>
+                    Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
+                  </p>
+                  <textarea
+                    className={styles.textarea}
+                    value={aboutTeacher}
+                    onChange={(e) => setAboutTeacher(e.target.value)}
+                    placeholder="Расскажите о себе: опыт, специализация, подход к обучению…"
+                  />
+                  <Button
+                    variant={ButtonTypeEnum.PRIMARY}
+                    size={ButtonSizeEnum.NORMAL}
+                    onClick={handleCreateTeacher}
+                    isLoading={isCreatingTeacher}
+                    disabled={!aboutTeacher.trim()}
+                  >
+                    Создать профиль преподавателя
+                  </Button>
+                </div>
+                );
+
+              default:
+                return null;
+            }
+          })()}
+
+            
           </>
         ) : (
           <div className={styles.card}>
