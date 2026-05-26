@@ -38,7 +38,7 @@ export const ProfilePage = () => {
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
 
   const { studentProfile, isLoading: studentLoading } = useStudentProfile(
-    user?.isApprovedStudent !== null,
+    user?.isApprovedStudent !== null && user?.isApprovedStudent !== undefined,
   );
   const { teacherProfile, isLoading: teacherLoading } = useTeacherProfile(
     user?.isApprovedTeacher === true,
@@ -207,7 +207,7 @@ export const ProfilePage = () => {
         {emailConfirmed ? (
           <>
             {/* ── Student card ── */}
-            {user.isApprovedStudent !== null ? (
+            {user.isApprovedStudent !== null && user.isApprovedStudent !== undefined ? (
               <div className={styles.card}>
                 <h2 className={styles.cardTitle}>Профиль ученика</h2>
                 {studentLoading || !studentProfile ? (
