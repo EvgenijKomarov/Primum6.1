@@ -119,6 +119,14 @@
   margin-top: 0.25rem;
 }
 
+.warning {
+  font-size: 1.2rem;
+  color: #da9648;
+  margin-top: 0.25rem;
+  justify-content: center;
+  text-align: center;
+}
+
 /* ── Create profile cards ── */
 
 .cardDescription {

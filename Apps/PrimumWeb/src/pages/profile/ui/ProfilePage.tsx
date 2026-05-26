@@ -204,115 +204,123 @@ export const ProfilePage = () => {
             )}
           </div>
         </div>
-
-        {/* ── Student card ── */}
-        {user.isApprovedStudent === true ? (
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Профиль ученика</h2>
-            {studentLoading || !studentProfile ? (
-              <div style={{ height: '4rem' }} />
-            ) : (
-              <>
-                <div className={styles.stats}>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Уровень</span>
-                    <span className={styles.statValue}>{studentProfile.level}</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Ранг</span>
-                    <span className={styles.statValue}>{studentProfile.rank ?? '—'}</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Рейтинг</span>
-                    <span className={styles.statValue}>
-                      {studentProfile.rating != null ? studentProfile.rating.toFixed(1) : '—'}
-                    </span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Монеты</span>
-                    <span className={styles.statValue}>{studentProfile.coins}</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Баланс</span>
-                    <span className={styles.statValue}>{studentProfile.cash.toFixed(2)} ₽</span>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Профиль ученика</h2>
-            <p className={styles.cardDescription}>
-              Создайте профиль ученика, чтобы записываться на курсы и отслеживать прогресс.
-            </p>
-            <Button
-              variant={ButtonTypeEnum.PRIMARY}
-              size={ButtonSizeEnum.NORMAL}
-              onClick={handleCreateStudent}
-              isLoading={isCreatingStudent}
-            >
-              Создать профиль ученика
-            </Button>
-          </div>
-        )}
-
-        {/* ── Teacher card ── */}
-        {user.isApprovedTeacher === true ? (
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
-            {teacherLoading || !teacherProfile ? (
-              <div style={{ height: '4rem' }} />
-            ) : (
-              <>
-                <span
-                  className={`${styles.badge} ${
-                    teacherProfile.isAvailable ? styles.badgeAvailable : styles.badgeUnavailable
-                  }`}
-                >
-                  <span className={styles.dot} />
-                  {teacherProfile.isAvailable ? 'Доступен' : 'Недоступен'}
-                </span>
-                <div className={styles.stats}>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Уровень</span>
-                    <span className={styles.statValue}>{teacherProfile.level}</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Ранг</span>
-                    <span className={styles.statValue}>{teacherProfile.rank ?? '—'}</span>
-                  </div>
-                </div>
-                {teacherProfile.about && (
-                  <p className={styles.about}>{teacherProfile.about}</p>
+        {emailConfirmed ? (
+          <>
+            {/* ── Student card ── */}
+            {user.isApprovedStudent === true ? (
+              <div className={styles.card}>
+                <h2 className={styles.cardTitle}>Профиль ученика</h2>
+                {studentLoading || !studentProfile ? (
+                  <div style={{ height: '4rem' }} />
+                ) : (
+                  <>
+                    <div className={styles.stats}>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Уровень</span>
+                        <span className={styles.statValue}>{studentProfile.level}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Ранг</span>
+                        <span className={styles.statValue}>{studentProfile.rank ?? '—'}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Рейтинг</span>
+                        <span className={styles.statValue}>
+                          {studentProfile.rating != null ? studentProfile.rating.toFixed(1) : '—'}
+                        </span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Монеты</span>
+                        <span className={styles.statValue}>{studentProfile.coins}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Баланс</span>
+                        <span className={styles.statValue}>{studentProfile.cash.toFixed(2)} ₽</span>
+                      </div>
+                    </div>
+                  </>
                 )}
-              </>
+              </div>
+            ) : (
+              <div className={styles.card}>
+                <h2 className={styles.cardTitle}>Профиль ученика</h2>
+                <p className={styles.cardDescription}>
+                  Создайте профиль ученика, чтобы записываться на курсы и отслеживать прогресс.
+                </p>
+                <Button
+                  variant={ButtonTypeEnum.PRIMARY}
+                  size={ButtonSizeEnum.NORMAL}
+                  onClick={handleCreateStudent}
+                  isLoading={isCreatingStudent}
+                >
+                  Создать профиль ученика
+                </Button>
+              </div>
             )}
-          </div>
+
+            {/* ── Teacher card ── */}
+            {user.isApprovedTeacher === true ? (
+              <div className={styles.card}>
+                <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+                {teacherLoading || !teacherProfile ? (
+                  <div style={{ height: '4rem' }} />
+                ) : (
+                  <>
+                    <span
+                      className={`${styles.badge} ${
+                        teacherProfile.isAvailable ? styles.badgeAvailable : styles.badgeUnavailable
+                      }`}
+                    >
+                      <span className={styles.dot} />
+                      {teacherProfile.isAvailable ? 'Доступен' : 'Недоступен'}
+                    </span>
+                    <div className={styles.stats}>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Уровень</span>
+                        <span className={styles.statValue}>{teacherProfile.level}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Ранг</span>
+                        <span className={styles.statValue}>{teacherProfile.rank ?? '—'}</span>
+                      </div>
+                    </div>
+                    {teacherProfile.about && (
+                      <p className={styles.about}>{teacherProfile.about}</p>
+                    )}
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className={styles.card}>
+                <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+                <p className={styles.cardDescription}>
+                  Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
+                </p>
+                <textarea
+                  className={styles.textarea}
+                  value={aboutTeacher}
+                  onChange={(e) => setAboutTeacher(e.target.value)}
+                  placeholder="Расскажите о себе: опыт, специализация, подход к обучению…"
+                />
+                <Button
+                  variant={ButtonTypeEnum.PRIMARY}
+                  size={ButtonSizeEnum.NORMAL}
+                  onClick={handleCreateTeacher}
+                  isLoading={isCreatingTeacher}
+                  disabled={!aboutTeacher.trim()}
+                >
+                  Создать профиль преподавателя
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
-            <p className={styles.cardDescription}>
-              Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
+            <p className={styles.warning}>
+              Подтвердите почту, чтобы получить доступ к созданию профилей ученика и преподавателя.
             </p>
-            <textarea
-              className={styles.textarea}
-              value={aboutTeacher}
-              onChange={(e) => setAboutTeacher(e.target.value)}
-              placeholder="Расскажите о себе: опыт, специализация, подход к обучению…"
-            />
-            <Button
-              variant={ButtonTypeEnum.PRIMARY}
-              size={ButtonSizeEnum.NORMAL}
-              onClick={handleCreateTeacher}
-              isLoading={isCreatingTeacher}
-              disabled={!aboutTeacher.trim()}
-            >
-              Создать профиль преподавателя
-            </Button>
           </div>
         )}
-
       </div>
     </div>
   );
