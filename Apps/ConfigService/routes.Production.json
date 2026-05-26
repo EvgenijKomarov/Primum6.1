@@ -30,5 +30,9 @@
   "PaymentService": {
     "SelfUrl": "http://0.0.0.0:5008",
     "PublicUrl": "http://payment-service:5008"
+  },
+  "PrimumWeb": {
+    "SelfUrl": "http://0.0.0.0:5009",
+    "PublicUrl": "http://primum-web:5009"
   }
 }

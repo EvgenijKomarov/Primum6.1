@@ -6,9 +6,6 @@ RUN npm ci
 
 COPY . .
 
-ARG VITE_PUBLIC_WEB_API=/api
-ENV VITE_PUBLIC_WEB_API=$VITE_PUBLIC_WEB_API
-
 RUN npm run build
 
 FROM nginx:alpine
