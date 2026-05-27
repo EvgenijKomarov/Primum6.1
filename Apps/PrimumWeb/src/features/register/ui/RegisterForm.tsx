@@ -12,13 +12,15 @@ interface RegisterFormProps {
   onSuccess?: () => void;
 }
 
+type RegisterForm = RegisterDto & {confirmPassword: string};
+
 export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
-  const form = useForm<RegisterDto>();
+  const form = useForm<RegisterForm>();
   const setToken = useUserStore((s) => s.setToken);
 
   const { fetch: fetchRegister, isLoading } = useFetch(register);
 
-  const onSubmit = form.handleSubmit(async (data) => {
+  const onSubmit = form.handleSubmit(async ({ confirmPassword, ...data }) => {
     const response = await fetchRegister(data);
     setToken(response.data);
     onSuccess?.();
@@ -46,6 +48,8 @@ export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
               )}
             />
           </div>
+        </div>
+        <div className={styles.formRow}>
           <div className={styles.formCol}>
             <Controller
               name={"surname"}
@@ -59,6 +63,8 @@ export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
               )}
             />
           </div>
+        </div>
+        <div className={styles.formRow}>
           <div className={styles.formCol}>
             <Controller
               name={"patronymic"}
@@ -99,6 +105,26 @@ export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
                   type={"password"}
                   label={"Пароль"}
                   placeholder={"Введите пароль"}
+                />
+              )}
+            />
+          </div>
+        </div>
+        <div className={styles.formRow}>
+          <div className={styles.formCol}>
+            <Controller
+              name={"confirmPassword"}
+              control={form.control}
+              rules={{
+                validate: (value) =>
+                  value === form.getValues('password') || 'Пароли не совпадают',
+              }}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type={"password"}
+                  label={"Подтверждение пароля"}
+                  placeholder={"Введите пароль еще раз"}
                 />
               )}
             />

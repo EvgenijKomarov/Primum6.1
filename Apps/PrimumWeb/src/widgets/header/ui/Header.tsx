@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { Link, NavLink, useNavigate } from 'react-router';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router';
 
 import { useCurrentUser } from '@/entity/user';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
@@ -29,6 +29,9 @@ export const Header = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open]);
 
+  const location = useLocation();
+  const showAuthButton = location.pathname !== '/auth';
+
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>PrimumCode</Link>
@@ -45,7 +48,7 @@ export const Header = () => {
         ))}
       </nav>
 
-      <div className={styles.actions}>
+      {showAuthButton && (<div className={styles.actions}>
         {user ? (
           <div className={styles.userMenu} ref={menuRef}>
             <Button
@@ -101,7 +104,7 @@ export const Header = () => {
             Войти/Зарегистрироваться
           </Button>
         )}
-      </div>
+      </div>) }
     </header>
   );
 };

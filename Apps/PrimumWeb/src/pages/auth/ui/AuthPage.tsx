@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./styles.module.css";
 import { useNavigate } from "react-router";
 import { LoginForm } from "@/features/login";
 import { RegisterForm } from "@/features/register";
@@ -9,9 +10,15 @@ export const AuthPage = () => {
 
   const handleSuccess = () => navigate('/profile', { replace: true });
 
-  return isLogin ? (
-    <LoginForm onSwitch={() => setIsLogin(false)} onSuccess={handleSuccess} />
-  ) : (
-    <RegisterForm onSwitch={() => setIsLogin(true)} onSuccess={handleSuccess} />
+  return (
+    <div className={styles.page}>
+      <div className={styles.card}>
+        {isLogin ? (
+          <LoginForm onSwitch={() => setIsLogin(false)} onSuccess={handleSuccess} />
+        ) : (
+          <RegisterForm onSwitch={() => setIsLogin(true)} onSuccess={handleSuccess} />
+        )}
+      </div>
+    </div>
   );
 }
