@@ -1,0 +1,10 @@
+{
+    "User is banned": "Пользователь заблокирован",
+    "User not found": "Пользователь не найден",
+    "Wrong password": "Неверный пароль",
+    "Email already exists": "Пользователь с таким email уже существует",
+    "Adress not valid": "Адрес недействителен",
+    "User with the same adress already exists": "Пользователь с таким адресом уже существует",
+    "Password too short. Minimum 5 chars": "Пароль слишком короткий. Минимум 5 символов",
+    "Password too long. Maximum 20 chars": "Пароль слишком длинный. Максимум 20 символов"
+}

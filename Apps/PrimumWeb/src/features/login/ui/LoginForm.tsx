@@ -6,22 +6,34 @@ import { Input } from "@/shared/ui/Input";
 import { useUserStore } from "@/entity/user";
 import Button from "@/shared/ui/Button/Button.tsx";
 import { ButtonTypeEnum } from "@/shared/enums";
+import { translateException } from "@/features/exception-translation/translate-exception";
 
 interface LoginFormProps {
   onSwitch: () => void;
   onSuccess?: () => void;
+  onMutate?: () => void;
 }
 
-export const LoginForm = ({ onSwitch, onSuccess }: LoginFormProps) => {
+export const LoginForm = ({ onSwitch, onSuccess, onMutate }: LoginFormProps) => {
   const form = useForm<LoginDto>();
   const setToken = useUserStore((s) => s.setToken);
 
   const { fetch: fetchLogin, isLoading } = useFetch(login);
 
   const onSubmit = form.handleSubmit(async (data) => {
-    const response = await fetchLogin(data);
-    setToken(response.data);
-    onSuccess?.();
+    try{
+      const response = await fetchLogin(data);
+      console.log(response.data);
+      setToken(response.data);
+      await onMutate?.();
+      onSuccess?.();
+    } catch (error) {
+      form.setError('root', {
+        message: error instanceof Error
+          ? error.message
+          : 'Произошла ошибка при входе',
+      });
+    }
   });
 
   const handleSwitch = () => {
@@ -29,9 +41,16 @@ export const LoginForm = ({ onSwitch, onSuccess }: LoginFormProps) => {
     onSwitch();
   };
 
+  const topError = form.formState.errors.root?.message;
+
   return (
     <FormProvider {...form}>
       <form onSubmit={onSubmit}>
+        {topError && (
+          <div className={styles.formError}>
+            {translateException(topError)}
+          </div>
+        )}
         <div className={styles.formRow}>
           <div className={styles.formCol}>
             <Controller

@@ -6,34 +6,54 @@ import { Input } from "@/shared/ui/Input";
 import { useUserStore } from "@/entity/user";
 import Button from "@/shared/ui/Button/Button.tsx";
 import { ButtonTypeEnum } from "@/shared/enums";
+import { translateException } from "@/features/exception-translation/translate-exception";
 
 interface RegisterFormProps {
   onSwitch: () => void;
   onSuccess?: () => void;
+  onMutate?: () => void;
 }
 
 type RegisterForm = RegisterDto & {confirmPassword: string};
 
-export const RegisterForm = ({ onSwitch, onSuccess }: RegisterFormProps) => {
+export const RegisterForm = ({ onSwitch, onSuccess, onMutate }: RegisterFormProps) => {
   const form = useForm<RegisterForm>();
   const setToken = useUserStore((s) => s.setToken);
 
   const { fetch: fetchRegister, isLoading } = useFetch(register);
 
-  const onSubmit = form.handleSubmit(async ({ confirmPassword, ...data }) => {
+const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
+  try {
     const response = await fetchRegister(data);
     setToken(response.data);
     onSuccess?.();
-  });
+    await onMutate?.();
+  } catch (error) {
+    form.setError('root', {
+      message: error instanceof Error
+        ? error.message
+        : 'Произошла ошибка при регистрации',
+    });
+  }
+});
 
   const handleSwitch = () => {
     form.reset();
     onSwitch();
   };
 
+  const rootError = form.formState.errors.root?.message;
+  const confirmPasswordError = form.formState.errors.confirmPassword?.message;
+  const topError = rootError ?? confirmPasswordError;
+
   return (
     <FormProvider {...form}>
       <form onSubmit={onSubmit}>
+        {topError && (
+          <div className={styles.formError}>
+            {translateException(topError)}
+          </div>
+        )}
         <div className={styles.formRow}>
           <div className={styles.formCol}>
             <Controller

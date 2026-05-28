@@ -10,3 +10,10 @@
 .formActions {
   @apply flex gap-[8px] mt-[16px];
 }
+
+.formError {
+  color: var(--color-error, #d32f2f);
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 14px;
+}

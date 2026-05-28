@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type SafeArg = string | number | boolean | null | undefined | object;
+type SafeArg = unknown;
 type AsyncFunction<TArgs extends SafeArg[], TReturn> = (...args: TArgs) => Promise<TReturn>;
 
 export const useFetch = <TArgs extends SafeArg[], TReturn>(
@@ -12,19 +12,8 @@ export const useFetch = <TArgs extends SafeArg[], TReturn>(
   const [isLoading, setIsLoading] = useState(false);
 
   const fetch = async (...data: TArgs): Promise<TReturn> => {
-    try {
-      setIsLoading(true);
-
-      return await callback(...data);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-
-      throw new Error(String(error));
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    return callback(...data).finally(() => setIsLoading(false));
   };
 
   return { fetch, isLoading };
