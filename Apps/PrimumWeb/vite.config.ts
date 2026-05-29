@@ -20,10 +20,6 @@ export default defineConfig(() => {
       host: '127.0.0.1',
       port: 5173,
       proxy: {
-        '/config': {
-          target: env.VITE_CONFIG_SERVICE_URL || 'http://localhost:5000',
-          changeOrigin: true,
-        },
         '/api': {
           target: env.VITE_WEB_API_URL ||'http://localhost:5002',
           changeOrigin: true,

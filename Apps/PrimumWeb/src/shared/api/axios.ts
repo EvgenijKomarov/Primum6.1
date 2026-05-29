@@ -19,6 +19,7 @@ fetcherInstance.interceptors.response.use(
     new FetchError(
       error.response?.data?.error ?? error.message,
       error.response?.data ?? null,
+      error.response?.status,
     )
   )
 );

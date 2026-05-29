@@ -33,17 +33,8 @@ namespace PrimumWebAPI.Controllers
         /// <param name="token">Токен из письма</param>
         /// <returns></returns>
         [HttpPost("confirm-email")]
-        public async Task<ActionResult<int>> ConfirmEmail([FromBody] string token)
+        public async Task<ActionResult<int>> ConfirmEmail([FromBody] string token = null!)
             => Ok(await client.ConfirmEmailAsync(User.GetUserId(), token));
-
-        /// <summary>
-        /// Подтвердить чат, отправив токен из него
-        /// </summary>
-        /// <param name="token">Токен из чата</param>
-        /// <returns></returns>
-        [HttpPost("confirm-chat")]
-        public async Task<ActionResult<int>> ConfirmChat([FromBody] string token)
-            => Ok(await client.ConfirmChatAsync(User.GetUserId(), token));
 
         /*[HttpPatch("deposit")]
         public async Task<ActionResult<long>> DepositMoney([FromQuery] long cash)

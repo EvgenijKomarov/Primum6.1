@@ -76,5 +76,25 @@ namespace PrimumCore.Extentions
                 CurrentPage = page
             };
         }
+
+        public static async Task<PageResult<TEntity>> ToPageResult<TEntity>(
+            this IEnumerable<TEntity> enumerable,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken = default)
+            where TEntity : class
+        {
+            var totalCount = enumerable.Count();
+
+            var pageItems = enumerable.Skip(page * pageSize).Take(pageSize);
+
+            return new PageResult<TEntity>
+            {
+                Items = pageItems.ToArray(),
+                TotalItemsCount = totalCount,
+                TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling((double)totalCount / pageSize),
+                CurrentPage = page
+            };
+        }
     }
 }

@@ -16,6 +16,8 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import { Input } from '@/shared/ui/Input';
 
 import styles from './ProfilePage.module.css';
+import { confirmChatSign } from '@/entity/chat-sign/api/chat-sign.api';
+import { useUserChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
 
 const CheckIcon = () => (
   <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -37,16 +39,18 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
   const clearStore = useUserStore((s) => s.clear);
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
+  const { signs: chatSigns, mutate: mutateChatSigns } = useUserChatSigns(user?.mailConfirmed === true);
 
   const { studentProfile, isLoading: studentLoading } = useStudentProfile(
-    user?.isApprovedStudent !== null && user?.isApprovedStudent !== undefined,
+    user?.isApprovedStudent !== null && user?.isApprovedStudent !== undefined && user?.isAvailable === true,
   );
   const { teacherProfile, isLoading: teacherLoading } = useTeacherProfile(
-    user?.isApprovedTeacher === true,
+    user?.isApprovedTeacher === true && user?.isApprovedStudent !== undefined && user?.isAvailable === true,
   );
 
   const [email, setEmail] = useState('');
   const [emailToken, setEmailToken] = useState('');
+  const [chatSignToken, setChatSignToken] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
@@ -68,10 +72,17 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleConfirmCode = async () => {
+  const handleConfirmEmail = async () => {
     await confirmEmail({ token: emailToken });
     await mutateUser();
     setIsEditingEmail(false);
+    setEmailToken('');
+  };
+
+  const handleConfirmSign = async () => {
+    await confirmChatSign(chatSignToken);
+    await mutateChatSigns();
+    setChatSignToken('');
   };
 
   const handleCancelEdit = () => {
@@ -211,29 +222,64 @@ export const ProfilePage = () => {
                 Почта не подтверждена. Введите адрес и отправьте код для подтверждения.
               </p>
             )}
+            <h2 className={styles.cardSubtitle}>Подтверждение почты</h2>
             <div className={styles.emailRow}>
-                  <div className={styles.emailInputWrapper}>
-                    <Input
-                      value={emailToken}
-                      onChange={setEmailToken}
-                      placeholder="Код подтверждения"
-                      type="emailToken"
-                    />
-                  </div>
-                  
-                    <Button
-                      variant={ButtonTypeEnum.PRIMARY}
-                      size={ButtonSizeEnum.SMALL}
-                      onClick={handleConfirmCode}
-                      isLoading={isSending}
-                    >
-                      Подтвердить код
-                    </Button>
+                <div className={styles.emailInputWrapper}>
+                  <Input
+                    value={emailToken}
+                    onChange={setEmailToken}
+                    placeholder="Код подтверждения"
+                    type="emailToken"
+                  />
                 </div>
+                <Button
+                  variant={ButtonTypeEnum.PRIMARY}
+                  size={ButtonSizeEnum.SMALL}
+                  onClick={handleConfirmEmail}
+                >
+                  Подтвердить код
+                </Button>
+            </div>
           </div>
         </div>
         {emailConfirmed ? (
           <>
+            {/* ── Chat sign card ── */}
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>Чат боты</h2>
+              <div className={styles.chatSignsSection}>
+                {chatSigns.length === 0 ? (
+                  <p className={styles.cardDescription}>
+                    У вас пока нет добавленных чат ботов. Добавьте их, чтобы получать уведомления и взаимодействовать с площадкой через мессенджеры.
+                  </p>
+                  ) : (<div className={styles.stats}>
+                  {chatSigns.map((sign) => (
+                    <div className={styles.stat}>
+                      <span className={styles.statLabel}>{sign.realizationTag}</span>
+                      <span className={styles.statValue}>{sign.username ?? sign.chatId}</span>
+                    </div>
+                  ))}
+                </div>)}
+                <h2 className={styles.cardSubtitle}>Добавить чат бота</h2>
+                <div className={styles.signInputRow}>
+                  <div className={styles.signInputWrapper}>
+                    <Input
+                      value={chatSignToken}
+                      onChange={setChatSignToken}
+                      placeholder="Подпись"
+                      type="chatSign"
+                    />
+                  </div>
+                  <Button
+                    variant={ButtonTypeEnum.PRIMARY}
+                    size={ButtonSizeEnum.SMALL}
+                    onClick={handleConfirmSign}
+                  >
+                    Подтвердить
+                    </Button>
+                </div>
+              </div>
+            </div>
             {/* ── Student card ── */}
             {user.isApprovedStudent !== null && user.isApprovedStudent !== undefined ? (
               <div className={styles.card}>

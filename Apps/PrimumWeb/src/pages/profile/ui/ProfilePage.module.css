@@ -40,6 +40,14 @@
   margin: 0;
 }
 
+.cardSubtitle {
+  font-size: 0.785rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
 /* ── Card 1: Personal info ── */
 
 .fields {
@@ -228,4 +236,28 @@
   height: 6px;
   border-radius: 50%;
   background-color: currentColor;
+}
+
+/* ── Chat signs ── */
+.chatSignsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.signInputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signInputWrapper > div {
+  flex: 1;
+}
+
+.signInputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }

@@ -26,13 +26,16 @@ namespace BotCore.Engine.Middlewares
 
             if (!isAuthenticated) 
             {
+                var encryptedToken = tokenWorker.EncryptSign(input.Sign);
                 return Finish(new EngineOutputMessage
                 {
                     Message = $"Привет!{Emoticons.Hello}\n" +
                     $"Я - {Emoticons.Bot}Primum bot\n" +
                     $"{Emoticons.Spark}Для начала работы тебе нужно войти, и тогда я дам тебе удобный доступ к своему профилю\n" +
                     $"Для быстрой авторизации перейди по этой ссылке:\n" +
-                    $"{configClient.GetGatewayUrl()}/api/user/confirm-chat?token={tokenWorker.EncryptSign(input.Sign)}"
+                    $"{await configClient.GetGatewayUrl()}/confirm-chat?token={encryptedToken}\n" +
+                    $"Или используй этот токен для ручной авторизации в личном кабинете:\n" +
+                    $"{encryptedToken}"
                 });
             }
             return Complete(input);

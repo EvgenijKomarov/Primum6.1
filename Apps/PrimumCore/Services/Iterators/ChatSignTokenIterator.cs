@@ -1,5 +1,6 @@
 ﻿using CoreDBModel.Constants;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Entities;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using SignServiceConnection;
@@ -14,7 +15,7 @@ namespace PrimumCore.Services.Iterators
             var user = await dbIterator.Users(true)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
-            if (AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new BusinessLogicException("User should be available"); }
+            if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new BusinessLogicException("User should be available"); }
 
             var decryptedToken = tokenWorker.DecryptSign(token);
             if (decryptedToken is null) { throw new BusinessLogicException("Invalid token"); }
@@ -26,6 +27,14 @@ namespace PrimumCore.Services.Iterators
                 Username = decryptedToken.UserName
             });
             return userId;
+        }
+
+        public async Task<PageResult<ChatSign>> GetChatSigns(int userId, int page, int pageSize)
+        {
+            var user = await dbIterator.Users(true)
+                .IgnoreQueryFilters()
+                .One(x => x.Id == userId);
+            return await (await client.GetSignsAsync(userId)).ToPageResult(page, pageSize);
         }
     }
 }

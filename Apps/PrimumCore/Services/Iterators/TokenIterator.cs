@@ -7,6 +7,7 @@ using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 using SolutionConfiguration;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -23,6 +24,14 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == userId);
             //if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
+            if (!new EmailAddressAttribute().IsValid(correctiveMail))
+            { throw new BusinessLogicException("Adress not valid"); }
+
+            if (await dbIterator.Users(false)
+                .Where(x => x.Id != userId)
+                .AnyAsync(x => x.MailAdress == correctiveMail))
+            { throw new BusinessLogicException("User with the same adress already exists"); }
+
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
 
             var token = new VerificationToken
@@ -38,6 +47,7 @@ namespace PrimumCore.Services.Iterators
             {
                 EmailAdress = user.MailAdress,
                 Token = token.Token,
+                AuthUrl = await configClient.GetGatewayUrl(),
                 UserId = user.Id
             });
 

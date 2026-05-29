@@ -7,6 +7,7 @@ import { LessonsPage } from '@/pages/lessons/index.ts';
 import { HomePage } from "@/pages/home/ui/HomePage.tsx";
 import { ProfilePage } from "@/pages/profile/index.ts";
 import { Role } from '@/shared/enums';
+import { RedirectPage } from '@/pages/redirect-page/RedirectPage';
 
 interface RouteDef {
   path: string;
@@ -51,6 +52,14 @@ const ROUTES_DEF: RouteDef[] = [
     element: <LessonsPage />,
     roles: [Role.STUDENT],
   },
+  {
+    path: '/confirm-email',
+    element: <RedirectPage apiUrl="/user/confirm-email" redirectTo="/profile" />,
+  },
+  {
+    path: '/confirm-chat',
+    element: <RedirectPage apiUrl="/user/chat-signs" redirectTo="/profile" />,
+  }
 ];
 
 const makeRoutes = (routeDefs: RouteDef[]): PrivateRoute[] => {
