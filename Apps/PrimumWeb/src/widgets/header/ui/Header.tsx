@@ -30,80 +30,82 @@ export const Header = () => {
   }, [open]);
 
   const location = useLocation();
-  const showAuthButton = location.pathname !== '/auth';
+  const showActions = location.pathname !== '/auth';
 
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>PrimumCode</Link>
 
-      <nav className={styles.nav}>
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) => clsx(styles.navLink, isActive && styles.navLinkActive)}
-          >
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {showAuthButton && (<div className={styles.actions}>
-        {user ? (
-          <div className={styles.userMenu} ref={menuRef}>
-            <Button
-              variant={ButtonTypeEnum.SECONDARY}
-              size={ButtonSizeEnum.SMALL}
-              onClick={() => setOpen(v => !v)}
+      {showActions && (<div className={styles.headerActions}>
+        <nav className={styles.nav}>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => clsx(styles.navLink, isActive && styles.navLinkActive)}
             >
-              <span className={styles.userInfo}>
-                <span className={styles.userName}>{resolveDisplayName(user)}</span>
-                <span className={styles.userRole}>{resolveRoleLabel(role)}</span>
-              </span>
-              <svg
-                className={clsx(styles.chevron, open && styles.chevronOpen)}
-                width="12" height="12" viewBox="0 0 12 12" fill="none"
-              >
-                <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Button>
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
 
-            {open && (
-              <div className={styles.dropdown}>
-                <p className={styles.dropdownLabel}>Активный профиль</p>
-                {availableRoles.map((r) => (
-                  <button
-                    key={r}
-                    className={clsx(styles.dropdownItem, r === role && styles.dropdownItemActive)}
-                    onClick={() => { setActiveRole(r); setOpen(false); }}
-                  >
-                    <span>{resolveRoleLabel(r)}</span>
-                    {r === role && (
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    )}
-                  </button>
-                ))}
-                <div className={styles.dropdownDivider} />
-                <button
-                  className={styles.dropdownItem}
-                  onClick={() => { navigate('/profile'); setOpen(false); }}
+        <div className={styles.actions}>
+          {user ? (
+            <div className={styles.userMenu} ref={menuRef}>
+              <Button
+                variant={ButtonTypeEnum.SECONDARY}
+                size={ButtonSizeEnum.SMALL}
+                onClick={() => setOpen(v => !v)}
+              >
+                <span className={styles.userInfo}>
+                  <span className={styles.userName}>{resolveDisplayName(user)}</span>
+                  <span className={styles.userRole}>{resolveRoleLabel(role)}</span>
+                </span>
+                <svg
+                  className={clsx(styles.chevron, open && styles.chevronOpen)}
+                  width="12" height="12" viewBox="0 0 12 12" fill="none"
                 >
-                  Перейти в профиль
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Button
-            variant={ButtonTypeEnum.PRIMARY}
-            size={ButtonSizeEnum.SMALL}
-            onClick={() => navigate('/auth')}
-          >
-            Войти/Зарегистрироваться
-          </Button>
-        )}
+                  <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Button>
+
+              {open && (
+                <div className={styles.dropdown}>
+                  <p className={styles.dropdownLabel}>Активный профиль</p>
+                  {availableRoles.map((r) => (
+                    <button
+                      key={r}
+                      className={clsx(styles.dropdownItem, r === role && styles.dropdownItemActive)}
+                      onClick={() => { setActiveRole(r); setOpen(false); }}
+                    >
+                      <span>{resolveRoleLabel(r)}</span>
+                      {r === role && (
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                  <div className={styles.dropdownDivider} />
+                  <button
+                    className={styles.dropdownItem}
+                    onClick={() => { navigate('/profile'); setOpen(false); }}
+                  >
+                    Перейти в профиль
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Button
+              variant={ButtonTypeEnum.PRIMARY}
+              size={ButtonSizeEnum.SMALL}
+              onClick={() => navigate('/auth')}
+            >
+              Войти/Зарегистрироваться
+            </Button>
+          )}
+        </div>
       </div>) }
     </header>
   );
