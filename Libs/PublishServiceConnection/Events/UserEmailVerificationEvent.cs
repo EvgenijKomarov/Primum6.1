@@ -11,7 +11,7 @@ namespace PublishServiceConnection.Events
     public class UserEmailVerificationEvent: IMailNotification
     {
         public required string EmailAdress { get; set; }
-        public required string VerificationLink { get; set; }
+        public required string Token { get; set; }
         public required int UserId { get; set; }
 
         public string MailTitle => "Подтверждение почты";
@@ -19,7 +19,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [UserId] = $"Для полного доступа на площадку, пожалуйста, перейдите по ссылке для подтверждения почты: {VerificationLink}",
+                [UserId] = $"Для полного доступа на площадку, пожалуйста, введите токен подтверждения на сайте в личном кабинете: {Token}",
             };
         }
     }

@@ -9,6 +9,7 @@ import {
   sendEmailVerification,
   useCurrentUser,
   useUserStore,
+  confirmEmail
 } from '@/entity/user';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
@@ -45,6 +46,7 @@ export const ProfilePage = () => {
   );
 
   const [email, setEmail] = useState('');
+  const [emailToken, setEmailToken] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
@@ -62,7 +64,14 @@ export const ProfilePage = () => {
       await sendEmailVerification({ correctiveMail: email || undefined });
     } finally {
       setIsSending(false);
+      await mutateUser();
     }
+  };
+
+  const handleConfirmCode = async () => {
+    await confirmEmail({ token: emailToken });
+    await mutateUser();
+    setIsEditingEmail(false);
   };
 
   const handleCancelEdit = () => {
@@ -202,6 +211,25 @@ export const ProfilePage = () => {
                 Почта не подтверждена. Введите адрес и отправьте код для подтверждения.
               </p>
             )}
+            <div className={styles.emailRow}>
+                  <div className={styles.emailInputWrapper}>
+                    <Input
+                      value={emailToken}
+                      onChange={setEmailToken}
+                      placeholder="Код подтверждения"
+                      type="emailToken"
+                    />
+                  </div>
+                  
+                    <Button
+                      variant={ButtonTypeEnum.PRIMARY}
+                      size={ButtonSizeEnum.SMALL}
+                      onClick={handleConfirmCode}
+                      isLoading={isSending}
+                    >
+                      Подтвердить код
+                    </Button>
+                </div>
           </div>
         </div>
         {emailConfirmed ? (

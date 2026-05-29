@@ -6,7 +6,7 @@ export const api = {
   user: {
     getUserInfo: "/user/",
     sendEmailVerification: "/user/send-email-verification",
-    confirmEmail: "/user/confirm-email-verification",
+    confirmEmail: "/user/confirm-email",
     confirmChat: "/user/confirm-chat",
     createTeacherProfile: "/user/create-teacher-profile",
     createStudentProfile: "/user/create-student-profile",

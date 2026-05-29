@@ -21,7 +21,7 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.VerificationTokens)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
-            if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
+            //if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
 
@@ -37,10 +37,11 @@ namespace PrimumCore.Services.Iterators
             await publisher.Push(new UserEmailVerificationEvent
             {
                 EmailAdress = user.MailAdress,
-                VerificationLink = $"{await configClient.GetGatewayUrl()}/api/user/confirm-email?token={token.Token}",
+                Token = token.Token,
                 UserId = user.Id
             });
 
+            user.IsMailChecked = false;
             await dbIterator.SaveChangesAsync();
             return user.Id;
         }

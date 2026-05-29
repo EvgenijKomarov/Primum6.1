@@ -27,6 +27,7 @@ export const confirmEmail = async (data: ConfirmEmailRequest) => {
     method: 'POST',
     url: api.user.confirmEmail,
     data: data.token,
+    headers: { 'Content-Type': 'application/json' }
   });
 };
 
