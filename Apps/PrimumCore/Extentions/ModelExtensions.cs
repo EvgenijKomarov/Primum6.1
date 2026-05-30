@@ -42,7 +42,8 @@ namespace PrimumCore.Extentions
                 IsActive = x.IsActive,
                 IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
                 Rank = x.Rank.Rank,
-                Level = x.Rank.Level
+                Level = x.Rank.Level,
+                Experience = x.Experience
             });
 
         public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 
@@ -110,7 +111,8 @@ namespace PrimumCore.Extentions
                 UserId = x.User.Id,
                 IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x),
                 Rank = x.Rank.Rank,
-                Level = x.Rank.Level
+                Level = x.Rank.Level,
+                Experience = x.Experience
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
@@ -123,6 +125,7 @@ namespace PrimumCore.Extentions
                 Level = x.Rank.Level,
                 Rating = x.Rating,
                 Cash = x.Cash,
+                Experience = x.Experience,
             });
 
         public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) => queryable.Select(x => 

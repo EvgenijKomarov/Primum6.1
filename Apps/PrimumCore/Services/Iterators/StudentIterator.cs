@@ -27,6 +27,7 @@ namespace PrimumCore.Services.Iterators
                 Level = student.Rank.Level,
                 Rank = student.Rank.Rank,
                 Cash = student.Cash,
+                Experience = student.Experience,
             };
         }
 

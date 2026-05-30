@@ -18,6 +18,8 @@ import { Input } from '@/shared/ui/Input';
 import styles from './ProfilePage.module.css';
 import { confirmChatSign } from '@/entity/chat-sign/api/chat-sign.api';
 import { useUserChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
+import { StudentRanks } from '@/widgets/popups/student-ranks/ui/StudentRanks';
+import { TeacherRanks } from '@/widgets/popups/teacher-ranks/ui/TeacherRanks';
 
 const CheckIcon = () => (
   <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -53,6 +55,8 @@ export const ProfilePage = () => {
   const [chatSignToken, setChatSignToken] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [studentRankPopupOpen, setStudentRankPopupOpen] = useState(false);
+  const [teacherRankPopupOpen, setTeacherRankPopupOpen] = useState(false);
 
   const [aboutTeacher, setAboutTeacher] = useState('');
   const [isCreatingStudent, setIsCreatingStudent] = useState(false);
@@ -289,14 +293,21 @@ export const ProfilePage = () => {
                 ) : (
                   <>
                     <div className={styles.stats}>
-                      <div className={styles.stat}>
+                      <div className={styles.stat}
+                        onClick={() => setStudentRankPopupOpen(true)}
+                        style={{ cursor: 'pointer' }}>
                         <span className={styles.statLabel}>Уровень</span>
                         <span className={styles.statValue}>{studentProfile.level}</span>
                       </div>
-                      <div className={styles.stat}>
+                      <div className={styles.stat}
+                        onClick={() => setStudentRankPopupOpen(true)}
+                        style={{ cursor: 'pointer' }}>
                         <span className={styles.statLabel}>Ранг</span>
                         <span className={styles.statValue}>{studentProfile.rank ?? '—'}</span>
                       </div>
+                      {studentRankPopupOpen && (
+                        <StudentRanks setRankPopupOpen={setStudentRankPopupOpen} />
+                      )}
                       <div className={styles.stat}>
                         <span className={styles.statLabel}>Рейтинг</span>
                         <span className={styles.statValue}>
@@ -310,6 +321,10 @@ export const ProfilePage = () => {
                       <div className={styles.stat}>
                         <span className={styles.statLabel}>Баланс</span>
                         <span className={styles.statValue}>{studentProfile.cash.toFixed(2)} ₽</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>Опыт</span>
+                        <span className={styles.statValue}>{studentProfile.experience}</span>
                       </div>
                     </div>
                   </>
@@ -352,13 +367,24 @@ export const ProfilePage = () => {
                         {teacherProfile.isAvailable ? 'Доступен' : 'Недоступен'}
                       </span>
                       <div className={styles.stats}>
-                        <div className={styles.stat}>
+                        <div className={styles.stat}
+                          onClick={() => setTeacherRankPopupOpen(true)}
+                          style={{ cursor: 'pointer' }}>
                           <span className={styles.statLabel}>Уровень</span>
                           <span className={styles.statValue}>{teacherProfile.level}</span>
                         </div>
-                        <div className={styles.stat}>
+                        <div className={styles.stat}
+                          onClick={() => setTeacherRankPopupOpen(true)}
+                          style={{ cursor: 'pointer' }}>
                           <span className={styles.statLabel}>Ранг</span>
                           <span className={styles.statValue}>{teacherProfile.rank ?? '—'}</span>
+                        </div>
+                        {teacherRankPopupOpen && (
+                          <TeacherRanks setRankPopupOpen={setTeacherRankPopupOpen} />
+                        )}
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>Опыт</span>
+                          <span className={styles.statValue}>{teacherProfile.experience}</span>
                         </div>
                       </div>
                       {teacherProfile.about && (

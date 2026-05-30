@@ -5,4 +5,5 @@ export interface TeacherProfileDto {
   isAvailable: boolean;
   level: number;
   rank: string | null;
+  experience: number;
 }

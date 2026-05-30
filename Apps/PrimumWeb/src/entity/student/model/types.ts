@@ -6,4 +6,5 @@ export interface StudentProfileDto {
   level: number;
   cash: number;
   rank: string | null;
+  experience: number;
 }

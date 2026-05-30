@@ -39,4 +39,9 @@ export const api = {
   teacherSchedule: {
     base: "/teacher/shedules",
   },
+  ranks: {
+    student: "public/ranks/student",
+    teacher: "/public/ranks/teacher",
+    course: "/public/ranks/course",
+  },
 }
