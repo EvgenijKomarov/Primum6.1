@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Popup } from "../../popup/ui/Popup";
 import styles from './StudentRanks.module.css';
 import type { StudentRankDto } from "@/entity/studentRank/model/types";
 import { getStudentRanks } from "@/entity/studentRank/api/studentRank.api";
+import { Popup } from "@/shared/ui/Popup";
 
 interface StudentRanksProps {
   setRankPopupOpen: (open: boolean) => void;

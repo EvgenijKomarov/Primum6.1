@@ -1,8 +1,8 @@
 import { getTeacherRanks } from "@/entity/teacherRank/api/teacherRank";
 import type { TeacherRankDto } from "@/entity/teacherRank/model/types";
 import { useEffect, useState } from "react";
-import { Popup } from "../../popup/ui/Popup";
 import styles from './TeacherRanks.module.css';
+import { Popup } from "@/shared/ui/Popup";
 
 interface TeacherRanksProps {
   setRankPopupOpen: (open: boolean) => void;
