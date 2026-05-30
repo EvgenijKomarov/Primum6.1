@@ -1,0 +1,46 @@
+.collapsible {
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+}
+
+.title {
+  font-size: 0.785rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+}
+
+.chevron {
+  width: 1rem;
+  height: 1rem;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  width: 1rem;
+  height: 1rem;
+  color: #94a3b8;
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+.inner {
+  padding-top: 1rem;
+}
+
+.content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}

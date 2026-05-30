@@ -23,7 +23,6 @@ export const LoginForm = ({ onSwitch, onSuccess, onMutate }: LoginFormProps) => 
   const onSubmit = form.handleSubmit(async (data) => {
     try{
       const response = await fetchLogin(data);
-      console.log(response.data);
       setToken(response.data);
       await onMutate?.();
       onSuccess?.();

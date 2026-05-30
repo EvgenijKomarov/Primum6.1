@@ -3,6 +3,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import { Input } from '@/shared/ui/Input';
 import type { ChatSign } from '@/entity/chat-sign/model/types';
 import styles from '../ui/ProfilePage.module.css';
+import { Collapsible } from '@/shared/ui/Collapsible';
 
 interface Props {
   chatSigns: ChatSign[];
@@ -22,8 +23,8 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
         </p>
       ) : (
         <div className={styles.stats}>
-          {chatSigns.map((sign) => (
-            <div key={sign.chatId} className={styles.stat}>
+          {chatSigns.map((sign, index) => (
+            <div key={`${sign.chatId}-${index}`} className={styles.stat}>
               <span className={styles.statLabel}>{sign.realizationTag}</span>
               <span className={styles.statValue}>{sign.username ?? sign.chatId}</span>
             </div>
@@ -31,24 +32,25 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
         </div>
       )}
 
-      <h2 className={styles.cardSubtitle}>Добавить чат бота</h2>
-      <div className={styles.signInputRow}>
-        <div className={styles.signInputWrapper}>
-          <Input
-            value={chatSignToken}
-            onChange={onTokenChange}
-            placeholder="Подпись"
-            type="chatSign"
-          />
+      <Collapsible title="Ручная привязка к чат боту">
+        <div className={styles.signInputRow}>
+          <div className={styles.signInputWrapper}>
+            <Input
+              value={chatSignToken}
+              onChange={onTokenChange}
+              placeholder="Код привязки"
+              type="chatSign"
+            />
+          </div>
+          <Button
+            variant={ButtonTypeEnum.PRIMARY}
+            size={ButtonSizeEnum.SMALL}
+            onClick={onConfirmSign}
+          >
+            Подтвердить
+          </Button>
         </div>
-        <Button
-          variant={ButtonTypeEnum.PRIMARY}
-          size={ButtonSizeEnum.SMALL}
-          onClick={onConfirmSign}
-        >
-          Подтвердить
-        </Button>
-      </div>
+      </Collapsible>
     </div>
   </div>
 );
