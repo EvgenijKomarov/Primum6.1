@@ -9,6 +9,7 @@ import { useModal } from '@/shared/lib/modal';
 import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
+import { EmptyIcon } from '@/shared/icons/types';
 
 const usePublicThemes = () =>
   useSWRImmutable(
@@ -16,12 +17,6 @@ const usePublicThemes = () =>
     async () => (await getPublicThemes()).data,
     { revalidateOnMount: true },
   );
-
-const EmptyIcon = () => (
-  <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-  </svg>
-);
 
 const MODAL_PREFIX = 'subscribe-course';
 

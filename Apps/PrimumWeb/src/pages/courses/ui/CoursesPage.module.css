@@ -32,12 +32,6 @@
   text-align: center;
 }
 
-.emptyIcon {
-  width: 3rem;
-  height: 3rem;
-  opacity: 0.4;
-}
-
 .emptyText {
   font-size: 0.9375rem;
   margin: 0;

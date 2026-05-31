@@ -7,6 +7,7 @@ import {
 import type { LessonDto, FutureLessonDto, LessonsByDateDto } from '@/entity/lesson';
 
 import styles from './LessonsPage.module.css';
+import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -61,22 +62,6 @@ const GradeCircle = ({ grade }: { grade: number }) => {
   const cls = grade >= 4 ? styles.gradeHigh : grade >= 3 ? styles.gradeMid : styles.gradeLow;
   return <span className={`${styles.gradeBadge} ${cls}`}>{grade}</span>;
 };
-
-// ── Link icon ────────────────────────────────────────────────────────────────
-
-const ExternalLinkIcon = () => (
-  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-    <path strokeLinecap="round" strokeLinejoin="round"
-      d="M4.5 1.5H10.5V7.5M10.5 1.5L5 7M1.5 4.5H4.5V10.5H1.5V4.5Z" />
-  </svg>
-);
-
-const CalendarIcon = () => (
-  <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path strokeLinecap="round" strokeLinejoin="round"
-      d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-  </svg>
-);
 
 // ── Upcoming lesson card ──────────────────────────────────────────────────────
 

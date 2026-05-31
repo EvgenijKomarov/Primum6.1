@@ -7,6 +7,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import { Loader } from '@/shared/ui/Loader';
 
 import styles from './CoursesPage.module.css';
+import { BookIcon, PlusIcon } from '@/shared/icons/types';
 
 const APPROVE_STATUS_LABEL: Record<ApproveStatus, { label: string; cls: string }> = {
   [ApproveStatus.Approved]:                { label: 'Одобрен',          cls: styles.badgeApproved },
@@ -14,18 +15,6 @@ const APPROVE_STATUS_LABEL: Record<ApproveStatus, { label: string; cls: string }
   [ApproveStatus.NeedAdministratorReview]: { label: 'У администратора', cls: styles.badgeReview   },
   [ApproveStatus.NeedManagerReview]:       { label: 'У менеджера',      cls: styles.badgeReview   },
 };
-
-const PlusIcon = () => (
-  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-    <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-  </svg>
-);
-
-const BookIcon = () => (
-  <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-  </svg>
-);
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
   const status = APPROVE_STATUS_LABEL[course.approveStatus];
