@@ -42,3 +42,15 @@
 .td {
   text-align: center;
 }
+
+.displayName {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, #6366f1 12%, transparent);
+    color: #a5b4fc;
+    cursor: pointer;
+}

@@ -8,9 +8,9 @@ import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
-import { CourseRanks } from '@/widgets/popups/course-ranks/ui/CourseRanks';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
+import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
 
 const usePublicThemes = () =>
   useSWRImmutable(
@@ -26,7 +26,6 @@ interface CourseCardProps {
 const CourseCard = ({ course }: CourseCardProps) => {
   const isFree = course.price === 0;
   const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
-  const [rankPopupOpen, setRankPopupOpen] = useState(false);
 
 
   return (
@@ -53,13 +52,8 @@ const CourseCard = ({ course }: CourseCardProps) => {
         {course.rank && (
           <div className={styles.cardMetaItem}>
             <span className={styles.cardMetaLabel}>Уровень</span>
-            <span className={styles.rankBadge} onClick={() => setRankPopupOpen(true)}>
-              {course.rank}
-            </span>
+            <CourseRankInfo rankInput={course.rank} />
           </div>
-        )}
-        {rankPopupOpen && (
-          <CourseRanks setRankPopupOpen={setRankPopupOpen} />
         )}
       </div>
 

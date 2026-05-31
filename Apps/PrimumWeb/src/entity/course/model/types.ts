@@ -13,6 +13,7 @@ export interface CourseDto {
   isActive: boolean;
   level: number;
   rank: string | null;
+  experience: number;
   isAvailable: boolean;
   onCheck: boolean;
 }

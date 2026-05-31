@@ -86,24 +86,26 @@
   gap: 0.3rem;
 }
 
-.metaRow {
-  display: flex;
-  gap: 1.25rem;
+.metaRow td {
+  width: 33.333%;
+  vertical-align: top;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
-.metaItem {
+.metaItemInner {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
+  align-items: center;
 }
 
 .metaLabel {
-  font-size: 0.6875rem;
+  font-size: 0.5rem;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-align: center;
-  text-wrap: nowrap;
 }
 
 .metaValue {
@@ -117,4 +119,10 @@
 .theme {
   font-size: 0.8125rem;
   color: #64748b;
+}
+
+.metaTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
 }

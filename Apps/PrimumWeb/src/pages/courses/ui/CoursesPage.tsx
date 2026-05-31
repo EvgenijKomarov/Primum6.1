@@ -10,6 +10,7 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
 import { CreateCourseForm } from '@/widgets/popups/create-course';
+import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
@@ -36,21 +37,50 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
       {course.courseThemeName && (
         <span className={styles.theme}>{course.courseThemeName}</span>
       )}
-
-      <div className={styles.metaRow}>
-        <div className={styles.metaItem}>
-          <span className={styles.metaLabel}>Цена</span>
-          <span className={styles.metaValue}>{course.price.toFixed(0)} ₽</span>
-        </div>
-        <div className={styles.metaItem}>
-          <span className={styles.metaLabel}>Максимум уроков в неделю</span>
-          <span className={styles.metaValue}>{course.maxLessons}</span>
-        </div>
-        <div className={styles.metaItem}>
-          <span className={styles.metaLabel}>Бесплатных уроков</span>
-          <span className={styles.metaValue}>{course.freeLessons}</span>
-        </div>
-      </div>
+      <table className={styles.metaTable}>
+        <tbody>
+          <tr className={styles.metaRow}>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Уровень</span>
+                <span className={styles.metaValue}>{course.level}</span>
+              </div>
+            </td>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Ранг</span>
+                <CourseRankInfo rankInput={course.rank} />
+              </div>
+            </td>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Опыт</span>
+                <span className={styles.metaValue}>{course.experience}</span>
+              </div>
+            </td>
+          </tr>
+          <tr className={styles.metaRow}>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Цена</span>
+                <span className={styles.metaValue}>{course.price.toFixed(0)} ₽</span>
+              </div>
+            </td>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Бесплатных занятий</span>
+                <span className={styles.metaValue}>{course.freeLessons}</span>
+              </div>
+            </td>
+            <td className={styles.metaItem}>
+              <div className={styles.metaItemInner}>
+                <span className={styles.metaLabel}>Максимум занятий в неделю</span>
+                <span className={styles.metaValue}>{course.maxLessons}</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
