@@ -18,6 +18,7 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
     <div className={styles.card}>
       <div className={styles.cardTop}>
         <h3 className={styles.courseName}>{course.name ?? '—'}</h3>
+        <span className={styles.theme}>{course.courseThemeName}</span>
       </div>
 
       <div className={styles.badges}>
@@ -33,10 +34,6 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
           <Badge text="Скрыт" badgeType={BadgeTypeEnum.Negative} />
         )}
       </div>
-
-      {course.courseThemeName && (
-        <span className={styles.theme}>{course.courseThemeName}</span>
-      )}
       <table className={styles.metaTable}>
         <tbody>
           <tr className={styles.metaRow}>
