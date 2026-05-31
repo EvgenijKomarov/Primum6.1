@@ -10,6 +10,7 @@ import styles from './LessonsPage.module.css';
 import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Badge } from '@/shared/ui/Badge/Badge';
+import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -46,7 +47,7 @@ const isToday = (dateStr: string) => {
 // ── Status badge ─────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: BadgeTypeEnum }> = {
-  [LessonStatus.Waiting]:           { label: 'Ожидает',   cls: BadgeTypeEnum.Warning },
+  [LessonStatus.Waiting]:           { label: 'Еще не скоро',   cls: BadgeTypeEnum.Warning },
   [LessonStatus.Warned]:            { label: 'Скоро',     cls: BadgeTypeEnum.Warning  },
   [LessonStatus.Happened]:          { label: 'Прошло',    cls: BadgeTypeEnum.Positive },
   [LessonStatus.Missed]:            { label: 'Пропущено', cls: BadgeTypeEnum.Negative  },
@@ -72,7 +73,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
     <div className={styles.cardLeft}>
       <span className={styles.cardCourseName}>{lesson.courseName}</span>
       <div className={styles.cardMeta}>
-        <span className={styles.cardTeacher}>{lesson.teacherDisplayName}</span>
+        <TeacherInfo teacherId={lesson.teacherId} />
         <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
       </div>
     </div>
@@ -92,7 +93,7 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
     <div className={styles.cardLeft}>
       <span className={styles.cardCourseName}>{lesson.courseName}</span>
       <div className={styles.cardMeta}>
-        <span className={styles.cardTeacher}>{lesson.teacherDisplayName}</span>
+        <TeacherInfo teacherId={lesson.teacherId} />
         <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
       </div>
     </div>
