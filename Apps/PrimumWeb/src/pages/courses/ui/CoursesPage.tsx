@@ -1,7 +1,5 @@
-import { CreateCourseForm } from '@/features/create-course';
 import { useTeacherCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
-import { useModal } from '@/shared/lib/modal';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import { Loader } from '@/shared/ui/Loader';
@@ -10,6 +8,8 @@ import styles from './CoursesPage.module.css';
 import { BookIcon, PlusIcon } from '@/shared/icons/types';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
+import { useState } from 'react';
+import { CreateCourseForm } from '@/widgets/popups/create-course';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
@@ -43,11 +43,11 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
           <span className={styles.metaValue}>{course.price.toFixed(0)} ₽</span>
         </div>
         <div className={styles.metaItem}>
-          <span className={styles.metaLabel}>Уроков</span>
+          <span className={styles.metaLabel}>Максимум уроков в неделю</span>
           <span className={styles.metaValue}>{course.maxLessons}</span>
         </div>
         <div className={styles.metaItem}>
-          <span className={styles.metaLabel}>Бесплатно</span>
+          <span className={styles.metaLabel}>Бесплатных уроков</span>
           <span className={styles.metaValue}>{course.freeLessons}</span>
         </div>
       </div>
@@ -55,24 +55,9 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
   );
 };
 
-const MODAL_ID = 'create-course';
-
 export const CoursesPage = () => {
   const { courses, isLoading, mutate } = useTeacherCourses();
-  const { open, close } = useModal();
-
-  const handleOpenCreate = () => {
-    open({
-      id: MODAL_ID,
-      title: 'Новый курс',
-      content: (
-        <CreateCourseForm
-          onSuccess={() => { mutate(); close(MODAL_ID); }}
-          onCancel={() => close(MODAL_ID)}
-        />
-      ),
-    });
-  };
+  const [coursePopupOpen, setCoursePopupOpen] = useState(false);
 
   if (isLoading) return <Loader />;
 
@@ -84,11 +69,17 @@ export const CoursesPage = () => {
           variant={ButtonTypeEnum.PRIMARY}
           size={ButtonSizeEnum.NORMAL}
           icon={<PlusIcon />}
-          onClick={handleOpenCreate}
+          onClick={() => setCoursePopupOpen(true)}
         >
           Создать курс
         </Button>
       </div>
+      {coursePopupOpen && (
+        <CreateCourseForm
+          setCoursePopupOpen={setCoursePopupOpen}
+          onSuccess={mutate}
+        />
+      )}
 
       {courses.length === 0 ? (
         <div className={styles.empty}>

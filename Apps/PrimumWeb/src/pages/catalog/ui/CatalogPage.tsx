@@ -4,12 +4,11 @@ import useSWRImmutable from 'swr/immutable';
 import { usePublicCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
 import { getPublicThemes } from '@/entity/course-theme';
-import { CourseScheduleModal } from '@/features/subscribe-course';
-import { useModal } from '@/shared/lib/modal';
 import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
+import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 
 const usePublicThemes = () =>
   useSWRImmutable(
@@ -18,15 +17,14 @@ const usePublicThemes = () =>
     { revalidateOnMount: true },
   );
 
-const MODAL_PREFIX = 'subscribe-course';
-
 interface CourseCardProps {
   course: CourseDto;
-  onSubscribe: (course: CourseDto) => void;
 }
 
-const CourseCard = ({ course, onSubscribe }: CourseCardProps) => {
+const CourseCard = ({ course }: CourseCardProps) => {
   const isFree = course.price === 0;
+  const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
+
 
   return (
     <article className={styles.card}>
@@ -65,19 +63,24 @@ const CourseCard = ({ course, onSubscribe }: CourseCardProps) => {
           </span>
           <button
             className={styles.subscribeBtn}
-            onClick={(e) => { e.stopPropagation(); onSubscribe(course); }}
+            onClick={(e) => { e.stopPropagation(); setSubscribePopupOpen(true); }}
           >
             Записаться
           </button>
         </div>
       </div>
+      {subscribePopupOpen && (
+        <CourseScheduleSubscribe
+          course={course}
+          setSubscribePopupOpen={setSubscribePopupOpen}
+        />
+      )}
     </article>
   );
 };
 
 export const CatalogPage = () => {
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
-  const { open, close } = useModal();
 
   const { data: themesResult, isLoading: themesLoading } = usePublicThemes();
   const themes = themesResult?.items?.filter((t) => t.isActive) ?? [];
@@ -85,20 +88,6 @@ export const CatalogPage = () => {
   const { courses, isLoading: coursesLoading } = usePublicCourses(selectedThemeId);
 
   const isLoading = themesLoading || coursesLoading;
-
-  const handleSubscribe = (course: CourseDto) => {
-    const id = `${MODAL_PREFIX}-${course.id}`;
-    open({
-      id,
-      title: 'Запись на курс',
-      content: (
-        <CourseScheduleModal
-          course={course}
-          onSuccess={() => close(id)}
-        />
-      ),
-    });
-  };
 
   return (
     <div className={styles.page}>
@@ -142,7 +131,6 @@ export const CatalogPage = () => {
             <CourseCard
               key={course.id}
               course={course}
-              onSubscribe={handleSubscribe}
             />
           ))
         )}

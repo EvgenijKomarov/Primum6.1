@@ -9,7 +9,8 @@ import { useFetch } from '@/shared/api/useFetch.ts';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 
-import styles from './CourseScheduleModal.module.css';
+import styles from './CourseScheduleSubscribe.module.css';
+import { Popup } from '@/shared/ui/Popup/Popup';
 
 const DAY_LABELS: Record<DayOfWeek, string> = {
   [DayOfWeek.Monday]:    'Понедельник',
@@ -33,10 +34,10 @@ const DAY_ORDER: DayOfWeek[] = [
 
 interface Props {
   course: CourseDto;
-  onSuccess: () => void;
+  setSubscribePopupOpen: (open: boolean) => void;
 }
 
-export const CourseScheduleModal = ({ course, onSuccess }: Props) => {
+export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props) => {
   const [selectedSlot, setSelectedSlot] = useState<TeacherScheduleDto | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +63,6 @@ export const CourseScheduleModal = ({ course, onSuccess }: Props) => {
     setError(null);
     try {
       await doSubscribe(course.id, selectedSlot.id);
-      onSuccess();
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: string } })?.response?.data ??
@@ -132,7 +132,7 @@ export const CourseScheduleModal = ({ course, onSuccess }: Props) => {
   }
 
   return (
-    <>
+    <Popup title="Запись на курс" onClose={() => { setSelectedSlot(null); setError(null); setSubscribePopupOpen(false); }}>
       <div className={styles.courseInfo}>
         <p className={styles.courseName}>{course.name ?? '—'}</p>
         <p className={styles.courseTeacher}>{course.teacherName ?? '—'}</p>
@@ -193,6 +193,6 @@ export const CourseScheduleModal = ({ course, onSuccess }: Props) => {
           </div>
         ))
       )}
-    </>
+    </Popup>
   );
 };
