@@ -8,6 +8,8 @@ import { Loader } from '@/shared/ui/Loader';
 
 import styles from './CoursesPage.module.css';
 import { BookIcon, PlusIcon } from '@/shared/icons/types';
+import { Badge } from '@/shared/ui/Badge/Badge';
+import { BadgeTypeEnum } from '@/shared/enums/badge';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
@@ -19,21 +21,16 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
 
       <div className={styles.badges}>
         {course.onCheck && (
-          <span className={`${styles.badge} ${styles.badgeOnCheck}`}>
-            <span className={styles.dot} />
-            На проверке
-          </span>
+          <Badge text="На проверке" badgeType={BadgeTypeEnum.Warning} />
         )}
         {course.isAvailable === false && (
-          <span className={`${styles.badge} ${styles.badgeUnavailable}`}>
-            <span className={styles.dot} />
-            Недоступен
-          </span>
+          <Badge text="Недоступен" badgeType={BadgeTypeEnum.Negative} />
         )}
-        <span className={`${styles.badge} ${course.isActive ? styles.badgeActive : styles.badgeInactive}`}>
-          <span className={styles.dot} />
-          {course.isActive ? 'Активен' : 'Скрыт'}
-        </span>
+        {course.isActive ? (
+          <Badge text="Активен" badgeType={BadgeTypeEnum.Positive} />
+        ) : (
+          <Badge text="Скрыт" badgeType={BadgeTypeEnum.Negative} />
+        )}
       </div>
 
       {course.courseThemeName && (

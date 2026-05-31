@@ -212,35 +212,6 @@
   white-space: pre-wrap;
 }
 
-.badge {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  margin-bottom: 1rem;
-}
-
-.badgeAvailable {
-  background-color: color-mix(in srgb, #22c55e 15%, transparent);
-  color: #4ade80;
-}
-
-.badgeUnavailable {
-  background-color: color-mix(in srgb, #64748b 15%, transparent);
-  color: #94a3b8;
-}
-
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: currentColor;
-}
-
 /* ── Chat signs ── */
 .chatSignsSection {
   display: flex;

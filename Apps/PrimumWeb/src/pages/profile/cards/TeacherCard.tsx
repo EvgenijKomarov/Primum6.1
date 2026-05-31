@@ -4,6 +4,8 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import { TeacherRanks } from '@/widgets/popups/teacher-ranks/ui/TeacherRanks';
 import styles from '../ui/ProfilePage.module.css';
 import type { TeacherProfileDto } from '@/entity/teacher';
+import { Badge } from '@/shared/ui/Badge/Badge';
+import { BadgeTypeEnum } from '@/shared/enums/badge';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */
@@ -71,14 +73,11 @@ export const TeacherCard = ({
       {/* Approved — loaded */}
       {isApproved === true && profile && (
         <>
-          <span
-            className={`${styles.badge} ${
-              profile.isAvailable ? styles.badgeAvailable : styles.badgeUnavailable
-            }`}
-          >
-            <span className={styles.dot} />
-            {profile.isAvailable ? 'Доступен' : 'Недоступен'}
-          </span>
+          {profile.isAvailable === true ? (
+            <Badge text="Доступен" badgeType={BadgeTypeEnum.Positive} />
+          ): (
+            <Badge text="Недоступен" badgeType={BadgeTypeEnum.Negative} />
+          )}
 
           <div className={styles.stats}>
             {[

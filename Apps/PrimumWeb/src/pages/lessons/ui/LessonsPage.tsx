@@ -8,6 +8,8 @@ import type { LessonDto, FutureLessonDto, LessonsByDateDto } from '@/entity/less
 
 import styles from './LessonsPage.module.css';
 import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
+import { BadgeTypeEnum } from '@/shared/enums/badge';
+import { Badge } from '@/shared/ui/Badge/Badge';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -43,17 +45,17 @@ const isToday = (dateStr: string) => {
 
 // ── Status badge ─────────────────────────────────────────────────────────────
 
-const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: string }> = {
-  [LessonStatus.Waiting]:           { label: 'Ожидает',   cls: styles.badgeWaiting },
-  [LessonStatus.Warned]:            { label: 'Скоро',     cls: styles.badgeWarned  },
-  [LessonStatus.Happened]:          { label: 'Прошло',    cls: styles.badgeHappened },
-  [LessonStatus.Missed]:            { label: 'Пропущено', cls: styles.badgeMissed  },
-  [LessonStatus.MissedWithoutReason]: { label: 'Пропущено', cls: styles.badgeMissed },
+const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: BadgeTypeEnum }> = {
+  [LessonStatus.Waiting]:           { label: 'Ожидает',   cls: BadgeTypeEnum.Warning },
+  [LessonStatus.Warned]:            { label: 'Скоро',     cls: BadgeTypeEnum.Warning  },
+  [LessonStatus.Happened]:          { label: 'Прошло',    cls: BadgeTypeEnum.Positive },
+  [LessonStatus.Missed]:            { label: 'Пропущено', cls: BadgeTypeEnum.Negative  },
+  [LessonStatus.MissedWithoutReason]: { label: 'Пропущено', cls: BadgeTypeEnum.Negative },
 };
 
 const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
-  return <span className={`${styles.badge} ${cfg.cls}`}>{cfg.label}</span>;
+  return <Badge text={cfg.label} badgeType={cfg.cls} />;
 };
 
 // ── Grade circle ─────────────────────────────────────────────────────────────
