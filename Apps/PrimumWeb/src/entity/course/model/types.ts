@@ -1,10 +1,3 @@
-export enum ApproveStatus {
-  NeedModeratorReview = 0,
-  Approved = 1,
-  NeedAdministratorReview = 2,
-  NeedManagerReview = 3,
-}
-
 export interface CourseDto {
   id: number;
   name: string | null;
@@ -20,7 +13,8 @@ export interface CourseDto {
   isActive: boolean;
   level: number;
   rank: string | null;
-  approveStatus: ApproveStatus;
+  isAvailable: boolean;
+  onCheck: boolean;
 }
 
 export interface CourseDtoPageResult {

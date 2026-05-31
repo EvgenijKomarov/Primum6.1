@@ -43,7 +43,8 @@ namespace PrimumCore.Extentions
                 IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level,
-                Experience = x.Experience
+                Experience = x.Experience,
+                OnCheck = x.ApproveStatus != ApproveStatus.Approved,
             });
 
         public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 

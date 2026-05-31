@@ -41,5 +41,7 @@ namespace CoreConnection.DTOs
         public required string Rank { get; set; }
 
         public required int Experience { get; set; }
+
+        public required bool OnCheck { get; set; }
     }
 }

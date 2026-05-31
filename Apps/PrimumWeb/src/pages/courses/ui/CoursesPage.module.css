@@ -91,29 +91,14 @@
   white-space: nowrap;
 }
 
-.badgeApproved {
+.badgeUnavailable {
   background-color: color-mix(in srgb, #22c55e 15%, transparent);
-  color: #4ade80;
+  color: #f72222;
 }
 
-.badgePending {
+.badgeOnCheck {
   background-color: color-mix(in srgb, #f59e0b 15%, transparent);
-  color: #fbbf24;
-}
-
-.badgeReview {
-  background-color: color-mix(in srgb, #6366f1 15%, transparent);
-  color: #a5b4fc;
-}
-
-.badgeActive {
-  background-color: color-mix(in srgb, #0ea5e9 15%, transparent);
-  color: #38bdf8;
-}
-
-.badgeInactive {
-  background-color: color-mix(in srgb, #64748b 15%, transparent);
-  color: #94a3b8;
+color: #fbbf24;
 }
 
 .dot {

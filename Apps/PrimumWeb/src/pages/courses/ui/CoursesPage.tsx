@@ -1,5 +1,5 @@
 import { CreateCourseForm } from '@/features/create-course';
-import { ApproveStatus, useTeacherCourses } from '@/entity/course';
+import { useTeacherCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
 import { useModal } from '@/shared/lib/modal';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
@@ -9,15 +9,7 @@ import { Loader } from '@/shared/ui/Loader';
 import styles from './CoursesPage.module.css';
 import { BookIcon, PlusIcon } from '@/shared/icons/types';
 
-const APPROVE_STATUS_LABEL: Record<ApproveStatus, { label: string; cls: string }> = {
-  [ApproveStatus.Approved]:                { label: 'Одобрен',          cls: styles.badgeApproved },
-  [ApproveStatus.NeedModeratorReview]:     { label: 'На проверке',      cls: styles.badgePending  },
-  [ApproveStatus.NeedAdministratorReview]: { label: 'У администратора', cls: styles.badgeReview   },
-  [ApproveStatus.NeedManagerReview]:       { label: 'У менеджера',      cls: styles.badgeReview   },
-};
-
 const CourseCard = ({ course }: { course: CourseDto }) => {
-  const status = APPROVE_STATUS_LABEL[course.approveStatus];
 
   return (
     <div className={styles.card}>
@@ -26,10 +18,18 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
       </div>
 
       <div className={styles.badges}>
-        <span className={`${styles.badge} ${status.cls}`}>
-          <span className={styles.dot} />
-          {status.label}
-        </span>
+        {course.onCheck && (
+          <span className={`${styles.badge} ${styles.badgeOnCheck}`}>
+            <span className={styles.dot} />
+            На проверке
+          </span>
+        )}
+        {course.isAvailable === false && (
+          <span className={`${styles.badge} ${styles.badgeUnavailable}`}>
+            <span className={styles.dot} />
+            Недоступен
+          </span>
+        )}
         <span className={`${styles.badge} ${course.isActive ? styles.badgeActive : styles.badgeInactive}`}>
           <span className={styles.dot} />
           {course.isActive ? 'Активен' : 'Скрыт'}
