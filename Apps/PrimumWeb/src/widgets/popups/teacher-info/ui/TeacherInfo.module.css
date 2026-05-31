@@ -1,0 +1,32 @@
+.displayName {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, #6366f1 12%, transparent);
+    color: #a5b4fc;
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.row {
+    justify-content: space-between;
+    display: flex;
+}
+
+.label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.description {
+    font-size: 14px;
+    color: var(--text-secondary);
+}

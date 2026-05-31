@@ -10,6 +10,13 @@ export const getTeacherProfile = async () => {
   });
 };
 
+export const getTeacherProfileById = async (id: number) => {
+  return await fetcherInstance<TeacherProfileDto>({
+    method: 'GET',
+    url: `${api.teacher.getById}/${id}`,
+  });
+};
+
 export const getPublicTeacherSchedules = async (teacherId: number, page = 0, pageSize = 500) => {
   return await fetcherInstance<TeacherScheduleDtoPageResult>({
     method: 'GET',

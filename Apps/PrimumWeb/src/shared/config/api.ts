@@ -21,6 +21,7 @@ export const api = {
   },
   teacher: {
     getProfile: "/teacher",
+    getById: "public/teachers",
   },
   publicTeacher: {
     getAll: "/public/teachers",

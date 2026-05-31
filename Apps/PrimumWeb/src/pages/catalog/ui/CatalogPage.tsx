@@ -10,6 +10,7 @@ import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
 import { CourseRanks } from '@/widgets/popups/course-ranks/ui/CourseRanks';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
+import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
 
 const usePublicThemes = () =>
   useSWRImmutable(
@@ -63,7 +64,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
       </div>
 
       <div className={styles.cardFooter}>
-        <span className={styles.cardTeacher}>{course.teacherName ?? '—'}</span>
+        <span className={styles.cardTeacher}>
+          <TeacherInfo teacherId={course.teacherId} />
+        </span>
         <div className={styles.cardFooterRight}>
           <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
             {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}
