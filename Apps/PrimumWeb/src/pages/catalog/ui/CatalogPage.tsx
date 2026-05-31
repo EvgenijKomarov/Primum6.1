@@ -8,6 +8,7 @@ import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
+import { CourseRanks } from '@/widgets/popups/course-ranks/ui/CourseRanks';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 
 const usePublicThemes = () =>
@@ -24,6 +25,7 @@ interface CourseCardProps {
 const CourseCard = ({ course }: CourseCardProps) => {
   const isFree = course.price === 0;
   const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
+  const [rankPopupOpen, setRankPopupOpen] = useState(false);
 
 
   return (
@@ -38,7 +40,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
       <div className={styles.cardMeta}>
         <div className={styles.cardMetaItem}>
-          <span className={styles.cardMetaLabel}>Уроков</span>
+          <span className={styles.cardMetaLabel}>Макс. уроков</span>
           <span className={styles.cardMetaValue}>{course.maxLessons}</span>
         </div>
         {course.freeLessons > 0 && (
@@ -50,8 +52,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
         {course.rank && (
           <div className={styles.cardMetaItem}>
             <span className={styles.cardMetaLabel}>Уровень</span>
-            <span className={styles.rankBadge}>{course.rank}</span>
+            <span className={styles.rankBadge} onClick={() => setRankPopupOpen(true)}>
+              {course.rank}
+            </span>
           </div>
+        )}
+        {rankPopupOpen && (
+          <CourseRanks setRankPopupOpen={setRankPopupOpen} />
         )}
       </div>
 

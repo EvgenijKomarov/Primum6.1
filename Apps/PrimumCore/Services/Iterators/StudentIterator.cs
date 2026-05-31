@@ -89,13 +89,6 @@ namespace PrimumCore.Services.Iterators
             {
                 throw new BusinessLogicException("Can't create more shedules than course's maximum shedules per week");
             }
-            if (student
-                .Abonements
-                .SelectMany(x => x.AbonementShedules)
-                .Any(x => x.TeacherShedule.Time == teacherShedule.Time && x.TeacherShedule.DayOfWeek == teacherShedule.DayOfWeek))
-            {
-                throw new BusinessLogicException("There is a same shedule in student profile");
-            }
 
             var suitableDate = dateTimeService.GetNextFreeSuitableDateThisWeek(teacherShedule.DayOfWeek, teacherShedule.Time);
             var abonementShedule = new AbonementShedule

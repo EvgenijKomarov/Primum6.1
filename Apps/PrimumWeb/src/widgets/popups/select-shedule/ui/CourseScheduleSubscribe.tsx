@@ -11,6 +11,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 
 import styles from './CourseScheduleSubscribe.module.css';
 import { Popup } from '@/shared/ui/Popup/Popup';
+import { translateException } from '@/features/exception-translation/translate-exception';
 
 const DAY_LABELS: Record<DayOfWeek, string> = {
   [DayOfWeek.Monday]:    'Понедельник',
@@ -75,62 +76,6 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
   const isFree = course.price === 0;
   const priceLabel = isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`;
 
-  if (selectedSlot) {
-    return (
-      <div className={styles.confirmBody}>
-        <button className={styles.backBtn} onClick={() => { setSelectedSlot(null); setError(null); }}>
-          ← Назад к расписанию
-        </button>
-
-        <div className={styles.confirmCard}>
-          <div className={styles.confirmRow}>
-            <span className={styles.confirmLabel}>Курс</span>
-            <span className={styles.confirmValue}>{course.name ?? '—'}</span>
-          </div>
-          <div className={styles.confirmRow}>
-            <span className={styles.confirmLabel}>Преподаватель</span>
-            <span className={styles.confirmValue}>{course.teacherName ?? '—'}</span>
-          </div>
-          <div className={styles.confirmRow}>
-            <span className={styles.confirmLabel}>День</span>
-            <span className={styles.confirmValue}>{DAY_LABELS[selectedSlot.dayOfWeek]}</span>
-          </div>
-          <div className={styles.confirmRow}>
-            <span className={styles.confirmLabel}>Время</span>
-            <span className={styles.confirmValue}>
-              {selectedSlot.time}:00 — {selectedSlot.time + 1}:00
-            </span>
-          </div>
-          <div className={styles.confirmRow}>
-            <span className={styles.confirmLabel}>Стоимость</span>
-            <span className={styles.confirmValue}>{priceLabel} / урок</span>
-          </div>
-        </div>
-
-        {error && <div className={styles.errorBanner}>{error}</div>}
-
-        <div className={styles.confirmActions}>
-          <Button
-            variant={ButtonTypeEnum.SECONDARY}
-            size={ButtonSizeEnum.NORMAL}
-            onClick={() => { setSelectedSlot(null); setError(null); }}
-            disabled={isSubmitting}
-          >
-            Отмена
-          </Button>
-          <Button
-            variant={ButtonTypeEnum.PRIMARY}
-            size={ButtonSizeEnum.NORMAL}
-            onClick={handleConfirm}
-            isLoading={isSubmitting}
-          >
-            Подтвердить запись
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <Popup title="Запись на курс" onClose={() => { setSelectedSlot(null); setError(null); setSubscribePopupOpen(false); }}>
       <div className={styles.courseInfo}>
@@ -193,6 +138,47 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
           </div>
         ))
       )}
+
+      {selectedSlot && (<div className={styles.confirmBody}>
+
+        <div className={styles.confirmCard}>
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmLabel}>Курс</span>
+            <span className={styles.confirmValue}>{course.name ?? '—'}</span>
+          </div>
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmLabel}>Преподаватель</span>
+            <span className={styles.confirmValue}>{course.teacherName ?? '—'}</span>
+          </div>
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmLabel}>День</span>
+            <span className={styles.confirmValue}>{DAY_LABELS[selectedSlot.dayOfWeek]}</span>
+          </div>
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmLabel}>Время</span>
+            <span className={styles.confirmValue}>
+              {selectedSlot.time}:00 — {selectedSlot.time + 1}:00
+            </span>
+          </div>
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmLabel}>Стоимость</span>
+            <span className={styles.confirmValue}>{priceLabel} / урок</span>
+          </div>
+        </div>
+
+        {error && <div className={styles.errorBanner}>{translateException(error)}</div>}
+
+        <div className={styles.confirmActions}>
+          <Button
+            variant={ButtonTypeEnum.PRIMARY}
+            size={ButtonSizeEnum.NORMAL}
+            onClick={handleConfirm}
+            isLoading={isSubmitting}
+          >
+            Подтвердить запись
+          </Button>
+        </div>
+      </div>)}
     </Popup>
   );
 };

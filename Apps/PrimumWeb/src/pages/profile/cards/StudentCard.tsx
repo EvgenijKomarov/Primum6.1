@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
-import { StudentRanks } from '@/widgets/popups/student-ranks/ui/StudentRanks';
 import styles from '../ui/ProfilePage.module.css';
 import type { StudentProfileDto } from '@/entity/student';
+import { StudentRanks } from '@/widgets/popups/student-ranks/ui/StudentRanks';
 
 interface Props {
   /** null = not created yet, undefined = loading */

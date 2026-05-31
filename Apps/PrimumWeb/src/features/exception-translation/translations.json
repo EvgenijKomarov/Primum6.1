@@ -6,5 +6,8 @@
     "Adress not valid": "Адрес недействителен",
     "User with the same adress already exists": "Пользователь с таким адресом уже существует",
     "Password too short. Minimum 5 chars": "Пароль слишком короткий. Минимум 5 символов",
-    "Password too long. Maximum 20 chars": "Пароль слишком длинный. Максимум 20 символов"
+    "Password too long. Maximum 20 chars": "Пароль слишком длинный. Максимум 20 символов",
+    "Can't create more shedules than course's maximum shedules per week": "Достигнуто максимальное количество занятий в неделю для данного курса",
+    "Student can't subscribe on himself": "Вы не можете подписаться на свой же курс",
+    "Same shedule already exists": "Уже существует занятие в это время"
 }
