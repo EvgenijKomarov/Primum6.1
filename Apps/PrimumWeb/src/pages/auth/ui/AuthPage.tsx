@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { LoginForm } from "@/features/login";
 import { RegisterForm } from "@/features/register";
 import { useCurrentUser } from "@/entity/user/model/useCurrentUser";
+import { Card } from "@/shared/ui/Card/Card";
 
 export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,13 +15,13 @@ export const AuthPage = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
+      <Card>
         {isLogin ? (
           <LoginForm onSwitch={() => setIsLogin(false)} onSuccess={handleSuccess} onMutate={mutate} />
         ) : (
           <RegisterForm onSwitch={() => setIsLogin(true)} onSuccess={handleSuccess} onMutate={mutate} />
         )}
-      </div>
+      </Card>
     </div>
   );
 }

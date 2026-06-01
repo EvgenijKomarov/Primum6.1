@@ -3,6 +3,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 import { useState } from 'react';
+import { Card } from '@/shared/ui/Card/Card';
 
 interface Props {
   surname: string | null | undefined;
@@ -14,18 +15,7 @@ interface Props {
 export const PersonalInfoCard = ({ surname, name, patronymic, onLogout }: Props) => {
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
   
-  return (<div className={styles.card}>
-    <div className={styles.cardHeader}>
-      <h2 className={styles.cardTitle}>Личные данные</h2>
-      <Button variant={ButtonTypeEnum.TEXT} size={ButtonSizeEnum.SMALL} onClick={() => setEnsurancePopupOpen(true)}>
-        Выйти
-      </Button>
-      {ensurancePopupOpen && <EnsurancePopup 
-        setPopupOpen={setEnsurancePopupOpen}
-        onConfirm={onLogout}
-        description="Вы уверены, что хотите выйти из аккаунта?"
-      />}
-    </div>
+  return (<Card title="Личные данные">
     <div className={styles.fields}>
       {[
         { label: 'Фамилия', value: surname },
@@ -38,5 +28,13 @@ export const PersonalInfoCard = ({ surname, name, patronymic, onLogout }: Props)
         </div>
       ))}
     </div>
-  </div>
+    <Button variant={ButtonTypeEnum.SECONDARY} size={ButtonSizeEnum.SMALL} onClick={() => setEnsurancePopupOpen(true)}>
+        Выйти
+      </Button>
+      {ensurancePopupOpen && <EnsurancePopup 
+        setPopupOpen={setEnsurancePopupOpen}
+        onConfirm={onLogout}
+        description="Вы уверены, что хотите выйти из аккаунта?"
+      />}
+  </Card>
 )};

@@ -11,11 +11,12 @@ import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
 import { CreateCourseForm } from '@/widgets/popups/create-course';
 import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
+import { Card } from '@/shared/ui/Card/Card';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
   return (
-    <div className={styles.card}>
+    <Card>
       <div className={styles.cardTop}>
         <h3 className={styles.courseName}>{course.name ?? '—'}</h3>
         <span className={styles.theme}>{course.courseThemeName}</span>
@@ -81,7 +82,7 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
       <div className={styles.description}>
         <p>{course.about ?? 'Описание отсутствует'}</p>
       </div>
-    </div>
+    </Card>
   );
 };
 

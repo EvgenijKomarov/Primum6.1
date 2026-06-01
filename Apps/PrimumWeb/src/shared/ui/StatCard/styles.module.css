@@ -1,0 +1,23 @@
+.stat {
+  background-color: #0f172a;
+  border: 1px solid #1e3a5f20;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+}
+
+.statLabel {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 8px;
+  
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.statValue {
+    font-size: 10px;
+    color: #e2e8f0;
+    font-weight: 600;
+}

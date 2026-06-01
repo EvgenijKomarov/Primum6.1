@@ -33,15 +33,6 @@
   justify-content: space-between;
 }
 
-.cardTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 0;
-}
-
 .cardSubtitle {
   font-size: 0.785rem;
   font-weight: 600;
@@ -180,29 +171,6 @@
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 0.75rem;
   margin-bottom: 1.25rem;
-}
-
-.stat {
-  background-color: #0f172a;
-  border: 1px solid #1e3a5f20;
-  border-radius: 0.5rem;
-  padding: 0.625rem 0.875rem;
-}
-
-.statLabel {
-  font-size: 0.6875rem;
-  color: #64748b;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: 0.2rem;
-}
-
-.statValue {
-  font-size: 0.9375rem;
-  color: #e2e8f0;
-  font-weight: 600;
 }
 
 .about {

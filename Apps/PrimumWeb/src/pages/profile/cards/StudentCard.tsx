@@ -4,6 +4,8 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
 import type { StudentProfileDto } from '@/entity/student';
 import { StudentRanks } from '@/widgets/popups/student-ranks/ui/StudentRanks';
+import { Card } from '@/shared/ui/Card/Card';
+import { StatCard } from '@/shared/ui/StatCard/StatCard';
 
 interface Props {
   /** null = not created yet, undefined = loading */
@@ -20,8 +22,7 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
   const hasProfile = isApproved !== null && isApproved !== undefined;
 
   return (
-    <div className={styles.card}>
-      <h2 className={styles.cardTitle}>Профиль ученика</h2>
+    <Card title="Профиль ученика">
 
       {!hasProfile && (
         <>
@@ -51,21 +52,17 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
               { label: 'Монеты', value: profile.coins },
               { label: 'Баланс', value: `${profile.cash.toFixed(2)} ₽` },
               { label: 'Опыт', value: profile.experience },
-            ].map(({ label, value, onClick }) => (
-              <div
+            ].map(({ label, value }) => (
+              <StatCard
                 key={label}
-                className={styles.stat}
-                onClick={onClick}
-                style={onClick ? { cursor: 'pointer' } : undefined}
-              >
-                <span className={styles.statLabel}>{label}</span>
-                <span className={styles.statValue}>{value}</span>
-              </div>
+                title={label}
+                value={value}
+              />
             ))}
           </div>
           {rankPopupOpen && <StudentRanks setRankPopupOpen={setRankPopupOpen} />}
         </>
       )}
-    </div>
+    </Card>
   );
 };

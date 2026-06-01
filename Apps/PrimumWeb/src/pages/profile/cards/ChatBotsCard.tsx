@@ -4,6 +4,8 @@ import { Input } from '@/shared/ui/Input';
 import type { ChatSign } from '@/entity/chat-sign/model/types';
 import styles from '../ui/ProfilePage.module.css';
 import { Collapsible } from '@/shared/ui/Collapsible';
+import { Card } from '@/shared/ui/Card/Card';
+import { StatCard } from '@/shared/ui/StatCard/StatCard';
 
 interface Props {
   chatSigns: ChatSign[];
@@ -13,8 +15,7 @@ interface Props {
 }
 
 export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfirmSign }: Props) => (
-  <div className={styles.card}>
-    <h2 className={styles.cardTitle}>Чат боты</h2>
+  <Card title="Чат боты">
     <div className={styles.chatSignsSection}>
       {chatSigns.length === 0 ? (
         <p className={styles.cardDescription}>
@@ -24,10 +25,11 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
       ) : (
         <div className={styles.stats}>
           {chatSigns.map((sign, index) => (
-            <div key={`${sign.chatId}-${index}`} className={styles.stat}>
-              <span className={styles.statLabel}>{sign.realizationTag}</span>
-              <span className={styles.statValue}>{sign.username ?? sign.chatId}</span>
-            </div>
+            <StatCard
+              key={`${sign.chatId}-${index}`}
+              title={sign.realizationTag}
+              value={sign.username ?? sign.chatId}
+            />
           ))}
         </div>
       )}
@@ -52,5 +54,5 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
         </div>
       </Collapsible>
     </div>
-  </div>
+  </Card>
 );

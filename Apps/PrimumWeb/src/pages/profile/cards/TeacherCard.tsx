@@ -6,6 +6,8 @@ import styles from '../ui/ProfilePage.module.css';
 import type { TeacherProfileDto } from '@/entity/teacher';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
+import { Card } from '@/shared/ui/Card/Card';
+import { StatCard } from '@/shared/ui/StatCard/StatCard';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */
@@ -32,8 +34,7 @@ export const TeacherCard = ({
   if (isApproved === undefined) return null;
 
   return (
-    <div className={styles.card}>
-      <h2 className={styles.cardTitle}>Профиль преподавателя</h2>
+    <Card title="Профиль преподавателя">
 
       {/* Pending approval */}
       {isApproved === false && (
@@ -84,16 +85,12 @@ export const TeacherCard = ({
               { label: 'Уровень', value: profile.level, onClick: () => setRankPopupOpen(true) },
               { label: 'Ранг', value: profile.rank ?? '—', onClick: () => setRankPopupOpen(true) },
               { label: 'Опыт', value: profile.experience },
-            ].map(({ label, value, onClick }) => (
-              <div
+            ].map(({ label, value }) => (
+              <StatCard
                 key={label}
-                className={styles.stat}
-                onClick={onClick}
-                style={onClick ? { cursor: 'pointer' } : undefined}
-              >
-                <span className={styles.statLabel}>{label}</span>
-                <span className={styles.statValue}>{value}</span>
-              </div>
+                title={label}
+                value={value}
+              />
             ))}
           </div>
 
@@ -101,6 +98,6 @@ export const TeacherCard = ({
           {profile.about && <p className={styles.about}>{profile.about}</p>}
         </>
       )}
-    </div>
+    </Card>
   );
 };

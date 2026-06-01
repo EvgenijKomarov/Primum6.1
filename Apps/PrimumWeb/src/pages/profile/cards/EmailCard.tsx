@@ -6,6 +6,7 @@ import { CheckIcon, EditIcon } from '@/shared/icons';
 import { Collapsible } from '@/shared/ui/Collapsible/Collapsible';
 import { useState } from 'react';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
+import { Card } from '@/shared/ui/Card/Card';
 
 interface Props {
   email: string;
@@ -38,8 +39,7 @@ export const EmailCard = ({
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
   
   return (
-    <div className={styles.card}>
-      <h2 className={styles.cardTitle}>Почта</h2>
+    <Card title="Почта">
       <div className={styles.emailSection}>
 
         {/* Email input row */}
@@ -124,6 +124,6 @@ export const EmailCard = ({
           </div>
         </Collapsible>
       </div>
-    </div>
+    </Card>
   );
 };

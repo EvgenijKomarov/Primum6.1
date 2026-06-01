@@ -11,6 +11,7 @@ import { EmptyIcon } from '@/shared/icons/types';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
 import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
+import { Card } from '@/shared/ui/Card/Card';
 
 const usePublicThemes = () =>
   useSWRImmutable(
@@ -29,7 +30,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
 
   return (
-    <article className={styles.card}>
+    <Card>
       <div>
         {course.courseThemeName && (
           <span className={styles.cardTheme}>{course.courseThemeName}</span>
@@ -79,7 +80,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
           setSubscribePopupOpen={setSubscribePopupOpen}
         />
       )}
-    </article>
+    </Card>
   );
 };
 
