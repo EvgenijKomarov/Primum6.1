@@ -54,3 +54,8 @@
     color: #a5b4fc;
     cursor: pointer;
 }
+
+.highlightedRow {
+  font-weight: bold;
+  background: #6366f1
+}

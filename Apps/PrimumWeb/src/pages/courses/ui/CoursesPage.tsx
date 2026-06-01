@@ -78,6 +78,9 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
           </tr>
         </tbody>
       </table>
+      <div className={styles.description}>
+        <p>{course.about ?? 'Описание отсутствует'}</p>
+      </div>
     </div>
   );
 };
