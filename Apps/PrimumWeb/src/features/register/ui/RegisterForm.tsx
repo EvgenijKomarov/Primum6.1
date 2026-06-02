@@ -54,100 +54,102 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
             {translateException(topError)}
           </div>
         )}
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"name"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label={"Имя"}
-                  placeholder={"Введите ваше имя"}
-                />
-              )}
-            />
+        <div className={styles.formRows}>
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"name"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={"Имя"}
+                    placeholder={"Введите ваше имя"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"surname"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label={"Фамилия"}
-                  placeholder={"Введите вашу фамилию"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"surname"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={"Фамилия"}
+                    placeholder={"Введите вашу фамилию"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"patronymic"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label={"Отчество"}
-                  placeholder={"Введите ваше отчество"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"patronymic"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={"Отчество"}
+                    placeholder={"Введите ваше отчество"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"mailAdress"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label={"Email"}
-                  placeholder={"Введите адрес электронной почты"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"mailAdress"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={"Email"}
+                    placeholder={"Введите адрес электронной почты"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"password"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type={"password"}
-                  label={"Пароль"}
-                  placeholder={"Введите пароль"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"password"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type={"password"}
+                    label={"Пароль"}
+                    placeholder={"Введите пароль"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"confirmPassword"}
-              control={form.control}
-              rules={{
-                validate: (value) =>
-                  value === form.getValues('password') || 'Пароли не совпадают',
-              }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type={"password"}
-                  label={"Подтверждение пароля"}
-                  placeholder={"Введите пароль еще раз"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"confirmPassword"}
+                control={form.control}
+                rules={{
+                  validate: (value) =>
+                    value === form.getValues('password') || 'Пароли не совпадают',
+                }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type={"password"}
+                    label={"Подтверждение пароля"}
+                    placeholder={"Введите пароль еще раз"}
+                  />
+                )}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.formActions}>

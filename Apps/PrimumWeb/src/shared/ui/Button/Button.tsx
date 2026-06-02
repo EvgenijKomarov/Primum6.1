@@ -13,7 +13,7 @@ export interface IButton extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, '
   variant?: ButtonTypeEnum;
   size?: ButtonSizeEnum;
   icon?: ReactElement;
-  title?: string | undefined;
+  title?: string;
   fullWidth?: boolean;
   isLoading?: boolean;
 }
@@ -27,7 +27,7 @@ const Button = ({
   variant = ButtonTypeEnum.PRIMARY,
   fullWidth = false,
   children,
-  title = undefined,
+  title,
   isLoading = false,
   ...restProps
 }: PropsWithChildren<IButton>) => {
@@ -36,26 +36,23 @@ const Button = ({
   return (
     <button
       type={type}
-      className={clsx([
+      className={clsx(
         styles.button,
-        variant === ButtonTypeEnum.PRIMARY && !isButtonDisabled && styles['primary'],
-        variant === ButtonTypeEnum.SECONDARY && !isButtonDisabled && styles['secondary'],
-        variant === ButtonTypeEnum.TEXT && !isButtonDisabled && styles['text'],
-        variant === ButtonTypeEnum.ICON && !isButtonDisabled && styles['icon'],
-        variant === ButtonTypeEnum.PRIMARY && isButtonDisabled && styles['primary-disabled'],
-        variant === ButtonTypeEnum.SECONDARY && isButtonDisabled && styles['secondary-disabled'],
-        variant === ButtonTypeEnum.TEXT && isButtonDisabled && styles['text-disabled'],
-        variant === ButtonTypeEnum.ICON && isButtonDisabled && styles['icon-disabled'],
-        size === ButtonSizeEnum.NORMAL && !isButtonDisabled && styles['size-normal'],
-        size === ButtonSizeEnum.MINIMUM && !isButtonDisabled && styles['size-minimum'],
-        size === ButtonSizeEnum.SMALL && !isButtonDisabled && styles['size-small'],
-        size === ButtonSizeEnum.NORMAL && isButtonDisabled && styles['size-normal-disabled'],
-        size === ButtonSizeEnum.SMALL && isButtonDisabled && styles['size-small-disabled'],
-        fullWidth && 'w-full',
-      ])}
+        // Variants & States
+        variant === ButtonTypeEnum.PRIMARY && (isButtonDisabled ? styles['primary-disabled'] : styles['primary']),
+        variant === ButtonTypeEnum.SECONDARY && (isButtonDisabled ? styles['secondary-disabled'] : styles['secondary']),
+        variant === ButtonTypeEnum.TEXT && (isButtonDisabled ? styles['text-disabled'] : styles['text']),
+        variant === ButtonTypeEnum.ICON && (isButtonDisabled ? styles['icon-disabled'] : styles['icon']),
+        // Sizes
+        size === ButtonSizeEnum.NORMAL && (isButtonDisabled ? styles['size-normal-disabled'] : styles['size-normal']),
+        size === ButtonSizeEnum.MINIMUM && styles['size-minimum'],
+        size === ButtonSizeEnum.SMALL && (isButtonDisabled ? styles['size-small-disabled'] : styles['size-small']),
+        // Modifiers
+        fullWidth && 'w-full'
+      )}
       disabled={isButtonDisabled}
       onClick={onClick}
-      title={title && title}
+      title={title}
       {...restProps}
     >
       {isLoading ? (
@@ -66,7 +63,8 @@ const Button = ({
       ) : (
         <>
           {icon}
-          {children}
+          {/* Заменил h3 на span для корректной семантики и отсутствия лишних отступов */}
+          {children && <span>{children}</span>}
         </>
       )}
     </button>

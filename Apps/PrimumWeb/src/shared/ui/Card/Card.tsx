@@ -3,11 +3,12 @@ import styles from './styles.module.css';
 interface Props {
   children: React.ReactNode;
   title?: string;
+  className?: string;
 }
 
-export const Card = ({ children, title }: Props) => {
+export const Card = ({ children, title, className }: Props) => {
     return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${className || ''}`}>
         {title && <h2 className={styles.cardTitle}>{title}</h2>}
         {children}
     </div>);

@@ -98,7 +98,7 @@ export const Header = () => {
             </div>
           ) : (
             <Button
-              variant={ButtonTypeEnum.PRIMARY}
+              variant={ButtonTypeEnum.SECONDARY}
               size={ButtonSizeEnum.SMALL}
               onClick={() => navigate('/auth')}
             >

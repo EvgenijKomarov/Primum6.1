@@ -8,7 +8,7 @@ interface Props {
 export const StatCard = ({ title, value }: Props) => {
     return (
     <div className={styles.stat}>
-        {title && <h3 className={styles.statTitle}>{title}</h3>}
+        {title && <h3 className={styles.statLabel}>{title}</h3>}
         {value && <p className={styles.statValue}>{value}</p>}
     </div>)
 };

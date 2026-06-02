@@ -50,44 +50,46 @@ export const LoginForm = ({ onSwitch, onSuccess, onMutate }: LoginFormProps) => 
             {translateException(topError)}
           </div>
         )}
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"email"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label={"Электронная почта"}
-                  placeholder={"Введите адрес электронной почты"}
-                />
-              )}
-            />
+        <div className={styles.formRows}>
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"email"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={"Электронная почта"}
+                    placeholder={"Введите адрес электронной почты"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formRow}>
-          <div className={styles.formCol}>
-            <Controller
-              name={"password"}
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type={"password"}
-                  label={"Пароль"}
-                  placeholder={"Введите пароль"}
-                />
-              )}
-            />
+          <div className={styles.formRow}>
+            <div className={styles.formCol}>
+              <Controller
+                name={"password"}
+                control={form.control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type={"password"}
+                    label={"Пароль"}
+                    placeholder={"Введите пароль"}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.formActions}>
-          <Button type="submit" isLoading={isLoading}>
-            Войти
-          </Button>
-          <Button variant={ButtonTypeEnum.SECONDARY} onClick={handleSwitch}>
-            Зарегистрироваться
-          </Button>
+          <div className={styles.formActions}>
+            <Button type="submit" isLoading={isLoading}>
+              Войти
+            </Button>
+            <Button variant={ButtonTypeEnum.SECONDARY} onClick={handleSwitch}>
+              Зарегистрироваться
+            </Button>
+          </div>
         </div>
       </form>
     </FormProvider>

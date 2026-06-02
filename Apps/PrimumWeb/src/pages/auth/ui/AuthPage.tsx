@@ -15,7 +15,7 @@ export const AuthPage = () => {
 
   return (
     <div className={styles.page}>
-      <Card>
+      <Card className={styles.card}>
         {isLogin ? (
           <LoginForm onSwitch={() => setIsLogin(false)} onSuccess={handleSuccess} onMutate={mutate} />
         ) : (

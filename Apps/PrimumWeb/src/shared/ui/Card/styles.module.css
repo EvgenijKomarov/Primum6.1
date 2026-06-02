@@ -1,11 +1,11 @@
 .card {
     width: 100%;
-    background-color: var(--color-background-secondary);
+    background-color: var(--color-secondary-base);
     border: 2px solid var(--color-border-base);
-    border-radius: 0px; /* Острые углы */
+    border-radius: 0px;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    box-shadow: 6px 6px 0px color-mix(in srgb, var(--color-primary-base) 20%, transparent);
+    box-shadow: 6px 6px 0px color-mix(in srgb, var(--color-secondary-base) 20%, transparent);
   }
