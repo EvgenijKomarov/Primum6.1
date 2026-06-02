@@ -39,7 +39,7 @@ def publish(userId: int, message: str):
     all_user_signs = requests.get(f"{SIGNSERVICE_URL}/get-signs/{userId}")
 
     for sign in all_user_signs:
-        rabbitmq_post(sign["realizationTag"], sign["chatId"], sign["username"], message)
+        rabbitmq_post(sign["realizationTag"], int(sign["chatId"]), sign["username"], message)
     return {"status": "ok"}
 
 
