@@ -6,7 +6,7 @@
 }
 
 .statLabel {
-  color: var(--color-secondary-dark);
+  color: var(--color-secondary-base);
   font-weight: 500;
   font-size: 0.5rem;
   
