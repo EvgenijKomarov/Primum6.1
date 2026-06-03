@@ -51,10 +51,10 @@
   @apply bg-secondary-darkest;
 }
 .secondary:active {
-  @apply bg-background-secondary-active;
+  @apply bg-secondary-light;
 }
 .secondary-disabled {
-  @apply text-disabled-text bg-secondary-disabled cursor-not-allowed;
+  @apply text-disabled-text bg-secondary-dark cursor-not-allowed;
 }
 .secondary-disabled svg,
 .secondary-disabled svg path {

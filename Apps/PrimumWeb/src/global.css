@@ -3,11 +3,11 @@
 @theme {
   /* ── Primary (yellow-lime) ── */
   --color-primary-base:     #b3dd1d;
-  --color-primary-hover:    #eaf64a;
-  --color-primary-dark:     #c4d30a;
-  --color-primary-disabled: #424908;
-  --color-primary-light:    #e3f882;
-  --color-primary-pressed:  #a6b400;
+  --color-primary-hover:    #c4e83a;
+  --color-primary-light:    #e0f285;
+  --color-primary-dark:     #96b815;
+  --color-primary-pressed:  #7a9610;
+  --color-primary-disabled: #4d5718;
 
   --color-secondary-light: #acacac;
   --color-secondary-base: #5e5e5c;
@@ -17,13 +17,6 @@
   --color-functional-error: #ff4d4f;
   --color-functional-success: #52c41a;
   --color-functional-warning: #faad14;
-
-  /* ── Surface / secondary ── */
-  --color-background-secondary:        #1e293b;
-  --color-background-secondary-dark:   #1e293b;
-  --color-background-secondary-hover:  #334155;
-  --color-background-secondary-active: #475569;
-  --color-secondary-disabled:          #0f172a;
 
   /* ── Icon-button overlays ── */
   --color-background-primary-hover:   color-mix(in srgb, #e1f018 12%, transparent);
@@ -70,7 +63,7 @@
     font-size: 11px;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    background-color: var(--color-secondary-darkest);
+    background-color: var(--color-secondary-dark);
     border: 1px solid var(--color-secondary-darker);
     border-radius: 0.375rem;
     font-size: 0.675rem;
