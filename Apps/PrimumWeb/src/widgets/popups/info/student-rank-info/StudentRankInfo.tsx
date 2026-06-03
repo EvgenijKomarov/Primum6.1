@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from './StudentRankInfo.module.css';
+import styles from '../styles.module.css';
 import type { StudentRankDto } from "@/entity/studentRank/model/types";
 import { getStudentRanks } from "@/entity/studentRank/api/studentRank.api";
 import { Popup } from "@/shared/ui/Popup";

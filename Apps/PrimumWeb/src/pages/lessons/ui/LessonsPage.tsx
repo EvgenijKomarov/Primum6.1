@@ -10,7 +10,7 @@ import styles from './LessonsPage.module.css';
 import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Badge } from '@/shared/ui/Badge/Badge';
-import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
+import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

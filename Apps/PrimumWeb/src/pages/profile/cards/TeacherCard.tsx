@@ -6,7 +6,7 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
-import { TeacherRankInfo } from '@/widgets/popups/teacher-rank-info/ui/TeacherRankInfo';
+import { TeacherRankInfo } from '@/widgets/popups/info/teacher-rank-info/TeacherRankInfo';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */

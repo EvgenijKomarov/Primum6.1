@@ -9,9 +9,9 @@ import { api } from '@/shared/config/api.ts';
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
-import { TeacherInfo } from '@/widgets/popups/teacher-info/ui/TeacherInfo';
-import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
 import { Card } from '@/shared/ui/Card/Card';
+import { CourseRankInfo } from '@/widgets/popups/info/course-rank-info/CourseRankInfo';
+import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 
 const usePublicThemes = () =>
   useSWRImmutable(

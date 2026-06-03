@@ -78,7 +78,7 @@
   }
 
   input::placeholder {
-    color: var(--color-secondary-dark);
+    color: var(--color-secondary-base);
   }
 
   input:disabled {

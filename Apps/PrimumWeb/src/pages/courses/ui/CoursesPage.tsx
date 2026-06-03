@@ -10,8 +10,8 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
 import { CreateCourseForm } from '@/widgets/popups/create-course';
-import { CourseRankInfo } from '@/widgets/popups/course-rank-info/ui/CourseRankInfo';
 import { Card } from '@/shared/ui/Card/Card';
+import { CourseRankInfo } from '@/widgets/popups/info/course-rank-info/CourseRankInfo';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 

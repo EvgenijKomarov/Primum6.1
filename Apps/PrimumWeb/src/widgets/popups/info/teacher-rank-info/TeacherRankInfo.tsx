@@ -1,20 +1,20 @@
-import { Popup } from "@/shared/ui/Popup";
+import { getTeacherRanks } from "@/entity/teacherRank/api/teacherRank";
+import type { TeacherRankDto } from "@/entity/teacherRank/model/types";
 import { useEffect, useState } from "react";
-import styles from './CourseRankInfo.module.css';
-import { getCourseRanks } from "@/entity/courseRank/api/courseRank.api";
-import type { CourseRankDto } from "@/entity/courseRank/model/types";
+import styles from '../styles.module.css';
+import { Popup } from "@/shared/ui/Popup";
 
-interface CourseRankInfoProps {
+interface TeacherRankInfoProps {
   rankInput: string | null;
 }
 
-export const CourseRankInfo = ({ rankInput }: CourseRankInfoProps) => {
-    const [ranks, setRanks] = useState<CourseRankDto[]>([]);
+export const TeacherRankInfo = ({ rankInput }: TeacherRankInfoProps) => {
+    const [ranks, setRanks] = useState<TeacherRankDto[]>([]);
     const [popupOpen, setPopupOpen] = useState(false);
 
     useEffect(() => {
         const fetchRanks = async () => {
-            const response = await getCourseRanks();
+            const response = await getTeacherRanks();
             setRanks(response.data.items || []);
         };
         fetchRanks();
@@ -27,14 +27,15 @@ export const CourseRankInfo = ({ rankInput }: CourseRankInfoProps) => {
             </div>
             {popupOpen && (
                 <Popup
-                    title="Таблица рангов курсов"
-                    onClose={() => setPopupOpen(false)}>
+                title="Таблица рангов преподавателей"
+                onClose={() => setPopupOpen(false)}>
                     <table className={styles.table}>
                         <thead>
                             <tr>
                                 <th>Ранг</th>
                                 <th>Уровень</th>
                                 <th>Требуемый опыт</th>
+                                <th>Комиссия преподавателя</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,12 +45,14 @@ export const CourseRankInfo = ({ rankInput }: CourseRankInfoProps) => {
                                     <td className={styles.td}>{rank.rank}</td>
                                     <td className={styles.td}>{rank.level}</td>
                                     <td className={styles.td}>{rank.requiredExperience}</td>
+                                    <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
                                 </tr>
                             ) : (
                                 <tr key={`${rank.level}-${index}`}>
                                     <td className={styles.td}>{rank.rank}</td>
                                     <td className={styles.td}>{rank.level}</td>
                                     <td className={styles.td}>{rank.requiredExperience}</td>
+                                    <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
                                 </tr>
                             )
                         ))}

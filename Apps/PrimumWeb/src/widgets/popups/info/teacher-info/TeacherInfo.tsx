@@ -1,7 +1,7 @@
 import { getTeacherProfileById, type TeacherProfileDto } from "@/entity/teacher";
 import { Popup } from "@/shared/ui/Popup";
 import { useEffect, useState } from "react";
-import styles from './TeacherInfo.module.css';
+import styles from '../styles.module.css';
 
 interface TeacherInfoProps {
   teacherId: number;
