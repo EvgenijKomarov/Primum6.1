@@ -8,7 +8,7 @@ interface Props {
 
 export const Card = ({ children, title, className }: Props) => {
     return (
-    <div className={`${styles.card} ${className || ''}`}>
+    <div className={`${styles.card}${className ? ` ${className}` : ''}`}>
         {title && <h2 className={styles.cardTitle}>{title}</h2>}
         {children}
     </div>);
