@@ -18,7 +18,7 @@
 
 .card {
   width: 40rem; 
-  box-shadow: 6px 6px 0px color-mix(in srgb, var(--color-secondary-dark) 80%, transparent);
+  box-shadow: var(--card-shadow);
 }
 
 .cardHeader {

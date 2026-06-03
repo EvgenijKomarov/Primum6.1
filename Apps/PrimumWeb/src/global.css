@@ -11,7 +11,7 @@
 
   --color-secondary-light: #acacac;
   --color-secondary-base: #5e5e5c;
-  --color-secondary-dark: #4d4d4b;
+  --color-secondary-dark: #41413f;
   --color-secondary-darkest: #272727;
 
   --color-functional-error: #ff4d4f;
@@ -24,6 +24,10 @@
 
   /* ── Semantic state ── */
   --color-disabled-text: #64748b;
+
+
+
+  --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
 }
 
 @font-face {

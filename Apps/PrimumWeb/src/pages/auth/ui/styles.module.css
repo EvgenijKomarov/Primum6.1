@@ -11,6 +11,7 @@
 
 .card {
   max-width: 40rem;
+  box-shadow: var(--сard-shadow);
   /* max-height: 90dvh; */
   /* overflow-y: auto; */
 }

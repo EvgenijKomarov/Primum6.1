@@ -37,6 +37,10 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Course)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.Rank)
                 .Where(l => l.Status == LessonStatus.Warned)
                 .Where(l => l.DateTime <= DateTime.UtcNow.AddMinutes(30))
                 .ToArray();
