@@ -122,4 +122,9 @@
   background-color: var(--color-secondary-darkest);
   border: 1px solid var(--color-secondary-dark);
   border-radius: 0.875rem;
+  font-size: 0.5rem;
+}
+
+.descriptionText {
+  font-size: 0.6rem;
 }

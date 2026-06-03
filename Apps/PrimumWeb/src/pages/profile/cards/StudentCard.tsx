@@ -4,7 +4,7 @@ import styles from '../ui/ProfilePage.module.css';
 import type { StudentProfileDto } from '@/entity/student';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
-import { StudentRankInfo } from '@/widgets/popups/info/student-rank-info/StudentRankInfo';
+import { StudentRankInfo } from '@/widgets/popups/rank-info/student-rank-info/StudentRankInfo';
 
 interface Props {
   /** null = not created yet, undefined = loading */

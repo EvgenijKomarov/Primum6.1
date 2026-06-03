@@ -11,7 +11,7 @@ import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
 import { CreateCourseForm } from '@/widgets/popups/create-course';
 import { Card } from '@/shared/ui/Card/Card';
-import { CourseRankInfo } from '@/widgets/popups/info/course-rank-info/CourseRankInfo';
+import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
@@ -80,7 +80,9 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
         </tbody>
       </table>
       <div className={styles.description}>
-        <p>{course.about ?? 'Описание отсутствует'}</p>
+        <p className={styles.descriptionText}>
+          {course.about ?? 'Описание отсутствует'}
+        </p>
       </div>
     </Card>
   );

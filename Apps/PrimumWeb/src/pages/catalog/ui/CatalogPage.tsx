@@ -10,8 +10,8 @@ import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { Card } from '@/shared/ui/Card/Card';
-import { CourseRankInfo } from '@/widgets/popups/info/course-rank-info/CourseRankInfo';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
+import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 
 const usePublicThemes = () =>
   useSWRImmutable(

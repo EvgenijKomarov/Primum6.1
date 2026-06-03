@@ -44,9 +44,9 @@ export const TeacherInfo = ({ teacherId }: TeacherInfoProps) => {
                                 <span className={styles.value}>{teacher?.rank}</span>
                             </div>
                         </div>
-                        <div className={styles.description}>
+                        <span className={styles.description}>
                             {teacher?.about}
-                        </div>
+                        </span>
                     </div>
                 </Popup>
             )}
