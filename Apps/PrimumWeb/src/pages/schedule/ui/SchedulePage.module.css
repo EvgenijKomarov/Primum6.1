@@ -218,14 +218,14 @@
 }
 
 .legendDotEmpty {
-  background-color: color-mix(in srgb, var(--color-primary-base) 20%, transparent);
+  background-color: color-mix(in srgb, var(--color-secondary-base) 90%, transparent);
   border: 1px dashed var(--color-secondary-dark);
 }
 
 .legendDotAvailable {
-  background-color: color-mix(in srgb, var(--color-functional-success) 25%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 90%, transparent);
 }
 
 .legendDotBooked {
-  background-color: color-mix(in srgb, var(--color-functional-warning) 20%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 90%, transparent);
 }

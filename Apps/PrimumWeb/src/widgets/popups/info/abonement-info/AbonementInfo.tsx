@@ -1,12 +1,17 @@
-import { ABON_STATUS_CONFIG, AbonementStatus, type AbonementDto } from '@/entity/abonement/model/types';
+import { AbonementStatus, type AbonementDto } from '@/entity/abonement/model/types';
 import styles from '../styles.module.css';
 import { useEffect, useState } from 'react';
 import { getTeacherAbonementById } from '@/entity/abonement/api/abonement.api';
 import { Popup } from '@/shared/ui/Popup';
-import { Badge } from '@/shared/ui/Badge/Badge';
 
 interface AbonementInfoProps {
   abonementId: number;
+}
+
+const ABON_STATUS_CONFIG: Record<AbonementStatus, { label: string; cls: string }> = {
+  [AbonementStatus.Active]:           { label: 'Активен',   cls: styles.Positive  },
+  [AbonementStatus.Freezed]:           { label: 'Активен',   cls: styles.Warning  },
+  [AbonementStatus.Deleted]:           { label: 'Активен',   cls: styles.Negative  },
 }
 
 export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
@@ -21,16 +26,16 @@ export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
                 fetchTeacher();
             }, []);
 
-    const cfg = ABON_STATUS_CONFIG[abonement?.abonementStatus ?? AbonementStatus.Deleted] ?? ABON_STATUS_CONFIG[AbonementStatus.Deleted];
+    const cfg = ABON_STATUS_CONFIG[abonement?.abonementStatus ?? AbonementStatus.Deleted] ?? 
+        ABON_STATUS_CONFIG[AbonementStatus.Deleted];
 
     
     return (
         <div>
-            <div className={styles.abonementBadge}>
-                <Badge 
-                    text={abonement?.studentDisplayName ?? ""} 
-                    badgeType={cfg.cls} onClick={() => setPopupOpen(true)} 
-                    className={styles.abonementBadgeText}/>
+            <div className={`${styles.abonementBadge} ${cfg.cls}`} onClick={() => setPopupOpen(true)}>
+                <span className={styles.abonementBadgeText}>
+                    {abonement?.studentDisplayName ?? ""}
+                </span>
             </div>
         {popupOpen && (
                 <Popup
