@@ -27,10 +27,24 @@
     justify-content: space-between;
 }
 
+.value{
+    text-wrap: balance;
+}
+
 .label {
     color: var(--color-secondary-light);
 }
 
 .description {
     font-size: 0.8rem;
+}
+
+.abonementBadge {
+    padding: 0.2rem;
+    cursor: pointer;
+}
+
+.abonementBadgeText {
+    font-size: 0.5rem;
+    text-wrap: balance;
 }

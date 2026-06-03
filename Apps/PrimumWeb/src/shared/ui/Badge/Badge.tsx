@@ -4,6 +4,8 @@ import styles from './styles.module.css';
 interface BadgeProps {
     text: string;
     badgeType: BadgeTypeEnum;
+    onClick?: React.MouseEventHandler<HTMLDivElement>; 
+    className?: string;
 }
 
 const variantStyles: Record<BadgeTypeEnum, string> = {
@@ -12,11 +14,11 @@ const variantStyles: Record<BadgeTypeEnum, string> = {
     [BadgeTypeEnum.Negative]: styles.Negative,
 };
 
-export const Badge = ({ text, badgeType }: BadgeProps) => {
+export const Badge = ({ text, badgeType, onClick, className }: BadgeProps) => {
     return (
-        <div className={`${styles.badge} ${variantStyles[badgeType]}`} >
+        <div className={`${styles.badge} ${variantStyles[badgeType]}`} onClick={onClick}>
             <span className={styles.dot} />
-            {text}
+            <span className={className}>{text}</span>
         </div>
     );
 };

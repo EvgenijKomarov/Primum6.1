@@ -138,7 +138,7 @@
 }
 
 .slotBooked {
-  background-color: color-mix(in srgb, var(--color-functional-warning) 50%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 20%, transparent);
   cursor: default;
 }
 

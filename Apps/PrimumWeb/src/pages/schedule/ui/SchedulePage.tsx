@@ -9,6 +9,7 @@ import type { TeacherScheduleDto } from '@/entity/schedule';
 import { Loader } from '@/shared/ui/Loader';
 
 import styles from './SchedulePage.module.css';
+import { AbonementInfo } from '@/widgets/popups/info/abonement-info/AbonementInfo';
 
 const DAYS: { label: string; value: DayOfWeek }[] = [
   { label: 'Пн', value: DayOfWeek.Monday },
@@ -141,19 +142,8 @@ export const SchedulePage = () => {
                       {status === 'available' && (
                         <span className={styles.slotDot} />
                       )}
-                      {status === 'booked' && slot && (
-                        <div className={styles.slotBookedInfo}>
-                          {slot.studentName && (
-                            <span className={styles.slotStudentName}>
-                              {slot.studentName}
-                            </span>
-                          )}
-                          {slot.courseName && (
-                            <span className={styles.slotCourseName}>
-                              {slot.courseName}
-                            </span>
-                          )}
-                        </div>
+                      {status === 'booked' && slot?.abonementId  && (
+                        <AbonementInfo abonementId={slot.abonementId ?? 1} />
                       )}
                     </div>
                   </div>

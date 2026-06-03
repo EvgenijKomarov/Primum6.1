@@ -152,6 +152,7 @@ namespace PrimumCore.Extentions
                 StudentId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Student.User.Id,
                 CourseName = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.Name,
                 CourseId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.Id,
+                AbonementId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Id
             });
 
         public static IQueryable<UserDto> ToDto(this IQueryable<User> queryable) => queryable.Select(x => 

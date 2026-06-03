@@ -45,4 +45,7 @@ export const api = {
     teacher: "/public/ranks/teacher",
     course: "/public/ranks/course",
   },
+  abonement: {
+    getByTeacher: "/teacher/abonements"
+  },
 }

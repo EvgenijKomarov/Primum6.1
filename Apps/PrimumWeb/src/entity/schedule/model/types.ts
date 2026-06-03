@@ -17,6 +17,7 @@ export interface TeacherScheduleDto {
   studentId: number | null;
   courseName: string | null;
   courseId: number | null;
+  abonementId: number | null;
 }
 
 export interface TeacherScheduleDtoPageResult {

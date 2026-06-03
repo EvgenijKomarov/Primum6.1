@@ -24,5 +24,7 @@ namespace CoreConnection.DTOs
         public required string? CourseName { get; set; }
 
         public required int? CourseId { get; set; }
+
+        public required int? AbonementId { get; set; }
     }
 }
