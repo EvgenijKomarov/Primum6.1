@@ -16,7 +16,7 @@ import { Card } from '@/shared/ui/Card/Card';
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
   return (
-    <Card>
+    <Card className={styles.card}>
       <div className={styles.cardTop}>
         <h3 className={styles.courseName}>{course.name ?? '—'}</h3>
         <span className={styles.theme}>{course.courseThemeName}</span>

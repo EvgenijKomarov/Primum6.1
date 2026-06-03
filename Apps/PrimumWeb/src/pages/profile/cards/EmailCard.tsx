@@ -39,7 +39,7 @@ export const EmailCard = ({
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
   
   return (
-    <Card title="Почта">
+    <Card title="Почта" className={styles.card}>
       <div className={styles.emailSection}>
 
         {/* Email input row */}

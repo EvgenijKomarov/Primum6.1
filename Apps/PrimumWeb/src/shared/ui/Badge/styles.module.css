@@ -19,16 +19,16 @@
 }
 
 .Positive {
-  background-color: color-mix(in srgb, #11fa57 15%, transparent);
-  color: #4ddd82;
+  background-color: color-mix(in srgb, var(--color-functional-success) 15%, transparent);
+  color: var(--color-functional-success);
 }
 
 .Warning {
-  background-color: color-mix(in srgb, #f7ba49 15%, transparent);
-  color: #f59e0b;
+  background-color: color-mix(in srgb, var(--color-functional-warning) 15%, transparent);
+  color: var(--color-functional-warning);
 }
 
 .Negative {
-  background-color: color-mix(in srgb, #f82929 15%, transparent);
-  color: #f85d5d;
+  background-color: color-mix(in srgb, var(--color-functional-error) 15%, transparent);
+  color: var(--color-functional-error);
 }

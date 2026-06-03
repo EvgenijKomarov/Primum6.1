@@ -17,21 +17,21 @@
 .title {
   font-size: 0.785rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--color-secondary-light);
   letter-spacing: 0.06em;
 }
 
 .chevron {
   width: 1rem;
   height: 1rem;
-  color: #94a3b8;
+  color: var(--color-secondary-light);
   transition: transform 0.2s ease;
 }
 
 .chevronOpen {
   width: 1rem;
   height: 1rem;
-  color: #94a3b8;
+  color: var(--color-secondary-light);
   transform: rotate(180deg);
   transition: transform 0.2s ease;
 }

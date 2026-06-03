@@ -30,7 +30,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
 
   return (
-    <Card>
+    <Card className={styles.card}>
       <div>
         {course.courseThemeName && (
           <span className={styles.cardTheme}>{course.courseThemeName}</span>

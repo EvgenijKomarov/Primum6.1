@@ -6,7 +6,7 @@
 }
 
 .table thead tr {
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--color-secondary-dark);
 }
 
 .table th {
@@ -14,7 +14,7 @@
   text-align: left;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-secondary-light);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   white-space: nowrap;
@@ -22,12 +22,11 @@
 
 .table td {
   padding: 0.75rem 1rem;
-  color: #e2e8f0;
   white-space: nowrap;
 }
 
 .table tbody tr {
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--color-secondary-dark);
   transition: background 0.15s ease;
 }
 
@@ -46,16 +45,15 @@
 .displayName {
     display: inline-flex;
     align-items: center;
-    font-size: 0.6875rem;
+    font-size: 0.55rem;
     font-weight: 500;
     padding: 0.2rem 0.55rem;
     border-radius: 9999px;
-    background-color: color-mix(in srgb, #6366f1 12%, transparent);
-    color: #a5b4fc;
+    background-color: color-mix(in srgb, var(--color-primary-base) 42%, transparent);
+    color: var(--color-secondary-base);
     cursor: pointer;
 }
 
 .highlightedRow {
   font-weight: bold;
-  background: #6366f1
 }

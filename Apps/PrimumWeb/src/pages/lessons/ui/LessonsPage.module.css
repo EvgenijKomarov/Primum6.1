@@ -10,7 +10,6 @@
 .title {
   font-size: 1.375rem;
   font-weight: 700;
-  color: #e2e8f0;
   margin: 0 0 1.5rem;
 }
 
@@ -19,7 +18,7 @@
   display: flex;
   gap: 0.25rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--color-secondary-base);
   padding-bottom: 0;
 }
 
@@ -32,7 +31,7 @@
   padding: 0 1rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--color-secondary-base);
   background: none;
   border: none;
   cursor: pointer;
@@ -42,12 +41,12 @@
 }
 
 .tab:hover {
-  color: #94a3b8;
+  color: var(--color-secondary-light);
 }
 
 .tabActive {
-  color: #a5b4fc;
-  border-bottom-color: #6366f1;
+  color: var(--color-primary-base);
+  border-bottom-color: var(--color-primary-base);
 }
 
 .tabCount {
@@ -60,8 +59,8 @@
   border-radius: 9999px;
   font-size: 0.625rem;
   font-weight: 600;
-  background-color: color-mix(in srgb, #6366f1 18%, transparent);
-  color: #a5b4fc;
+  background-color: color-mix(in srgb, var(--color-primary-base) 18%, transparent);
+  color: var(--color-primary-base);
 }
 
 /* ── Empty state ── */
@@ -71,14 +70,14 @@
   align-items: center;
   gap: 0.75rem;
   padding: 4rem 0;
-  color: #475569;
+  color: var(--color-secondary-base);
   text-align: center;
 }
 
 .emptyText {
   font-size: 0.9375rem;
   margin: 0;
-  color: #64748b;
+  color: var(--color-secondary-base);
 }
 
 /* ── Date group (upcoming) ── */
@@ -96,12 +95,11 @@
 .dateHeadingDay {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #e2e8f0;
 }
 
 .dateHeadingDate {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--color-secondary-dark);
 }
 
 .dateHeadingToday {
@@ -109,8 +107,8 @@
   font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 9999px;
-  background-color: color-mix(in srgb, #6366f1 18%, transparent);
-  color: #a5b4fc;
+  background-color: color-mix(in srgb, var(--color-primary-base) 18%, transparent);
+  color: var(--color-primary-base);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -123,8 +121,8 @@
 
 /* ── Lesson card ── */
 .card {
-  background-color: #1e293b;
-  border: 1px solid #334155;
+  background-color: var(--color-secondary-dark);
+  border: 1px solid var(--color-secondary-dark);
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
   display: flex;
@@ -134,7 +132,7 @@
 }
 
 .card:hover {
-  border-color: #475569;
+  border-color: var(--color-secondary-base);
 }
 
 .cardLeft {
@@ -148,7 +146,6 @@
 .cardCourseName {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #e2e8f0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -163,12 +160,12 @@
 
 .cardTeacher {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--color-secondary-base);
 }
 
 .cardTime {
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: var(--color-secondary-light);
   font-variant-numeric: tabular-nums;
 }
 
@@ -182,12 +179,12 @@
 /* ── Price ── */
 .cardPrice {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--color-secondary-base);
   font-variant-numeric: tabular-nums;
 }
 
 .cardPriceFree {
-  color: #4ade80;
+  color: var(--color-functional-success);
 }
 
 /* ── Grade badge ── */
@@ -204,21 +201,21 @@
 }
 
 .gradeHigh {
-  background-color: color-mix(in srgb, #22c55e 18%, transparent);
-  color: #4ade80;
-  border: 1px solid color-mix(in srgb, #22c55e 30%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 18%, transparent);
+  color: var(--color-functional-success);
+  border: 1px solid color-mix(in srgb, var(--color-functional-success) 30%, transparent);
 }
 
 .gradeMid {
-  background-color: color-mix(in srgb, #f59e0b 18%, transparent);
-  color: #fbbf24;
-  border: 1px solid color-mix(in srgb, #f59e0b 30%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 18%, transparent);
+  color: var(--color-functional-warning);
+  border: 1px solid color-mix(in srgb, var(--color-functional-warning) 30%, transparent);
 }
 
 .gradeLow {
-  background-color: color-mix(in srgb, #ef4444 18%, transparent);
-  color: #fca5a5;
-  border: 1px solid color-mix(in srgb, #ef4444 30%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-error) 18%, transparent);
+  color: var(--color-functional-error);
+  border: 1px solid color-mix(in srgb, var(--color-functional-error) 30%, transparent);
 }
 
 /* ── Link button ── */
@@ -229,9 +226,9 @@
   height: 2rem;
   padding: 0 0.75rem;
   border-radius: 0.375rem;
-  border: 1px solid color-mix(in srgb, #6366f1 40%, transparent);
-  background-color: color-mix(in srgb, #6366f1 10%, transparent);
-  color: #a5b4fc;
+  border: 1px solid color-mix(in srgb, var(--color-primary-base) 40%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary-base) 10%, transparent);
+  color: var(--color-primary-base);
   font-size: 0.75rem;
   font-weight: 500;
   text-decoration: none;
@@ -241,8 +238,8 @@
 }
 
 .linkBtn:hover {
-  background-color: color-mix(in srgb, #6366f1 20%, transparent);
-  border-color: color-mix(in srgb, #6366f1 60%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary-base) 20%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary-base) 60%, transparent);
 }
 
 .linkBtn svg {
@@ -254,19 +251,12 @@
 /* ── History date stamp ── */
 .historyDate {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--color-secondary-base);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 /* ── Skeleton ── */
-.skeletonCard {
-  height: 5rem;
-  border-radius: 0.75rem;
-  background-image: linear-gradient(90deg, #1e293b 25%, #263346 50%, #1e293b 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-}
 
 @keyframes shimmer {
   0%   { background-position: 200% 0; }

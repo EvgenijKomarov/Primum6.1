@@ -22,7 +22,7 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
   const hasProfile = isApproved !== null && isApproved !== undefined;
 
   return (
-    <Card title="Профиль ученика">
+    <Card title="Профиль ученика" className={styles.card}>
 
       {!hasProfile && (
         <>

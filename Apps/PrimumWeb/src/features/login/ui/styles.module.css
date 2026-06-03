@@ -12,7 +12,7 @@
 }
 
 .formError {
-  color: var(--color-error, #d32f2f);
+  color: var(--color-error, var(--color-functional-error));
   margin-bottom: 12px;
   text-align: center;
   font-size: 14px;

@@ -54,19 +54,21 @@ export const Header = () => {
             <div className={styles.userMenu} ref={menuRef}>
               <Button
                 variant={ButtonTypeEnum.SECONDARY}
-                size={ButtonSizeEnum.SMALL}
+                size={ButtonSizeEnum.NORMAL}
                 onClick={() => setOpen(v => !v)}
               >
-                <span className={styles.userInfo}>
-                  <span className={styles.userName}>{resolveDisplayName(user)}</span>
-                  <span className={styles.userRole}>{resolveRoleLabel(role)}</span>
-                </span>
-                <svg
-                  className={clsx(styles.chevron, open && styles.chevronOpen)}
-                  width="12" height="12" viewBox="0 0 12 12" fill="none"
-                >
-                  <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <div className={styles.userInfoButton}>
+                  <div className={styles.userInfo}>
+                    <span className={styles.userName}>{resolveDisplayName(user)}</span>
+                    <span className={styles.userRole}>{resolveRoleLabel(role)}</span>
+                  </div>
+                  <svg
+                    className={clsx(styles.chevron, open && styles.chevronOpen)}
+                    width="12" height="12" viewBox="0 0 12 12" fill="none"
+                  >
+                    <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
               </Button>
 
               {open && (

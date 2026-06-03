@@ -17,20 +17,19 @@
 .title {
   font-size: 1.375rem;
   font-weight: 700;
-  color: #e2e8f0;
   margin: 0;
 }
 
 .hint {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--color-secondary-base);
   margin-bottom: 1.75rem;
 }
 
 .calendarWrapper {
   overflow-x: auto;
   border-radius: 0.875rem;
-  border: 1px solid #334155;
+  border: 1px solid var(--color-secondary-base);
   background-color: var(--color-background-secondary);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
 }
@@ -46,18 +45,18 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  background-color: #1e293b;
-  border-bottom: 1px solid #334155;
-  border-right: 1px solid #334155;
+  background-color: var(--color-secondary-dark);
+  border-bottom: 1px solid var(--color-secondary-base);
+  border-right: 1px solid var(--color-secondary-base);
 }
 
 .dayHeader {
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: #1e293b;
-  border-bottom: 1px solid #334155;
-  border-right: 1px solid #283548;
+  background-color: var(--color-secondary-dark);
+  border-bottom: 1px solid var(--color-secondary-base);
+  border-right: 1px solid var(--color-secondary-base);
   padding: 0.625rem 0;
   text-align: center;
 }
@@ -70,7 +69,7 @@
   display: block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--color-secondary-light);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -80,10 +79,12 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
+  font-size: 0.6rem;
   padding: 0.25rem 0.5rem 0 0;
-  color: #475569;
-  border-right: 1px solid #334155;
-  border-bottom: 1px solid #283548;
+  color: var(--color-secondary-light);
+  background-color: var(--color-secondary-dark);
+  border-right: 1px solid var(--color-secondary-base);
+  border-bottom: 1px solid var(--color-secondary-base);
   height: 2.75rem;
   line-height: 1;
 }
@@ -95,8 +96,8 @@
 /* ── Slot cells ── */
 .slot {
   height: 2.75rem;
-  border-right: 1px solid #283548;
-  border-bottom: 1px solid #283548;
+  border-right: 1px solid var(--color-secondary-dark);
+  border-bottom: 1px solid var(--color-secondary-dark);
   cursor: pointer;
   transition: background-color 120ms ease;
   position: relative;
@@ -112,31 +113,32 @@
 
 .slotEmpty {
   background-color: transparent;
+  background-color: var(--color-secondary-base);
 }
 
 .slotEmpty:hover {
-  background-color: color-mix(in srgb, #6366f1 8%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 30%, transparent);
 }
 
 .slotEmpty:active {
-  background-color: color-mix(in srgb, #6366f1 16%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary-base) 16%, transparent);
 }
 
 .slotAvailable {
-  background-color: color-mix(in srgb, #22c55e 15%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 50%, transparent);
   cursor: pointer;
 }
 
 .slotAvailable:hover {
-  background-color: color-mix(in srgb, #22c55e 25%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 75%, transparent);
 }
 
 .slotAvailable:active {
-  background-color: color-mix(in srgb, #22c55e 35%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 35%, transparent);
 }
 
 .slotBooked {
-  background-color: color-mix(in srgb, #f59e0b 12%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 50%, transparent);
   cursor: default;
 }
 
@@ -160,7 +162,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #4ade80;
+  background-color: var(--color-functional-success);
   flex-shrink: 0;
 }
 
@@ -175,7 +177,7 @@
 .slotStudentName {
   font-size: 0.5625rem;
   font-weight: 600;
-  color: #fbbf24;
+  color: var(--color-functional-warning);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -184,7 +186,7 @@
 
 .slotCourseName {
   font-size: 0.5rem;
-  color: #f59e0b;
+  color: var(--color-functional-warning);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -205,7 +207,7 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--color-secondary-light);
 }
 
 .legendDot {
@@ -216,14 +218,14 @@
 }
 
 .legendDotEmpty {
-  background-color: color-mix(in srgb, #6366f1 20%, transparent);
-  border: 1px dashed #475569;
+  background-color: color-mix(in srgb, var(--color-primary-base) 20%, transparent);
+  border: 1px dashed var(--color-secondary-dark);
 }
 
 .legendDotAvailable {
-  background-color: color-mix(in srgb, #22c55e 25%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-success) 25%, transparent);
 }
 
 .legendDotBooked {
-  background-color: color-mix(in srgb, #f59e0b 20%, transparent);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 20%, transparent);
 }
