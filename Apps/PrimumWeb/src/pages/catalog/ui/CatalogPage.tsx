@@ -52,7 +52,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
         )}
         {course.rank && (
           <div className={styles.cardMetaItem}>
-            <span className={styles.cardMetaLabel}>Уровень</span>
+            <span className={styles.cardMetaLabel}>Ранг</span>
             <CourseRankInfo rankInput={course.rank} />
           </div>
         )}

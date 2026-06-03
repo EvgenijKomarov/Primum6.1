@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
 import type { StudentProfileDto } from '@/entity/student';
-import { StudentRanks } from '@/widgets/popups/student-ranks/ui/StudentRanks';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
+import { StudentRankInfo } from '@/widgets/popups/student-rank-info/ui/StudentRankInfo';
 
 interface Props {
   /** null = not created yet, undefined = loading */
@@ -17,7 +16,6 @@ interface Props {
 }
 
 export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCreate }: Props) => {
-  const [rankPopupOpen, setRankPopupOpen] = useState(false);
 
   const hasProfile = isApproved !== null && isApproved !== undefined;
 
@@ -46,8 +44,8 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
         <>
           <div className={styles.stats}>
             {[
-              { label: 'Уровень', value: profile.level, onClick: () => setRankPopupOpen(true) },
-              { label: 'Ранг', value: profile.rank ?? '—', onClick: () => setRankPopupOpen(true) },
+              { label: 'Уровень', value: profile.level },
+              { label: 'Ранг', value: <StudentRankInfo rankInput={profile.rank} /> },
               { label: 'Рейтинг', value: profile.rating != null ? profile.rating.toFixed(1) : '—' },
               { label: 'Монеты', value: profile.coins },
               { label: 'Баланс', value: `${profile.cash.toFixed(2)} ₽` },
@@ -60,7 +58,6 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
               />
             ))}
           </div>
-          {rankPopupOpen && <StudentRanks setRankPopupOpen={setRankPopupOpen} />}
         </>
       )}
     </Card>

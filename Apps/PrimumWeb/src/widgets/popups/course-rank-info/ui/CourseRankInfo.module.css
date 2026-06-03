@@ -49,11 +49,12 @@
     font-weight: 500;
     padding: 0.2rem 0.55rem;
     border-radius: 9999px;
-    background-color: color-mix(in srgb, var(--color-primary-base) 42%, transparent);
+    background-color: var(--color-primary-base);
     color: var(--color-secondary-base);
     cursor: pointer;
 }
 
 .highlightedRow {
   font-weight: bold;
+  background-color: color-mix(in srgb, var(--color-primary-base) 32%, transparent);
 }

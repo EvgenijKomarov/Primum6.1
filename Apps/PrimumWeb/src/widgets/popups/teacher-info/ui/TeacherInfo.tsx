@@ -45,7 +45,7 @@ export const TeacherInfo = ({ teacherId }: TeacherInfoProps) => {
                             </div>
                         </div>
                         <div className={styles.description}>
-                            <span className={styles.value}>{teacher?.about}</span>
+                            {teacher?.about}
                         </div>
                     </div>
                 </Popup>

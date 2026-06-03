@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
-import { TeacherRanks } from '@/widgets/popups/teacher-ranks/ui/TeacherRanks';
 import styles from '../ui/ProfilePage.module.css';
 import type { TeacherProfileDto } from '@/entity/teacher';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
+import { TeacherRankInfo } from '@/widgets/popups/teacher-rank-info/ui/TeacherRankInfo';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */
@@ -29,7 +28,6 @@ export const TeacherCard = ({
   onAboutChange,
   onCreate,
 }: Props) => {
-  const [rankPopupOpen, setRankPopupOpen] = useState(false);
 
   if (isApproved === undefined) return null;
 
@@ -82,8 +80,8 @@ export const TeacherCard = ({
 
           <div className={styles.stats}>
             {[
-              { label: 'Уровень', value: profile.level, onClick: () => setRankPopupOpen(true) },
-              { label: 'Ранг', value: profile.rank ?? '—', onClick: () => setRankPopupOpen(true) },
+              { label: 'Уровень', value: profile.level },
+              { label: 'Ранг', value: <TeacherRankInfo rankInput={profile.rank} /> },
               { label: 'Опыт', value: profile.experience },
             ].map(({ label, value }) => (
               <StatCard
@@ -93,8 +91,6 @@ export const TeacherCard = ({
               />
             ))}
           </div>
-
-          {rankPopupOpen && <TeacherRanks setRankPopupOpen={setRankPopupOpen} />}
           {profile.about && <p className={styles.about}>{profile.about}</p>}
         </>
       )}
