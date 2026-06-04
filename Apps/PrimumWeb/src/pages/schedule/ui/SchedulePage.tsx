@@ -118,7 +118,7 @@ export const SchedulePage = () => {
                   styles.slot,
                   status === 'empty' && styles.slotEmpty,
                   status === 'available' && styles.slotAvailable,
-                  status === 'booked' && styles.slotBooked,
+                  //status === 'booked' && styles.slotBooked,
                   loading && styles.slotLoading,
                   isLastHour && styles.slotLastRow,
                 ]
@@ -156,16 +156,12 @@ export const SchedulePage = () => {
 
       <div className={styles.legend}>
         <div className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.legendDotEmpty}`} />
-          Свободно
+          <span className={`${styles.legendDot} ${styles.legendDotActive}`} />
+          Активный абонемент
         </div>
         <div className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.legendDotAvailable}`} />
-          Доступно для записи
-        </div>
-        <div className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.legendDotBooked}`} />
-          Занято студентом
+          <span className={`${styles.legendDot} ${styles.legendDotFreezed}`} />
+          Замороженный абонемент
         </div>
       </div>
     </div>

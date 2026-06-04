@@ -217,15 +217,14 @@
   flex-shrink: 0;
 }
 
-.legendDotEmpty {
-  background-color: color-mix(in srgb, var(--color-secondary-base) 90%, transparent);
-  border: 1px dashed var(--color-secondary-dark);
+.legendDotDeleted {
+  background-color: color-mix(in srgb, var(--color-functional-error) 90%, transparent);
 }
 
-.legendDotAvailable {
+.legendDotActive {
   background-color: color-mix(in srgb, var(--color-functional-success) 90%, transparent);
 }
 
-.legendDotBooked {
+.legendDotFreezed {
   background-color: color-mix(in srgb, var(--color-functional-warning) 90%, transparent);
 }
