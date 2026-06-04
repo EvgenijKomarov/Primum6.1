@@ -30,8 +30,7 @@ namespace PaymentServiceConnection
             decimal amount,
             CancellationToken ct = default)
         {
-            var request = new BalanceRequest(userId, amount);
-            return await PostAsync($"/force/topup-student-balance?userId={userId}&amount={amount}", ct);
+            return await PostAsync(Inv($"/force/topup-student-balance?userId={userId}&amount={amount}"), ct);
         }
 
         /// <summary>
@@ -42,8 +41,7 @@ namespace PaymentServiceConnection
             decimal amount,
             CancellationToken ct = default)
         {
-            var request = new BalanceRequest(userId, amount);
-            return await PostAsync($"/request-topup-student-balance?userId={userId}&amount={amount}", ct);
+            return await PostAsync(Inv($"/request-topup-student-balance?userId={userId}&amount={amount}"), ct);
         }
 
         /// <summary>
@@ -54,8 +52,7 @@ namespace PaymentServiceConnection
             decimal amount,
             CancellationToken ct = default)
         {
-            var request = new BalanceRequest(userId, amount);
-            return await PostAsync($"/withdrawn-student-balance?userId={userId}&amount={amount}", ct);
+            return await PostAsync(Inv($"/withdrawn-student-balance?userId={userId}&amount={amount}"), ct);
         }
 
         /// <summary>
@@ -68,7 +65,7 @@ namespace PaymentServiceConnection
             decimal platformCash,
             CancellationToken ct = default)
         {
-            return await PostAsync($"/process-lesson-payment?studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}", ct);
+            return await PostAsync(Inv($"/process-lesson-payment?studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}"), ct);
         }
 
         private async Task<PaymentResponse> PostAsync(string endpoint, CancellationToken ct)
@@ -100,5 +97,7 @@ namespace PaymentServiceConnection
             }
             return result;
         }
+
+        private static string Inv(FormattableString s) => FormattableString.Invariant(s);
     }
 }
