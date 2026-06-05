@@ -16,7 +16,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             return $"{Emoticons.Lesson}Занятие за {item.DateTime.ToString("HH:mm dd.MM.yyyy")}\n" +
                 $"{Emoticons.Course}Курс: {item.CourseName}\n" +
                 $"{Emoticons.Teacher}Ученик: {item.StudentDisplayName}\n" +
-                $"{Emoticons.Grade}Оценка: {(item.Grade.HasValue ? item.Grade.Value : "отсутствует")}\n" +
+                $"{Emoticons.Grade}Оценка: {(item.FinalGrade.HasValue ? item.FinalGrade.Value : "отсутствует")}\n" +
                 $"{Emoticons.Cash}Стоимость: {item.Price}\n" +
                 $"Статус: {LessonStatusRes.ResourceManager.GetString(item.LessonStatus.ToString()) ?? string.Empty}";
         }

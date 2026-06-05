@@ -89,7 +89,11 @@ namespace PrimumCore.Extentions
                 Price = x.Price,
                 Id = x.Id,
                 LessonStatus = x.Status,
-                Grade = x.Grading == null ? null : x.Grading.GetFinalGrade()
+                HomeworkGrade = x.Grading == null ? null : (int?)x.Grading.HomeworkGrade,
+                LessonActivityGrade = x.Grading == null ? null : (int?)x.Grading.LessonActivityGrade,
+                RepetitionOfMaterialGrade = x.Grading == null ? null : (int?)x.Grading.RepetitionOfMaterialGrade,
+                StudyInitiativeGrade = x.Grading == null ? null : (int?)x.Grading.StudyInitiativeGrade,
+                FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade()
             });
 
         public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => queryable.Select(x => 

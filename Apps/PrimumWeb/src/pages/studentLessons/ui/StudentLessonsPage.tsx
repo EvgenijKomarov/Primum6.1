@@ -11,6 +11,7 @@ import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
+import { Gradinginfo } from '@/widgets/popups/info/grading-info/GradingInfo';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -59,13 +60,6 @@ const StatusBadge = ({ status }: { status: LessonStatus }) => {
   return <Badge text={cfg.label} badgeType={cfg.cls} />;
 };
 
-// ── Grade circle ─────────────────────────────────────────────────────────────
-
-const GradeCircle = ({ grade }: { grade: number }) => {
-  const cls = grade >= 4 ? styles.gradeHigh : grade >= 3 ? styles.gradeMid : styles.gradeLow;
-  return <span className={`${styles.gradeBadge} ${cls}`}>{grade}</span>;
-};
-
 // ── Upcoming lesson card ──────────────────────────────────────────────────────
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
@@ -98,7 +92,7 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
       </div>
     </div>
     <div className={styles.cardRight}>
-      {lesson.grade != null && <GradeCircle grade={lesson.grade} />}
+      <Gradinginfo {...lesson} />
       <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
         {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
       </span>

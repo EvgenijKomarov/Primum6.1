@@ -3,7 +3,7 @@
 .page {
   min-height: calc(100vh - 3.75rem);
   padding: 2.5rem 1.5rem;
-  max-width: 860px;
+  max-width: 60rem;
   margin: 0 auto;
 }
 
@@ -200,24 +200,6 @@
   font-size: 0.6rem;
   font-weight: 700;
   flex-shrink: 0;
-}
-
-.gradeHigh {
-  background-color: color-mix(in srgb, var(--color-functional-success) 18%, transparent);
-  color: var(--color-functional-success);
-  border: 1px solid color-mix(in srgb, var(--color-functional-success) 30%, transparent);
-}
-
-.gradeMid {
-  background-color: color-mix(in srgb, var(--color-functional-warning) 18%, transparent);
-  color: var(--color-functional-warning);
-  border: 1px solid color-mix(in srgb, var(--color-functional-warning) 30%, transparent);
-}
-
-.gradeLow {
-  background-color: color-mix(in srgb, var(--color-functional-error) 18%, transparent);
-  color: var(--color-functional-error);
-  border: 1px solid color-mix(in srgb, var(--color-functional-error) 30%, transparent);
 }
 
 /* ── Link button ── */

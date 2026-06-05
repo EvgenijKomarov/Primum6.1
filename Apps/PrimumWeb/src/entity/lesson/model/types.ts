@@ -19,7 +19,11 @@ export interface LessonDto {
   lessonStatus: LessonStatus;
   dateTime: string;
   lessonLink: string | null;
-  grade: number | null;
+  homeworkGrade: number | null;
+  lessonActivityGrade: number | null;
+  repetitionOfMaterialGrade: number | null;
+  studyInitiativeGrade: number | null;
+  finalGrade: number | null;
 }
 
 export interface LessonDtoPageResult {
