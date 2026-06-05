@@ -18,6 +18,10 @@
   align-self: flex-start;
 }
 
+.pointingCursor {
+  cursor: pointer;
+}
+
 .Positive {
   background-color: color-mix(in srgb, var(--color-functional-success) 15%, transparent);
   color: var(--color-functional-success);

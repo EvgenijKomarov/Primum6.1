@@ -7,6 +7,7 @@ interface BadgeProps {
     onClick?: React.MouseEventHandler<HTMLDivElement>; 
     className?: string;
     hideDot?: boolean;
+    pointingCursor?: boolean;
 }
 
 const variantStyles: Record<BadgeTypeEnum, string> = {
@@ -15,9 +16,9 @@ const variantStyles: Record<BadgeTypeEnum, string> = {
     [BadgeTypeEnum.Negative]: styles.Negative,
 };
 
-export const Badge = ({ text, badgeType, onClick, className, hideDot }: BadgeProps) => {
+export const Badge = ({ text, badgeType, onClick, className, hideDot, pointingCursor }: BadgeProps) => {
     return (
-        <div className={`${styles.badge} ${variantStyles[badgeType]}`} onClick={onClick}>
+        <div className={`${styles.badge} ${variantStyles[badgeType]} ${pointingCursor ? styles.pointingCursor : ''}`} onClick={onClick}>
             {!hideDot && <span className={styles.dot} />}
             <span className={className}>{text}</span>
         </div>
