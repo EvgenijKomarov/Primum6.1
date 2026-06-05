@@ -29,7 +29,7 @@ namespace CoreDBModel.Models
 
             gradeCount = gradeCount == 0 ? 1 : gradeCount;
 
-            return gradeSum / gradeCount;
+            return (float)Math.Round((float)gradeSum / gradeCount, 2);
         }
     }
 }

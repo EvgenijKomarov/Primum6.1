@@ -24,7 +24,7 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
     },
     {
       label: "Мои занятия",
-      path: "/lessons",
+      path: "/student-lessons",
     },
   ],
   [Role.GUEST]: [],

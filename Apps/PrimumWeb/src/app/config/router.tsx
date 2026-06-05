@@ -3,11 +3,11 @@ import { AuthPage } from '@/pages/auth/ui/AuthPage.tsx';
 import { CatalogPage } from '@/pages/catalog/index.ts';
 import { CoursesPage } from '@/pages/courses/index.ts';
 import { SchedulePage } from '@/pages/schedule/index.ts';
-import { LessonsPage } from '@/pages/lessons/index.ts';
 import { HomePage } from "@/pages/home/ui/HomePage.tsx";
 import { ProfilePage } from "@/pages/profile/index.ts";
 import { Role } from '@/shared/enums';
 import { RedirectPage } from '@/pages/redirect-page/RedirectPage';
+import { StudentLessonsPage } from '@/pages/studentLessons';
 
 interface RouteDef {
   path: string;
@@ -48,8 +48,8 @@ const ROUTES_DEF: RouteDef[] = [
     roles: [Role.STUDENT],
   },
   {
-    path: '/lessons',
-    element: <LessonsPage />,
+    path: '/student-lessons',
+    element: <StudentLessonsPage />,
     roles: [Role.STUDENT],
   },
   {

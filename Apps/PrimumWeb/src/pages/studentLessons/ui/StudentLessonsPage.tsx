@@ -6,7 +6,7 @@ import {
 } from '@/entity/lesson';
 import type { LessonDto, FutureLessonDto, LessonsByDateDto } from '@/entity/lesson';
 
-import styles from './LessonsPage.module.css';
+import styles from './StudentLessonsPage.module.css';
 import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Badge } from '@/shared/ui/Badge/Badge';
@@ -98,7 +98,7 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
       </div>
     </div>
     <div className={styles.cardRight}>
-      {lesson.grade != null && <GradeCircle grade={Math.round(lesson.grade)} />}
+      {lesson.grade != null && <GradeCircle grade={lesson.grade} />}
       <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
         {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
       </span>
@@ -184,7 +184,7 @@ const HistoryTab = () => {
 
 type Tab = 'upcoming' | 'history';
 
-export const LessonsPage = () => {
+export const StudentLessonsPage = () => {
   const [activeTab, setActiveTab] = useState<Tab>('upcoming');
 
   const { groups } = useStudentFutureLessons();
