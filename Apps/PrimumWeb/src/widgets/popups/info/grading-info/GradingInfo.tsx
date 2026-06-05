@@ -32,19 +32,19 @@ export const Gradinginfo = (input: GradingInfoProps) => {
                         <div className={styles.rows}>
                             <div className={styles.row}>
                                 <span className={styles.label}>Домашнее задание: </span>
-                                <span className={styles.value}>{input.homeworkGrade}</span>
+                                <span className={styles.value}>{input.homeworkGrade === 0 ? 'Не оценено' : input.homeworkGrade}</span>
                             </div>
                             <div className={styles.row}>
                                 <span className={styles.label}>Активность на уроке: </span>
-                                <span className={styles.value}>{input.lessonActivityGrade}</span>
+                                <span className={styles.value}>{input.lessonActivityGrade === 0 ? 'Не оценено' : input.lessonActivityGrade}</span>
                             </div>
                             <div className={styles.row}>
                                 <span className={styles.label}>Повторение материала: </span>
-                                <span className={styles.value}>{input.repetitionOfMaterialGrade}</span>
+                                <span className={styles.value}>{input.repetitionOfMaterialGrade  === 0 ? 'Не оценено' : input.repetitionOfMaterialGrade}</span>
                             </div>
                             <div className={styles.row}>
                                 <span className={styles.label}>Инициатива в обучении: </span>
-                                <span className={styles.value}>{input.studyInitiativeGrade}</span>
+                                <span className={styles.value}>{input.studyInitiativeGrade  === 0 ? 'Не оценено' : input.studyInitiativeGrade}</span>
                             </div>
                             <div className={styles.row}>
                                 <span className={styles.label}>Общая оценка: </span>
