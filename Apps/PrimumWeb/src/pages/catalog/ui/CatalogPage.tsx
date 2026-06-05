@@ -30,7 +30,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
 
   return (
-    <Card className={styles.card}>
+    <Card hoverable={true} width={30}>
       <div>
         {course.courseThemeName && (
           <span className={styles.cardTheme}>{course.courseThemeName}</span>

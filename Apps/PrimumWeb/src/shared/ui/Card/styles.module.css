@@ -9,5 +9,14 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    box-shadow: var(--card-shadow);
   }
+
+.card:hover{
+  transform: translateY(-0.3rem);
+  box-shadow: var(--card-shadow);
+}
+
+.nonHoverable {
+    transform: translateY(-0.3rem);
+    box-shadow: var(--card-shadow);
+}

@@ -32,7 +32,7 @@ export const TeacherCard = ({
   if (isApproved === undefined) return null;
 
   return (
-    <Card title="Профиль преподавателя" className={styles.card}>
+    <Card title="Профиль преподавателя"  width={40}>
 
       {/* Pending approval */}
       {isApproved === false && (

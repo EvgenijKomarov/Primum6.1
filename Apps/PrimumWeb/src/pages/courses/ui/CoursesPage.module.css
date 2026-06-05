@@ -42,10 +42,6 @@
   gap: 1.25rem;
 }
 
-.card {
-  box-shadow: var(--card-shadow);
-}
-
 .cardTop {
   display: flex;
   align-items: flex-start;

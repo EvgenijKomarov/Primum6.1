@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfirmSign }: Props) => (
-  <Card title="Чат боты" className={styles.card}>
+  <Card title="Чат боты" width={40}>
     <div className={styles.chatSignsSection}>
       {chatSigns.length === 0 ? (
         <p className={styles.cardDescription}>

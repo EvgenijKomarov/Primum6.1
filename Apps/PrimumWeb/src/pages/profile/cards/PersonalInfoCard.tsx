@@ -15,7 +15,7 @@ interface Props {
 export const PersonalInfoCard = ({ surname, name, patronymic, onLogout }: Props) => {
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
   
-  return (<Card title="Личные данные" className={styles.card}>
+  return (<Card title="Личные данные"  width={40}>
     <div className={styles.fields}>
       {[
         { label: 'Фамилия', value: surname },

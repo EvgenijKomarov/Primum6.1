@@ -106,23 +106,6 @@
 
 /* ── Course card ── */
 
-.card {
-  box-shadow: 6px 6px 0px color-mix(in srgb, var(--color-secondary-base) 0%, transparent);
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow);
-}
-
-.cardTheme {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--color-primary-base);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .cardName {
   font-size: 1rem;
   font-weight: 600;
