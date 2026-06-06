@@ -121,18 +121,9 @@
 
 /* ── Lesson card ── */
 .card {
-  background-color: var(--color-secondary-dark);
-  border: 1px solid var(--color-secondary-dark);
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
   transition: border-color 150ms ease;
-}
-
-.card:hover {
-  border-color: var(--color-secondary-base);
 }
 
 .cardLeft {
@@ -181,7 +172,7 @@
 /* ── Price ── */
 .cardPrice {
   font-size: 0.8125rem;
-  color: var(--color-secondary-base);
+  color: var(--color-secondary-light);
   font-variant-numeric: tabular-nums;
 }
 
@@ -235,7 +226,7 @@
 /* ── History date stamp ── */
 .historyDate {
   font-size: 0.6rem;
-  color: var(--color-secondary-base);
+  color: var(--color-secondary-light);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }

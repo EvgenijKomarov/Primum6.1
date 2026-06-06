@@ -12,6 +12,7 @@ import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { Gradinginfo } from '@/widgets/popups/info/grading-info/GradingInfo';
+import { Card } from '@/shared/ui/Card/Card';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -63,53 +64,57 @@ const StatusBadge = ({ status }: { status: LessonStatus }) => {
 // ── Upcoming lesson card ──────────────────────────────────────────────────────
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
-  <div className={styles.card}>
-    <div className={styles.cardLeft}>
-      <span className={styles.cardCourseName}>{lesson.courseName}</span>
-      <div className={styles.cardMeta}>
-        <TeacherInfo teacherId={lesson.teacherId} />
-        <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
+  <Card hoverable={true} width={60}>
+    <div className={styles.card}>
+      <div className={styles.cardLeft}>
+        <span className={styles.cardCourseName}>{lesson.courseName}</span>
+        <div className={styles.cardMeta}>
+          <TeacherInfo teacherId={lesson.teacherId} />
+          <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
+        </div>
+      </div>
+      <div className={styles.cardRight}>
+        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+        </span>
+        <StatusBadge status={lesson.lessonStatus} />
       </div>
     </div>
-    <div className={styles.cardRight}>
-      <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-        {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-      </span>
-      <StatusBadge status={lesson.lessonStatus} />
-    </div>
-  </div>
+  </Card>
 );
 
 // ── History lesson card ───────────────────────────────────────────────────────
 
 const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
-  <div className={styles.card}>
-    <div className={styles.cardLeft}>
-      <span className={styles.cardCourseName}>{lesson.courseName}</span>
-      <div className={styles.cardMeta}>
-        <TeacherInfo teacherId={lesson.teacherId} />
-        <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
+  <Card hoverable={true} width={60}>
+    <div className={styles.card}>
+      <div className={styles.cardLeft}>
+        <span className={styles.cardCourseName}>{lesson.courseName}</span>
+        <div className={styles.cardMeta}>
+          <TeacherInfo teacherId={lesson.teacherId} />
+          <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
+        </div>
+      </div>
+      <div className={styles.cardRight}>
+        <Gradinginfo {...lesson} />
+        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+        </span>
+        <StatusBadge status={lesson.lessonStatus} />
+        {lesson.lessonLink && (
+          <a
+            href={lesson.lessonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.linkBtn}
+          >
+            <ExternalLinkIcon />
+            Открыть
+          </a>
+        )}
       </div>
     </div>
-    <div className={styles.cardRight}>
-      <Gradinginfo {...lesson} />
-      <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-        {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-      </span>
-      <StatusBadge status={lesson.lessonStatus} />
-      {lesson.lessonLink && (
-        <a
-          href={lesson.lessonLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.linkBtn}
-        >
-          <ExternalLinkIcon />
-          Открыть
-        </a>
-      )}
-    </div>
-  </div>
+  </Card>
 );
 
 // ── Date group ────────────────────────────────────────────────────────────────
