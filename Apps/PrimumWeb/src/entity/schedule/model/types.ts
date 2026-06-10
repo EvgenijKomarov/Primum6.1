@@ -31,3 +31,20 @@ export interface TeacherScheduleInputDto {
   time: number;
   dayOfWeek: DayOfWeek;
 }
+
+export interface AbonementScheduleDto {
+  id: number;
+  dayOfWeek: DayOfWeek;
+  time: number;
+  courseName: string;
+  courseId: number;
+  teacherDisplayName: string;
+  teacherId: number;
+}
+
+export interface AbonementScheduleDtoPageResult {
+  items: AbonementScheduleDto[] | null;
+  totalItemsCount: number;
+  totalPages: number;
+  currentPage: number;
+}

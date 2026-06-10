@@ -1,0 +1,14 @@
+.Positive {
+  background-color: color-mix(in srgb, var(--color-functional-success) 15%, transparent);
+  color: var(--color-functional-success);
+}
+
+.Warning {
+  background-color: color-mix(in srgb, var(--color-functional-warning) 15%, transparent);
+  color: var(--color-functional-warning);
+}
+
+.Negative {
+  background-color: color-mix(in srgb, var(--color-functional-error) 15%, transparent);
+  color: var(--color-functional-error);
+}

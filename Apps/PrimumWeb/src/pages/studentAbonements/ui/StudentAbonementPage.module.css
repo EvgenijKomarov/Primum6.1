@@ -1,0 +1,111 @@
+.page {
+  min-height: calc(100vh - 3.75rem);
+  padding: 2.5rem 1.5rem;
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.25rem;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statLabel {
+  color: var(--color-secondary-light);
+  font-weight: 500;
+  font-size: 0.5rem;
+  
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.statValue {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.stat {
+  justify-content: space-between;
+}
+
+.cardContentColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: var(--color-secondary-dark);
+  border-radius: 0.5rem;
+  padding: 0.425rem;
+  overflow-y: auto;
+  overflow-x: hidden; 
+  height: 10rem;
+  min-width: 11rem;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.dowString {
+  font-size: 0.5rem;
+  color: var(--color-secondary-light);
+}
+
+.timeString {
+  font-size: 0.6rem;
+}
+
+.scheduleBadge {
+  background-color: var(--color-secondary-base);
+  border-radius: 0.5rem;
+  padding: 0.425rem;
+  width: 10rem;
+}
+
+.scheduleBadgeTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.miniButton {
+  color: var(--color-functional-error);
+  font-size: 0.4rem;
+  cursor: pointer;
+}
+
+.middleButton {
+  color: var(--color-functional-error);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.abonementCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cursorBadge {
+  cursor: pointer;
+}

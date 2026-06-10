@@ -24,3 +24,10 @@ export const deleteTeacherSchedule = async (scheduleId: number) => {
     url: `${api.teacherSchedule.base}/${scheduleId}`,
   });
 };
+
+export const deleteStudentSchedule = async (scheduleId: number) => {
+  return await fetcherInstance<number>({
+    method: 'DELETE',
+    url: `${api.studentSchedule.base}/${scheduleId}`,
+  });
+};

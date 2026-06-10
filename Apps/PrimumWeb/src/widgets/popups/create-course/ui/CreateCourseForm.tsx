@@ -1,6 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
 import useSWRImmutable from 'swr/immutable';
-
 import { createCourse } from '@/entity/course';
 import type { CourseInputDto } from '@/entity/course';
 import { getPublicThemes } from '@/entity/course-theme';

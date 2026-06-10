@@ -24,7 +24,7 @@ export const EnsurancePopup = ({ title, description, onConfirm, onConfirmString,
             </p>
             <div className={styles.buttons}>
                 <Button
-                    onClick={onConfirm}
+                    onClick={() => {onConfirm(); setPopupOpen(false)}}
                     variant={ButtonTypeEnum.PRIMARY}
                     size={ButtonSizeEnum.NORMAL}>
                     {onConfirmString ?? "Да"}

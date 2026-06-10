@@ -8,6 +8,7 @@ import { ProfilePage } from "@/pages/profile/index.ts";
 import { Role } from '@/shared/enums';
 import { RedirectPage } from '@/pages/redirect-page/RedirectPage';
 import { StudentLessonsPage } from '@/pages/studentLessons';
+import { StudentAbonementPage } from '@/pages/studentAbonements/ui/StudentAbonementPage';
 
 interface RouteDef {
   path: string;
@@ -50,6 +51,11 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/student-lessons',
     element: <StudentLessonsPage />,
+    roles: [Role.STUDENT],
+  },
+  {
+    path: '/student-abonements',
+    element: <StudentAbonementPage />,
     roles: [Role.STUDENT],
   },
   {

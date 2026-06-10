@@ -40,12 +40,18 @@ export const api = {
   teacherSchedule: {
     base: "/teacher/shedules",
   },
+  studentSchedule: {
+    base: "/student/shedules",
+  },
   ranks: {
     student: "public/ranks/student",
     teacher: "/public/ranks/teacher",
     course: "/public/ranks/course",
   },
-  abonement: {
-    getByTeacher: "/teacher/abonements"
+  teacherAbonement: {
+    getById: "/teacher/abonements"
+  },
+  studentAbonement: {
+    base: "/student/abonements",
   },
 }

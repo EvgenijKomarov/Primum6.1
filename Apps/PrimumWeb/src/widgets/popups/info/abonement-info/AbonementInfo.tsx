@@ -3,15 +3,10 @@ import styles from '../styles.module.css';
 import { useEffect, useState } from 'react';
 import { getTeacherAbonementById } from '@/entity/abonement/api/abonement.api';
 import { Popup } from '@/shared/ui/Popup';
+import { translateAbonementStatus } from '@/features/translation/translation';
 
 interface AbonementInfoProps {
   abonementId: number;
-}
-
-const ABON_STATUS_CONFIG: Record<AbonementStatus, { label: string; cls: string }> = {
-  [AbonementStatus.Active]:           { label: 'Активен',   cls: styles.Positive  },
-  [AbonementStatus.Freezed]:           { label: 'Активен',   cls: styles.Warning  },
-  [AbonementStatus.Deleted]:           { label: 'Активен',   cls: styles.Negative  },
 }
 
 export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
@@ -26,8 +21,8 @@ export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
                 fetchTeacher();
             }, []);
 
-    const cfg = ABON_STATUS_CONFIG[abonement?.abonementStatus ?? AbonementStatus.Deleted] ?? 
-        ABON_STATUS_CONFIG[AbonementStatus.Deleted];
+    const cfg = translateAbonementStatus(abonement?.abonementStatus ?? AbonementStatus.Deleted) ?? 
+        translateAbonementStatus(AbonementStatus.Deleted);
 
     
     return (

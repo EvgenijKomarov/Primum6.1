@@ -48,6 +48,8 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.Abonements)
                 .ThenInclude(x => x.AbonementShedules)
                 .ThenInclude(x => x.TeacherShedule)
+                .Include(x => x.Abonements)
+                .ThenInclude(x => x.Lessons)
                 .One(x => x.User.Id == studentId);
 
             var course = await dbIterator.Courses(false)

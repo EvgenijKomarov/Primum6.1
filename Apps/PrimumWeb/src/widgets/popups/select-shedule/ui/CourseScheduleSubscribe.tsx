@@ -12,16 +12,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import styles from './CourseScheduleSubscribe.module.css';
 import { Popup } from '@/shared/ui/Popup/Popup';
 import { translateException } from '@/features/exception-translation/translate-exception';
-
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  [DayOfWeek.Monday]:    'Понедельник',
-  [DayOfWeek.Tuesday]:   'Вторник',
-  [DayOfWeek.Wednesday]: 'Среда',
-  [DayOfWeek.Thursday]:  'Четверг',
-  [DayOfWeek.Friday]:    'Пятница',
-  [DayOfWeek.Saturday]:  'Суббота',
-  [DayOfWeek.Sunday]:    'Воскресенье',
-};
+import { translateDayOfWeek } from '@/features/translation/translation';
 
 const DAY_ORDER: DayOfWeek[] = [
   DayOfWeek.Monday,
@@ -64,6 +55,7 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
     setError(null);
     try {
       await doSubscribe(course.id, selectedSlot.id);
+      setSubscribePopupOpen(false);
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: string } })?.response?.data ??
@@ -124,7 +116,7 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
         ) : (
           DAY_ORDER.filter((day) => slotsByDay[day].length > 0).map((day) => (
             <div key={day} className={styles.dayGroup}>
-              <p className={styles.dayName}>{DAY_LABELS[day]}</p>
+              <p className={styles.dayName}>{translateDayOfWeek(day)}</p>
               <div className={styles.slotsRow}>
                 {slotsByDay[day].map((slot) => (
                   <button
@@ -153,7 +145,7 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
             </div>
             <div className={styles.confirmRow}>
               <span className={styles.confirmLabel}>День</span>
-              <span className={styles.confirmValue}>{DAY_LABELS[selectedSlot.dayOfWeek]}</span>
+              <span className={styles.confirmValue}>{translateDayOfWeek(selectedSlot.dayOfWeek)}</span>
             </div>
             <div className={styles.confirmRow}>
               <span className={styles.confirmLabel}>Время</span>

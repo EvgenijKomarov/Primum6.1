@@ -4,6 +4,7 @@ using CoreDBModel.Models.Enums;
 using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -44,6 +45,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)
         {
             var abonement = await dbIterator.Abonements(false)
+                .Include(x => x.AbonementShedules)
                 .Where(x => x.Student.User.Id == studentId)
                 .One(x => x.Id == abonementId);
 

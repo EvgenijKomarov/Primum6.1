@@ -1,4 +1,5 @@
 import os
+import json
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -15,7 +16,7 @@ parameters = pika.URLParameters(RABBITMQ_URL)
 
 app = FastAPI(title="FastAPI → RabbitMQ Publisher")
 
-def rabbitmq_post(tag: str, userChatId: int, username:str, message: str):
+def rabbitmq_post(tag: str, userChatId: int, username: str, message: str):
     if is_prod_mode:
         with pika.BlockingConnection(parameters) as connection:
             channel = connection.channel()
@@ -23,11 +24,17 @@ def rabbitmq_post(tag: str, userChatId: int, username:str, message: str):
             # 1. Объявляем fanout-обменник (durable=True = переживёт перезагрузку брокера)
             channel.exchange_declare(exchange=tag, exchange_type='fanout', durable=True)
 
-            # Отправляем строку
+            # Формируем JSON-сообщение и конвертируем в байты
+            message_body = json.dumps({
+                "userChatId": userChatId,
+                "username": username,
+                "message": message
+            }).encode('utf-8')
+
             channel.basic_publish(
                 exchange=tag,
                 routing_key='',
-                body = {userChatId, username, message},
+                body=message_body,
                 properties=pika.BasicProperties(delivery_mode=2) # persistent
             )
             print(f"✅Pushed on {tag}: {message}")
@@ -36,12 +43,23 @@ def rabbitmq_post(tag: str, userChatId: int, username:str, message: str):
 
 @app.post("/publish")
 def publish(userId: int, message: str):
-    all_user_signs = requests.get(f"{SIGNSERVICE_URL}/get-signs/{userId}")
+    # Получаем ответ
+    response = requests.get(f"{SIGNSERVICE_URL}/get-signs/{userId}")
+    
+    # На случай, если SignService вернет HTTP-ошибку (404, 500 и т.д.)
+    response.raise_for_status() 
+    
+    # Парсим JSON в список словарей
+    all_user_signs = response.json()
 
     for sign in all_user_signs:
-        rabbitmq_post(sign["realizationTag"], int(sign["chatId"]), sign["username"], message)
+        rabbitmq_post(
+            sign["realizationTag"], 
+            int(sign["chatId"]), 
+            sign["username"], 
+            message
+        )
     return {"status": "ok"}
-
 
 if __name__ == "__main__":
     print("Starting server initialization...")

@@ -13,23 +13,19 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { Gradinginfo } from '@/widgets/popups/info/grading-info/GradingInfo';
 import { Card } from '@/shared/ui/Card/Card';
+import { translateDayOfWeek, translateMonth } from '@/features/translation/translation';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-const RU_DAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-
-const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-
 const formatDateLabel = (dateStr: string) => {
   const [y, m, d] = dateStr.split('-').map(Number);
-  return `${d} ${RU_MONTHS[m - 1]} ${y}`;
+  return `${d} ${translateMonth(m - 1)} ${y}`;
 };
 
 const formatDateTime = (iso: string) => {
   const dt = new Date(iso);
   const d = dt.getDate();
-  const m = RU_MONTHS[dt.getMonth()];
+  const m = translateMonth(dt.getMonth());
   const hh = String(dt.getHours()).padStart(2, '0');
   const mm = String(dt.getMinutes()).padStart(2, '0');
   return `${d} ${m}, ${hh}:${mm}`;
@@ -124,7 +120,7 @@ const DateGroup = ({ group }: { group: LessonsByDateDto }) => {
   return (
     <div className={styles.dateGroup}>
       <div className={styles.dateHeading}>
-        <span className={styles.dateHeadingDay}>{RU_DAYS[group.dayOfWeek]}</span>
+        <span className={styles.dateHeadingDay}>{translateDayOfWeek(group.dayOfWeek)}</span>
         <span className={styles.dateHeadingDate}>{formatDateLabel(group.date)}</span>
         {today && <span className={styles.dateHeadingToday}>Сегодня</span>}
       </div>

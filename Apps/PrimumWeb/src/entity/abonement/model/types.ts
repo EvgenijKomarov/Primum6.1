@@ -4,7 +4,20 @@ export enum AbonementStatus {
   Deleted = 2,
 }
 
+export enum AbonementInputStatus {
+  Activate = 0,
+  Freeze = 1,
+}
+
+export interface AbonementDtoPageResult {
+  items: AbonementDto[] | null;
+  totalItemsCount: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export interface AbonementDto {
+  id: number;
   studentDisplayName: string;
   studentId: number;
   teacherDisplayName: string;
