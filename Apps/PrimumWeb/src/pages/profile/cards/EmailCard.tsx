@@ -73,7 +73,10 @@ export const EmailCard = ({
               <Button
                 variant={ButtonTypeEnum.PRIMARY}
                 size={ButtonSizeEnum.SMALL}
-                onClick={() => setEnsurancePopupOpen(true)}
+                onClick={() => {
+                  if (isConfirmed) {setEnsurancePopupOpen(true);}
+                  else {onSendVerification();}
+                }}
                 isLoading={isSending}
                 disabled={!email.trim()}
               >

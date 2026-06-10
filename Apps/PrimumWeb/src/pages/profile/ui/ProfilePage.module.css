@@ -10,10 +10,16 @@
 
 .container {
   width: 100%;
-  max-width: 640px;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  justify-content: center;
+}
+
+.containerColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 2rem;
 }
 
 .cardHeader {

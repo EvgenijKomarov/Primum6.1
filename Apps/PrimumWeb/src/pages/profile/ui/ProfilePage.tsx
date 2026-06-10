@@ -20,6 +20,7 @@ import { EmailCard } from '../cards/EmailCard';
 import { ChatBotsCard } from '../cards/ChatBotsCard';
 import { StudentCard } from '../cards/StudentCard';
 import { TeacherCard } from '../cards/TeacherCard';
+import { Card } from '@/shared/ui/Card/Card';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -118,64 +119,65 @@ export const ProfilePage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-
-        <PersonalInfoCard
-          surname={user.surname}
-          name={user.name}
-          patronymic={user.patronymic}
-          onLogout={handleLogout}
-        />
-
-        <EmailCard
-          email={email}
-          emailToken={emailToken}
-          isConfirmed={user.mailConfirmed}
-          isEditing={isEditingEmail}
-          isSending={isSending}
-          onEmailChange={setEmail}
-          onEmailTokenChange={setEmailToken}
-          onSendVerification={handleSendVerification}
-          onConfirmEmail={handleConfirmEmail}
-          onStartEditing={() => setIsEditingEmail(true)}
-          onCancelEditing={() => {
-            setEmail(user.email ?? '');
-            setIsEditingEmail(false);
-          }}
-        />
+        <div className={styles.containerColumn}>
+          <PersonalInfoCard
+            surname={user.surname}
+            name={user.name}
+            patronymic={user.patronymic}
+            onLogout={handleLogout}
+          />
+          <EmailCard
+            email={email}
+            emailToken={emailToken}
+            isConfirmed={user.mailConfirmed}
+            isEditing={isEditingEmail}
+            isSending={isSending}
+            onEmailChange={setEmail}
+            onEmailTokenChange={setEmailToken}
+            onSendVerification={handleSendVerification}
+            onConfirmEmail={handleConfirmEmail}
+            onStartEditing={() => setIsEditingEmail(true)}
+            onCancelEditing={() => {
+              setEmail(user.email ?? '');
+              setIsEditingEmail(false);
+            }}
+          />
+          {user.mailConfirmed && <ChatBotsCard
+                chatSigns={chatSigns}
+                chatSignToken={chatSignToken}
+                onTokenChange={setChatSignToken}
+                onConfirmSign={handleConfirmSign}
+              />}
+        </div>
 
         {user.mailConfirmed ? (
           <>
-            <ChatBotsCard
-              chatSigns={chatSigns}
-              chatSignToken={chatSignToken}
-              onTokenChange={setChatSignToken}
-              onConfirmSign={handleConfirmSign}
-            />
+            <div className={styles.containerColumn}>
+              <StudentCard
+                isApproved={user.isApprovedStudent}
+                profile={studentProfile}
+                isLoading={studentLoading}
+                isCreating={isCreatingStudent}
+                onCreate={handleCreateStudent}
+              />
 
-            <StudentCard
-              isApproved={user.isApprovedStudent}
-              profile={studentProfile}
-              isLoading={studentLoading}
-              isCreating={isCreatingStudent}
-              onCreate={handleCreateStudent}
-            />
-
-            <TeacherCard
-              isApproved={user.isApprovedTeacher}
-              profile={teacherProfile}
-              isLoading={teacherLoading}
-              isCreating={isCreatingTeacher}
-              aboutTeacher={aboutTeacher}
-              onAboutChange={setAboutTeacher}
-              onCreate={handleCreateTeacher}
-            />
+              <TeacherCard
+                isApproved={user.isApprovedTeacher}
+                profile={teacherProfile}
+                isLoading={teacherLoading}
+                isCreating={isCreatingTeacher}
+                aboutTeacher={aboutTeacher}
+                onAboutChange={setAboutTeacher}
+                onCreate={handleCreateTeacher}
+              />
+            </div>
           </>
         ) : (
-          <div className={styles.card}>
+          <Card width={40}>
             <p className={styles.warning}>
               Подтвердите почту, чтобы получить доступ к созданию профилей ученика и преподавателя.
             </p>
-          </div>
+          </Card>
         )}
 
       </div>
