@@ -21,10 +21,12 @@ import { ChatBotsCard } from '../cards/ChatBotsCard';
 import { StudentCard } from '../cards/StudentCard';
 import { TeacherCard } from '../cards/TeacherCard';
 import { Card } from '@/shared/ui/Card/Card';
+import { useToast } from '@/shared/ui/Toast/useToast';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
   const clearStore = useUserStore((s) => s.clear);
+  const { showToast } = useToast();
 
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
   const { signs: chatSigns, mutate: mutateChatSigns } = useUserChatSigns(
@@ -58,6 +60,7 @@ export const ProfilePage = () => {
     setIsSending(true);
     try {
       await sendEmailVerification({ correctiveMail: email || undefined });
+      showToast('Письмо отправлено', 'success')
     } finally {
       setIsSending(false);
       await mutateUser();
@@ -69,12 +72,14 @@ export const ProfilePage = () => {
     await mutateUser();
     setIsEditingEmail(false);
     setEmailToken('');
+    showToast('Почта подтверждена', 'success')
   };
 
   const handleConfirmSign = async () => {
     await confirmChatSign(chatSignToken);
     await mutateChatSigns();
     setChatSignToken('');
+    showToast('Аккаунт успешно привязан', 'success')
   };
 
   const handleCreateStudent = async () => {
@@ -82,6 +87,7 @@ export const ProfilePage = () => {
     try {
       await createStudentProfile();
       await mutateUser();
+      showToast('Профиль создан', 'success')
     } finally {
       setIsCreatingStudent(false);
     }
@@ -92,6 +98,7 @@ export const ProfilePage = () => {
     try {
       await createTeacherProfile({ aboutTeacher });
       await mutateUser();
+      showToast('Профиль создан и отправлен на утверждение', 'warning', 3000)
     } finally {
       setIsCreatingTeacher(false);
     }

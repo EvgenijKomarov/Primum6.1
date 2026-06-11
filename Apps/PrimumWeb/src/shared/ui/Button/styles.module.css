@@ -21,10 +21,6 @@
 .primary {
   @apply bg-primary-base text-secondary-base;
 }
-.primary svg,
-.primary svg path {
-  @apply fill-secondary-base;
-}
 .primary:hover {
   @apply bg-primary-hover;
 }
@@ -33,10 +29,6 @@
 }
 .primary-disabled {
   @apply text-disabled-text bg-primary-disabled cursor-not-allowed;
-}
-.primary-disabled svg,
-.primary-disabled svg path {
-  @apply fill-disabled-text;
 }
 
 /* ── SECONDARY ── */
@@ -55,10 +47,6 @@
 }
 .secondary-disabled {
   @apply text-disabled-text bg-secondary-dark cursor-not-allowed;
-}
-.secondary-disabled svg,
-.secondary-disabled svg path {
-  @apply fill-disabled-text;
 }
 
 /* ── TEXT ── */
@@ -86,10 +74,6 @@
 .text-disabled {
   @apply p-0 bg-transparent text-disabled-text cursor-not-allowed;
 }
-.text-disabled svg,
-.text-disabled svg path {
-  @apply fill-disabled-text;
-}
 
 /* ── ICON ── */
 .icon {
@@ -107,10 +91,6 @@
 }
 .icon-disabled {
   @apply cursor-not-allowed;
-}
-.icon-disabled svg,
-.icon-disabled svg path {
-  @apply fill-disabled-text;
 }
 
 /* ── Utilities ── */

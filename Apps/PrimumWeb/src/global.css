@@ -18,14 +18,14 @@
   --color-functional-success: #52c41a;
   --color-functional-warning: #faad14;
 
+  --color-functional-gold: #f3d449;
+
   /* ── Icon-button overlays ── */
   --color-background-primary-hover:   color-mix(in srgb, #e1f018 12%, transparent);
   --color-background-primary-active:  color-mix(in srgb, #e1f018 22%, transparent);
 
   /* ── Semantic state ── */
   --color-disabled-text: #64748b;
-
-
 
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
 }
@@ -68,7 +68,6 @@
     width: 100%;
     padding: 0.5rem 0.75rem;
     background-color: var(--color-secondary-dark);
-    border: 1px solid var(--color-secondary-darker);
     border-radius: 0.375rem;
     font-size: 0.675rem;
     font-family: 'Press Start 2P', monospace;

@@ -53,7 +53,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator.Promocodes(false)
                 .Where(x => x.Student != null && x.Student.UserId == studentId)
-                .ToDto(true)
+                .ToDto(false)
                 .ToPageResult(_page, _pageSize);
         }
 

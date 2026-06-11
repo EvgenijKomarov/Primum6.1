@@ -54,4 +54,9 @@ export const api = {
   studentAbonement: {
     base: "/student/abonements",
   },
+  promocodes: {
+    student: "/student/promocodes",
+    available: "/student/promocodes/available",
+    buy: "/student/promocodes/buy"
+  }
 }

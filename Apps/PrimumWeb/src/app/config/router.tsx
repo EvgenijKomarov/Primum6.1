@@ -9,6 +9,7 @@ import { Role } from '@/shared/enums';
 import { RedirectPage } from '@/pages/redirect-page/RedirectPage';
 import { StudentLessonsPage } from '@/pages/studentLessons';
 import { StudentAbonementPage } from '@/pages/studentAbonements/ui/StudentAbonementPage';
+import { PromocodesCatalogPage } from '@/pages/promocodesCatalog/ui/PromocodesCatalogPage';
 
 interface RouteDef {
   path: string;
@@ -56,6 +57,11 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/student-abonements',
     element: <StudentAbonementPage />,
+    roles: [Role.STUDENT],
+  },
+  {
+    path: '/promocodes',
+    element: <PromocodesCatalogPage />,
     roles: [Role.STUDENT],
   },
   {
