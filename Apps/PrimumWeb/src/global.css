@@ -28,7 +28,7 @@
   --color-disabled-text: #64748b;
 
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
-  --page-size: 100rem;
+  --page-size: 80%;
 }
 
 @font-face {

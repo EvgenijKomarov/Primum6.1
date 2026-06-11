@@ -95,7 +95,7 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
     const status_config = ACTIVATION_CONFIG[abonement.abonementStatus];
 
     return (
-        <Card hoverable={true} width={'40rem'}>
+        <Card hoverable={true} min_width={'30rem'}>
             <div className={styles.abonementCard}>
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTop}>
@@ -175,6 +175,8 @@ export const StudentAbonementPage = () => {
     return (
         <div className={styles.page}>
             <h1 className={styles.title}>Мои абонементы</h1>
+            <p className={styles.subtitle}>Управляйте своим обучением</p>
+            <p className={styles.line}></p>
             <div className={styles.grid}>
                 {isLoading ? (
                     <div className={styles.empty}>
