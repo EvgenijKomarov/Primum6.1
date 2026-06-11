@@ -3,7 +3,7 @@
 .page {
   min-height: calc(100vh - 3.75rem);
   padding: 2.5rem 1.5rem;
-  max-width: 900px;
+  max-width: var(--page-size);
   margin: 0 auto;
 }
 
@@ -15,7 +15,6 @@
 }
 
 .title {
-  font-size: 1.375rem;
   font-weight: 700;
   margin: 0;
 }
@@ -38,7 +37,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
   gap: 1.25rem;
 }
 
@@ -83,7 +82,7 @@
 }
 
 .metaLabel {
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   color: var(--color-secondary-light);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -111,16 +110,15 @@
 .description {
   margin-top: 1rem;
   padding: 1rem;
-  height: 6rem;
+  height: 10rem;
   overflow-y: auto;
   overflow-x: hidden; 
   padding-right: 0.5rem; 
   background-color: var(--color-secondary-darkest);
   border: 1px solid var(--color-secondary-dark);
   border-radius: 0.875rem;
-  font-size: 0.5rem;
 }
 
 .descriptionText {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
 }

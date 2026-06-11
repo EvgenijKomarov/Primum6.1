@@ -180,7 +180,7 @@ export const ProfilePage = () => {
             </div>
           </>
         ) : (
-          <Card width={40}>
+          <Card width={'40rem'}>
             <p className={styles.warning}>
               Подтвердите почту, чтобы получить доступ к созданию профилей ученика и преподавателя.
             </p>

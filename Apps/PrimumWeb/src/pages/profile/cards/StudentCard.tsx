@@ -20,7 +20,7 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
   const hasProfile = isApproved !== null && isApproved !== undefined;
 
   return (
-    <Card title="Профиль ученика"  width={40}>
+    <Card title="Профиль ученика"  width={'40rem'}>
 
       {!hasProfile && (
         <>

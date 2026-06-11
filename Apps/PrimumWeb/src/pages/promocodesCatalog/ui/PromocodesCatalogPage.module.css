@@ -1,7 +1,7 @@
 .page {
   min-height: calc(100vh - 3.75rem);
   padding: 2.5rem 1.5rem;
-  max-width: 1100px;
+  max-width: var(--page-size);
   margin: 0 auto;
 }
 
@@ -13,7 +13,6 @@
 }
 
 .title {
-  font-size: 1.375rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
 }
@@ -96,6 +95,7 @@
 .cardContent {
   display: flex;
   flex-direction: row;
+  flex: 1;
   gap: 0.5rem;
 }
 .buttonRow {
@@ -119,7 +119,11 @@
   word-break: break-word;
   white-space: pre-wrap;
   overflow-y: auto;
-  min-height: 5rem;
+  min-height: 4rem;
+  max-height: 9rem;
+  flex: 1;
+  width: 100%;
+  height: 100%;
   padding: 0.3rem;
   padding-right: 0.5rem; 
   background-color: var(--color-secondary-dark);
@@ -142,12 +146,11 @@
 .cardSection {
   background-color: var(--color-secondary-dark);
   border-radius: 0.3rem;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 12rem;
-  width: 30rem;
 }
 .cardPriceValue {
   color: var(--color-primary-light);
@@ -160,7 +163,6 @@
   justify-content: center;
   flex-direction: column;
   height: 8.3rem;
-  width: 100%;
 }
 .cardCodeValue {
   background-color: var(--color-secondary-base);

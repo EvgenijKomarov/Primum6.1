@@ -28,6 +28,7 @@
   --color-disabled-text: #64748b;
 
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
+  --page-size: 100rem;
 }
 
 @font-face {
@@ -55,7 +56,7 @@
     font-family: 'Press Start 2P', monospace;
   }
 
-  h1 { font-size: 10px; }
+  h1 { font-size: 1.375rem; }
   h2 { font-size: 18px; }
   p, span, li, label, div, h3 { 
     font-size: 14px;

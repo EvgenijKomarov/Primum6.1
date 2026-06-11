@@ -60,7 +60,7 @@ const StatusBadge = ({ status }: { status: LessonStatus }) => {
 // ── Upcoming lesson card ──────────────────────────────────────────────────────
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
-  <Card hoverable={true} width={60}>
+  <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
@@ -82,7 +82,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
 // ── History lesson card ───────────────────────────────────────────────────────
 
 const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
-  <Card hoverable={true} width={60}>
+  <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>

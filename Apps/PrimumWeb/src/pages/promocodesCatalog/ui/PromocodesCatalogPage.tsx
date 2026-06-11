@@ -32,7 +32,7 @@ const PromocodeCard = ({ promocode, studentCoins, mutateEntities }: PromocodeCar
 
     const codeVisible = showCode && promocode.code;
 
-    return (<Card hoverable={true} width={66}>
+    return (<Card hoverable={true} width={'100%'}>
                 <span className={styles.cardTitle}>{promocode.title}</span>
                 {promocode.isAvailable ? (
                     <div className={styles.cardContentAvailable}>

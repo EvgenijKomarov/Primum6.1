@@ -1,14 +1,14 @@
 .Positive {
-  background-color: color-mix(in srgb, var(--color-functional-success) 15%, transparent);
-  color: var(--color-functional-success);
+  background-color: color-mix(in srgb, var(--color-functional-success) 75%, transparent);
+  color: var(--color-secondary-base);
 }
 
 .Warning {
-  background-color: color-mix(in srgb, var(--color-functional-warning) 15%, transparent);
-  color: var(--color-functional-warning);
+  background-color: color-mix(in srgb, var(--color-functional-warning) 75%, transparent);
+  color: var(--color-secondary-base);
 }
 
 .Negative {
-  background-color: color-mix(in srgb, var(--color-functional-error) 15%, transparent);
-  color: var(--color-functional-error);
+  background-color: color-mix(in srgb, var(--color-functional-error) 75%, transparent);
+  color: var(--color-secondary-base);
 }

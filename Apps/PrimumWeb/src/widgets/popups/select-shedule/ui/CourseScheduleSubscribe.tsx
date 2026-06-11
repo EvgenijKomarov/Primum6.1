@@ -27,9 +27,10 @@ const DAY_ORDER: DayOfWeek[] = [
 interface Props {
   course: CourseDto;
   setSubscribePopupOpen: (open: boolean) => void;
+  onSubscribe?: () => void;
 }
 
-export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props) => {
+export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopupOpen }: Props) => {
   const [selectedSlot, setSelectedSlot] = useState<TeacherScheduleDto | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,6 +56,7 @@ export const CourseScheduleSubscribe = ({ course, setSubscribePopupOpen }: Props
     setError(null);
     try {
       await doSubscribe(course.id, selectedSlot.id);
+      if (onSubscribe) { onSubscribe(); }
       setSubscribePopupOpen(false);
     } catch (err: unknown) {
       const msg =

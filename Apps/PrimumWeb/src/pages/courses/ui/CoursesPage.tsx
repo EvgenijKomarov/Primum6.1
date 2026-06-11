@@ -16,7 +16,7 @@ import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/Cour
 const CourseCard = ({ course }: { course: CourseDto }) => {
 
   return (
-    <Card hoverable={true} width={40}>
+    <Card hoverable={true} width={'100%'}>
       <div className={styles.cardTop}>
         <h3 className={styles.courseName}>{course.name ?? '—'}</h3>
         <span className={styles.theme}>{course.courseThemeName}</span>

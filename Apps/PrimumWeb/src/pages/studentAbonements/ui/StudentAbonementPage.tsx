@@ -7,9 +7,11 @@ import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { translateAbonementStatus, translateDayOfWeek } from '@/features/translation/translation';
 import { deleteStudentSchedule, type DayOfWeek } from '@/entity/schedule';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DeleteStudentAbonementAsync, StudentAbonementChangeStatusAsync } from '@/entity/abonement/api/abonement.api';
 import { Badge } from '@/shared/ui/Badge/Badge';
+import { getPublicCourse, type CourseDto } from '@/entity/course';
+import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 
 interface SheduleBadgeProps {
     dow: DayOfWeek;
@@ -58,6 +60,15 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
     const { schedules, mutate } = useAbonementSchedules(abonement.id);
     const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
     const [changeStatusPopupOpen, setChangeStatusPopupOpen] = useState(false);
+    const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
+
+    const [course, setCourse] = useState<CourseDto | null>(null);
+
+    useEffect(() => {
+        if (!abonement.courseId) return;
+        
+        getPublicCourse(abonement.courseId).then(res => setCourse(res.data));
+    }, [abonement.courseId]);
 
     const {label: statusLabel, badgeType} = translateAbonementStatus(abonement.abonementStatus);
 
@@ -84,7 +95,7 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
     const status_config = ACTIVATION_CONFIG[abonement.abonementStatus];
 
     return (
-        <Card hoverable={true} width={30}>
+        <Card hoverable={true} width={'40rem'}>
             <div className={styles.abonementCard}>
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTop}>
@@ -138,7 +149,20 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
                                 id={schedule.id}
                                 onMutate={mutate} />
                         ))}
+                        {course?.maxLessons && course?.maxLessons > schedules.length && (
+                            <div 
+                                className={styles.scheduleAddBadge}
+                                onClick={()=>{setSubscribePopupOpen(true)}}>
+                                <span className={styles.scheduleAddBadgePlus}>+</span>
+                            </div>
+                        )}
                     </div>
+                    {subscribePopupOpen && course && (
+                        <CourseScheduleSubscribe 
+                            setSubscribePopupOpen={setSubscribePopupOpen}
+                            course={course}
+                            onSubscribe={mutate}/>
+                    )}
                 </div>
             </div>
         </Card>
@@ -148,17 +172,18 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
 export const StudentAbonementPage = () => {
     const { abonements, isLoading, mutate } = useStudentAbonements();
 
-    return (<div className={styles.page}>
+    return (
+        <div className={styles.page}>
             <h1 className={styles.title}>Мои абонементы</h1>
             <div className={styles.grid}>
                 {isLoading ? (
                     <div className={styles.empty}>
                         <EmptyIcon />
                         <p className={styles.emptyText}>
-                        {'Абонементов пока нет'}
+                            Загрузка...
                         </p>
                     </div>
-                ) : (
+                ) : abonements && abonements.length > 0 ? (
                     abonements.map((abonement, index) => (
                         <AbonementCard
                             key={`${abonement.id}-${index}`}
@@ -166,7 +191,15 @@ export const StudentAbonementPage = () => {
                             mutateAbonements={mutate}
                         />
                     ))
+                ) : (
+                    <div className={styles.empty}>
+                        <EmptyIcon />
+                        <p className={styles.emptyText}>
+                            Абонементов пока нет
+                        </p>
+                    </div>
                 )}
             </div>
-        </div>)
-}
+        </div>
+    );
+};

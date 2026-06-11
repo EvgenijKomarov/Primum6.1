@@ -22,7 +22,7 @@ const DAY_LABELS: Record<DayOfWeek, string> = {
 const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
-export function translateAbonementStatus(status: AbonementStatus): {label: string, badgeType: BadgeTypeEnum} {
+export function translateAbonementStatus(status: AbonementStatus): {label: string, badgeType: BadgeTypeEnum, cls: string} {
     return STATUS_TRANSLATION[status];
 }
 
