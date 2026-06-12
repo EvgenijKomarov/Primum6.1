@@ -43,6 +43,7 @@
 .abonementBadge {
     cursor: pointer;
     text-align: center;
+    border-radius: 9999px;
 }
 
 .abonementBadgeText {
