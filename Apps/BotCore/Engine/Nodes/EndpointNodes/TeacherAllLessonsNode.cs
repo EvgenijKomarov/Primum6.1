@@ -22,7 +22,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         }
         public override async Task Initialize(int index, DataBuffer input)
         {
-            var res = await client.LessonsAsync(input.UserId!.Value, index, 1);
+            var res = await client.LastLessonsAsync(input.UserId!.Value, index, 1);
             TotalCount = res.TotalPages;
             Item = res.Items?.FirstOrDefault();
         }

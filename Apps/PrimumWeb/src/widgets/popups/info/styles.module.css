@@ -44,9 +44,7 @@
     cursor: pointer;
     text-align: center;
     border-radius: 9999px;
-}
-
-.abonementBadgeText {
     font-size: 0.55rem;
     font-weight: 500;
+    padding: 0.2rem 0.55rem;
 }

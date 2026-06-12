@@ -7,9 +7,10 @@ import { HomePage } from "@/pages/home/ui/HomePage.tsx";
 import { ProfilePage } from "@/pages/profile/index.ts";
 import { Role } from '@/shared/enums';
 import { RedirectPage } from '@/pages/redirect-page/RedirectPage';
-import { StudentLessonsPage } from '@/pages/studentLessons';
 import { StudentAbonementPage } from '@/pages/studentAbonements/ui/StudentAbonementPage';
 import { PromocodesCatalogPage } from '@/pages/promocodesCatalog/ui/PromocodesCatalogPage';
+import { StudentLessonsPage } from '@/pages/lessons/studentLessons';
+import { TeacherLessonsPage } from '@/pages/lessons/teacherLessons/TeacherLessonsPage';
 
 interface RouteDef {
   path: string;
@@ -48,6 +49,11 @@ const ROUTES_DEF: RouteDef[] = [
     path: '/catalog',
     element: <CatalogPage />,
     roles: [Role.STUDENT],
+  },
+  {
+    path: '/teacher-lessons',
+    element: <TeacherLessonsPage />,
+    roles: [Role.TEACHER],
   },
   {
     path: '/student-lessons',

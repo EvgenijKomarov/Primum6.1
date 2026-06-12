@@ -3,6 +3,25 @@ import { Badge } from "@/shared/ui/Badge/Badge";
 import { Popup } from "@/shared/ui/Popup/Popup";
 import { useState } from "react";
 import styles from '../styles.module.css';
+import { translateGrade } from "@/features/translation/translation";
+
+interface GradingRowProps{
+    title: string;
+    grade: number
+}
+const GradingRow = ({title, grade}: GradingRowProps) => {
+    const {label, value} = translateGrade(grade);
+    return (
+        <div className={styles.row}>
+            <span className={styles.label}>{title}</span>
+            {value === 0 ? (
+                <span className={styles.value}>{label}</span>
+            ) : (
+                <span className={styles.value}>{`(${value}) ${label}`}</span>
+            )}
+        </div>
+    );
+}
 
 interface GradingInfoProps{
     homeworkGrade: number | null;
@@ -30,22 +49,10 @@ export const Gradinginfo = (input: GradingInfoProps) => {
                     onClose={() => setPopupOpen(false)}>
                     <div className={styles.info}>
                         <div className={styles.rows}>
-                            <div className={styles.row}>
-                                <span className={styles.label}>Домашнее задание: </span>
-                                <span className={styles.value}>{input.homeworkGrade === 0 ? 'Не оценено' : input.homeworkGrade}</span>
-                            </div>
-                            <div className={styles.row}>
-                                <span className={styles.label}>Активность на уроке: </span>
-                                <span className={styles.value}>{input.lessonActivityGrade === 0 ? 'Не оценено' : input.lessonActivityGrade}</span>
-                            </div>
-                            <div className={styles.row}>
-                                <span className={styles.label}>Повторение материала: </span>
-                                <span className={styles.value}>{input.repetitionOfMaterialGrade  === 0 ? 'Не оценено' : input.repetitionOfMaterialGrade}</span>
-                            </div>
-                            <div className={styles.row}>
-                                <span className={styles.label}>Инициатива в обучении: </span>
-                                <span className={styles.value}>{input.studyInitiativeGrade  === 0 ? 'Не оценено' : input.studyInitiativeGrade}</span>
-                            </div>
+                            <GradingRow title={'Домашнее задание: '} grade={input.homeworkGrade ?? 0}/>
+                            <GradingRow title={'Активность на уроке: '} grade={input.lessonActivityGrade ?? 0}/>
+                            <GradingRow title={'Повторение материала: '} grade={input.repetitionOfMaterialGrade ?? 0}/>
+                            <GradingRow title={'Инициатива в обучении: '} grade={input.studyInitiativeGrade ?? 0}/>
                             <div className={styles.row}>
                                 <span className={styles.label}>Общая оценка: </span>
                                 <span className={styles.value}>{input.finalGrade}</span>

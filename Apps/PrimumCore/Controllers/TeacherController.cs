@@ -22,9 +22,9 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<TeacherProfileDto>> GetTeacherProfile([FromRoute] int userId)
             => Ok(await teacherIterator.GetTeacher(userId, false));
 
-        [HttpGet("lessons")]
+        [HttpGet("last-lessons")]
         public async Task<ActionResult<PageResult<LessonDto>>> GetLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await lessonIterator.GetTeacherLessons(userId, page, pageSize));
+            => Ok(await lessonIterator.GetTeacherLastLessons(userId, page, pageSize));
 
         [HttpGet("future-lessons")]
         public async Task<ActionResult<PageResult<LessonsByDateDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)

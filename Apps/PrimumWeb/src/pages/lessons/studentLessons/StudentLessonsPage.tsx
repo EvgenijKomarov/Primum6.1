@@ -1,63 +1,23 @@
 import { useState } from 'react';
 import {
-  LessonStatus,
   useStudentFutureLessons,
   useStudentLessons,
 } from '@/entity/lesson';
 import type { LessonDto, FutureLessonDto, LessonsByDateDto } from '@/entity/lesson';
-
-import styles from './StudentLessonsPage.module.css';
+import { LessonStatus } from '@/entity/lesson';
+import styles from '../lessons.module.css';
 import { CalendarIcon, ExternalLinkIcon } from '@/shared/icons/types';
-import { BadgeTypeEnum } from '@/shared/enums/badge';
-import { Badge } from '@/shared/ui/Badge/Badge';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { Gradinginfo } from '@/widgets/popups/info/grading-info/GradingInfo';
 import { Card } from '@/shared/ui/Card/Card';
-import { translateDayOfWeek, translateMonth } from '@/features/translation/translation';
+import { translateDayOfWeek } from '@/features/translation/translation';
+import { formatDateLabel, formatDateTime, formatTimeSlot, isToday, STATUS_CONFIG } from '../lessons.common';
+import { Badge } from '@/shared/ui/Badge/Badge';
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-const formatDateLabel = (dateStr: string) => {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return `${d} ${translateMonth(m - 1)} ${y}`;
-};
-
-const formatDateTime = (iso: string) => {
-  const dt = new Date(iso);
-  const d = dt.getDate();
-  const m = translateMonth(dt.getMonth());
-  const hh = String(dt.getHours()).padStart(2, '0');
-  const mm = String(dt.getMinutes()).padStart(2, '0');
-  return `${d} ${m}, ${hh}:${mm}`;
-};
-
-const formatTimeSlot = (timeStr: string) => {
-  const [h] = timeStr.split(':').map(Number);
-  return `${h}:00 — ${h + 1}:00`;
-};
-
-const isToday = (dateStr: string) => {
-  const now = new Date();
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return now.getFullYear() === y && now.getMonth() + 1 === m && now.getDate() === d;
-};
-
-// ── Status badge ─────────────────────────────────────────────────────────────
-
-const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: BadgeTypeEnum }> = {
-  [LessonStatus.Waiting]:           { label: 'Еще не скоро',   cls: BadgeTypeEnum.Warning },
-  [LessonStatus.Warned]:            { label: 'Скоро',     cls: BadgeTypeEnum.Warning  },
-  [LessonStatus.Happened]:          { label: 'Прошло',    cls: BadgeTypeEnum.Positive },
-  [LessonStatus.Missed]:            { label: 'Пропущено', cls: BadgeTypeEnum.Negative  },
-  [LessonStatus.MissedWithoutReason]: { label: 'Пропущено', cls: BadgeTypeEnum.Negative },
-};
-
-const StatusBadge = ({ status }: { status: LessonStatus }) => {
+export const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
   return <Badge text={cfg.label} badgeType={cfg.cls} />;
 };
-
-// ── Upcoming lesson card ──────────────────────────────────────────────────────
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
   <Card hoverable={true} width={'100%'}>

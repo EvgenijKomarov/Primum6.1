@@ -7,9 +7,10 @@ import { translateAbonementStatus } from '@/features/translation/translation';
 
 interface AbonementInfoProps {
   abonementId: number;
+  badgeStyle?: string;
 }
 
-export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
+export const AbonementInfo = ({ abonementId, badgeStyle }: AbonementInfoProps) => {
     const [abonement, setAbonement] = useState<AbonementDto | null>(null);
     const [popupOpen, setPopupOpen] = useState(false);
 
@@ -27,10 +28,10 @@ export const AbonementInfo = ({ abonementId }: AbonementInfoProps) => {
     
     return (
         <div>
-            <div className={`${styles.abonementBadge} ${cfg.cls}`} onClick={() => setPopupOpen(true)}>
-                <span className={styles.abonementBadgeText}>
-                    {abonement?.studentDisplayName ?? ""}
-                </span>
+            <div 
+                className={`${badgeStyle ?? styles.abonementBadge} ${cfg.cls}`} 
+                onClick={() => setPopupOpen(true)}>
+                {abonement?.studentDisplayName ?? ""}
             </div>
         {popupOpen && (
                 <Popup

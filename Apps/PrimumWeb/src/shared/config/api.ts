@@ -16,8 +16,13 @@ export const api = {
     subscribe: "/student/subscribe",
   },
   studentLesson: {
-    getAll: "/student/lessons",
+    getLast: "/student/lessons/last",
     getFuture: "/student/lessons/future",
+  },
+  teacherLesson: {
+    getLast: "/teacher/lessons/last",
+    getFuture: "/teacher/lessons/future",
+    base: "/teacher/lessons"
   },
   teacher: {
     getProfile: "/teacher",
