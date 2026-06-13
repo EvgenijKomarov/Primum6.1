@@ -52,8 +52,7 @@ export const GradingPopup = ({ lessonId }: GradingPopupProps) => {
             <Badge text="Не оценено"
                 badgeType={BadgeTypeEnum.Negative} 
                 onClick={() => setPopupOpen(true)} 
-                hideDot={true} 
-                pointingCursor={true} />
+                hideDot={true} />
             {popupOpen && (
                 <Popup
                     title="Оценить занятие"

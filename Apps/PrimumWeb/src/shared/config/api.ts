@@ -33,7 +33,7 @@ export const api = {
     getSchedules: "/public/teachers",
   },
   teacherCourse: {
-    getCourses: "/teacher/courses",
+    base: "/teacher/courses",
   },
   publicTheme: {
     getThemes: "/public/themes",

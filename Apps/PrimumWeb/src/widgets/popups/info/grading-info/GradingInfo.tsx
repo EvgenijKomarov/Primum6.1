@@ -42,7 +42,7 @@ export const Gradinginfo = (input: GradingInfoProps) => {
             <Badge text={input.finalGrade.toString()} badgeType={
                 input.finalGrade >= 4 ? BadgeTypeEnum.Positive : 
                 input.finalGrade >= 2.5 ? BadgeTypeEnum.Warning : 
-                BadgeTypeEnum.Negative} onClick={() => setPopupOpen(true)} hideDot={true} pointingCursor={true} />
+                BadgeTypeEnum.Negative} onClick={() => setPopupOpen(true)} hideDot={true} />
         {popupOpen && (
                 <Popup 
                     title="Оценка занятия"

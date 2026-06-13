@@ -20,7 +20,7 @@ export const TeacherInfo = ({ teacherId }: TeacherInfoProps) => {
         }, []);
 
     return (
-        <div>
+        <div className={styles.badge}>
             <div className={styles.displayName} onClick={() => setPopupOpen(true)}>
                 {teacher?.displayName}
             </div>

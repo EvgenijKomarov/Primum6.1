@@ -5,7 +5,7 @@ import type { CourseDto, CourseDtoPageResult, CourseInputDto } from '@/entity/co
 export const getTeacherCourses = async (page = 0, pageSize = 50) => {
   return await fetcherInstance<CourseDtoPageResult>({
     method: 'GET',
-    url: api.teacherCourse.getCourses,
+    url: api.teacherCourse.base,
     params: { page, pageSize },
   });
 };
@@ -13,7 +13,24 @@ export const getTeacherCourses = async (page = 0, pageSize = 50) => {
 export const createCourse = async (data: CourseInputDto) => {
   return await fetcherInstance<number>({
     method: 'POST',
-    url: api.teacherCourse.getCourses,
+    url: api.teacherCourse.base,
+    data,
+  });
+};
+
+export const editCourse = async (courseId: number, data: CourseInputDto) => {
+  return await fetcherInstance<number>({
+    method: 'PUT',
+    url: `${api.teacherCourse.base}/${courseId}`,
+    data,
+  });
+};
+
+export const changeActivityCourse = async (courseId: number, data: boolean) => {
+  return await fetcherInstance<number>({
+    method: 'PATCH',
+    url: `${api.teacherCourse.base}/${courseId}/activity`,
+    headers: { 'Content-Type': 'application/json' },
     data,
   });
 };

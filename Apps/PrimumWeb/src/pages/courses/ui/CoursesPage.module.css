@@ -56,9 +56,10 @@
 }
 
 .badges {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   gap: 0.375rem;
+  max-width: 80%;
 }
 
 .meta {
@@ -121,4 +122,14 @@
 
 .descriptionText {
   font-size: 0.7rem;
+}
+
+.cardHead {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.pointingBadge {
+  cursor: pointer;
 }

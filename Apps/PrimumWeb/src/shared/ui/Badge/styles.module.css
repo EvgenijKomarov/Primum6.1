@@ -16,10 +16,7 @@
   border-radius: 9999px;
   white-space: nowrap;
   align-self: flex-start;
-}
-
-.pointingCursor {
-  cursor: pointer;
+  border: 1.5px solid transparent;
 }
 
 .Positive {
@@ -27,12 +24,27 @@
   color: var(--color-functional-success);
 }
 
+.PositiveBorder {
+  border: 1.5px solid var(--color-functional-success);
+  cursor: pointer;
+}
+
 .Warning {
   background-color: color-mix(in srgb, var(--color-functional-warning) 15%, transparent);
   color: var(--color-functional-warning);
 }
 
+.WarningBorder {
+  border: 1.5px solid var(--color-functional-warning);
+  cursor: pointer;
+}
+
 .Negative {
   background-color: color-mix(in srgb, var(--color-functional-error) 15%, transparent);
   color: var(--color-functional-error);
+}
+
+.NegativeBorder {
+  border: 1.5px solid var(--color-functional-error);
+  cursor: pointer;
 }

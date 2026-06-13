@@ -1,19 +1,32 @@
-import { useTeacherCourses } from '@/entity/course';
+import { changeActivityCourse, useTeacherCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import { Loader } from '@/shared/ui/Loader';
 
 import styles from './CoursesPage.module.css';
-import { BookIcon, PlusIcon } from '@/shared/icons/types';
+import { BookIcon, EditIcon, PlusIcon } from '@/shared/icons/types';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
 import { CreateCourseForm } from '@/widgets/popups/create-course';
 import { Card } from '@/shared/ui/Card/Card';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
+import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
+import { EditCourseForm } from '@/widgets/popups/edit-course/ui/EditCourseForm';
 
-const CourseCard = ({ course }: { course: CourseDto }) => {
+interface CourseCardProps {
+  course: CourseDto,
+  onMutate: () => void
+}
+const CourseCard = ({ course, onMutate }: CourseCardProps) => {
+  const [changeStatusPopupOpen, setChangeStatusPopupOpen] = useState(false);
+  const [editCoursePopupOpen, setEditCoursePopupOpen] = useState(false);
+
+  const handleChangeStatus = async () => {
+    await changeActivityCourse(course.id, !course.isActive); 
+    onMutate();
+  }
 
   return (
     <Card hoverable={true} width={'100%'}>
@@ -22,18 +35,47 @@ const CourseCard = ({ course }: { course: CourseDto }) => {
         <span className={styles.theme}>{course.courseThemeName}</span>
       </div>
 
-      <div className={styles.badges}>
-        {course.onCheck && (
-          <Badge text="На проверке" badgeType={BadgeTypeEnum.Warning} />
-        )}
-        {course.isAvailable === false && (
-          <Badge text="Недоступен" badgeType={BadgeTypeEnum.Negative} />
-        )}
-        {course.isActive ? (
-          <Badge text="Активен" badgeType={BadgeTypeEnum.Positive} />
-        ) : (
-          <Badge text="Скрыт" badgeType={BadgeTypeEnum.Negative} />
-        )}
+      <div className={styles.cardHead}>
+        <div className={styles.badges}>
+          {course.onCheck && (
+            <Badge text="На проверке" badgeType={BadgeTypeEnum.Warning} />
+          )}
+          {course.isAvailable === false && (
+            <Badge text="Недоступен" badgeType={BadgeTypeEnum.Negative} />
+          )}
+          {course.isActive ? (
+            <Badge 
+              text="Активен" 
+              className={styles.pointingBadge} 
+              badgeType={BadgeTypeEnum.Positive} 
+              onClick={() => {setChangeStatusPopupOpen(true)}}/>
+          ) : (
+            <Badge 
+              text="Скрыт" 
+              className={styles.pointingBadge} 
+              badgeType={BadgeTypeEnum.Negative} 
+              onClick={() => {setChangeStatusPopupOpen(true)}}/>
+          )}
+        </div>
+        <Button
+          icon={<EditIcon/>}
+          variant={ButtonTypeEnum.SECONDARY}
+          size={ButtonSizeEnum.SMALL}
+          onClick={() => {setEditCoursePopupOpen(true)}}
+          >
+        </Button>
+        {editCoursePopupOpen && <EditCourseForm 
+          course={course} 
+          setCoursePopupOpen={setEditCoursePopupOpen}
+          onSuccess={onMutate}
+          />}
+        {changeStatusPopupOpen && <EnsurancePopup
+          description={course.isActive ? 
+            'Вы уверены, что хотите скрыть курс от новых пользователей?' : 
+            'Вы уверены, что хотите сделать видимым курс для новых пользователей?'}
+          setPopupOpen={setChangeStatusPopupOpen}
+          onConfirm={() => {handleChangeStatus()}}
+          />}
       </div>
       <table className={styles.metaTable}>
         <tbody>
@@ -122,7 +164,7 @@ export const CoursesPage = () => {
       ) : (
         <div className={styles.grid}>
           {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseCard key={course.id} course={course} onMutate={mutate}/>
           ))}
         </div>
       )}
