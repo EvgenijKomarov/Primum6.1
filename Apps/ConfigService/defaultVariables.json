@@ -1,5 +1,6 @@
 {
   "CoreDatabaseConnection": "Host=localhost;Port=5432;Database=CoreDB;Username=postgres;Password=password;SSL Mode=Disable;Include Error Detail=true;",
   "RabbitMQConnection": "amqp://guest:guest@localhost:5672/",
-  "GatewayUrl": "http://127.0.0.1:5173"
+  "GatewayUrl": "http://127.0.0.1:5173",
+  "MongoDBUrl": "mongodb://localhost:27017"
 }

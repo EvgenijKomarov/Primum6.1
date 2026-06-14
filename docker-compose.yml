@@ -37,6 +37,20 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    
+  mongodb:
+    image: mongo:7
+    container_name: primum-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "4220:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - primum-network
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -63,6 +77,7 @@ services:
       - primum-network
     depends_on:
       - configservice
+      - mongodb
       
   email-notification-service:
     build:
