@@ -8,3 +8,9 @@ export interface StudentProfileDto {
   rank: string | null;
   experience: number;
 }
+
+export interface PaymentResponse {
+  error: string | null,
+  success: boolean,
+  url: string | null
+}

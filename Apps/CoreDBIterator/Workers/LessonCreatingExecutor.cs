@@ -44,7 +44,7 @@ namespace CoreDBIterator.Workers
             {
                 var freeDateTime = datetimeService.GetNextSuitableDateThisWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
 
-                s.LastIteration = freeDateTime;
+                s.LastIteration = DateTime.UtcNow;
                 logger.LogInformation($"Set LastIterationTime of {s.Id} for {freeDateTime}");
                 if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {

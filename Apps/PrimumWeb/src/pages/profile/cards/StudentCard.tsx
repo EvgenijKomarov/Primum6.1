@@ -5,6 +5,10 @@ import type { StudentProfileDto } from '@/entity/student';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
 import { StudentRankInfo } from '@/widgets/popups/rank-info/student-rank-info/StudentRankInfo';
+import { CoinIcon } from '@/shared/icons/types';
+import { useState } from 'react';
+import { Popup } from '@/shared/ui/Popup';
+import { Input } from '@/shared/ui/Input';
 
 interface Props {
   /** null = not created yet, undefined = loading */
@@ -13,10 +17,12 @@ interface Props {
   isLoading: boolean;
   isCreating: boolean;
   onCreate: () => void;
+  onRequestTopup: (amount: number) => void;
 }
 
-export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCreate }: Props) => {
-
+export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCreate, onRequestTopup }: Props) => {
+  const [topupPopupOpen, setTopupPopupOpen] = useState(false);
+  const [topupAmount, setTopupAmount] = useState(100);
   const hasProfile = isApproved !== null && isApproved !== undefined;
 
   return (
@@ -57,6 +63,37 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
                 value={value}
               />
             ))}
+          </div>
+          <div className={styles.buttons}>
+            <Button
+              variant={ButtonTypeEnum.PRIMARY}
+              size={ButtonSizeEnum.SMALL}
+              icon={<CoinIcon />}
+              onClick={() => {setTopupPopupOpen(true)}}
+            >
+              Пополнить балланс
+            </Button>
+            {topupPopupOpen && 
+              <Popup 
+                onClose={() => {setTopupPopupOpen(false)}}
+                title={'Пополнить балланс'}
+              >
+                <div className={styles.balancePopup}>
+                  <Input 
+                    value={topupAmount}
+                    onChange={(val) => {setTopupAmount(Number(val))}}
+                    placeholder="Введите сумму"
+                  />
+                  <Button
+                    variant={ButtonTypeEnum.PRIMARY}
+                    size={ButtonSizeEnum.SMALL}
+                    icon={<CoinIcon />}
+                    onClick={() => { onRequestTopup(topupAmount); }}
+                  >
+                    Пополнить
+                  </Button>
+                </div>
+              </Popup>}
           </div>
         </>
       )}

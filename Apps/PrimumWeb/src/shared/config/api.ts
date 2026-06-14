@@ -3,6 +3,10 @@ export const api = {
     login: "/public/login",
     register: "/public/register",
   },
+  studentBalance: {
+    topup: "/student/balance/request-topup",
+    withdrawn: "/student/balance/request-withdrawn"
+  },
   user: {
     getUserInfo: "/user/",
     sendEmailVerification: "/user/send-email-verification",

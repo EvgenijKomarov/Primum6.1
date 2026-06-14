@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaymentServiceConnection;
+using PaymentServiceConnection.Models;
 using PrimumWebAPI.Extensions;
 
 namespace PrimumWebAPI.Controllers
@@ -14,7 +15,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("request-topup")]
-        public async Task<ActionResult<string>> CreateTopupRequest([FromQuery] decimal amount)
+        public async Task<ActionResult<PaymentResponse>> CreateTopupRequest([FromQuery] decimal amount)
             => Ok(await paymentClient.RequestTopupStudentBalanceAsync(User.GetUserId(), amount));
 
         /// <summary>

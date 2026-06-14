@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { useStudentProfile } from '@/entity/student';
+import { topupStudentBallance, useStudentProfile } from '@/entity/student';
 import { useTeacherProfile } from '@/entity/teacher';
 import {
   createStudentProfile,
@@ -104,6 +104,11 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleTopupRequest = async (amount: number) => {
+    const url = (await topupStudentBallance(amount)).data.url;
+    if (url) { window.open(url, '_blank'); }
+  }
+
   const handleLogout = async () => {
     clearStore();
     await mutateUser(undefined, { revalidate: false });
@@ -166,6 +171,7 @@ export const ProfilePage = () => {
                 isLoading={studentLoading}
                 isCreating={isCreatingStudent}
                 onCreate={handleCreateStudent}
+                onRequestTopup={handleTopupRequest}
               />
 
               <TeacherCard

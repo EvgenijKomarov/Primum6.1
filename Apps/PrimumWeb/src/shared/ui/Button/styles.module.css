@@ -35,10 +35,6 @@
 .secondary {
   @apply bg-secondary-dark text-primary-base border-[rgba(0,0,0,0.02)];
 }
-.secondary svg,
-.secondary svg path {
-  @apply fill-primary-base;
-}
 .secondary:hover {
   @apply bg-secondary-darkest;
 }
@@ -53,23 +49,11 @@
 .text {
   @apply p-0 bg-transparent text-primary-base;
 }
-.text svg,
-.text svg path {
-  @apply fill-primary-base;
-}
 .text:hover {
   @apply text-primary-light;
 }
-.text:hover svg,
-.text:hover svg path {
-  @apply fill-primary-light;
-}
 .text:active {
   @apply text-primary-pressed;
-}
-.text:active svg,
-.text:active svg path {
-  @apply fill-primary-pressed;
 }
 .text-disabled {
   @apply p-0 bg-transparent text-disabled-text cursor-not-allowed;
@@ -78,10 +62,6 @@
 /* ── ICON ── */
 .icon {
   @apply p-0 bg-transparent w-10 h-10 flex items-center justify-center rounded-full text-primary-base;
-}
-.icon svg,
-.icon svg path {
-  @apply fill-primary-base;
 }
 .icon:hover {
   @apply bg-background-primary-hover;
