@@ -32,7 +32,7 @@
     "PublicUrl": "http://localhost:5008"
   },
   "PrimumWeb": {
-    "SelfUrl": "http://localhost:5008",
-    "PublicUrl": "http://localhost:5008"
+    "SelfUrl": "http://localhost:5009",
+    "PublicUrl": "http://localhost:5009"
   }
 }

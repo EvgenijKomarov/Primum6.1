@@ -16,8 +16,8 @@
     "PublicUrl": "http://publisherservice:5004"
   },
   "SignService": {
-    "SelfUrl": "http://0.0.0.0:8000",
-    "PublicUrl": "http://signservice:8000"
+    "SelfUrl": "http://0.0.0.0:5005",
+    "PublicUrl": "http://signservice:5005"
   },
   "ChatBotNotificationService": {
     "SelfUrl": "http://0.0.0.0:5006",
