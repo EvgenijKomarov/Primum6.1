@@ -31,7 +31,7 @@ def load_variable(name: str) -> str:
     response = requests.get(url, timeout=20.0)
     response.raise_for_status()  # выбросит исключение при 4xx/5xx
     
-    return response.text
+    return response.json()
 
 def load_host_and_port(route: str) -> tuple[str, int]:
     """
