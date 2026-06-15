@@ -4,7 +4,7 @@ import { getTeacherLessons, type LessonDto } from '@/entity/lesson';
 
 export const useTeacherLessons = () => {
   const { data, isLoading, mutate } = useSWR(
-    [api.teacherLesson.getAll],
+    [api.teacherLesson.getLast],
     async () => (await getTeacherLessons(0, 500)).data,
   );
 

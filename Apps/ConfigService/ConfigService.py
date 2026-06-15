@@ -21,7 +21,8 @@ if is_prod_mode:
         "CoreDatabaseConnection": getDbUrl("core_db"),
         "SignServiceDatabaseConnection": getDbUrl("signservice_db"),
         "RabbitMQConnection": f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASSWORD')}@{os.environ.get('RABBITMQ_HOST')}:{os.environ.get('RABBITMQ_PORT')}/",
-        "GatewayUrl": os.environ.get('GATEWAY_URL')
+        "GatewayUrl": os.environ.get('GATEWAY_URL'),
+        "MongoDBUrl": f"mongodb://{os.environ.get('MONGO_USERNAME')}:{os.environ.get('MONGO_PASSWORD')}@{os.environ.get('MONGO_HOST')}:{os.environ.get('MONGO_PORT')}/?authSource=admin"
     }
 else:
     with open(DEFAULT_VARIABLES_FILE, "r", encoding="utf-8") as f:

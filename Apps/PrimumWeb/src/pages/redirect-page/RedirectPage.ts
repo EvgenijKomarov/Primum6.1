@@ -22,9 +22,9 @@ export const RedirectPage = ({ apiUrl, redirectTo='/profile', defaultRedirect = 
         try {
             await fetcherInstance({
                 url: apiUrl,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            data: JSON.stringify(token),
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: JSON.stringify(token),
             });
             navigate(redirectTo, { replace: true });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

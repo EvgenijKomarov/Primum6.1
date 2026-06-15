@@ -8,10 +8,3 @@
   background-color: var(--color-background-base);
   padding: 1rem;
 }
-
-.card {
-  max-width: 40rem;
-  box-shadow: var(--сard-shadow);
-  /* max-height: 90dvh; */
-  /* overflow-y: auto; */
-}
