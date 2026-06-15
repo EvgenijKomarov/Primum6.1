@@ -1,4 +1,5 @@
-﻿using CoreConnection;
+﻿using CommonNotificationServiceClient;
+using CoreConnection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
@@ -65,7 +66,11 @@ namespace PrimumWebAPI.Extensions
             return builder;
         }
 
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl, string paymentUrl)
+        public static WebApplicationBuilder AddClients(
+            this WebApplicationBuilder builder, 
+            string coreUrl, 
+            string paymentUrl, 
+            string commonNotificationUrl)
         {
             builder.Services.AddHttpClient<AdminClient>()
                 .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
@@ -79,6 +84,8 @@ namespace PrimumWebAPI.Extensions
                 .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<PaymentServiceClient>()
                 .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentUrl));
+            builder.Services.AddHttpClient<CommonNotificationClient>()
+                .AddTypedClient((httpClient, sp) => new CommonNotificationClient(commonNotificationUrl, httpClient));
 
             return builder;
         }

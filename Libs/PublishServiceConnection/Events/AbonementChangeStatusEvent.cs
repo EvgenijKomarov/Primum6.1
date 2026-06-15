@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PublishServiceConnection.Events
 {
-    public class AbonementChangeStatusEvent : IChatBotNotification, IMailNotification
+    public class AbonementChangeStatusEvent : IChatBotNotification, IMailNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -39,6 +39,14 @@ namespace PublishServiceConnection.Events
             return new Dictionary<int, string>
             {
                 [TeacherUserId] = $"Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
+            };
+        }
+
+        public Dictionary<int, string> ToCommonNotifications()
+        {
+            return new Dictionary<int, string>
+            {
+                [TeacherUserId] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
             };
         }
     }

@@ -30,7 +30,10 @@ builder.AddAuth();
 builder.AddLogging();
 builder.AddControllers();
 builder.AddServices();
-builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl, solutionEnvironment.PaymentService.PublicUrl);
+builder.AddClients(
+    solutionEnvironment.PrimumCore.PublicUrl, 
+    solutionEnvironment.PaymentService.PublicUrl,
+    solutionEnvironment.CommonNotificationService.PublicUrl);
 builder.AddSwagger();
 
 var app = builder.Build();

@@ -34,5 +34,9 @@
   "PrimumWeb": {
     "SelfUrl": "http://0.0.0.0:5009",
     "PublicUrl": "http://primum-web:5009"
+  },
+  "CommonNotificationService": {
+    "SelfUrl": "http://0.0.0.0:5010",
+    "PublicUrl": "http://common-notification-service:5010"
   }
 }

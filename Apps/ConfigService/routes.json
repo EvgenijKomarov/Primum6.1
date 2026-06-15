@@ -34,5 +34,9 @@
   "PrimumWeb": {
     "SelfUrl": "http://localhost:5009",
     "PublicUrl": "http://localhost:5009"
+  },
+  "CommonNotificationService": {
+    "SelfUrl": "http://localhost:5010",
+    "PublicUrl": "http://localhost:5010"
   }
 }

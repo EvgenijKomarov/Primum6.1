@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PublishServiceConnection.Events
 {
-    public class LessonGradedEvent : IChatBotNotification, IMailNotification
+    public class LessonGradedEvent : IChatBotNotification, IMailNotification, ICommonNotification
     {
         public required string StudentDisplayName;
 
@@ -25,13 +25,17 @@ namespace PublishServiceConnection.Events
         public required float Grade;
 
         public required int EarnedCoins;
+        public required int CourseExp { get; set; }
+        public required int TeacherExp { get; set; }
+        public required int StudentExp { get; set; }
 
         public string MailTitle => "Оценка занятия";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
             {
-                [StudentUserId] = $"{Emoticons.Lesson}Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. {(EarnedCoins == 0 ? "" : $"{Emoticons.Coins}Начислено {EarnedCoins} монет!")}",
+                [StudentUserId] = $"{Emoticons.Lesson}Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. " +
+                    $"Получено {StudentExp} опыта. {(EarnedCoins == 0 ? "" : $"{Emoticons.Coins}Начислено {EarnedCoins} монет!")}",
             };
         }
 
@@ -39,7 +43,17 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [StudentUserId] = $"Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
+                [StudentUserId] = $"Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
+            };
+        }
+
+        public Dictionary<int, string> ToCommonNotifications()
+        {
+            return new Dictionary<int, string>
+            {
+                [StudentUserId] = $"Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. " +
+                    $"Получено {StudentExp} опыта. {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
+                [TeacherUserId] = $"Вы получили {TeacherExp} опыта, а Ваш курс {CourseName} - {CourseExp} опыта",
             };
         }
     }

@@ -79,6 +79,19 @@ services:
       - configservice
       - mongodb
       
+  common-notification-service:
+    build:
+      context: Apps/CommonNotificationService
+      dockerfile: Dockerfile
+    container_name: common-notification-service
+    environment:
+      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+    networks:
+      - primum-network
+    depends_on:
+      - configservice
+      - mongodb
+      
   email-notification-service:
     build:
       context: Apps/EmailNotificationService
@@ -202,3 +215,4 @@ networks:
 volumes:
   postgres-data:
   rabbitmq-data:
+  mongo-data:

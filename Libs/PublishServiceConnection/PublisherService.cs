@@ -27,6 +27,13 @@ namespace PublishServiceConnection
                     await PushNotification(notif.Key, notif.Value, routes.EmailNotificationService.PublicUrl);
                 }
             }
+            if (message is ICommonNotification commonNotification)
+            {
+                foreach (var notif in commonNotification.ToCommonNotifications())
+                {
+                    await PushNotification(notif.Key, notif.Value, routes.CommonNotificationService.PublicUrl);
+                }
+            }
         }
 
         private async Task PushNotification(int userId, string message, string route)

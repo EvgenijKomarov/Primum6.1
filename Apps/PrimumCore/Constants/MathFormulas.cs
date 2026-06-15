@@ -5,9 +5,6 @@ namespace PrimumCore.Constants
 {
     public class MathFormulas(IOptions<CoreConstants> constants)
     {
-        private Random random = new Random();
-        private int GetRandomExpBonus() => random.Next(0, 101);
-
         public int CoinFormula(float finalGrade, decimal lessonCost)
         {
             const float maximumCashback = 0.1f;
@@ -20,17 +17,17 @@ namespace PrimumCore.Constants
 
         public int StudentExpFormula(float finalGrade)
         {
-            return (int)(finalGrade * 100) + constants.Value.StudentLessonExpFloor + GetRandomExpBonus();
+            return (int)(finalGrade * 100) + constants.Value.StudentLessonExpFloor;
         }
 
         public int CourseExpFormula()
         {
-            return constants.Value.CourseGainExp + GetRandomExpBonus();
+            return constants.Value.CourseGainExp;
         }
 
         public int TeacherExpFormula()
         {
-            return constants.Value.CourseGainExp + GetRandomExpBonus();
+            return constants.Value.TeacherGainExp;
         }
     }
 }

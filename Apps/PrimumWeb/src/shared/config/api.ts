@@ -3,6 +3,10 @@ export const api = {
     login: "/public/login",
     register: "/public/register",
   },
+  userNotifications: {
+    getAll: "/user/common-notifications",
+    setSeen: "/user/common-notifications/set-seen"
+  },
   studentBalance: {
     topup: "/student/balance/request-topup",
     withdrawn: "/student/balance/request-withdrawn"

@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace PublishServiceConnection.Events
 {
-    public class LessonReadyEvent : IChatBotNotification, IMailNotification
+    public class LessonReadyEvent : IChatBotNotification, IMailNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -43,6 +43,15 @@ namespace PublishServiceConnection.Events
             {
                 [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
                 [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}"
+            };
+        }
+
+        public Dictionary<int, string> ToCommonNotifications()
+        {
+            return new Dictionary<int, string>
+            {
+                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n",
+                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n"
             };
         }
     }

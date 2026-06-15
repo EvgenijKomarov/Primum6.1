@@ -30,5 +30,8 @@ namespace SolutionConfiguration
 
         [JsonPropertyName("PaymentService")]
         public ServiceConfiguration PaymentService { get; set; } = null!;
+
+        [JsonPropertyName("CommonNotificationService")]
+        public ServiceConfiguration CommonNotificationService { get; set; } = null!;
     }
 }

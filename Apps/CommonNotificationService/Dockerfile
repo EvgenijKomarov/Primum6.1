@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "SignService:app", "--host", "0.0.0.0", "--port", "5005"]
+CMD ["uvicorn", "CommonNotificationService:app", "--host", "0.0.0.0", "--port", "5010"]

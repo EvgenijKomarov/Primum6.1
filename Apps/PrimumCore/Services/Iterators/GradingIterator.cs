@@ -30,12 +30,23 @@ namespace PrimumCore.Services.Iterators
             lesson.Grading = lessonGrading;
 
             var avgGrade = lessonGrading.GetFinalGrade();
+            var courseExp = formulas.CourseExpFormula();
+            var studentExp = formulas.StudentExpFormula(avgGrade);
+            var teacherExp = formulas.TeacherExpFormula();
+
+            //if lesson is free -> x2 exp for teacher
+            if (lesson.Price == 0)
+            {
+                courseExp = courseExp * 2;
+                teacherExp = teacherExp * 2;
+            }
 
             var addedCoins = formulas.CoinFormula(avgGrade, lesson.Price);
+
             lesson.Abonement.Student.Coins += addedCoins;
-            lesson.Abonement.Student.Experience += formulas.StudentExpFormula(avgGrade);
-            lesson.Abonement.Course.Experience += formulas.CourseExpFormula();
-            lesson.Abonement.Course.Teacher.Experience += formulas.TeacherExpFormula();
+            lesson.Abonement.Student.Experience += studentExp;
+            lesson.Abonement.Course.Experience += courseExp;
+            lesson.Abonement.Course.Teacher.Experience += teacherExp;
 
             await dbIterator.AddAsync(lessonGrading);
             await dbIterator.SaveChangesAsync();
@@ -50,7 +61,10 @@ namespace PrimumCore.Services.Iterators
                 TeacherDisplayName = lesson.Abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                 Grade = avgGrade,
-                EarnedCoins = addedCoins
+                EarnedCoins = addedCoins,
+                CourseExp = courseExp,
+                TeacherExp = teacherExp,
+                StudentExp = studentExp
             });
 
             return lesson.Id;

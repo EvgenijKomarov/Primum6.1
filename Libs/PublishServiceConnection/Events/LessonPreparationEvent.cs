@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PublishServiceConnection.Events
 {
-    public class LessonPreparationEvent : IChatBotNotification, IMailNotification
+    public class LessonPreparationEvent : IChatBotNotification, IMailNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -41,6 +41,16 @@ namespace PublishServiceConnection.Events
         }
 
         public Dictionary<int, string> ToMailNotifications()
+        {
+            return new Dictionary<int, string>
+            {
+                [TeacherUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
+                [StudentUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                    (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
+            };
+        }
+
+        public Dictionary<int, string> ToCommonNotifications()
         {
             return new Dictionary<int, string>
             {
