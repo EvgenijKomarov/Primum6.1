@@ -12,8 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BellIcon } from '@/shared/icons/types';
 import { useCommonNotifications } from '@/entity/commonNotification/model/useCommonNotifications';
 import { setSeenNotification } from '@/entity/commonNotification/api/common-notification.api';
-import { formatDateTime } from '@/pages/lessons/lessons.common';
-
+import { formatDateTime } from '@/shared/format/format-config';
 const Notifications = () => {
   const { notifications, isLoading, mutate } = useCommonNotifications();
   const [open, setOpen] = useState(false);

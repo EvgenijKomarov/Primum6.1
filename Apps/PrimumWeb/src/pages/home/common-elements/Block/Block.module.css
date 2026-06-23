@@ -1,0 +1,56 @@
+.cardChild {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-secondary-dark);
+}
+
+.cardTitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--color-primary-base);
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.cardText {
+    font-size: 1rem;
+}
+
+/* Начальное состояние элемента */
+.blockWrapper {
+  opacity: 0;
+  transform: translateY(40px); /* Смещение вниз на 40px */
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform; /* Подсказка браузеру для оптимизации рендеринга */
+  width: 80%;
+}
+
+/* Состояние, когда элемент попал в область видимости */
+.blockWrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Дополнительные стили для картинки, чтобы она была адаптивной */
+.cardImage {
+  width: 50%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px; /* Опционально, для красоты */
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .cardContent {
+    flex-direction: column;
+  }
+  .cardImage, .cardChild {
+    width: 100% !important;
+  }
+}

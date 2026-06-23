@@ -1,0 +1,152 @@
+.filterBar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-primary-base);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border: 1px solid color-mix(in srgb, var(--color-primary-base) 50%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary-base) 0%, transparent);
+  color: var(--color-primary-base);
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background-color: color-mix(in srgb, var(--color-primary-base) 10%, transparent);
+  color: var(--color-primary-light);
+}
+
+.chipActive {
+  background-color: color-mix(in srgb, var(--color-primary-base) 18%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary-base) 50%, transparent);
+  color: var(--color-primary-base);
+}
+
+.chipActive:hover {
+  background-color: color-mix(in srgb, var(--color-primary-base) 26%, transparent);
+  color: var(--color-primary-light);
+}
+
+.columns {
+    display: flex;
+    flex-direction: row;
+    gap: 0.7rem;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 0;
+  color: var(--color-secondary-light);
+  text-align: center;
+}
+
+.emptyText {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: var(--color-secondary-base);
+    width: 33%;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+}
+
+.cardTitle {
+    font-size: 1.2rem;
+}
+
+.cardAbout {
+    overflow: auto;
+    height: 10rem;
+    font-size: 0.6rem;
+    border-top: 1px solid var(--color-secondary-dark);
+    padding-top: 0.75rem;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-secondary-dark);
+  gap: 0.75rem;
+}
+
+.cardTeacher {
+  font-size: 0.8125rem;
+  color: var(--color-secondary-light);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardFooterRight {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+.cardPrice {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cardPriceFree {
+  color: var(--color-functional-success);
+}
+
+.cardMeta {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  border-top: 1px solid var(--color-secondary-dark);
+  padding-top: 0.75rem;
+  justify-content: space-between;
+}
+
+.cardMetaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.cardMetaLabel {
+  font-size: 0.63rem;
+  color: var(--color-secondary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.cardMetaValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}

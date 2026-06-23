@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import useSWRImmutable from 'swr/immutable';
 
 import { usePublicCourses } from '@/entity/course';
 import type { CourseDto } from '@/entity/course';
-import { getPublicThemes } from '@/entity/course-theme';
-import { api } from '@/shared/config/api.ts';
 
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
@@ -12,13 +9,7 @@ import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/Cour
 import { Card } from '@/shared/ui/Card/Card';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
-
-const usePublicThemes = () =>
-  useSWRImmutable(
-    [api.publicTheme.getThemes],
-    async () => (await getPublicThemes()).data,
-    { revalidateOnMount: true },
-  );
+import { usePublicThemes } from '@/entity/course-theme/model/usePublicThemes';
 
 interface CourseCardProps {
   course: CourseDto;

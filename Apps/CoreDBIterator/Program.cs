@@ -29,7 +29,6 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHttpClient<PaymentServiceClient>()
                 .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, solutionEnvironment.PaymentService.PublicUrl));
 
-        services.AddHostedService<DatabaseMigratorExecutor>();
         services.AddHostedService<LessonCreatingExecutor>();
         services.AddHostedService<LessonWarningExecutor>();
         services.AddHostedService<LessonIteratorExecutor>();

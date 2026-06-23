@@ -5,12 +5,12 @@ import styles from '../lessons.module.css';
 import { CalendarIcon, ExternalLinkIcon } from "@/shared/icons/types";
 import type { FutureLessonDto, LessonDto, LessonsByDateDto } from "@/entity/lesson";
 import { Card } from "@/shared/ui/Card/Card";
-import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from "../lessons.common";
 import { translateDayOfWeek } from "@/features/translation/translation";
 import { AbonementInfo } from "@/widgets/popups/info/abonement-info/AbonementInfo";
 import { Gradinginfo } from "@/widgets/popups/info/grading-info/GradingInfo";
 import { StatusBadge } from "../studentLessons/StudentLessonsPage";
 import { GradingPopup } from "@/widgets/popups/grading-popup/GradingPopup";
+import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from "@/shared/format/format-config";
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
   <Card hoverable={true} width={'100%'}>

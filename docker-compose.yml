@@ -21,6 +21,12 @@ services:
     container_name: configservice
     networks:
       - primum-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
 
   postgres:
     image: postgres:16-alpine
@@ -41,6 +47,18 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    
+  core-db-migrate:
+    build:
+      context: /Libs/CoreDBModel
+      dockerfile: Dockerfile
+    networks:
+      - primum-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      configservice:
+        condition: service_healthy
     
   mongodb:
     image: mongo:7
@@ -146,9 +164,10 @@ services:
       CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
     depends_on:
-      - configservice
-      - postgres
-      - rabbitmq
+      core-db-migrate:
+        condition: service_completed_successfully
+      configservice:
+        condition: service_healthy
     networks:
       - primum-network
 
@@ -194,8 +213,10 @@ services:
     environment:
       CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
     depends_on:
-      - configservice
-      - postgres
+      core-db-migrate:
+        condition: service_completed_successfully
+      configservice:
+        condition: service_healthy
     networks:
       - primum-network
 

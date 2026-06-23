@@ -11,8 +11,9 @@ import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { Gradinginfo } from '@/widgets/popups/info/grading-info/GradingInfo';
 import { Card } from '@/shared/ui/Card/Card';
 import { translateDayOfWeek } from '@/features/translation/translation';
-import { formatDateLabel, formatDateTime, formatTimeSlot, isToday, STATUS_CONFIG } from '../lessons.common';
+import { STATUS_CONFIG } from '../lessons.common';
 import { Badge } from '@/shared/ui/Badge/Badge';
+import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from '@/shared/format/format-config';
 
 export const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
