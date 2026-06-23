@@ -18,6 +18,8 @@ public partial class TeacherProfile: BaseEntity
     
     public int RankId { get; set; } = -1;
 
+    public float? ConvertionIndex { get; set; } = null;
+
     public TeacherRank Rank { get; set; } = null!;
 
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();

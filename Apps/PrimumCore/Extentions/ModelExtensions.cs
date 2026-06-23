@@ -117,7 +117,8 @@ namespace PrimumCore.Extentions
                 IsAvailable = AvailabilityExpressions.IsTeacherAvailable.Compile()(x),
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level,
-                Experience = x.Experience
+                Experience = x.Experience,
+                ConvertionIndex = x.ConvertionIndex
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 

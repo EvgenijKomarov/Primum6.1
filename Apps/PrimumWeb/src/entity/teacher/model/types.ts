@@ -6,4 +6,5 @@ export interface TeacherProfileDto {
   level: number;
   rank: string | null;
   experience: number;
+  convertionIndex: number | null;
 }

@@ -22,5 +22,7 @@ namespace CoreConnection.DTOs
         public required string Rank { get; set; }
 
         public required int Experience { get; set; }
+
+        public required float? ConvertionIndex { get; set; }
     }
 }

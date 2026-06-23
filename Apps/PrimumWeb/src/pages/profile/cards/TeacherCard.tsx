@@ -83,6 +83,7 @@ export const TeacherCard = ({
               { label: 'Уровень', value: profile.level },
               { label: 'Ранг', value: <TeacherRankInfo rankInput={profile.rank} /> },
               { label: 'Опыт', value: profile.experience },
+              { label: 'Конверсии', value: profile.convertionIndex ? profile.convertionIndex * 100 : '--'}
             ].map(({ label, value }) => (
               <StatCard
                 key={label}
