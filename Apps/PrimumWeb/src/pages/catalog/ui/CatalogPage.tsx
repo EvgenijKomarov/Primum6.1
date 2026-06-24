@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { usePublicCourses } from '@/entity/course';
-import type { CourseDto } from '@/entity/course';
+import type { CourseDtoLite } from '@/entity/course';
 
 import styles from './CatalogPage.module.css';
 import { EmptyIcon } from '@/shared/icons/types';
@@ -12,7 +12,7 @@ import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/Cour
 import { usePublicThemes } from '@/entity/course-theme/model/usePublicThemes';
 
 interface CourseCardProps {
-  course: CourseDto;
+  course: CourseDtoLite;
 }
 
 const CourseCard = ({ course }: CourseCardProps) => {
@@ -22,55 +22,57 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
   return (
     <Card hoverable={true} min_width={'30rem'}>
-      <div>
-        {course.courseThemeName && (
-          <span className={styles.cardTheme}>{course.courseThemeName}</span>
-        )}
-        <h3 className={styles.cardName}>{course.name ?? '—'}</h3>
-        {course.about && <p className={styles.cardAbout}>{course.about}</p>}
-      </div>
-
-      <div className={styles.cardMeta}>
-        <div className={styles.cardMetaItem}>
-          <span className={styles.cardMetaLabel}>Макс. уроков</span>
-          <span className={styles.cardMetaValue}>{course.maxLessons}</span>
+      <div className={styles.card}>
+        <div>
+          {course.courseThemeName && (
+            <span className={styles.cardTheme}>{course.courseThemeName}</span>
+          )}
+          <h3 className={styles.cardName}>{course.name ?? '—'}</h3>
+          {course.about && <p className={styles.cardAbout}>{course.about}</p>}
         </div>
-        {course.freeLessons > 0 && (
-          <div className={styles.cardMetaItem}>
-            <span className={styles.cardMetaLabel}>Бесплатно</span>
-            <span className={styles.cardMetaValue}>{course.freeLessons}</span>
-          </div>
-        )}
-        {course.rank && (
-          <div className={styles.cardMetaItem}>
-            <span className={styles.cardMetaLabel}>Ранг</span>
-            <CourseRankInfo rankInput={course.rank} />
-          </div>
-        )}
-      </div>
 
-      <div className={styles.cardFooter}>
-        <span className={styles.cardTeacher}>
-          <TeacherInfo teacherId={course.teacherId} />
-        </span>
-        <div className={styles.cardFooterRight}>
-          <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
-            {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}
+        <div className={styles.cardMeta}>
+          <div className={styles.cardMetaItem}>
+            <span className={styles.cardMetaLabel}>Макс. уроков</span>
+            <span className={styles.cardMetaValue}>{course.maxLessons}</span>
+          </div>
+          {course.freeLessons > 0 && (
+            <div className={styles.cardMetaItem}>
+              <span className={styles.cardMetaLabel}>Бесплатно</span>
+              <span className={styles.cardMetaValue}>{course.freeLessons}</span>
+            </div>
+          )}
+          {course.rank && (
+            <div className={styles.cardMetaItem}>
+              <span className={styles.cardMetaLabel}>Ранг</span>
+              <CourseRankInfo rankInput={course.rank} />
+            </div>
+          )}
+        </div>
+
+        <div className={styles.cardFooter}>
+          <span className={styles.cardTeacher}>
+            <TeacherInfo teacherId={course.teacherId} />
           </span>
-          <button
-            className={styles.subscribeBtn}
-            onClick={(e) => { e.stopPropagation(); setSubscribePopupOpen(true); }}
-          >
-            Записаться
-          </button>
+          <div className={styles.cardFooterRight}>
+            <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
+              {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}
+            </span>
+            <button
+              className={styles.subscribeBtn}
+              onClick={(e) => { e.stopPropagation(); setSubscribePopupOpen(true); }}
+            >
+              Записаться
+            </button>
+          </div>
         </div>
+        {subscribePopupOpen && (
+          <CourseScheduleSubscribe
+            course={course}
+            setSubscribePopupOpen={setSubscribePopupOpen}
+          />
+        )}
       </div>
-      {subscribePopupOpen && (
-        <CourseScheduleSubscribe
-          course={course}
-          setSubscribePopupOpen={setSubscribePopupOpen}
-        />
-      )}
     </Card>
   );
 };

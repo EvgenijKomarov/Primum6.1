@@ -65,6 +65,9 @@ public partial class PrimumContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
 
+            entity.Property(e => e.IsReferal)
+                .HasDefaultValue(false);
+
             entity.HasOne(d => d.Course).WithMany(p => p.Abonements)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);

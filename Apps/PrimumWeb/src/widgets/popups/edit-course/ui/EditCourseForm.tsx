@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import useSWRImmutable from 'swr/immutable';
 import { editCourse } from '@/entity/course';
-import type { CourseDto, CourseInputDto } from '@/entity/course';
+import type { CourseDtoLite, CourseInputDto } from '@/entity/course';
 import { getPublicThemes } from '@/entity/course-theme';
 import { api } from '@/shared/config/api.ts';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
@@ -12,7 +12,7 @@ import styles from './EditCourseForm.module.css';
 import { Popup } from '@/shared/ui/Popup';
 
 interface EditCourseFormProps {
-    course: CourseDto,
+    course: CourseDtoLite,
     setCoursePopupOpen: (open: boolean) => void;
     onSuccess?: () => void;
 }

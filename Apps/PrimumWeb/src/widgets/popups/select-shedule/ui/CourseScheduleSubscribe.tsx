@@ -4,7 +4,7 @@ import { getPublicTeacherSchedules } from '@/entity/teacher';
 import { subscribeToCourse } from '@/entity/student';
 import { DayOfWeek } from '@/entity/schedule';
 import type { TeacherScheduleDto } from '@/entity/schedule';
-import type { CourseDto } from '@/entity/course';
+import type { CourseDtoLite } from '@/entity/course';
 import { useFetch } from '@/shared/api/useFetch.ts';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
@@ -25,7 +25,7 @@ const DAY_ORDER: DayOfWeek[] = [
 ];
 
 interface Props {
-  course: CourseDto;
+  course: CourseDtoLite;
   setSubscribePopupOpen: (open: boolean) => void;
   onSubscribe?: () => void;
 }

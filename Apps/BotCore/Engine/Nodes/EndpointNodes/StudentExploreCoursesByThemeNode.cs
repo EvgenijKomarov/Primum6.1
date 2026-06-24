@@ -7,9 +7,9 @@ using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentExploreCoursesByThemeNode(PublicClient publicClient) : ScrollableEndpointNode<CourseDto>("stExplrCoursByTh")
+    public class StudentExploreCoursesByThemeNode(PublicClient publicClient) : ScrollableEndpointNode<CourseDtoLite>("stExplrCoursByTh")
     {
-        public override async Task<string> ItemInfo(CourseDto item, DataBuffer buffer)
+        public override async Task<string> ItemInfo(CourseDtoLite item, DataBuffer buffer)
         {
             return $"{Emoticons.Course}Курс:{item.Name}\n" +
                 $"{Emoticons.Cash}Стоимость урока:{item.Price}\n" +
@@ -27,7 +27,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             TotalCount = res.TotalPages;
             Item = res.Items?.FirstOrDefault();
         }
-        public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDto item, DataBuffer buffer)
+        public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDtoLite item, DataBuffer buffer)
         {
             return new List<EngineOutputButton>()
             {

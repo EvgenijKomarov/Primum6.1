@@ -16,6 +16,8 @@ public partial class Abonement: BaseEntity
 
     public float? Rating { get; set; } = null;
 
+    public bool IsReferal { get; set; } = false;
+
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 
     public virtual Course Course { get; set; } = null!;

@@ -1,4 +1,4 @@
-export interface CourseDto {
+export interface CourseDtoLite {
   id: number;
   name: string | null;
   teacherName: string | null;
@@ -13,9 +13,20 @@ export interface CourseDto {
   isActive: boolean;
   level: number;
   rank: string | null;
-  experience: number;
   isAvailable: boolean;
+}
+
+export interface CourseDto extends CourseDtoLite {
   onCheck: boolean;
+  experience: number;
+  referalLink: string;
+}
+
+export interface CourseDtoLitePageResult {
+  items: CourseDtoLite[] | null;
+  totalItemsCount: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface CourseDtoPageResult {

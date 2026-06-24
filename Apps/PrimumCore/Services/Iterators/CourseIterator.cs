@@ -1,19 +1,21 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using PrimumCore.Entities;
 using CoreDBModel.Models;
-using PrimumCore.Extentions;
 using CoreDBModel.Models.Enums;
+using PrimumCore.Entities;
+using PrimumCore.Extentions;
+using PrimumCore.Services.Utilities;
+using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class CourseIterator(DatabaseIterator dbIterator)
+    public class CourseIterator(DatabaseIterator dbIterator, RandomStringGenerator generator, ConfigurationClient configClient)
     {
         public async Task<PageResult<CourseDto>> GetCoursesByTeacher(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.Courses(isOnlyAvailable)
                 .Where(x => x.Teacher.User.Id == teacherId)
-                .ToDto()
+                .ToDto(await configClient.GetGatewayUrl())
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -21,25 +23,25 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator.Courses(isOnlyAvailable)
                 .Where(x => x.Teacher.User.Id == teacherId)
-                .ToDto()
+                .ToDto(await configClient.GetGatewayUrl())
                 .One(x => x.Id == courseId);
         }
 
-        public async Task<PageResult<CourseDto>> GetCourses(bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<CourseDtoLite>> GetCourses(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await dbIterator.Courses(isOnlyAvailable).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Courses(isOnlyAvailable).ToDtoLite().ToPageResult(_page, _pageSize);
         }
 
-        public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
+        public async Task<CourseDtoLite> GetCourse(int courseId, bool isOnlyAvailable)
         {
-            return await dbIterator.Courses(isOnlyAvailable).ToDto().One(x => x.Id == courseId);
+            return await dbIterator.Courses(isOnlyAvailable).ToDtoLite().One(x => x.Id == courseId);
         }
 
-        public async Task<PageResult<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<CourseDtoLite>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.Courses(isOnlyAvailable)
                 .Where(x => x.CourseTheme.Id == themeId)
-                .ToDto()
+                .ToDtoLite()
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -76,7 +78,8 @@ namespace PrimumCore.Services.Iterators
                 MaxLessons = courseDto.MaxLessons,
                 FreeLessons = courseDto.FreeLessons,
                 CourseThemeId = courseDto.CourseThemeId,
-                About = courseDto.Description
+                About = courseDto.Description,
+                ReferalToken = $"{teacherId}:{generator.GenerateRandomString()}"
             };
 
             teacher.Courses.Add(course);

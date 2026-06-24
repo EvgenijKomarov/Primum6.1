@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Block } from '../../common-elements/Block/Block';
 import styles from './CoursesBlock.module.css'
 import { usePublicThemes } from '@/entity/course-theme/model/usePublicThemes';
-import { usePublicCourses, type CourseDto } from '@/entity/course';
+import { usePublicCourses, type CourseDtoLite } from '@/entity/course';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 import { EmptyIcon } from '@/shared/icons/types';
 
 interface CourseCardProps {
-  course: CourseDto;
+  course: CourseDtoLite;
 }
 const CourseCard = ({ course }: CourseCardProps) => {
     const isFree = course.price === 0;

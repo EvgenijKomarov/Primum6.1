@@ -107,5 +107,9 @@ namespace PrimumCore.Controllers
         [HttpDelete("abonement-delete/{abonementId}")]
         public async Task<ActionResult<int>> DeleteAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.AbonementChangeStatus(userId, abonementId, AbonementStatus.Deleted));
+
+        [HttpPost("create-referal-abonement/{token}")]
+        public async Task<ActionResult<int>> CreateReferalAbonement([FromRoute] int userId, [FromRoute] string token)
+            => Ok(await abonementIterator.CreateReferalAbonement(userId, token));
     }
 }

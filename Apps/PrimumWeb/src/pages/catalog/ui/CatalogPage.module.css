@@ -105,6 +105,12 @@
 
 /* ── Course card ── */
 
+.card {
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+}
+
 .cardName {
   font-size: 1rem;
   font-weight: 600;
@@ -120,7 +126,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0;
+  margin: 0.5rem;
 }
 
 .cardMeta {

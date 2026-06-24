@@ -24,6 +24,8 @@ public partial class Course: BaseEntity
 
     public int Experience { get; set; } = 0;
 
+    public string ReferalToken { get; set; } = null!;
+
     public ApproveStatus ApproveStatus { get; set; } = ApproveStatus.NeedModeratorReview;
 
     public int RankId { get; set; } = -1;

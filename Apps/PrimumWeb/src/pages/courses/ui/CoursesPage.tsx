@@ -1,5 +1,5 @@
 import { changeActivityCourse, useTeacherCourses } from '@/entity/course';
-import type { CourseDto } from '@/entity/course';
+import type { CourseDtoLite } from '@/entity/course';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import { Loader } from '@/shared/ui/Loader';
@@ -16,7 +16,7 @@ import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePop
 import { EditCourseForm } from '@/widgets/popups/edit-course/ui/EditCourseForm';
 
 interface CourseCardProps {
-  course: CourseDto,
+  course: CourseDtoLite,
   onMutate: () => void
 }
 const CourseCard = ({ course, onMutate }: CourseCardProps) => {

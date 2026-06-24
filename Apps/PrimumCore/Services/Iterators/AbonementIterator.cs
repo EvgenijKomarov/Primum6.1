@@ -5,6 +5,8 @@ using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
+using CoreDBModel.Models;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -62,6 +64,32 @@ namespace PrimumCore.Services.Iterators
                 AbonementId = abonement.Id,
                 AbonementStatus = abonement.AbonementStatus.ToString()
             });
+            return abonement.Id;
+        }
+
+        public async Task<int> CreateReferalAbonement(int studentId, string token)
+        {
+            var course = await dbIterator.Courses(false)
+                .One(x => x.ReferalToken == token);
+            var student = await dbIterator.Students()
+                .Include(x => x.Abonements)
+                .One(x => x.User.Id == studentId);
+
+            if (student.Abonements.Any(x => x.CourseId == course.Id))
+            {
+                throw new BusinessLogicException("Abonement already created");
+            }
+
+            var abonement = new Abonement
+            {
+                Course = course,
+                PricePerLesson = course.Price,
+                FreeLessons = course.FreeLessons,
+                IsReferal = true
+            };
+            student.Abonements.Add(abonement);
+            
+            await dbIterator.SaveChangesAsync();
             return abonement.Id;
         }
     }

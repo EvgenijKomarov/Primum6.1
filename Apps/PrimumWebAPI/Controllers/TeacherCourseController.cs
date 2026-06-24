@@ -26,7 +26,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{courseId}")]
-        public async Task<ActionResult<CourseDto>> GetCourses([FromRoute] int courseId)
+        public async Task<ActionResult<CourseDto>> GetCourse([FromRoute] int courseId)
             => Ok(await client.CourseAsync(courseId, User.GetUserId()));
 
         /// <summary>

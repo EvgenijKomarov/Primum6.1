@@ -10,7 +10,7 @@ import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePop
 import { useEffect, useState } from 'react';
 import { DeleteStudentAbonementAsync, StudentAbonementChangeStatusAsync } from '@/entity/abonement/api/abonement.api';
 import { Badge } from '@/shared/ui/Badge/Badge';
-import { getPublicCourse, type CourseDto } from '@/entity/course';
+import { getPublicCourse, type CourseDtoLite } from '@/entity/course';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 
 interface SheduleBadgeProps {
@@ -62,7 +62,7 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
     const [changeStatusPopupOpen, setChangeStatusPopupOpen] = useState(false);
     const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
 
-    const [course, setCourse] = useState<CourseDto | null>(null);
+    const [course, setCourse] = useState<CourseDtoLite | null>(null);
 
     useEffect(() => {
         if (!abonement.courseId) return;

@@ -77,6 +77,10 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/confirm-chat',
     element: <RedirectPage apiUrl="/user/chat-signs" redirectTo="/profile" />,
+  },
+  {
+    path: '/referal',
+    element: <RedirectPage apiUrl="/student/abonements/referal" redirectTo="/student-abonements" />
   }
 ];
 

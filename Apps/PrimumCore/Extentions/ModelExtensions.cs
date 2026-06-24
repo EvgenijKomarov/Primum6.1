@@ -22,10 +22,31 @@ namespace PrimumCore.Extentions
                 CourseThemeId = x.Course.CourseTheme.Id,
                 PricePerLesson = x.PricePerLesson,
                 AbonementStatus = x.AbonementStatus,
-                Rating = x.Rating
+                Rating = x.Rating,
+                IsReferal = x.IsReferal,
             });
 
-        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable) => queryable.Select(x =>
+        public static IQueryable<CourseDtoLite> ToDtoLite(this IQueryable<Course> queryable) => queryable.Select(x =>
+            new CourseDtoLite
+            {
+                Id = x.Id,
+                Name = x.Name,
+                TeacherName = x.Teacher.User.DisplayName,
+                CourseThemeName = x.CourseTheme.ThemeName,
+                About = x.About,
+                CourseThemeId = x.CourseTheme.Id,
+                TeacherId = x.Teacher.User.Id,
+                Price = x.Price,
+                MaxLessons = x.MaxLessons,
+                FreeLessons = x.FreeLessons,
+                TeacherAbout = x.Teacher.About,
+                IsActive = x.IsActive,
+                IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
+                Rank = x.Rank.Rank,
+                Level = x.Rank.Level
+            });
+
+        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable, string gatewayUrl) => queryable.Select(x =>
             new CourseDto
             {
                 Id = x.Id,
@@ -45,6 +66,7 @@ namespace PrimumCore.Extentions
                 Level = x.Rank.Level,
                 Experience = x.Experience,
                 OnCheck = x.ApproveStatus != ApproveStatus.Approved,
+                ReferalLink = $"{gatewayUrl}/referal?token={x.ReferalToken}",
             });
 
         public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 
