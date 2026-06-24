@@ -23,7 +23,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(29rem, 1fr));
   gap: 1.25rem;
 }
 
@@ -156,4 +156,9 @@
 .emptyText {
   font-size: 0.9375rem;
   margin: 0;
+}
+
+.cardBadges {
+  display: flex;
+  gap: 0.2rem;
 }

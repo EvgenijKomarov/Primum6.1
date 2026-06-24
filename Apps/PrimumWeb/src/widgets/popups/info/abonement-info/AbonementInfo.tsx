@@ -3,7 +3,7 @@ import styles from '../styles.module.css';
 import { useEffect, useState } from 'react';
 import { getTeacherAbonementById } from '@/entity/abonement/api/abonement.api';
 import { Popup } from '@/shared/ui/Popup';
-import { translateAbonementStatus } from '@/features/translation/translation';
+import { translateAbonementStatus, translateBoolean } from '@/features/translation/translation';
 
 interface AbonementInfoProps {
   abonementId: number;
@@ -62,6 +62,10 @@ export const AbonementInfo = ({ abonementId, badgeStyle }: AbonementInfoProps) =
                             <div className={styles.row}>
                                 <span className={styles.label}>Статус: </span>
                                 <span className={styles.value}>{cfg.label}</span>
+                            </div>
+                            <div className={styles.row}>
+                                <span className={styles.label}>Реферальный: </span>
+                                <span className={styles.value}>{translateBoolean(abonement?.isReferal ?? false)}</span>
                             </div>
                         </div>
                     </div>

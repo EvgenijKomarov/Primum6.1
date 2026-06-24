@@ -29,4 +29,5 @@ export interface AbonementDto {
   pricePerLesson: number;
   rating: number | null;
   abonementStatus: AbonementStatus;
+  isReferal: boolean;
 }

@@ -51,3 +51,7 @@ export function translateGrade(grading: number, fixedLabel = false): { label: st
     hint: grade.hint
   };
 }
+
+export function translateBoolean(input: boolean): string {
+  return input ? 'Да' : 'Нет';
+}

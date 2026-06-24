@@ -12,6 +12,7 @@ import { DeleteStudentAbonementAsync, StudentAbonementChangeStatusAsync } from '
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { getPublicCourse, type CourseDtoLite } from '@/entity/course';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
+import { BadgeTypeEnum } from '@/shared/enums/badge';
 
 interface SheduleBadgeProps {
     dow: DayOfWeek;
@@ -114,14 +115,17 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
                     <span className={styles.title}>
                         {abonement.courseName}
                     </span>
-                    <Badge text={statusLabel} badgeType={badgeType} className={styles.cursorBadge} onClick={
+                    <div className={styles.cardBadges}>
+                        <Badge text={statusLabel} badgeType={badgeType} className={styles.cursorBadge} onClick={
                             () => {setChangeStatusPopupOpen(true) 
                         }} />
-                    {changeStatusPopupOpen && <EnsurancePopup
-                        setPopupOpen={setChangeStatusPopupOpen}
-                        onConfirm={status_config.handler}
-                        description={status_config.popupDescription}
-                        />}
+                        {abonement.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
+                        {changeStatusPopupOpen && <EnsurancePopup
+                            setPopupOpen={setChangeStatusPopupOpen}
+                            onConfirm={status_config.handler}
+                            description={status_config.popupDescription}
+                            />}
+                    </div>
                 </div>
                 <div className={styles.cardContent}>
                     <div className={styles.cardContentColumn}>
