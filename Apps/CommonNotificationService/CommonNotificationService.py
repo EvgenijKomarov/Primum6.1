@@ -69,7 +69,7 @@ async def add_notification(userId: int, message: str):
 async def get_by_user(userId: int):
     cursor = app.state.notifications.find(
         {"userId": userId}
-    ).sort([("seen", 1), ("datetime", 1)])
+    ).sort([("seen", 1), ("datetime", -1)])
 
     rows = await cursor.to_list(length=None)
     if not rows:

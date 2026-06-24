@@ -50,8 +50,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n"
+                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n Ссылка доступна в личном кабинете",
+                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n Ссылка доступна в личном кабинете"
             };
         }
     }
