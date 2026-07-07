@@ -32,6 +32,10 @@ namespace CoreConnection.DTOs
 
         public required float? Rating { get; set; }
 
+        public required int FreeLessons { get; set; }
+
+        public required int MaxLessons { get; set; }
+
         public required AbonementStatus AbonementStatus { get; set; }
 
         public required bool IsReferal { get; set; }

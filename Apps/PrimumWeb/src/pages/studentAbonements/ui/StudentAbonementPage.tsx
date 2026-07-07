@@ -153,7 +153,7 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
                                 id={schedule.id}
                                 onMutate={mutate} />
                         ))}
-                        {course?.maxLessons && course?.maxLessons > schedules.length && (
+                        {course && course.maxLessons && course.maxLessons > schedules.length && (
                             <div 
                                 className={styles.scheduleAddBadge}
                                 onClick={()=>{setSubscribePopupOpen(true)}}>

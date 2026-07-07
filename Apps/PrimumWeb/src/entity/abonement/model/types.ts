@@ -30,4 +30,6 @@ export interface AbonementDto {
   rating: number | null;
   abonementStatus: AbonementStatus;
   isReferal: boolean;
+  freeLessons: number;
+  maxLessons: number;
 }

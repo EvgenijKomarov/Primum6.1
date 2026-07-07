@@ -11,6 +11,8 @@ namespace PrimumCore.Extentions
         public static IQueryable<AbonementDto> ToDto(this IQueryable<Abonement> queryable) => queryable.Select(x => 
             new AbonementDto
             {
+                MaxLessons = x.Course.MaxLessons,
+                FreeLessons = x.FreeLessons,
                 StudentId = x.Student.User.Id,
                 StudentDisplayName = x.Student.User.DisplayName,
                 TeacherId = x.Course.Teacher.User.Id,

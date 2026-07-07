@@ -21,71 +21,7 @@
   color: var(--color-secondary-light);
   margin: 0;
 }
-
-/* ── Theme filter ── */
-
-.filterBar {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--color-secondary-dark);
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  height: 2rem;
-  padding: 0 0.875rem;
-  border-radius: 9999px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border: 1px solid color-mix(in srgb, var(--color-primary-base) 50%, transparent);
-  background-color: color-mix(in srgb, var(--color-primary-base) 0%, transparent);
-  color: var(--color-primary-base);
-  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.chip:hover {
-  background-color: color-mix(in srgb, var(--color-primary-base) 10%, transparent);
-  color: var(--color-primary-light);
-}
-
-.chipActive {
-  background-color: color-mix(in srgb, var(--color-primary-base) 18%, transparent);
-  border-color: color-mix(in srgb, var(--color-primary-base) 50%, transparent);
-  color: var(--color-primary-base);
-}
-
-.chipActive:hover {
-  background-color: color-mix(in srgb, var(--color-primary-base) 26%, transparent);
-  color: var(--color-primary-light);
-}
-
-/* ── Course grid ── */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-  gap: 1.25rem;
-}
-
-.skeleton {
-  border-radius: 0.875rem;
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-  height: 200px;
-}
-
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+/* ── Courses ── */
 
 .empty {
   grid-column: 1 / -1;
@@ -106,7 +42,7 @@
 /* ── Course card ── */
 
 .card {
-  height: 12rem;
+  width: 26rem;
   display: flex;
   flex-direction: column;
 }
@@ -121,18 +57,16 @@
 .cardAbout {
   font-size: 0.8125rem;
   color: var(--color-secondary-light);
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   margin: 0.5rem;
+  height: 20rem;
+  overflow-y: auto;
 }
 
 .cardMeta {
   display: flex;
-  gap: 1rem;
-  margin-top: 0.25rem;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
 }
 
 .cardMetaItem {
@@ -143,7 +77,7 @@
 }
 
 .cardMetaLabel {
-  font-size: 0.6875rem;
+  font-size: 0.7rem;
   color: var(--color-secondary-light);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -223,4 +157,22 @@
   background-color: color-mix(in srgb, var(--color-primary-base) 12%, transparent);
   color: var(--color-primary-base);
   cursor: pointer;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap:0.7rem;
+}
+
+.courseThemeTabHeader {
+  border-bottom: 1px solid var(--color-secondary-base);
+  margin-bottom: 1rem;
+}
+
+.courseThemeTabContent {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  overflow-x: auto;
 }

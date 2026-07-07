@@ -60,6 +60,10 @@ export const AbonementInfo = ({ abonementId, badgeStyle }: AbonementInfoProps) =
                                 <span className={styles.value}>{abonement?.rating ?? '--'}</span>
                             </div>
                             <div className={styles.row}>
+                                <span className={styles.label}>Бесплатных уроков: </span>
+                                <span className={styles.value}>{abonement?.freeLessons}</span>
+                            </div>
+                            <div className={styles.row}>
                                 <span className={styles.label}>Статус: </span>
                                 <span className={styles.value}>{cfg.label}</span>
                             </div>

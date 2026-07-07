@@ -56,7 +56,7 @@ namespace PublishServiceConnection.Events
             {
                 [TeacherUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}",
                 [StudentUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
-                    (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
+                    (IsEnoughMoney ? $"Вам должно хватить средств для оплаты занятия" : $"ВНИМАНИЕ! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
             };
         }
     }

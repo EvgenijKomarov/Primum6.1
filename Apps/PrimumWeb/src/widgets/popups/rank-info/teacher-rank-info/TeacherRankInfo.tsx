@@ -40,21 +40,12 @@ export const TeacherRankInfo = ({ rankInput }: TeacherRankInfoProps) => {
                         </thead>
                         <tbody>
                         {ranks.map((rank, index) => (
-                            rank.rank === rankInput ? (
-                                <tr key={`${rank.level}-${index}`} className={styles.highlightedRow}>
-                                    <td className={styles.td}>{rank.rank}</td>
-                                    <td className={styles.td}>{rank.level}</td>
-                                    <td className={styles.td}>{rank.requiredExperience}</td>
-                                    <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
-                                </tr>
-                            ) : (
-                                <tr key={`${rank.level}-${index}`}>
-                                    <td className={styles.td}>{rank.rank}</td>
-                                    <td className={styles.td}>{rank.level}</td>
-                                    <td className={styles.td}>{rank.requiredExperience}</td>
-                                    <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
-                                </tr>
-                            )
+                            <tr key={`${rank.level}-${index}`} className={rank.rank === rankInput ? styles.highlightedRow : ''}>
+                                <td className={styles.td}>{rank.rank}</td>
+                                <td className={styles.td}>{rank.level}</td>
+                                <td className={styles.td}>{rank.requiredExperience}</td>
+                                <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
+                            </tr>
                         ))}
                         </tbody>
                     </table>

@@ -10,11 +10,11 @@ import { Card } from '@/shared/ui/Card/Card';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 import { usePublicThemes } from '@/entity/course-theme/model/usePublicThemes';
+import type { CourseThemeDto } from '@/entity/course-theme';
 
 interface CourseCardProps {
   course: CourseDtoLite;
 }
-
 const CourseCard = ({ course }: CourseCardProps) => {
   const isFree = course.price === 0;
   const [subscribePopupOpen, setSubscribePopupOpen] = useState(false);
@@ -77,43 +77,18 @@ const CourseCard = ({ course }: CourseCardProps) => {
   );
 };
 
-export const CatalogPage = () => {
-  const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
+interface ThemeTabProps {
+  theme: CourseThemeDto
+}
+const ThemeTab = ({theme}: ThemeTabProps) => {
+  const { courses, isLoading } = usePublicCourses(theme.id);
 
-  const { data: themesResult, isLoading: themesLoading } = usePublicThemes();
-  const themes = themesResult?.items?.filter((t) => t.isActive) ?? [];
-
-  const { courses, isLoading: coursesLoading } = usePublicCourses(selectedThemeId);
-
-  const isLoading = themesLoading || coursesLoading;
-
-  return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Каталог курсов</h1>
-        <p className={styles.subtitle}>Выберите тему и найдите подходящий курс</p>
-      </div>
-
-      <div className={styles.filterBar}>
-        <button
-          className={`${styles.chip} ${selectedThemeId === null ? styles.chipActive : ''}`}
-          onClick={() => setSelectedThemeId(null)}
-        >
-          Все
-        </button>
-        {themes.map((theme) => (
-          <button
-            key={theme.id}
-            className={`${styles.chip} ${selectedThemeId === theme.id ? styles.chipActive : ''}`}
-            onClick={() => setSelectedThemeId(theme.id)}
-          >
-            {theme.themeName}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.grid}>
-        {isLoading ? (
+  return (<div className={styles.courseThemeTab}>
+    <h2 className={styles.courseThemeTabHeader}>
+      {theme.themeName}
+    </h2>
+    <div className={styles.courseThemeTabContent}>
+      {isLoading ? (
           Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className={styles.skeleton} />
           ))
@@ -121,7 +96,7 @@ export const CatalogPage = () => {
           <div className={styles.empty}>
             <EmptyIcon />
             <p className={styles.emptyText}>
-              {selectedThemeId ? 'Курсов по этой теме пока нет' : 'Курсов пока нет'}
+              'Курсов пока нет'
             </p>
           </div>
         ) : (
@@ -132,6 +107,28 @@ export const CatalogPage = () => {
             />
           ))
         )}
+    </div>
+  </div>);
+}
+
+export const CatalogPage = () => {
+  const { data: themesResult } = usePublicThemes();
+  const themes = themesResult?.items?.filter((t) => t.isActive) ?? [];
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Каталог курсов</h1>
+        <p className={styles.subtitle}>Выберите тему и найдите подходящий курс</p>
+      </div>
+
+      <div className={styles.content}>
+        {themes.map((theme) => (
+            <ThemeTab
+              key={theme.id}
+              theme={theme}
+            />
+          ))}
       </div>
     </div>
   );
