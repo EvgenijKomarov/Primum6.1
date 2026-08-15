@@ -71,5 +71,8 @@ export const api = {
     student: "/student/promocodes",
     available: "/student/promocodes/available",
     buy: "/student/promocodes/buy"
+  },
+  incidents: {
+    commonIncidents: "/admin/incidents"
   }
 }

@@ -157,7 +157,6 @@ namespace PrimumCore.Services.Utilities
                         ObjectId = x.Id,
                         Status = IncidentStatus.NeedModeration,
                         Meaning = IncidentMeaning.Teacher,
-                        PermissionBy = key.PermissionBy,
                         Decisions = decisions,
                         CommonInfo =
                             $"Name: {x.Name}\n" +
@@ -175,7 +174,6 @@ namespace PrimumCore.Services.Utilities
                         ObjectId = x.Id,
                         Status = IncidentStatus.NeedModeration,
                         Meaning = IncidentMeaning.Student,
-                        PermissionBy = key.PermissionBy,
                         Decisions = decisions,
                         CommonInfo =
                             $"Name: {x.Name}\n" +
@@ -192,7 +190,6 @@ namespace PrimumCore.Services.Utilities
                         ObjectId = x.Id,
                         Status = IncidentStatus.NeedModeration,
                         Meaning = IncidentMeaning.Course,
-                        PermissionBy = key.PermissionBy,
                         Decisions = decisions,
                         CommonInfo =
                             $"Name: {x.Name}\n" +
@@ -210,7 +207,6 @@ namespace PrimumCore.Services.Utilities
                         ObjectId = x.Id,
                         Status = IncidentStatus.NeedInspectation,
                         Meaning = IncidentMeaning.Lesson,
-                        PermissionBy = key.PermissionBy,
                         Decisions = decisions,
                         CommonInfo =
                             $"Student: {x.Abonement.Student.User.DisplayName}\n" +

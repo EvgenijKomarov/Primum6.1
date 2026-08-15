@@ -6,7 +6,12 @@ interface NavItem {
 }
 
 export const NAV_ITEMS: Record<Role, NavItem[]> = {
-  [Role.ADMIN]: [],
+  [Role.ADMIN]: [
+    {
+      label: "Инциденты",
+      path: "/incidents",
+    }
+  ],
   [Role.TEACHER]: [
     {
       label: "Мои курсы",

@@ -219,6 +219,7 @@
 
 .notificationText {
   font-size: 0.6rem;
+  padding: 1rem;
 }
 
 .notificationTab::after,

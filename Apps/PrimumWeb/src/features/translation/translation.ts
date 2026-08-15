@@ -2,6 +2,7 @@ import { AbonementStatus } from "@/entity/abonement/model/types";
 import { BadgeTypeEnum } from "@/shared/enums/badge";
 import styles from './styles.module.css'
 import { DayOfWeek } from "@/entity/schedule/model/types";
+import { IncidentDecision, IncidentMeaning, IncidentStatus } from "@/entity/incident/model/types";
 
 const STATUS_TRANSLATION: Record<AbonementStatus, {label: string, badgeType: BadgeTypeEnum, cls: string}> = {
         [AbonementStatus.Active]: { label: 'Активен', badgeType: BadgeTypeEnum.Positive, cls: styles.Positive},
@@ -18,6 +19,31 @@ const DAY_LABELS: Record<DayOfWeek, string> = {
   [DayOfWeek.Saturday]:  'Суббота',
   [DayOfWeek.Sunday]:    'Воскресенье',
 };
+
+const INCIDENT_STATUSES: Record<IncidentStatus, string> = {
+    [IncidentStatus.Unknown]: 'Неизвестен',
+    [IncidentStatus.NeedModeration]: 'Нужна модерация',
+    [IncidentStatus.NeedAdministration]: 'Нужно администрирование',
+    [IncidentStatus.NeedManagerApprovement]: 'Нужно одобрение менеджера',
+    [IncidentStatus.NeedInspectation]: 'Нужно разбирательство',
+};
+
+const INCIDENT_MEANINGS: Record<IncidentMeaning, string> = {
+    [IncidentMeaning.Unknown]: 'Неизвестно',
+    [IncidentMeaning.Teacher]: 'Преподаватель',
+    [IncidentMeaning.Student]: 'Ученик',
+    [IncidentMeaning.Course]: 'Курс',
+    [IncidentMeaning.Lesson]: 'Занятие',
+}
+
+const INCIDENT_DECISIONS: Record<IncidentDecision, string> = {
+    [IncidentDecision.Approve]: 'Утвердить',
+    [IncidentDecision.Delete]: 'Удалить',
+    [IncidentDecision.SendToAdministrator]: 'Отправить на исправление',
+    [IncidentDecision.SendToManager]: 'Отправить на утверждение',
+    [IncidentDecision.Revisioned]: 'Проведено разбирательство',
+    [IncidentDecision.BanUser]: 'Забанить пользователя',
+}
 
 const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
@@ -54,4 +80,16 @@ export function translateGrade(grading: number, fixedLabel = false): { label: st
 
 export function translateBoolean(input: boolean): string {
   return input ? 'Да' : 'Нет';
+}
+
+export function translateIncidentStatus(input: IncidentStatus): string {
+  return INCIDENT_STATUSES[input];
+}
+
+export function translateIncidentMeaning(input: IncidentMeaning): string {
+  return INCIDENT_MEANINGS[input];
+}
+
+export function translateIncidentDecision(input: IncidentDecision): string {
+  return INCIDENT_DECISIONS[input];
 }
