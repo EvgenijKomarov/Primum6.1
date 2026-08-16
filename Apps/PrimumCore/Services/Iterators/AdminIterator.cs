@@ -11,9 +11,18 @@ namespace PrimumCore.Services.Iterators
 {
     public class AdminIterator(DatabaseIterator dbIterator, AdminProfileHelper helper)
     {
-        public async Task<PageResult<AdminProfileDto>> GetAdmins(int _page, int _pageSize)
+        public async Task<PageResult<AdminProfileDto>> GetAdmins(string? displayName, int _page, int _pageSize)
         {
-            return await dbIterator.Admins().ToDto(helper).ToPageResult(_page, _pageSize);
+            return await dbIterator
+                .Admins()
+                .WhereIf(!string.IsNullOrEmpty(displayName), e => EF.Functions.Like(
+                    (
+                         (e.User.Surname ?? "") + " " +
+                         (e.User.Name ?? "") + " " +
+                         (e.User.Patronymic ?? "")).ToLower(),
+                    $"%{displayName.ToLower()}%"))
+                .ToDto(helper)
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<AdminProfileDto> GetAdmin(int userId)

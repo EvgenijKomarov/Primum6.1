@@ -236,7 +236,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserDtoPageResult> GetUsersAsync(int userId, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<UserDtoPageResult> GetUsersAsync(int userId, string? displayName = null, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -257,6 +257,10 @@ namespace CoreConnection
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append("/get-users");
                     urlBuilder_.Append('?');
+                    if (displayName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("displayName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(displayName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (page != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("page")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -408,7 +412,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AdminProfileDtoPageResult> AdminsAsync(int userId, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AdminProfileDtoPageResult> AdminsAsync(int userId, string? displayName = null, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -429,6 +433,10 @@ namespace CoreConnection
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append("/admins");
                     urlBuilder_.Append('?');
+                    if (displayName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("displayName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(displayName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (page != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("page")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append('&');

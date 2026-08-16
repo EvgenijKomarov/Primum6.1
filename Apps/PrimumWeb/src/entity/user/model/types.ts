@@ -14,6 +14,13 @@ export interface UserDto {
   isAvailable: boolean;
 }
 
+export interface UserDtoPageResult {
+  items: UserDto[] | null;
+  totalItemsCount: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export interface SendEmailVerificationRequest {
   correctiveMail?: string;
 }

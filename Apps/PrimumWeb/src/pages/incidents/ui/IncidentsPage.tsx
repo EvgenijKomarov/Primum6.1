@@ -8,6 +8,7 @@ import Button from '@/shared/ui/Button/Button';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums/button';
 import { useToast } from '@/shared/ui/Toast/useToast';
 import { solveIncident } from '@/entity/incident/api/incidents.api';
+import { EmptyIcon } from '@/shared/icons/types';
 
 export const IncidentCard = ({ incident, onMutate }: { incident: IncidentDto; onMutate: () => void }) => {
     const [incidentDescription, setIncidentDescription] = useState('');
@@ -94,9 +95,18 @@ export const IncidentsPage = () => {
             <p className={styles.line}></p>
 
             <div className={styles.incidentsList}>
-                {incidents.map((incident) => (
-                    <IncidentCard key={`${incident.objectId}-${incident.meaning}`} incident={incident} onMutate={mutate} />
-                ))}
+                {incidents.length > 0 ? (
+                    incidents.map((incident) => (
+                        <IncidentCard key={`${incident.objectId}-${incident.meaning}`} incident={incident} onMutate={mutate} />
+                    ))
+                ) : (
+                    <div className={styles.empty}>
+                        <EmptyIcon />
+                        <p className={styles.emptyText}>
+                            Инцидентов пока нет
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );

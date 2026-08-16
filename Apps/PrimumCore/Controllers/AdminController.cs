@@ -26,16 +26,16 @@ namespace PrimumCore.Controllers
             => Ok(await userIterator.GetUser(objectUserId, false));
 
         [HttpGet("get-users")]
-        public async Task<ActionResult<PageResult<UserDto>>> GetUsers([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await userIterator.GetUsers(false, page, pageSize));
+        public async Task<ActionResult<PageResult<UserDto>>> GetUsers([FromRoute] int userId, [FromQuery] string? displayName, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await userIterator.GetUsers(displayName, false, page, pageSize));
 
         [HttpGet("incidents")]
         public async Task<ActionResult<PageResult<IncidentDto>>> GetIncidents([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
             => Ok(await IncidentIterator.GetIncedents(userId, page, pageSize));
 
         [HttpGet("admins")]
-        public async Task<ActionResult<PageResult<AdminProfileDto>>> GetAdmins([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await iterator.GetAdmins(page, pageSize));
+        public async Task<ActionResult<PageResult<AdminProfileDto>>> GetAdmins([FromRoute] int userId,[FromQuery]string? displayName, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await iterator.GetAdmins(displayName, page, pageSize));
 
         [HttpGet("admin/{objectUserId}")]
         public async Task<ActionResult<AdminProfileDto>> GetAdmin([FromRoute] int userId, [FromRoute] int objectUserId) 

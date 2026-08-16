@@ -3,6 +3,10 @@ export const api = {
     login: "/public/login",
     register: "/public/register",
   },
+  adminProfile: {
+    self: "/admin",
+    other: "/admin/other-admins",
+  },
   userNotifications: {
     getAll: "/user/common-notifications",
     setSeen: "/user/common-notifications/set-seen"
@@ -18,6 +22,7 @@ export const api = {
     chatSigns: "/user/chat-signs",
     createTeacherProfile: "/user/create-teacher-profile",
     createStudentProfile: "/user/create-student-profile",
+    byAdmin: "/admin/users",
   },
   student: {
     getProfile: "/student",

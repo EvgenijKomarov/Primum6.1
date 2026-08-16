@@ -168,6 +168,8 @@ services:
         condition: service_completed_successfully
       configservice:
         condition: service_healthy
+    ports:
+      - "5004:5001"
     networks:
       - primum-network
 

@@ -90,9 +90,18 @@ namespace PrimumCore.Services.Iterators
             return await dbIterator.Users(isOnlyAvailable).ToDtoLite().One(x => x.Id == id);
         }
 
-        public async Task<PageResult<UserDto>> GetUsers(bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<UserDto>> GetUsers(string? displayName, bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await dbIterator.Users(isOnlyAvailable).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator
+                .Users(isOnlyAvailable)
+                .WhereIf(!string.IsNullOrEmpty(displayName), e => EF.Functions.Like(
+                    (
+                         (e.Surname ?? "") + " " +
+                         (e.Name ?? "") + " " +
+                         (e.Patronymic ?? "")).ToLower(),
+                    $"%{displayName.ToLower()}%"))
+                .ToDto()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<string> GetMail(int userId)

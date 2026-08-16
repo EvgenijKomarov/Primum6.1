@@ -16,9 +16,10 @@ namespace PrimumWebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<UserDtoPageResult>> GetUsers(
+            [FromQuery] string? displayName,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10) 
-            => Ok(await client.GetUsersAsync(User.GetUserId(), page, pageSize));
+            => Ok(await client.GetUsersAsync(User.GetUserId(), displayName, page, pageSize));
 
         /// <summary>
         /// Информация о конкретном пользователе

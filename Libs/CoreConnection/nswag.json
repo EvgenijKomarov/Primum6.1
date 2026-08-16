@@ -2,7 +2,7 @@
   "runtime": "Net100",
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://localhost:5001/swagger/v1/swagger.json",
+      "url": "http://localhost:5004/swagger/v1/swagger.json",
       "output": null
     }
   },
