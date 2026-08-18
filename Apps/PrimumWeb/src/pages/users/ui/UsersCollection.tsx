@@ -14,6 +14,7 @@ import { EmptyIcon } from "@/shared/icons/types";
 import { useState } from "react";
 import { Popup } from "@/shared/ui/Popup";
 import { Input } from "@/shared/ui/Input";
+import { useUserChatSigns } from "@/entity/chat-sign/model/useUserChatSigns";
 
 const AdminProfileCreation = ({userId, onMutate, isDisabled}: {userId: number, onMutate: () => void, isDisabled: boolean | undefined}) => {
     const [topupPopupOpen, setTopupPopupOpen] = useState(false);
@@ -40,7 +41,7 @@ const AdminProfileCreation = ({userId, onMutate, isDisabled}: {userId: number, o
                         <Button
                             variant={ButtonTypeEnum.PRIMARY}
                             size={ButtonSizeEnum.SMALL}
-                            onClick={() => {createAdminProfile(userId, status); onMutate()}}>
+                            onClick={async () => {await createAdminProfile(userId, status); await onMutate()}}>
                             Создать
                         </Button>
                     </div>
@@ -51,6 +52,8 @@ const AdminProfileCreation = ({userId, onMutate, isDisabled}: {userId: number, o
 };
 
 const UserCard = ({ user, onMutate, adminProfile }: { user: UserDto; onMutate: () => void; adminProfile: AdminProfileDto | undefined }) => {
+    const { signs } = useUserChatSigns(user.id)
+    
     return (
         <div className={styles.card}>
             <div className={styles.userInfo}>
@@ -60,13 +63,20 @@ const UserCard = ({ user, onMutate, adminProfile }: { user: UserDto; onMutate: (
                     {user.isBanned ? <Badge text="Забанен" badgeType={BadgeTypeEnum.Negative} /> : null}
                     {!user.mailConfirmed ? <Badge text="Почта не подтверждена" badgeType={BadgeTypeEnum.Negative} /> : null}
                     {user.isAvailable ? <Badge text="Доступен" badgeType={BadgeTypeEnum.Positive} /> : null}
+                    {user.isAdmin ? <Badge text="Админ" badgeType={BadgeTypeEnum.Positive} /> : null}
+                    {user.isApprovedTeacher ? <Badge text="Преподаватель" badgeType={BadgeTypeEnum.Positive} /> : null}
+                    {user.isApprovedStudent ? <Badge text="Ученик" badgeType={BadgeTypeEnum.Positive} /> : null}
                 </div>
             </div>
             <p className={styles.verticalLine}/>
-            <div className={styles.userRoles}>
-                <StatCard title="Студент" value={user.isApprovedStudent ? 'Да' : 'Нет'} />
-                <StatCard title="Преподаватель" value={user.isApprovedTeacher ? 'Да' : 'Нет'}/>
-                <StatCard title="Администратор" value={user.isAdmin ? 'Да' : 'Нет'} />
+            <div className={styles.userSigns}>
+                {signs && signs.length > 0 ? (
+                    signs.map((sign) => (
+                        <StatCard title={sign.realizationTag} value={sign.username}/>
+                    ))
+                ) : (
+                    <p>Нет привязанных мессенджеров</p>
+                )}
             </div>
             <p className={styles.verticalLine}/>
             <div className={styles.userActions}>
@@ -80,7 +90,7 @@ const UserCard = ({ user, onMutate, adminProfile }: { user: UserDto; onMutate: (
                     <Button 
                         disabled={!adminProfile?.permissions['CreateAdminProfiles']}
                         variant={ButtonTypeEnum.PRIMARY}
-                        onClick={() => {deleteAdminProfile(user.id); onMutate()}}>
+                        onClick={async () => {await deleteAdminProfile(user.id); await onMutate()}}>
                         Удалить профиль админа
                     </Button> : 
                     <AdminProfileCreation userId={user.id} onMutate={onMutate} isDisabled={!adminProfile?.permissions['CreateAdminProfiles']}/>

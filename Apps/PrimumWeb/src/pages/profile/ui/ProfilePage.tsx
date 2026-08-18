@@ -14,7 +14,7 @@ import {
 
 import styles from './ProfilePage.module.css';
 import { confirmChatSign } from '@/entity/chat-sign/api/chat-sign.api';
-import { useUserChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
+import { useChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
 import { PersonalInfoCard } from '../cards/PersonalInfoCard';
 import { EmailCard } from '../cards/EmailCard';
 import { ChatBotsCard } from '../cards/ChatBotsCard';
@@ -29,7 +29,7 @@ export const ProfilePage = () => {
   const { showToast } = useToast();
 
   const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
-  const { signs: chatSigns, mutate: mutateChatSigns } = useUserChatSigns(
+  const { signs: chatSigns, mutate: mutateChatSigns } = useChatSigns(
     user?.mailConfirmed === true,
   );
   const { studentProfile, isLoading: studentLoading } = useStudentProfile(

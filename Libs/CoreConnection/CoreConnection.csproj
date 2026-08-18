@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoreDBModel\CoreDBModel.csproj" />
+    <ProjectReference Include="..\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>

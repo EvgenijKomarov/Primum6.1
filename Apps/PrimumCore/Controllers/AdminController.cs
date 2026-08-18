@@ -3,6 +3,8 @@ using CoreConnection.DTOs.Inputs;
 using PrimumCore.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
+using CoreConnection;
+using SignServiceConnection.Models;
 
 namespace PrimumCore.Controllers
 {
@@ -14,7 +16,8 @@ namespace PrimumCore.Controllers
         IncidentIterator IncidentIterator,
         PromocodeIterator promocodeIterator,
         UserIterator userIterator,
-        ThemeIterator themeIterator
+        ThemeIterator themeIterator, 
+        ChatSignTokenIterator chatSignTokenIterator
         ) : PrimumController
     {
         [HttpGet("profile")]
@@ -104,5 +107,9 @@ namespace PrimumCore.Controllers
         [HttpDelete("delete-promocode/{promocodeId}")]
         public async Task<ActionResult<int>> DeletePromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.DeletePromocode(userId, promocodeId));
+
+        [HttpGet("get-user-chat-signs/{objectUserId}")]
+        public async Task<ActionResult<PageResult<ChatSign>>> GetUserChatSigns([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await chatSignTokenIterator.GetChatSigns(objectUserId, page, pageSize));
     }
 }

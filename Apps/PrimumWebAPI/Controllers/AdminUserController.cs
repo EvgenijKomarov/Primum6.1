@@ -29,6 +29,15 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("{objectUserId}")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int objectUserId)
             => Ok(await client.GetUserAsync(User.GetUserId(), objectUserId));
+        
+        /// <summary>
+        /// Чат-подписи пользователя
+        /// </summary>
+        /// <param name="objectUserId"></param>
+        /// <returns></returns>
+        [HttpGet("{objectUserId}/chat-signs")]
+        public async Task<ActionResult<UserDto>> GetUserChatSigns([FromRoute] int objectUserId)
+            => Ok(await client.GetUserChatSignsAsync(User.GetUserId(), objectUserId));
 
         /// <summary>
         /// Забанить/разбанить пользователя. Только для админов с правом ChangeBanStatus

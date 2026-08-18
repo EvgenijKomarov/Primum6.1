@@ -23,7 +23,7 @@ const AdminCard = ({ admin, onMutate, subjAdminProfile }: { admin: AdminProfileD
                     disabled={!subjAdminProfile?.permissions['CreateAdminProfiles']}
                     variant={ButtonTypeEnum.PRIMARY}
                     size={ButtonSizeEnum.SMALL}
-                    onClick={() => {deleteAdminProfile(admin.userId); onMutate()}}
+                    onClick={async () => {await deleteAdminProfile(admin.userId);await onMutate()}}
                     >
                     Удалить профиль
                 </Button>
@@ -73,7 +73,7 @@ const AdminProfilePopup = ({admin, onMutate, isDisabled}: {admin: AdminProfileDt
                         <Button
                             variant={ButtonTypeEnum.PRIMARY}
                             size={ButtonSizeEnum.SMALL}
-                            onClick={() => {changeAdminPermissions(admin.userId, permissions); onMutate(); setTopupPopupOpen(false)}}>
+                            onClick={async () => {await changeAdminPermissions(admin.userId, permissions); await onMutate(); await setTopupPopupOpen(false)}}>
                             Изменить
                         </Button>
                     </div>

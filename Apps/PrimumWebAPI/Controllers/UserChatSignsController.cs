@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrimumWebAPI.Extensions;
+using SignServiceConnection.Models;
 
 namespace PrimumWebAPI.Controllers
 {
@@ -18,7 +19,7 @@ namespace PrimumWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<ChatSignPageResult>> GetChatSigns([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
             => Ok(await client.ChatSignsAsync(User.GetUserId(), page, pageSize));
-
+        
         /// <summary>
         /// Добавляет чат-подпись для пользователя
         /// </summary>

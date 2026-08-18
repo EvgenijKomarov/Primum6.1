@@ -11,6 +11,14 @@ export const getChatSigns = async (page = 0, pageSize = 50) => {
   });
 };
 
+export const getChatSignsByAdmin = async (userId: number, page = 0, pageSize = 50) => {
+  return await fetcherInstance<ChatSignPageResult>({
+    method: 'GET',
+    url: `${api.user.byAdmin}/${userId}/chat-signs`,
+    params: { page, pageSize },
+  });
+};
+
 export const confirmChatSign = async (token: string) => {
   return await fetcherInstance({
     method: 'POST',
