@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Popup } from "@/shared/ui/Popup";
 import { Input } from "@/shared/ui/Input";
 import { createCourseTheme, editCourseTheme } from "@/entity/course-theme/api/course-theme.byAdmin";
-import { EmptyIcon } from "@/shared/icons/types";
+import { EditIcon, EmptyIcon, PlusIcon } from "@/shared/icons/types";
 import { Badge } from "@/shared/ui/Badge/Badge";
 import { BadgeTypeEnum } from "@/shared/enums/badge";
 
@@ -86,7 +86,7 @@ const ThemeInteractionPopup = ({onClose, onMutate, courseThemeDto}: {onClose:() 
                     variant={ButtonTypeEnum.PRIMARY}
                     size={ButtonSizeEnum.NORMAL}
                     isLoading={isSubmitting}>
-                    Добавить тему
+                    Принять
                 </Button>
             </form>
         </Popup>)
@@ -106,8 +106,9 @@ const ThemeCard = ({courseTheme, admin, onMutate} : {courseTheme: CourseThemeDto
         <Button 
             disabled={!admin?.permissions['EditCourseThemes']}
             variant={ButtonTypeEnum.PRIMARY}
+            icon={<EditIcon/>}
             onClick={async () => {setEditPopupOpen(true)}}>
-            Добавить тему
+            Реадктировать тему
         </Button>
         {editPopupOpen && <ThemeInteractionPopup 
                     onClose={() => setEditPopupOpen(false)}
@@ -127,6 +128,7 @@ export const ThemesList = (admin: AdminProfileDto | undefined) => {
                 <Button 
                         disabled={!admin?.permissions['EditCourseThemes']}
                         variant={ButtonTypeEnum.PRIMARY}
+                        icon={<PlusIcon/>}
                         onClick={async () => {setCreatePopupOpen(true)}}>
                         Добавить тему
                 </Button>

@@ -95,7 +95,8 @@ namespace PrimumCore.Extentions
                 AdminUserId = x.AdminProfile.User.Id,
                 AdminDisplayName = x.AdminProfile.User.DisplayName,
                 DateTime = x.CreatedAt,
-                Description = x.Description
+                Description = x.Description,
+                IsRevisioned = x.IsRevisioned
             });
 
         public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable

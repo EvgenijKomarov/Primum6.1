@@ -48,9 +48,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PageResult<IncidentLogDto>>> GetIncidentLogs(
             [FromRoute] int userId, 
             [FromQuery] bool OnlyUnrevisioned = true, 
+            [FromQuery] int? adminUserId = null, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10) 
-            => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned, page, pageSize));
+            => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned, adminUserId, page, pageSize));
 
         [HttpGet("incident-log/{logId}")]
         public async Task<ActionResult<IncidentLogDto>> GetIncidentLog([FromRoute] int userId, [FromRoute] int logId)

@@ -20,6 +20,7 @@ namespace PrimumCore.Extentions
                     AdminDisplayName = log.AdminProfile.User.DisplayName,
                     Id = log.Id,
                     Description = log.Description,
+                    IsRevisioned = log.IsRevisioned,
                     DateTime = log.CreatedAt
                 });
         }

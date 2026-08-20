@@ -38,9 +38,10 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("logs")]
         public async Task<ActionResult<IncidentLogDtoPageResult>> GetIncidentLogs(
             [FromQuery] bool OnlyUnrevisioned = true,
+            [FromQuery] int? adminUserId = null,
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await client.IncidentLogsAsync(User.GetUserId(), OnlyUnrevisioned, page, pageSize));
+            => Ok(await client.IncidentLogsAsync(User.GetUserId(), OnlyUnrevisioned, adminUserId, page, pageSize));
 
         /// <summary>
         /// Конкретный лог действия админа. Только для админов с правом InspectIncidentLogs

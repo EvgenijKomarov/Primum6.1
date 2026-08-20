@@ -19,11 +19,15 @@ namespace PrimumCore.Services.Iterators
             return await collector.GetIncedents(userPermissions, _page, _pageSize);
         }
 
-        public async Task<PageResult<IncidentLogDto>> GetIncidentLogs(int userId, bool OnlyUnrevisioned, int _page, int _pageSize)
+        public async Task<PageResult<IncidentLogDto>> GetIncidentLogs(int userId, bool OnlyUnrevisioned, int? adminUserId, int _page, int _pageSize)
         {
             await helper.CheckIteratingUser(userId, Permission.InspectIncidentLogs);
 
-            return await dbIterator.IncidentLogs(OnlyUnrevisioned).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator
+                .IncidentLogs(OnlyUnrevisioned)
+                .WhereIf(adminUserId is not null, e => e.AdminProfile.UserId == adminUserId)
+                .ToDto()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<IncidentLogDto> GetIncidentLog(int userId, int logId)

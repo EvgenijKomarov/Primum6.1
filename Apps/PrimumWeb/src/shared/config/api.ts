@@ -82,6 +82,7 @@ export const api = {
     byAdmin: "/admin/promocodes"
   },
   incidents: {
-    commonIncidents: "/admin/incidents"
+    commonIncidents: "/admin/incidents",
+    incidentLogs: "/admin/incidents/logs"
   }
 }

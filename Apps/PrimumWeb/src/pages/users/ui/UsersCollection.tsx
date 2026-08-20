@@ -10,7 +10,7 @@ import Button from "@/shared/ui/Button/Button";
 import { ButtonSizeEnum, ButtonTypeEnum } from "@/shared/enums";
 import { changeBanStatus, createAdminProfile } from "@/entity/user/api/userByAdmin.api";
 import { deleteAdminProfile } from "@/entity/admin/api/admin.api";
-import { EmptyIcon } from "@/shared/icons/types";
+import { DeleteIcon, EmptyIcon } from "@/shared/icons/types";
 import { useState } from "react";
 import { Popup } from "@/shared/ui/Popup";
 import { Input } from "@/shared/ui/Input";
@@ -90,6 +90,7 @@ const UserCard = ({ user, onMutate, adminProfile }: { user: UserDto; onMutate: (
                     <Button 
                         disabled={!adminProfile?.permissions['CreateAdminProfiles']}
                         variant={ButtonTypeEnum.PRIMARY}
+                        icon={<DeleteIcon/>}
                         onClick={async () => {await deleteAdminProfile(user.id); await onMutate()}}>
                         Удалить профиль админа
                     </Button> : 

@@ -5,7 +5,6 @@ namespace CoreDBModel.Models.Enums
     public enum Permission
     {
         EditPermissions = 0,
-        AddCash = 1,
         DeleteLessons = 2,
         [AvailableIncident(IncidentMeaning.Student, IncidentDecision.Approve)]
         [AvailableIncident(IncidentMeaning.Student, IncidentDecision.Delete)]

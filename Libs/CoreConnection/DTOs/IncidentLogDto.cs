@@ -18,5 +18,7 @@ namespace CoreConnection.DTOs
         public required string AdminDisplayName { get; set; }
 
         public required string Description { get; set; }
+
+        public required bool IsRevisioned { get; set; }
     }
 }

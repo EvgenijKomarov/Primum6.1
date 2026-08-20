@@ -4,7 +4,6 @@ import { usePublicCourses } from '@/entity/course';
 import type { CourseDtoLite } from '@/entity/course';
 
 import styles from './CatalogPage.module.css';
-import { EmptyIcon } from '@/shared/icons/types';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { Card } from '@/shared/ui/Card/Card';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
@@ -83,32 +82,26 @@ interface ThemeTabProps {
 const ThemeTab = ({theme}: ThemeTabProps) => {
   const { courses, isLoading } = usePublicCourses(theme.id);
 
-  return (<div className={styles.courseThemeTab}>
-    <h2 className={styles.courseThemeTabHeader}>
-      {theme.themeName}
-    </h2>
-    <div className={styles.courseThemeTabContent}>
-      {isLoading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className={styles.skeleton} />
-          ))
-        ) : courses.length === 0 ? (
-          <div className={styles.empty}>
-            <EmptyIcon />
-            <p className={styles.emptyText}>
-              'Курсов пока нет'
-            </p>
-          </div>
-        ) : (
-          courses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-            />
-          ))
-        )}
-    </div>
-  </div>);
+  return <>{ courses.length > 0 ?  <div className={styles.courseThemeTab}>
+        <h2 className={styles.courseThemeTabHeader}>
+          {theme.themeName}
+        </h2>
+        <div className={styles.courseThemeTabContent}>
+          {isLoading ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className={styles.skeleton} />
+              ))
+            ) : (
+              courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                />
+              ))
+            )}
+        </div>
+      </div> : null}
+    </>
 }
 
 export const CatalogPage = () => {

@@ -10,7 +10,7 @@ import type { PromocodeDto, PromocodeInputDto } from "@/entity/promocode/model/t
 import { Controller, useForm } from "react-hook-form";
 import { Input } from "@/shared/ui/Input";
 import { addPromocode, deletePromocode } from "@/entity/promocode/api/promocodesByAdmin.api";
-import { EmptyIcon } from "@/shared/icons/types";
+import { DeleteIcon, EmptyIcon, PlusIcon } from "@/shared/icons/types";
 
 const CreatePromocodePopup = ({onClose, onMutate}: {onClose:() => void, onMutate: () => void}) => {
     const {
@@ -122,6 +122,7 @@ const PromocodeCard = ({card, admin, onMutate}: {card: PromocodeDto, admin: Admi
                     onClick={async () => {await deletePromocode(); await onMutate();}}
                     disabled={(!admin?.permissions['DeletePromocodes']) || !card.isAvailable}
                     variant={ButtonTypeEnum.PRIMARY}
+                    icon={<DeleteIcon/>}
                     size={ButtonSizeEnum.NORMAL}>
                     Удалить промокод
                 </Button>
@@ -147,6 +148,7 @@ export const PromocodesList = (admin: AdminProfileDto | undefined) => {
                 <Button 
                         disabled={!admin?.permissions['AddPromocodes']}
                         variant={ButtonTypeEnum.PRIMARY}
+                        icon={<PlusIcon/>}
                         onClick={async () => {setCreatePopupOpen(true)}}>
                         Добавить промокод
                 </Button>

@@ -1,3 +1,5 @@
+import type { IncidentLogDto } from "@/entity/incidentLog/model/types";
+
 export enum IncidentStatus {
     Unknown = 0,
     NeedModeration = 1,
@@ -21,14 +23,6 @@ export enum IncidentDecision {
     SendToManager = 3,
     Revisioned = 4,
     BanUser = 5
-}
-
-export interface IncidentLogDto {
-    id: number;
-    adminUserId: number;
-    dateTime: Date;
-    adminDisplayName: string;
-    description: string;
 }
 
 export interface IncidentDto {
