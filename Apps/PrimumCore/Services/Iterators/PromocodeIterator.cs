@@ -14,9 +14,17 @@ namespace PrimumCore.Services.Iterators
 {
     public class PromocodeIterator(DatabaseIterator dbIterator, AdminProfileHelper helper)
     {
-        public async Task<PageResult<PromocodeDto>> GetPromocodes(bool onlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<PromocodeDto>> GetPromocodes(bool onlyAvailable, string? searchString, int _page, int _pageSize)
         {
-            return await dbIterator.Promocodes(onlyAvailable).ToDto(true).ToPageResult(_page, _pageSize);
+            return await dbIterator
+                .Promocodes(onlyAvailable)
+                .WhereIf(!string.IsNullOrEmpty(searchString), e => EF.Functions.Like(
+                    (
+                         (e.Title ?? "") + " " +
+                         (e.Description ?? "")).ToLower(),
+                    $"%{searchString.ToLower()}%"))
+                .ToDto(true)
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<PromocodeDto> GetPromocode(int promocodeId, bool onlyAvailable)

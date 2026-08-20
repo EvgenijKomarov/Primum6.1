@@ -13,6 +13,7 @@ import { StudentLessonsPage } from '@/pages/lessons/studentLessons';
 import { TeacherLessonsPage } from '@/pages/lessons/teacherLessons/TeacherLessonsPage';
 import { IncidentsPage } from '@/pages/incidents/ui/IncidentsPage';
 import { UsersPage } from '@/pages/users/ui/UsersPage';
+import { PlatformConfigPage } from '@/pages/platform/ui/PlatformConfigPage';
 
 interface RouteDef {
   path: string;
@@ -40,6 +41,11 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/incidents',
     element: <IncidentsPage />,
+    roles: [Role.ADMIN],
+  },
+  {
+    path: '/platform-config',
+    element: <PlatformConfigPage />,
     roles: [Role.ADMIN],
   },
   {

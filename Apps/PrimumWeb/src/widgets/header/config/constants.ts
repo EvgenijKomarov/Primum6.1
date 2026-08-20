@@ -14,6 +14,10 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
     {
       label: "Пользователи",
       path: "/users",
+    },
+    {
+      label: "Платформа",
+      path: "/platform-config",
     }
   ],
   [Role.TEACHER]: [

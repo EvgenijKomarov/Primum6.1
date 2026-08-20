@@ -77,8 +77,8 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetStudentPromocodes(userId, page, pageSize));
 
         [HttpGet("available-promocodes")]
-        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await promocodeIterator.GetPromocodes(true, page, pageSize));
+        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] string? searchString, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await promocodeIterator.GetPromocodes(true, searchString, page, pageSize));
 
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)

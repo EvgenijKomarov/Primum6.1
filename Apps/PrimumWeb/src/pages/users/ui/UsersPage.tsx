@@ -1,23 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './UsersPage.module.css';
 import { useSelfAdminProfile } from '@/entity/admin/model/useCurrentAdminProfile';
 import { UsersCollection } from './UsersCollection';
 import { AdminsCollection } from './AdminCollection';
+import { useDebouncedValue } from '@/shared/lib/debounced/debounced';
 
-function useDebouncedValue<T>(value: T, delay = 400): T {
-    const [debounced, setDebounced] = useState(value);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setDebounced(value), delay);
-        return () => clearTimeout(timer);
-    }, [value, delay]);
-
-    return debounced;
-}
-
-export const UsersPage = () => { //TODO: странно работает onMutate
-    const [displayName, setDisplayName] = useState('');
-    const debouncedDisplayName = useDebouncedValue(displayName, 400);
+export const UsersPage = () => {
+    const { debouncedValue, value, setValue } = useDebouncedValue('', 400);
 
     const [isAdminCollectionEnabled, setIsAdminCollectionEnabled] = useState(false);
     const { adminProfile } = useSelfAdminProfile();
@@ -28,8 +17,8 @@ export const UsersPage = () => { //TODO: странно работает onMutat
             <textarea
                 className={styles.textarea}
                 placeholder="Введите ФИО пользователя"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
             />
             <div className={styles.filterBar}>
                 <button
@@ -44,8 +33,8 @@ export const UsersPage = () => { //TODO: странно работает onMutat
                 </button>
             </div>
             {!isAdminCollectionEnabled ? 
-                <UsersCollection displayName={debouncedDisplayName} adminProfile={adminProfile}/> :
-                <AdminsCollection displayName={debouncedDisplayName} adminProfile={adminProfile}/>
+                <UsersCollection displayName={debouncedValue} adminProfile={adminProfile}/> :
+                <AdminsCollection displayName={debouncedValue} adminProfile={adminProfile}/>
             }
         </div>
     );

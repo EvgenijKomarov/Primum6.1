@@ -51,6 +51,9 @@ export const api = {
   publicTheme: {
     getThemes: "/public/themes",
   },
+  adminThemes: {
+    base: "/admin/themes"
+  },
   publicCourse: {
     getAll:     "/public/courses",
     getByTheme: "/public/courses/by-theme",
@@ -75,7 +78,8 @@ export const api = {
   promocodes: {
     student: "/student/promocodes",
     available: "/student/promocodes/available",
-    buy: "/student/promocodes/buy"
+    buy: "/student/promocodes/buy",
+    byAdmin: "/admin/promocodes"
   },
   incidents: {
     commonIncidents: "/admin/incidents"

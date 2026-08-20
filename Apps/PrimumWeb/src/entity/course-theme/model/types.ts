@@ -4,6 +4,11 @@ export interface CourseThemeDto {
   isActive: boolean;
 }
 
+export interface CourseThemeInputDto {
+  themeName: string;
+  isActive: boolean;
+}
+
 export interface CourseThemeDtoPageResult {
   items: CourseThemeDto[] | null;
   totalItemsCount: number;

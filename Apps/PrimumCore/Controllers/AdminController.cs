@@ -60,9 +60,13 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> RevisionIncidentLog([FromRoute] int userId, [FromRoute] int logId)
             => Ok(await IncidentIterator.RevisionIncidentLog(userId, logId));
 
+        [HttpGet("get-course-themes")]
+        public async Task<ActionResult<PageResult<CourseThemeDto>>> GetThemes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await themeIterator.GetThemes(false, page, pageSize));
+
         [HttpGet("all-promocodes")]
-        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await promocodeIterator.GetPromocodes(false, page, pageSize));
+        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] string? searchString, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await promocodeIterator.GetPromocodes(false, searchString, page, pageSize));
 
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)

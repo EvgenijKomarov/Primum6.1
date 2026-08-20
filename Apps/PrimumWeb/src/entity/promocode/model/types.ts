@@ -8,6 +8,13 @@ export interface PromocodeDto {
     isAvailable: boolean;
 }
 
+export interface PromocodeInputDto {
+  code: string,
+  coinsPrice: number,
+  title: string,
+  description: string
+}
+
 export interface PromocodeDtoPageResult {
   items: PromocodeDto[] | null;
   totalItemsCount: number;
