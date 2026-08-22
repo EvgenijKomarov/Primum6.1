@@ -34,6 +34,7 @@
        Visual Studio and specify your pre- and post-build commands in
        the BeforeBuild and AfterBuild targets below. -->
   <!--<Target Name="CoreCompile" />-->
+  <Target Name="GetTargetPath" Returns="" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
