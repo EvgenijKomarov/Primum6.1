@@ -14,14 +14,6 @@ app = FastAPI(title="PaymentService")
 processor = FakePaymentProcessor()
 core_payment_iterator = CorePaymentIterator(load_url("PrimumCore/PublicUrl"))
 
-@app.post("/force/topup-student-balance")
-def force_topup_student_balance(userId: int, amount: Decimal):
-    try:
-        core_payment_iterator.add_cash(userId, amount)
-    except Exception as e:
-        return {"success": False, "error": str(e)}
-    return {"success": True}
-
 @app.post("/request-topup-student-balance")
 def add_student_balance(userId: int, amount: Decimal):
     try:

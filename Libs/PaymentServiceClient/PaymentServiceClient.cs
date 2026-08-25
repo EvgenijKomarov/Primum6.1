@@ -24,17 +24,6 @@ namespace PaymentServiceConnection
         }
 
         /// <summary>
-        /// Принудительное пополнение баланса студента (минуя платежную систему)
-        /// </summary>
-        public async Task<PaymentResponse> ForceTopupStudentBalanceAsync(
-            int userId,
-            decimal amount,
-            CancellationToken ct = default)
-        {
-            return await PostAsync(Inv($"/force/topup-student-balance?userId={userId}&amount={amount}"), ct);
-        }
-
-        /// <summary>
         /// Запрос на пополнение баланса через платежную систему
         /// </summary>
         public async Task<PaymentResponse> RequestTopupStudentBalanceAsync(

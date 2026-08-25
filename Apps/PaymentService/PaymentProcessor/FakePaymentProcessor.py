@@ -3,9 +3,7 @@ from decimal import Decimal
 
 class FakePaymentProcessor(object):
 
-    def topup_student_balance(self, userId: int, amount: Decimal):
-        print(f"Fakely requested topup of {amount} RUB to user {userId}")
-        return "http://fake-payment.com/form"
+
 
     def withdrawn_student_balance(self, userId: int, amount: Decimal):
         print(f"Fakely withdrawned {amount} RUB to user {userId}")
