@@ -1,6 +1,6 @@
 import useSWRImmutable from 'swr/immutable';
 import { api } from '@/shared/config/api.ts';
-import { getStudentProfile } from '@/entity/student';
+import { getStudentBalance, getStudentProfile } from '@/entity/student';
 
 export const useStudentProfile = (enabled: boolean) => {
   const { data, isLoading, mutate } = useSWRImmutable(
@@ -10,4 +10,13 @@ export const useStudentProfile = (enabled: boolean) => {
   );
 
   return { studentProfile: data, isLoading, mutate };
+};
+
+export const useStudentBalance = () => {
+  const { data, isLoading, mutate } = useSWRImmutable(
+    [api.studentBalance.get],
+    async () => (await getStudentBalance()).data
+  );
+
+  return { studentBalance: data ? +data : null, isLoading, mutate };
 };

@@ -56,8 +56,9 @@ namespace CoreDBIterator.Workers
 
             foreach (var lesson in lessonsForIteration)
             {
-                if (lesson.Abonement.Student.Cash >= lesson.Price &&
-                    AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
+                var studentCash = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id);
+
+                if (studentCash >= lesson.Price && AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                 {
                     var teacher = lesson.Abonement.Course.Teacher;
                     var teacherCash = lesson.Price * Convert.ToDecimal(lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
@@ -67,7 +68,6 @@ namespace CoreDBIterator.Workers
                         teacherCash,
                         lesson.Price - teacherCash
                         );
-                    lesson.Abonement.Student.Cash -= lesson.Price;
                     lesson.Status = LessonStatus.Happened;
 
                     (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
@@ -89,7 +89,7 @@ namespace CoreDBIterator.Workers
                     });
                     logger?.LogInformation($"Lesson {lesson.Id} happened successfully");
                 }
-                else if (lesson.Abonement.Student.Cash < lesson.Price &&
+                else if (studentCash < lesson.Price &&
                     AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
                 {
                     lesson.Status = LessonStatus.Missed;

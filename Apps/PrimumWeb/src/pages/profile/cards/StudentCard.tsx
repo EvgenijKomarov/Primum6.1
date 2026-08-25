@@ -1,7 +1,7 @@
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
-import type { StudentProfileDto } from '@/entity/student';
+import { useStudentBalance, type StudentProfileDto } from '@/entity/student';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
 import { StudentRankInfo } from '@/widgets/popups/rank-info/student-rank-info/StudentRankInfo';
@@ -24,6 +24,8 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
   const [topupPopupOpen, setTopupPopupOpen] = useState(false);
   const [topupAmount, setTopupAmount] = useState(100);
   const hasProfile = isApproved !== null && isApproved !== undefined;
+
+  const { studentBalance } = useStudentBalance();
 
   return (
     <Card title="Профиль ученика"  width={'40rem'}>
@@ -54,7 +56,7 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
               { label: 'Ранг', value: <StudentRankInfo rankInput={profile.rank} /> },
               { label: 'Рейтинг', value: profile.rating != null ? profile.rating.toFixed(1) : '—' },
               { label: 'Монеты', value: profile.coins },
-              { label: 'Баланс', value: `${profile.cash.toFixed(2)} ₽` },
+              { label: 'Баланс', value: `${studentBalance ? studentBalance.toFixed(2) : '--'} ₽` },
               { label: 'Опыт', value: profile.experience },
             ].map(({ label, value }) => (
               <StatCard

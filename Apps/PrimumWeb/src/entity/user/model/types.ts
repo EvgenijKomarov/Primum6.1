@@ -5,7 +5,6 @@ export interface UserDto {
   surname: string | null;
   patronymic: string | null;
   displayName: string | null;
-  cash: number;
   isBanned: boolean;
   mailConfirmed: boolean;
   isApprovedStudent: boolean | null;

@@ -1,6 +1,7 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 
@@ -23,6 +24,7 @@ namespace CoreDBIterator.Workers
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
+            var paymentClient = scope.ServiceProvider.GetRequiredService<PaymentServiceClient>();
 
             var lessonsForPreparation = context.Set<Lesson>()
                 .Include(x => x.Abonement)
@@ -58,7 +60,7 @@ namespace CoreDBIterator.Workers
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
-                    IsEnoughMoney = lesson.Abonement.Student.Cash >= lesson.Price
+                    IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }

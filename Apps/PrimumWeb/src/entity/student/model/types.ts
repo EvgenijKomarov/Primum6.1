@@ -4,7 +4,6 @@ export interface StudentProfileDto {
   coins: number;
   rating: number | null;
   level: number;
-  cash: number;
   rank: string | null;
   experience: number;
 }

@@ -14,5 +14,6 @@ class FakePaymentProcessor(object):
         print(f"Fakely sent {teacherCash} RUB to teacher {teacherUserId}")
         print(f"Fakely sent {platformCash} RUB to platform")
 
-
-
+    def get_student_balance(self, refId: str):
+        print(f"Fakely get balance of student {refId}")
+        return 9999

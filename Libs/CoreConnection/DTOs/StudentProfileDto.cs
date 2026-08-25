@@ -19,8 +19,6 @@ namespace CoreConnection.DTOs
 
         public required int Level { get; set; }
 
-        public required decimal Cash { get; set; }
-
         public required string Rank { get; set; }
 
         public required int Experience { get; set; }

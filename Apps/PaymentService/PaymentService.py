@@ -48,6 +48,15 @@ def process_lesson_payment(studentUserId: int, teacherUserId: int, teacherCash: 
         return {"success": False, "error": str(e)}
     return {"success": True}
 
+@app.get("/get-student-balance/{studentUserId}")
+def get_student_balance(studentUserId: int):
+    try:
+        amount = processor.get_student_balance(studentUserId)
+    except Exception as e:
+        return None
+    return amount
+
+
 if __name__ == "__main__":
     print("Starting server initialization...")
     

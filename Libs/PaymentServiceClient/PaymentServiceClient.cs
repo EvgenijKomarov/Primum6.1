@@ -1,5 +1,6 @@
 ﻿using PaymentServiceConnection.Exceptions;
 using PaymentServiceConnection.Models;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -66,6 +67,34 @@ namespace PaymentServiceConnection
             CancellationToken ct = default)
         {
             return await PostAsync(Inv($"/process-lesson-payment?studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}"), ct);
+        }
+
+        public async Task<int?> GetStudentBalanceAsync(int studentUserId, CancellationToken ct = default)
+        {
+            int? amount = null;
+            try
+            {
+                var response = await _httpClient.GetAsync($"/get-student-balance/{studentUserId}");
+                response.EnsureSuccessStatusCode();
+                amount = int.Parse(await response.Content.ReadAsStringAsync(ct));
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new PaymentServiceException($"HTTP request error: {ex.Message}", ex);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new PaymentServiceException($"Request timeout");
+            }
+            catch (JsonException ex)
+            {
+                throw new PaymentServiceException($"JSON parsing error: {ex.Message}", ex);
+            }
+            catch (Exception ex) 
+            {
+                throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
+            }
+            return amount;
         }
 
         private async Task<PaymentResponse> PostAsync(string endpoint, CancellationToken ct)

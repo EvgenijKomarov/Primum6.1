@@ -31,3 +31,10 @@ export const withdrawnStudentBallance = async (amount: number) => {
     params: {amount: amount}
   })
 }
+
+export const getStudentBalance = async () => {
+  return await fetcherInstance<string>({
+    method: 'GET',
+    url: api.studentBalance.get
+  })
+}

@@ -18,6 +18,10 @@ namespace PrimumWebAPI.Controllers
         public async Task<ActionResult<PaymentResponse>> CreateTopupRequest([FromQuery] decimal amount)
             => Ok(await paymentClient.RequestTopupStudentBalanceAsync(User.GetUserId(), amount));
 
+        [HttpGet]
+        public async Task<ActionResult<int>> GetBalance()
+            => Ok(await paymentClient.GetStudentBalanceAsync(User.GetUserId()));
+
         /// <summary>
         /// Создать заявку на списание баланса. Пока ничего не возвращает.
         /// </summary>

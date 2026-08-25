@@ -26,20 +26,8 @@ namespace PrimumCore.Services.Iterators
                 Rating = student.Rating,
                 Level = student.Rank.Level,
                 Rank = student.Rank.Rank,
-                Cash = student.Cash,
                 Experience = student.Experience,
             };
-        }
-
-        public async Task<decimal> AddCash(int studentId, decimal amount)
-        {
-            var student = await dbIterator.Students()
-                .One(x => x.User.Id == studentId);
-
-            student.Cash += amount;
-
-            await dbIterator.SaveChangesAsync();
-            return student.Cash;
         }
 
         public async Task<int> SubscribeToCourse(int studentId, int courseId, int teacherSheduleId)

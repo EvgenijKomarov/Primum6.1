@@ -155,7 +155,6 @@ namespace PrimumCore.Extentions
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level,
                 Rating = x.Rating,
-                Cash = x.Cash,
                 Experience = x.Experience,
             });
 

@@ -13,7 +13,8 @@ export const api = {
   },
   studentBalance: {
     topup: "/student/balance/request-topup",
-    withdrawn: "/student/balance/request-withdrawn"
+    withdrawn: "/student/balance/request-withdrawn",
+    get: "/student/balance"
   },
   user: {
     getUserInfo: "/user/",
