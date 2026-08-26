@@ -56,61 +56,72 @@ namespace CoreDBIterator.Workers
 
             foreach (var lesson in lessonsForIteration)
             {
-                var studentCash = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id);
-
-                if (studentCash >= lesson.Price && AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
+                try
                 {
+                    var studentCash = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id);
                     var teacher = lesson.Abonement.Course.Teacher;
-                    var teacherCash = lesson.Price * Convert.ToDecimal(lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
-                    await paymentClient.ProcessLessonPaymentAsync(
-                        lesson.Abonement.Student.User.Id,
-                        teacher.User.Id,
-                        teacherCash,
-                        lesson.Price - teacherCash
-                        );
-                    lesson.Status = LessonStatus.Happened;
 
-                    (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
-                        DateTime.UtcNow.ToString() + lesson.AbonementId.ToString());
-                    lesson.StudentLink = tuple.guestLink;
-                    lesson.TeacherLink = tuple.adminLink;
-                    await publisher.Push(new LessonReadyEvent()
+                    if (!await paymentClient.IsTeacherReadyAsync(teacher.User.Id)) throw new Exception("Teacher not ready to process payments");
+
+                    if (studentCash >= lesson.Price && AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                     {
-                        StudentName = lesson.Abonement.Student.User.DisplayName,
-                        StudentUserId = lesson.Abonement.Student.User.Id,
-                        TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                        TeacherUserId = lesson.Abonement.Course.TeacherId,
-                        CourseName = lesson.Abonement.Course.Name,
-                        AbonementId = lesson.Abonement.Id,
-                        LessonId = lesson.Id,
-                        DateTime = lesson.DateTime,
-                        StudentLink = tuple.guestLink,
-                        TeacherLink = tuple.adminLink
-                    });
-                    logger?.LogInformation($"Lesson {lesson.Id} happened successfully");
-                }
-                else if (studentCash < lesson.Price &&
-                    AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
-                {
-                    lesson.Status = LessonStatus.Missed;
-                    var notification = new LessonFailureEvent()
+                        var teacherCash = lesson.Price * Convert.ToDecimal(lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
+                        await paymentClient.ProcessLessonPaymentAsync(
+                            lesson.Id,
+                            lesson.Abonement.Student.User.Id,
+                            teacher.User.Id,
+                            teacherCash,
+                            lesson.Price - teacherCash
+                            );
+                        lesson.Status = LessonStatus.Happened;
+
+                        (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
+                            DateTime.UtcNow.ToString() + lesson.AbonementId.ToString());
+                        lesson.StudentLink = tuple.guestLink;
+                        lesson.TeacherLink = tuple.adminLink;
+                        await publisher.Push(new LessonReadyEvent()
+                        {
+                            StudentName = lesson.Abonement.Student.User.DisplayName,
+                            StudentUserId = lesson.Abonement.Student.User.Id,
+                            TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                            TeacherUserId = lesson.Abonement.Course.TeacherId,
+                            CourseName = lesson.Abonement.Course.Name,
+                            AbonementId = lesson.Abonement.Id,
+                            LessonId = lesson.Id,
+                            DateTime = lesson.DateTime,
+                            StudentLink = tuple.guestLink,
+                            TeacherLink = tuple.adminLink
+                        });
+                        logger?.LogInformation($"Lesson {lesson.Id} happened successfully");
+                    }
+                    else if (studentCash < lesson.Price &&
+                        AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
                     {
-                        StudentName = lesson.Abonement.Student.User.DisplayName,
-                        StudentUserId = lesson.Abonement.Student.User.Id,
-                        TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                        TeacherUserId = lesson.Abonement.Course.TeacherId,
-                        CourseName = lesson.Abonement.Course.Name,
-                        AbonementId = lesson.Abonement.Id,
-                        LessonId = lesson.Id,
-                        DateTime = lesson.DateTime
-                    };
-                    await publisher.Push(notification);
-                    logger?.LogInformation($"Lesson {lesson.Id} not happened");
+                        lesson.Status = LessonStatus.Missed;
+                        var notification = new LessonFailureEvent()
+                        {
+                            StudentName = lesson.Abonement.Student.User.DisplayName,
+                            StudentUserId = lesson.Abonement.Student.User.Id,
+                            TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                            TeacherUserId = lesson.Abonement.Course.TeacherId,
+                            CourseName = lesson.Abonement.Course.Name,
+                            AbonementId = lesson.Abonement.Id,
+                            LessonId = lesson.Id,
+                            DateTime = lesson.DateTime
+                        };
+                        await publisher.Push(notification);
+                        logger?.LogInformation($"Lesson {lesson.Id} not happened");
+                    }
+                    else //Занятие пропущено по сторонним причинам
+                    {
+                        logger?.LogInformation($"Lesson {lesson.Id} missed due to non-active abonement");
+                        context.Set<Lesson>().Remove(lesson);
+                    }
                 }
-                else //Занятие пропущено по сторонним причинам
+                catch (Exception ex) 
                 {
-                    logger?.LogInformation($"Lesson {lesson.Id} missed due to non-active abonement");
-                    context.Set<Lesson>().Remove(lesson);
+                    lesson.Status = LessonStatus.MissedDueToException;
+                    logger?.LogInformation($"Lesson {lesson.Id} iteration failed", ex);
                 }
             }
 

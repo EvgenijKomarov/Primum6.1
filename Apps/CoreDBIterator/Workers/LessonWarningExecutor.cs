@@ -60,7 +60,8 @@ namespace CoreDBIterator.Workers
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
-                    IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price
+                    IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price,
+                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.TeacherId)
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }

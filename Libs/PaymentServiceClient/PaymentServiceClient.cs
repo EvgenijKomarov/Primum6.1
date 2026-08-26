@@ -49,13 +49,14 @@ namespace PaymentServiceConnection
         /// Обработка оплаты урока
         /// </summary>
         public async Task<PaymentResponse> ProcessLessonPaymentAsync(
+            int lessonId,
             int studentUserId,
             int teacherUserId,
             decimal teacherCash,
             decimal platformCash,
             CancellationToken ct = default)
         {
-            return await PostAsync(Inv($"/process-lesson-payment?studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}"), ct);
+            return await PostAsync(Inv($"/process-lesson-payment?lessonId={lessonId}&studentUserId={studentUserId}&teacherUserId={teacherUserId}&teacherCash={teacherCash}&platformCash={platformCash}"), ct);
         }
 
         public async Task<int?> GetStudentBalanceAsync(int studentUserId, CancellationToken ct = default)
@@ -80,6 +81,34 @@ namespace PaymentServiceConnection
                 throw new PaymentServiceException($"JSON parsing error: {ex.Message}", ex);
             }
             catch (Exception ex) 
+            {
+                throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
+            }
+            return amount;
+        }
+
+        public async Task<bool> IsTeacherReadyAsync(int teacherUserId, CancellationToken ct = default)
+        {
+            bool amount = false;
+            try
+            {
+                var response = await _httpClient.GetAsync($"/is-teacher-ready/{teacherUserId}");
+                response.EnsureSuccessStatusCode();
+                amount = bool.Parse(await response.Content.ReadAsStringAsync(ct));
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new PaymentServiceException($"HTTP request error: {ex.Message}", ex);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new PaymentServiceException($"Request timeout");
+            }
+            catch (JsonException ex)
+            {
+                throw new PaymentServiceException($"JSON parsing error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
             {
                 throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
             }

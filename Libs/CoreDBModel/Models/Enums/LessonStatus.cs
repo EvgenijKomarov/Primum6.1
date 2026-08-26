@@ -12,6 +12,7 @@ namespace CoreDBModel.Models.Enums
         Warned = 1, // предупрежден за сутки
         Happened = 2, // произошло
         Missed = 3, //пропущено без объяснений, надо разобраться почему
-        MissedWithoutReason = 4 //пропущено без уважительной причины
+        MissedWithoutReason = 4, //пропущено без уважительной причины
+        MissedDueToException = 5 // пропущено из-за технических проблем или ошибок
     }
 }

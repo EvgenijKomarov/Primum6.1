@@ -21,7 +21,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CorePaymentIterator.py" />
     <Compile Include="get_url.py" />
     <Compile Include="PaymentProcessor\FakePaymentProcessor.py" />
     <Compile Include="PaymentService.py" />
