@@ -3,10 +3,9 @@ import os
 import uvicorn
 from pymongo import MongoClient, ASCENDING
 from PaymentProcessor.FakePaymentProcessor import FakePaymentProcessor
-from get_url import load_host_and_port, load_variable
 from fastapi import FastAPI
  
-MONGO_URI = load_variable("MongoDBUrl")
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "paymentservice"
  
 is_prod_mode = os.getenv("MODE", "Development") == "Production"
@@ -121,12 +120,9 @@ def get_student_balance(studentUserId: int):
 if __name__ == "__main__":
     print("Starting server initialization...")
  
-    HOST, PORT = load_host_and_port("PaymentService/SelfUrl")
-    print(f"Binding to http://{HOST}:{PORT}")
- 
     uvicorn.run(
         f"PaymentService:app",
-        host=HOST,
-        port=PORT,
+        host="0.0.0.0",
+        port=5000,
         log_level="info"
     )

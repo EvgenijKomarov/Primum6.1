@@ -96,7 +96,7 @@ services:
       dockerfile: Dockerfile
     container_name: signservice
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
     volumes:
       - ./Apps/SignService:/app
     networks:
@@ -111,7 +111,7 @@ services:
       dockerfile: Dockerfile
     container_name: common-notification-service
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
     volumes:
       - ./Apps/CommonNotificationService:/app
     networks:
@@ -126,8 +126,7 @@ services:
       dockerfile: Dockerfile
     container_name: email-notification-service
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
-      MODE: "Production"
+      CORE_URL: "http://primumcore:5001"
       EMAIL: ${EMAIL}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     volumes:
@@ -143,8 +142,8 @@ services:
       dockerfile: Dockerfile
     container_name: payment-service
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
-      MODE: "Production"
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
+      MODE: "Development"
     volumes:
       - ./Apps/PaymentService:/app
     networks:
@@ -158,8 +157,8 @@ services:
       dockerfile: Dockerfile
     container_name: chat-bot-notification-service
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
-      MODE: "Development"
+      SIGNSERVICE_URL: "http://signservice:5000"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/"
     volumes:
       - ./Apps/ChatBotNotificationService:/app
     networks:

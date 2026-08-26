@@ -22,7 +22,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EmailNotificationService.py" />
-    <Compile Include="get_url.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />

@@ -4,11 +4,10 @@ from UserCreate import UserCreate
 import os
 import logging
 import uvicorn
-from get_url import load_url, load_host_and_port, load_variable
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import DuplicateKeyError
 
-MONGO_URI = load_variable("MongoDBUrl")
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "signservice"
 
 logging.basicConfig(
@@ -28,12 +27,6 @@ async def lifespan(app: FastAPI):
     await app.state.users.create_index(
         [("realizationTag", 1), ("chatId", 1)], unique=True
     )
-    try:
-        app.state.url = load_url("SignService/SelfUrl")
-        print(f"Loaded selfUrl (runtime): {app.state.url}")
-    except Exception as e:
-        print(f"Failed to load config at runtime: {e}")
-        app.state.url = None
     yield
     print("Shutting down service...")
     app.state.mongo_client.close()
@@ -90,13 +83,9 @@ async def get_by_user(userId: int):
 if __name__ == "__main__":
     print("Starting server initialization...")
 
-    HOST, PORT = load_host_and_port("SignService/SelfUrl")
-    print(f"Binding to http://{HOST}:{PORT}")
-
     uvicorn.run(
         "SignService:app",
-        host=HOST,
-        port=PORT,
-        log_level="info",
-        reload=os.getenv("RELOAD_MODE", "false").lower() == "true"
+        host="0.0.0.0",
+        port=5000,
+        log_level="info"
     )

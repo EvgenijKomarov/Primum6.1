@@ -8,13 +8,10 @@ import aio_pika
 import smtplib
 import requests
 from email.message import EmailMessage
-from get_url import load_url, load_variable, load_host_and_port
 
-is_prod_mode = os.getenv("MODE", "Development") == "Production"
-
-EMAIL=os.getenv("EMAIL", "")
-EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD", "")
-CORE_URL=load_url("PrimumCore/PublicUrl")
+EMAIL=os.getenv("EMAIL")
+EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD")
+CORE_URL=os.getenv("CORE_URL")
 
 app = FastAPI(title="FastAPI → SMTP")
 
@@ -46,24 +43,18 @@ def send_email(address: str, subject: str, body: str):
 
 @app.post("/publish")
 def publish(userId: int, message: str):
-    if is_prod_mode:
-        response = requests.get(f"{CORE_URL}/api/user/{userId}/get-mail", timeout=10)
-        response.raise_for_status()
-        address = response.text.strip()
-        send_email(address, "SYSTEM", message)
-        print(f"Successfully sent to {address} message: {message}")
-    else:
-        print(f"Send to user {userId} mail with message {message}")
+    response = requests.get(f"{CORE_URL}/api/user/{userId}/get-mail", timeout=10)
+    response.raise_for_status()
+    address = response.text.strip()
+    send_email(address, "SYSTEM", message)
+    print(f"Successfully sent to {address} message: {message}")
 
 if __name__ == "__main__":
     print("Starting server initialization...")
     
-    HOST, PORT = load_host_and_port("EmailNotificationService/SelfUrl")
-    print(f"Binding to http://{HOST}:{PORT}")
-    
     uvicorn.run(
         f"EmailNotificationService:app",
-        host=HOST,
-        port=PORT,
+        host="0.0.0.0",
+        port=5000,
         log_level="info"
     )

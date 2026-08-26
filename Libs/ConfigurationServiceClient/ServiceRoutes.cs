@@ -16,9 +16,6 @@ namespace SolutionConfiguration
         [JsonPropertyName("BotCore")]
         public ServiceConfiguration BotCore { get; set; } = null!;
 
-        [JsonPropertyName("PublisherService")]
-        public ServiceConfiguration PublisherService { get; set; } = null!;
-
         [JsonPropertyName("SignService")]
         public ServiceConfiguration SignService { get; set; } = null!;
 

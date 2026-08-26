@@ -11,10 +11,6 @@
     "SelfUrl": "http://localhost:5003",
     "PublicUrl": "http://localhost:5003"
   },
-  "PublisherService": {
-    "SelfUrl": "http://localhost:5004",
-    "PublicUrl": "http://localhost:5004"
-  },
   "SignService": {
     "SelfUrl": "http://localhost:5005",
     "PublicUrl": "http://localhost:5005"

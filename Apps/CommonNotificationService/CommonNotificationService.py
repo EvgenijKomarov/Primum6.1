@@ -3,14 +3,13 @@ from fastapi import FastAPI, HTTPException
 import os
 import logging
 import uvicorn
-from get_url import load_url, load_host_and_port, load_variable
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import DuplicateKeyError
 from bson import ObjectId
 from bson.errors import InvalidId
 from datetime import datetime, timezone
 
-MONGO_URI = load_variable("MongoDBUrl")
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "commonnotifications"
 
 logging.basicConfig(
@@ -28,12 +27,6 @@ async def lifespan(app: FastAPI):
     app.state.db = app.state.mongo_client[DB_NAME]
     app.state.notifications = app.state.db["notifications"]
     await app.state.notifications.create_index([("userId", 1), ("datetime", -1)])
-    try:
-        app.state.url = load_url("CommonNotificationService/SelfUrl")
-        print(f"Loaded selfUrl (runtime): {app.state.url}")
-    except Exception as e:
-        print(f"Failed to load config at runtime: {e}")
-        app.state.url = None
     yield
     print("Shutting down service...")
     app.state.mongo_client.close()
@@ -108,13 +101,9 @@ async def set_seen(notif_id: str):
 if __name__ == "__main__":
     print("Starting server initialization...")
 
-    HOST, PORT = load_host_and_port("CommonNotificationService/SelfUrl")
-    print(f"Binding to http://{HOST}:{PORT}")
-
     uvicorn.run(
         "CommonNotificationService:app",
-        host=HOST,
-        port=PORT,
-        log_level="info",
-        reload=os.getenv("RELOAD_MODE", "false").lower() == "true"
+        host="0.0.0.0",
+        port=5000,
+        log_level="info"
     )

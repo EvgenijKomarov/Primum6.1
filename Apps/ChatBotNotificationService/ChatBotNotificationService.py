@@ -6,10 +6,9 @@ from pydantic import BaseModel
 import uvicorn
 import pika
 import requests
-from get_url import load_variable, load_url, load_host_and_port
 
-RABBITMQ_URL = load_variable("RabbitMQConnection")
-SIGNSERVICE_URL = load_url("SignService/PublicUrl")
+RABBITMQ_URL = os.getenv("RABBITMQ_URL")
+SIGNSERVICE_URL = os.getenv("SIGNSERVICE_URL")
 
 is_prod_mode = os.getenv("MODE", "Development") == "Production"
 parameters = pika.URLParameters(RABBITMQ_URL)
@@ -17,29 +16,26 @@ parameters = pika.URLParameters(RABBITMQ_URL)
 app = FastAPI(title="FastAPI → RabbitMQ Publisher")
 
 def rabbitmq_post(tag: str, userChatId: int, username: str, message: str):
-    if is_prod_mode:
-        with pika.BlockingConnection(parameters) as connection:
-            channel = connection.channel()
+    with pika.BlockingConnection(parameters) as connection:
+        channel = connection.channel()
     
-            # 1. Объявляем fanout-обменник (durable=True = переживёт перезагрузку брокера)
-            channel.exchange_declare(exchange=tag, exchange_type='fanout', durable=True)
+        # 1. Объявляем fanout-обменник (durable=True = переживёт перезагрузку брокера)
+        channel.exchange_declare(exchange=tag, exchange_type='fanout', durable=True)
 
-            # Формируем JSON-сообщение и конвертируем в байты
-            message_body = json.dumps({
-                "userChatId": userChatId,
-                "username": username,
-                "message": message
-            }).encode('utf-8')
+        # Формируем JSON-сообщение и конвертируем в байты
+        message_body = json.dumps({
+            "userChatId": userChatId,
+            "username": username,
+            "message": message
+        }).encode('utf-8')
 
-            channel.basic_publish(
-                exchange=tag,
-                routing_key='',
-                body=message_body,
-                properties=pika.BasicProperties(delivery_mode=2) # persistent
-            )
-            print(f"✅Pushed on {tag}: {message}")
-    else:
-        print(f"Fakely pushed on: {tag}: {message}")
+        channel.basic_publish(
+            exchange=tag,
+            routing_key='',
+            body=message_body,
+            properties=pika.BasicProperties(delivery_mode=2) # persistent
+        )
+        print(f"✅Pushed on {tag}: {message}")
 
 @app.post("/publish")
 def publish(userId: int, message: str):
@@ -64,12 +60,9 @@ def publish(userId: int, message: str):
 if __name__ == "__main__":
     print("Starting server initialization...")
     
-    HOST, PORT = load_host_and_port("ChatBotNotificationService/SelfUrl")
-    print(f"Binding to http://{HOST}:{PORT}")
-    
     uvicorn.run(
         f"ChatBotNotificationService:app",
-        host=HOST,
-        port=PORT,
+        host="0.0.0.0",
+        port=5000,
         log_level="info"
     )

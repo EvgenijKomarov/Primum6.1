@@ -22,7 +22,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Dockerfile" />
-    <Compile Include="get_url.py" />
     <Compile Include="SignService.py" />
     <Compile Include="UserCreate.py" />
   </ItemGroup>

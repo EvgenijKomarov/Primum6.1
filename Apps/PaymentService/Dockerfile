@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "PaymentService:app", "--host", "0.0.0.0", "--port", "5008"]
+CMD ["uvicorn", "PaymentService:app", "--host", "0.0.0.0", "--port", "5000"]

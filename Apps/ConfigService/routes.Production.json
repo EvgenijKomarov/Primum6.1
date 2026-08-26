@@ -11,32 +11,28 @@
     "SelfUrl": "http://0.0.0.0:5003",
     "PublicUrl": "http://botcore:5003"
   },
-  "PublisherService": {
-    "SelfUrl": "http://0.0.0.0:5004",
-    "PublicUrl": "http://publisherservice:5004"
-  },
   "SignService": {
-    "SelfUrl": "http://0.0.0.0:5005",
-    "PublicUrl": "http://signservice:5005"
+    "SelfUrl": "http://0.0.0.0:5000",
+    "PublicUrl": "http://signservice:5000"
   },
   "ChatBotNotificationService": {
-    "SelfUrl": "http://0.0.0.0:5006",
-    "PublicUrl": "http://chat-bot-notification-service:5006"
+    "SelfUrl": "http://0.0.0.0:5000",
+    "PublicUrl": "http://chat-bot-notification-service:5000"
   },
   "EmailNotificationService": {
-    "SelfUrl": "http://0.0.0.0:5007",
-    "PublicUrl": "http://email-notification-service:5007"
+    "SelfUrl": "http://0.0.0.0:5000",
+    "PublicUrl": "http://email-notification-service:5000"
   },
   "PaymentService": {
-    "SelfUrl": "http://0.0.0.0:5008",
-    "PublicUrl": "http://payment-service:5008"
+    "SelfUrl": "http://0.0.0.0:5000",
+    "PublicUrl": "http://payment-service:5000"
   },
   "PrimumWeb": {
     "SelfUrl": "http://0.0.0.0:5009",
     "PublicUrl": "http://primum-web:5009"
   },
   "CommonNotificationService": {
-    "SelfUrl": "http://0.0.0.0:5010",
-    "PublicUrl": "http://common-notification-service:5010"
+    "SelfUrl": "http://0.0.0.0:5000",
+    "PublicUrl": "http://common-notification-service:5000"
   }
 }

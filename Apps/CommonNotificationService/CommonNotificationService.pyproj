@@ -23,7 +23,6 @@
   <ItemGroup>
     <Compile Include="CommonNotification.py" />
     <Compile Include="CommonNotificationService.py" />
-    <Compile Include="get_url.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
