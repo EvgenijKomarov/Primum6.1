@@ -3,11 +3,12 @@ using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using Engine;
 using Engine.Nodes;
+using PaymentServiceConnection;
 using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentProfileNode(StudentClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("stProf")
+    public class StudentProfileNode(StudentClient client, PaymentServiceClient paymentServiceClient) : EndpointNode<DataBuffer, EngineOutputMessage>("stProf")
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
@@ -17,7 +18,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 Message = $"{Emoticons.Student}Профиль ученика\n" +
                 $"{Emoticons.User}Пользователь: {input.User?.DisplayName}!\n" +
                 $"{Emoticons.Id}Id: {input.User?.Id}\n" +
-                //$"{Emoticons.Cash}Балланс: {studentProfile.Cash} рублей\n" + TODO!
+                $"{Emoticons.Cash}Балланс: {await paymentServiceClient.GetStudentBalanceAsync(input.User?.Id ?? 0)} рублей\n" + //ну надеемся что input.User?.Id null не будет никогда)))))))))))))))
                 $"{Emoticons.Coins}Монеты: {studentProfile.Coins}",
                 Buttons = new EngineOutputButton[]
                 {

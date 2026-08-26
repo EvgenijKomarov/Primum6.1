@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(c =>
     // ⚠️ Важно: второй параметр true включает комментарии для контроллеров!
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
-builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl);
+builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl, solutionEnvironment.PaymentService.PublicUrl);
 builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();

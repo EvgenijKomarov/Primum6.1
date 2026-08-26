@@ -8,6 +8,7 @@ using BotCore.Services.Iterators;
 using CoreConnection;
 using Engine;
 using Engine.Extensions;
+using PaymentServiceConnection;
 using Serilog;
 using SignServiceConnection;
 using SignServiceConnection.Models;
@@ -17,7 +18,7 @@ namespace BotCore.Extensions
 {
     public static class BuilderExtensions
     {
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl)
+        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl, string paymentServiceUrl)
         {
             builder.Services.AddHttpClient<AdminClient>()
                 .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
@@ -29,6 +30,8 @@ namespace BotCore.Extensions
                 .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
                 .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+            builder.Services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentServiceUrl));
 
             return builder;
         }
