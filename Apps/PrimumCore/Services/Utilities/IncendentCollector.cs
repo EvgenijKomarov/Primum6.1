@@ -135,6 +135,12 @@ namespace PrimumCore.Services.Utilities
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Lesson, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
+                Permission.AdministrateMissedLessons =>
+                    await dbIterator.Lessons()
+                        .Where(x => x.Status == LessonStatus.MissedDueToException)
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Lesson, permission, x.Id))
+                        .ToListAsync(cancellationToken),
+
                 _ => new List<IncidentKey>()
             };
         }
@@ -205,7 +211,8 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = IncidentStatus.NeedInspectation,
+                        Status = x.Status == LessonStatus.MissedDueToException ? 
+                            IncidentStatus.NeedAdministration : IncidentStatus.NeedInspectation,
                         Meaning = IncidentMeaning.Lesson,
                         Decisions = decisions,
                         CommonInfo =

@@ -39,6 +39,8 @@ namespace CoreDBModel.Models.Enums
         AddPromocodes = 15,
         DeletePromocodes = 16,
         ChangeBanStatus = 17,
-        EditCourseThemes = 18
+        EditCourseThemes = 18,
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
+        AdministrateMissedLessons = 19
     }
 }

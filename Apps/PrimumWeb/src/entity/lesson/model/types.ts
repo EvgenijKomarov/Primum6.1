@@ -4,6 +4,7 @@ export enum LessonStatus {
   Happened = 2,
   Missed = 3,
   MissedWithoutReason = 4,
+  MissedDueToException = 5
 }
 
 export interface LessonDto extends Grading {
