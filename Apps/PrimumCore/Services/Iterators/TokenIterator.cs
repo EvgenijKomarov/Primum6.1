@@ -6,16 +6,17 @@ using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
-using SolutionConfiguration;
 using System.ComponentModel.DataAnnotations;
 
 namespace PrimumCore.Services.Iterators
 {
     public class TokenIterator(DatabaseIterator dbIterator,
         RandomStringGenerator randomGenerator,
-        PublisherService publisher,
-        ConfigurationClient configClient)
+        PublisherService publisher)
     {
+
+        string _gatewayUrl = Environment.GetEnvironmentVariable("GATEWAY_URL") ?? throw new ArgumentNullException("Missing env variable");
+
         public async Task<int> SendEmailVerification(int userId, string? correctiveMail)
         {
             var user = await dbIterator.Users(false)
@@ -47,7 +48,7 @@ namespace PrimumCore.Services.Iterators
             {
                 EmailAdress = user.MailAdress,
                 Token = token.Token,
-                AuthUrl = await configClient.GetGatewayUrl(),
+                AuthUrl = _gatewayUrl,
                 UserId = user.Id
             });
 

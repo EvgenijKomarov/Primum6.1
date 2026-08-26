@@ -1,35 +1,4 @@
 services:
-  configservice:
-    build:
-      context: Apps/ConfigService
-      dockerfile: Dockerfile
-    environment:
-      MODE: "Production"
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
-      RABBITMQ_PORT: ${RABBITMQ_PORT}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-      RABBITMQ_USER: ${RABBITMQ_USER}
-      GATEWAY_URL: ${GATEWAY_URL}
-      MONGO_USERNAME: ${MONGO_USERNAME}
-      MONGO_PASSWORD: ${MONGO_PASSWORD}
-      MONGO_HOST: ${MONGO_HOST}
-      MONGO_PORT: ${MONGO_PORT}
-    container_name: configservice
-    volumes:
-      - ./Apps/ConfigService:/app
-    networks:
-      - primum-network
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-      start_period: 5s
-
   postgres:
     image: postgres:16-alpine
     container_name: primum-postgres
@@ -54,12 +23,12 @@ services:
     build:
       context: ./Libs/CoreDBModel
       dockerfile: Dockerfile
+    environment:
+      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
     networks:
       - primum-network
     depends_on:
       postgres:
-        condition: service_healthy
-      configservice:
         condition: service_healthy
     
   mongodb:
@@ -94,7 +63,7 @@ services:
     build:
       context: Apps/SignService
       dockerfile: Dockerfile
-    container_name: signservice
+    container_name: sign-service
     environment:
       MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
     volumes:
@@ -102,8 +71,13 @@ services:
     networks:
       - primum-network
     depends_on:
-      - configservice
       - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
       
   common-notification-service:
     build:
@@ -117,24 +91,33 @@ services:
     networks:
       - primum-network
     depends_on:
-      - configservice
       - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
       
-  email-notification-service:
+  email-notification-service: #вообще взаимозависимы с ядром, хз как фиксить
     build:
       context: Apps/EmailNotificationService
       dockerfile: Dockerfile
     container_name: email-notification-service
     environment:
-      CORE_URL: "http://primumcore:5001"
+      CORE_URL: "http://primumcore:5000"
       EMAIL: ${EMAIL}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     volumes:
       - ./Apps/EmailNotificationService:/app
     networks:
       - primum-network
-    depends_on:
-      - configservice
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
       
   payment-service:
     build:
@@ -149,7 +132,13 @@ services:
     networks:
       - primum-network
     depends_on:
-      - configservice
+      - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
       
   chat-bot-notification-service:
     build:
@@ -161,10 +150,17 @@ services:
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/"
     volumes:
       - ./Apps/ChatBotNotificationService:/app
+    depends_on:
+      - rabbitmq
+      - signservice
     networks:
       - primum-network
-    depends_on:
-      - configservice
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   primumcore:
     build:
@@ -172,15 +168,30 @@ services:
       dockerfile: Apps/PrimumCore/Dockerfile
     container_name: primumcore
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      CHATBOTNOTIFICATIONSERVICE_URL: "http://chat-bot-notification-service:5000"
+      MAILNOTIFICATIONSERVICE_URL: "http://email-notification-service:5000"
+      COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
+      PAYMENTSERVICE_URL: "http://payment-service:5000"
+      SIGNSERVICE_URL: "http://signservice:5000"
+      GATEWAY_URL: ${GATEWAY_URL}
+      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "5000"
     depends_on:
       core-db-migrate:
         condition: service_completed_successfully
-      configservice:
-        condition: service_healthy
+      email-notification-service:
+        condition: service_started
+      chat-bot-notification-service:
+        condition: service_started
+      common-notification-service:
+        condition: service_started
+      signservice:
+        condition: service_started
+      payment-service:
+        condition: service_started
     ports:
-      - "5004:5001"
+      - "5004:5000"
     networks:
       - primum-network
 
@@ -190,16 +201,20 @@ services:
       dockerfile: Apps/PrimumWebAPI/Dockerfile
     container_name: primumwebapi
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
       ASPNETCORE_ENVIRONMENT: Production
       WEBAPI_JWT_ISSUER: ${WEBAPI_JWT_ISSUER}
       WEBAPI_JWT_SEED: ${WEBAPI_JWT_SEED}
       WEBAPI_JWT_AUDIENCE: ${WEBAPI_JWT_AUDIENCE}
       WEBAPI_JWT_LIFETIME_MINUTES: ${WEBAPI_JWT_LIFETIME_MINUTES}
+      COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
+      PRIMUMCORE_URL: "http://primumcore:5000"
+      ASPNETCORE_HTTP_PORTS: "5000"
+      PAYMENTSERVICE_URL: "http://payment-service:5000"
     ports:
-      - "4200:5002"
+      - "4200:5000"
     depends_on:
-      - configservice
+      - primumcore
+      - common-notification-service
     networks:
       - primum-network
 
@@ -209,12 +224,18 @@ services:
       dockerfile: Apps/BotCore/Dockerfile
     container_name: botcore
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      SIGNSERVICE_URL: "http://signservice:5000"
+      PRIMUMCORE_URL: "http://primumcore:5000"
+      PAYMENTSERVICE_URL: "http://payment-service:5000"
+      ASPNETCORE_HTTP_PORTS: "5000"
+      GATEWAY_URL: ${GATEWAY_URL}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
-      - "5003:5003"
+      - "5003:5000"
     depends_on:
-      - configservice
+      - primumcore
+      - signservice
+      - payment-service
     networks:
       - primum-network
 
@@ -224,12 +245,14 @@ services:
       dockerfile: Apps/CoreDBIterator/Dockerfile
     container_name: coredbiterator
     environment:
-      CONFIG_SERVICE_URL: ${CONFIGSERVICE_URL}
+      CHATBOTNOTIFICATIONSERVICE_URL: "http://chat-bot-notification-service:5000"
+      MAILNOTIFICATIONSERVICE_URL: "http://email-notification-service:5000"
+      COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
+      PAYMENTSERVICE_URL: "http://payment-service:5000"
+      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
     depends_on:
       core-db-migrate:
         condition: service_completed_successfully
-      configservice:
-        condition: service_healthy
     networks:
       - primum-network
 
@@ -242,7 +265,6 @@ services:
       - "3001:80"
     depends_on:
       - primumwebapi
-      - signservice
     networks:
       - primum-network
 

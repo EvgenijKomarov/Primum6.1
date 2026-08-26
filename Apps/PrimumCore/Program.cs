@@ -1,18 +1,7 @@
-using PrimumCore.Entities;
-using CoreDBModel.Models;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;
-using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var configClient = new ConfigurationClient();
-var solutionEnvironment = await configClient.GetRoutesAsync();
-var coreDbConnectionString = await configClient.GetCoreDatabaseConnectionAsync();
-
-builder.WebHost.UseUrls(solutionEnvironment.PrimumCore.SelfUrl);
-builder.Services.AddSingleton(sp => solutionEnvironment);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -40,11 +29,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.AddDI();
-builder.AddContext(coreDbConnectionString);
+builder.AddContext();
 builder.AddProjectControllers();
-builder.AddPublishers(solutionEnvironment);
-builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
-builder.AddPaymentService(solutionEnvironment.PaymentService.PublicUrl);
+builder.AddPublishers();
+builder.AddSignService();
+builder.AddPaymentService();
 builder.AddLogging();
 
 var app = builder.Build();

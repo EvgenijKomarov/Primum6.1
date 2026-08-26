@@ -14,10 +14,12 @@ namespace CommonNotificationServiceClient
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        public CommonNotificationClient(string commonNotificationServiceUrl, HttpClient httpClient)
+        public CommonNotificationClient(HttpClient httpClient)
         {
+            var url = Environment.GetEnvironmentVariable("COMMONNOTIFICATIONSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _httpClient.BaseAddress = new Uri(commonNotificationServiceUrl);
+            _httpClient.BaseAddress = new Uri(url);
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 

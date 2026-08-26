@@ -5,17 +5,18 @@ using CoreDBModel.Models.Enums;
 using PrimumCore.Entities;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
-using SolutionConfiguration;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class CourseIterator(DatabaseIterator dbIterator, RandomStringGenerator generator, ConfigurationClient configClient)
+    public class CourseIterator(DatabaseIterator dbIterator, RandomStringGenerator generator)
     {
+        string _gatewayUrl = Environment.GetEnvironmentVariable("GATEWAY_URL") ?? throw new ArgumentNullException("Missing env variable");
+
         public async Task<PageResult<CourseDto>> GetCoursesByTeacher(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.Courses(isOnlyAvailable)
                 .Where(x => x.Teacher.User.Id == teacherId)
-                .ToDto(await configClient.GetGatewayUrl())
+                .ToDto(_gatewayUrl)
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -23,7 +24,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator.Courses(isOnlyAvailable)
                 .Where(x => x.Teacher.User.Id == teacherId)
-                .ToDto(await configClient.GetGatewayUrl())
+                .ToDto(_gatewayUrl)
                 .One(x => x.Id == courseId);
         }
 

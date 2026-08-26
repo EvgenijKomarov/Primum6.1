@@ -3,13 +3,12 @@ using BotCore.Engine.Entities.Outputs;
 using CoreConnection;
 using CoreConnection.DTOs;
 using Engine;
-using SolutionConfiguration;
 using Resourses;
 using SignServiceConnection.Models;
 
 namespace BotCore.Engine.Middlewares
 {
-    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker, ConfigurationClient configClient) : Middleware<DataBuffer, EngineOutputMessage>
+    public class AuthentificationMiddleware(UserClient client, ChatSignTokenWorker tokenWorker) : Middleware<DataBuffer, EngineOutputMessage>
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
@@ -33,7 +32,7 @@ namespace BotCore.Engine.Middlewares
                     $"Я - {Emoticons.Bot}Primum bot\n" +
                     $"{Emoticons.Spark}Для начала работы тебе нужно войти, и тогда я дам тебе удобный доступ к своему профилю\n" +
                     $"Для быстрой авторизации перейди по этой ссылке:\n" +
-                    $"{await configClient.GetGatewayUrl()}/confirm-chat?token={encryptedToken}\n" +
+                    $"{Environment.GetEnvironmentVariable("GATEWAY_URL") ?? throw new ArgumentNullException("Missing env variable")}/confirm-chat?token={encryptedToken}\n" +
                     $"Или используй этот токен для ручной авторизации в личном кабинете:\n" +
                     $"{encryptedToken}"
                 });

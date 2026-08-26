@@ -1,8 +1,5 @@
 ﻿using Common.Utilities;
-using CoreConnection.DTOs;
 using CoreDBModel.Extensions;
-using CoreDBModel.Models;
-using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
 using PrimumCore.Constants;
 using PrimumCore.Controllers;
@@ -12,7 +9,6 @@ using PublishServiceConnection;
 using Serilog;
 using SignServiceConnection;
 using SignServiceConnection.Models;
-using SolutionConfiguration;
 
 namespace PrimumCore.Extentions
 {
@@ -46,8 +42,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<RanksIterator>();
             builder.Services.AddScoped<MathFormulas>();
 
-            builder.Services.AddHttpClient<ConfigurationClient>();
-
             return builder;
         }
 
@@ -62,10 +56,10 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder, ServiceRoutes routes)
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(routes, httpClient, sp.GetRequiredService<ILogger<PublisherService>>()));
+                .AddTypedClient((httpClient, sp) => new PublisherService(httpClient));
 
             return builder;
         }
@@ -78,25 +72,25 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder, string dbConnectionString)
+        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder)
         {
-            builder.Services.AddCoreContext(dbConnectionString);
+            builder.Services.AddCoreContext();
 
             return builder;
         }
 
-        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder, string signServiceUrl)
+        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<SignServiceClient>()
-                .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new SignServiceClient(httpClient));
 
             return builder;
         }
 
-        public static WebApplicationBuilder AddPaymentService(this WebApplicationBuilder builder, string paymentServiceUrl)
+        public static WebApplicationBuilder AddPaymentService(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<PaymentServiceClient>()
-                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentServiceUrl));
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient));
 
             return builder;
         }

@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="EasyBotEngine" Version="8.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
@@ -31,7 +31,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\PaymentServiceClient\PaymentServiceClient.csproj" />
     <ProjectReference Include="..\..\Libs\Resourses\Resourses.csproj" />
-    <ProjectReference Include="..\..\Libs\ConfigurationServiceClient\SolutionConfiguration.csproj" />
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
     <ProjectReference Include="..\..\Libs\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>

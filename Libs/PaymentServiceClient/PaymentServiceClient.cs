@@ -20,14 +20,16 @@ namespace PaymentServiceConnection
             Converters = { new DecimalJsonConverter() }
         };
 
-        public PaymentServiceClient(HttpClient httpClient, string paymentServiceUrl)
+        public PaymentServiceClient(HttpClient httpClient)
         {
+            var url = Environment.GetEnvironmentVariable("PAYMENTSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
-            if (string.IsNullOrWhiteSpace(paymentServiceUrl))
-                throw new ArgumentException("Payment service URL must not be empty.", nameof(paymentServiceUrl));
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentException("Payment service URL must not be empty.", nameof(url));
 
-            _httpClient.BaseAddress = new Uri(paymentServiceUrl);
+            _httpClient.BaseAddress = new Uri(url);
         }
 
         /// <summary>

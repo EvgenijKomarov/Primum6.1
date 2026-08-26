@@ -6,14 +6,11 @@ using PrimumCore.Middlewares;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Extensions;
 using PrimumWebAPI.Services;
-using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetRoutesAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PrimumWebAPI.SelfUrl);
 
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
@@ -30,10 +27,7 @@ builder.AddAuth();
 builder.AddLogging();
 builder.AddControllers();
 builder.AddServices();
-builder.AddClients(
-    solutionEnvironment.PrimumCore.PublicUrl, 
-    solutionEnvironment.PaymentService.PublicUrl,
-    solutionEnvironment.CommonNotificationService.PublicUrl);
+builder.AddClients();
 builder.AddSwagger();
 
 var app = builder.Build();

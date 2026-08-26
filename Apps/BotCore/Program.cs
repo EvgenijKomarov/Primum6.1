@@ -1,17 +1,13 @@
 using BotCore.Extensions;
 using BotCore.Middlewares;
 using Microsoft.OpenApi;
-using SolutionConfiguration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var solutionEnvironment = await new ConfigurationClient().GetRoutesAsync();
-builder.Services.AddSingleton<ServiceRoutes>(sp => solutionEnvironment);
-builder.WebHost.UseUrls(solutionEnvironment.BotCore.SelfUrl);
-builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
+builder.AddSignService();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -30,7 +26,7 @@ builder.Services.AddSwaggerGen(c =>
     // ⚠️ Важно: второй параметр true включает комментарии для контроллеров!
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
-builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl, solutionEnvironment.PaymentService.PublicUrl);
+builder.AddClients();
 builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();

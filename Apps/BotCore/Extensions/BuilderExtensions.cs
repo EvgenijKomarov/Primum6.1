@@ -12,34 +12,35 @@ using PaymentServiceConnection;
 using Serilog;
 using SignServiceConnection;
 using SignServiceConnection.Models;
-using SolutionConfiguration;
 
 namespace BotCore.Extensions
 {
     public static class BuilderExtensions
     {
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl, string paymentServiceUrl)
+        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder)
         {
+            var url = Environment.GetEnvironmentVariable("PRIMUMCORE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             builder.Services.AddHttpClient<AdminClient>()
-                .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new AdminClient(url, httpClient));
             builder.Services.AddHttpClient<StudentClient>()
-                .AddTypedClient((httpClient, sp) => new StudentClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new StudentClient(url, httpClient));
             builder.Services.AddHttpClient<UserClient>()
-                .AddTypedClient((httpClient, sp) => new UserClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new UserClient(url, httpClient));
             builder.Services.AddHttpClient<PublicClient>()
-                .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublicClient(url, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
-                .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new TeacherClient(url, httpClient));
             builder.Services.AddHttpClient<PaymentServiceClient>()
-                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentServiceUrl));
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient));
 
             return builder;
         }
 
-        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder, string signServiceUrl)
+        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<SignServiceClient>()
-                .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new SignServiceClient(httpClient));
 
             return builder;
         }
@@ -107,7 +108,6 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<InOutConverter>();
 
             builder.Services.AddTransient<ChatSignTokenWorker>();
-            builder.Services.AddHttpClient<ConfigurationClient>();
 
             return builder;
         }

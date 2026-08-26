@@ -18,10 +18,12 @@ namespace SignServiceConnection
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        public SignServiceClient(string signServiceUrl, HttpClient httpClient)
+        public SignServiceClient(HttpClient httpClient)
         {
+            var url = Environment.GetEnvironmentVariable("SIGNSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _httpClient.BaseAddress = new Uri(signServiceUrl);
+            _httpClient.BaseAddress = new Uri(url);
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 

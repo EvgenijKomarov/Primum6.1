@@ -4,15 +4,11 @@ using CoreDBModel.Extensions;
 using PaymentServiceConnection;
 using PublishServiceConnection;
 using Serilog;
-using SolutionConfiguration;
 
 // For a non-web Worker Service use the generic Host builder and register Serilog on the host
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true).AddEnvironmentVariables().Build())
     .CreateLogger();
-var configClient = new ConfigurationClient();
-var solutionEnvironment = await configClient.GetRoutesAsync();
-var coreDbConnectionString = await configClient.GetCoreDatabaseConnectionAsync();
 
 var hostBuilder = Host.CreateDefaultBuilder(args)
     .UseSerilog((context, services, configuration) =>
@@ -24,17 +20,17 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddTransient<ConverterToDateTimeService>();
 
         services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(solutionEnvironment, httpClient, sp.GetRequiredService<ILogger<PublisherService>>()));
+                .AddTypedClient((httpClient, sp) => new PublisherService(httpClient));
 
         services.AddHttpClient<PaymentServiceClient>()
-                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, solutionEnvironment.PaymentService.PublicUrl));
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient));
 
         services.AddHostedService<LessonCreatingExecutor>();
         services.AddHostedService<LessonWarningExecutor>();
         services.AddHostedService<LessonIteratorExecutor>();
         services.AddHostedService<ExpiredTokenDeleteExecutor>();
 
-        services.AddCoreContext(coreDbConnectionString);
+        services.AddCoreContext();
     });
 
 var host = hostBuilder.Build();
