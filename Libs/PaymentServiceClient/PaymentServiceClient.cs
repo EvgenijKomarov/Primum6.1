@@ -89,12 +89,12 @@ namespace PaymentServiceConnection
 
         public async Task<bool> IsTeacherReadyAsync(int teacherUserId, CancellationToken ct = default)
         {
-            bool amount = false;
+            bool flag = false;
             try
             {
                 var response = await _httpClient.GetAsync($"/is-teacher-ready/{teacherUserId}");
                 response.EnsureSuccessStatusCode();
-                amount = bool.Parse(await response.Content.ReadAsStringAsync(ct));
+                flag = bool.Parse(await response.Content.ReadAsStringAsync(ct));
             }
             catch (HttpRequestException ex)
             {
@@ -112,7 +112,70 @@ namespace PaymentServiceConnection
             {
                 throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
             }
-            return amount;
+            return flag;
+        }
+
+        public async Task<bool> EnroleTeacherRegistrationAsync(int teacherUserId, CancellationToken ct = default)
+        {
+            bool flag = false;
+            try
+            {
+                var response = await _httpClient.PostAsync($"/enrole-teacher-registration/{teacherUserId}", null);
+                response.EnsureSuccessStatusCode();
+                flag = bool.Parse(await response.Content.ReadAsStringAsync(ct));
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new PaymentServiceException($"HTTP request error: {ex.Message}", ex);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new PaymentServiceException($"Request timeout");
+            }
+            catch (JsonException ex)
+            {
+                throw new PaymentServiceException($"JSON parsing error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
+            }
+            return flag;
+        }
+
+        public async Task<bool> RegTeacherAsync(
+            int teacherUserId,
+            string fullName, 
+            string inn, 
+            string phone,       
+            string accountNumber, 
+            string bankBic,
+            CancellationToken ct = default)
+        {//$"/register-teacher?teacherUserId={teacherUserId}&fullName={fullName}&inn={inn}&phone={phone}&accountNumber={accountNumber}&bankBik={bankBic}"
+            bool flag = false;
+            try
+            {
+                var response = await _httpClient.PostAsync(Inv($"/register-teacher?teacherUserId={teacherUserId}&fullName={fullName}&inn={inn}&phone={phone}&accountNumber={accountNumber}&bankBik={bankBic}"), null);
+                response.EnsureSuccessStatusCode();
+                flag = bool.Parse(await response.Content.ReadAsStringAsync(ct));
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new PaymentServiceException($"HTTP request error: {ex.Message}", ex);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new PaymentServiceException($"Request timeout");
+            }
+            catch (JsonException ex)
+            {
+                throw new PaymentServiceException($"JSON parsing error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new PaymentServiceException($"Unknown exception: {ex.Message}", ex);
+            }
+            return flag;
         }
 
         private async Task<PaymentResponse> PostAsync(string endpoint, CancellationToken ct)

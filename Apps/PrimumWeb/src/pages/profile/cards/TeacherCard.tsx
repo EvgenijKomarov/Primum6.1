@@ -7,28 +7,131 @@ import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
 import { TeacherRankInfo } from '@/widgets/popups/rank-info/teacher-rank-info/TeacherRankInfo';
+import { Popup } from '@/shared/ui/Popup';
+import { useState } from 'react';
+import { createTeacherProfile, type CreateTeacherProfileRequest } from '@/entity/user';
+import { Controller, useForm } from 'react-hook-form';
+import { Input } from '@/shared/ui/Input';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */
   isApproved: boolean | null | undefined;
   profile: TeacherProfileDto | undefined;
   isLoading: boolean;
-  isCreating: boolean;
-  aboutTeacher: string;
-  onAboutChange: (v: string) => void;
-  onCreate: () => void;
+}
+
+const TeacherRegistrationPopup = ({onClose}: {onClose: () => void}) => {
+  
+  const {
+          control,
+          handleSubmit,
+          formState: { errors, isSubmitting },
+        } = useForm<CreateTeacherProfileRequest>({
+          defaultValues: {
+            about: "",
+            inn: "",
+            phone: "",
+            accountNumber: "",
+            bankBIC: ""
+          },
+        });
+
+  const onSubmit = handleSubmit(async (values) => {
+      const dto: CreateTeacherProfileRequest = {
+        about: values.about.trim(),
+        inn: values.inn.trim(),
+        phone: values.phone.trim(),
+        accountNumber: values.accountNumber.trim(),
+        bankBIC: values.bankBIC.trim()
+      };
+      await createTeacherProfile(dto);
+      onClose();
+    });
+
+  return (
+  <Popup 
+    title="Создание профиля преподавателя"
+    onClose={onClose}>
+    <form className={styles.form} onSubmit={onSubmit}>
+      <div className={styles.field}>
+        <label className={styles.label}>ИНН</label>
+        <Controller
+          name="inn"
+          control={control}
+          rules={{ required: 'Обязательное поле' }}
+          render={({ field }) => (
+            <Input {...field} type="string" placeholder="" />
+          )}
+        />
+        {errors.inn && <span className={styles.error}>{errors.inn.message}</span>}
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>Номер телефона</label>
+        <Controller
+          name="phone"
+          control={control}
+          rules={{ required: 'Обязательное поле' }}
+          render={({ field }) => (
+            <Input {...field} type="string" placeholder="" />
+          )}
+        />
+        {errors.phone && <span className={styles.error}>{errors.phone.message}</span>}
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>Номер счета в банке</label>
+        <Controller
+          name="accountNumber"
+          control={control}
+          rules={{ required: 'Обязательное поле' }}
+          render={({ field }) => (
+            <Input {...field} type="string" placeholder="" />
+          )}
+        />
+        {errors.accountNumber && <span className={styles.error}>{errors.accountNumber.message}</span>}
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>БИК банка</label>
+        <Controller
+          name="bankBIC"
+          control={control}
+          rules={{ required: 'Обязательное поле' }}
+          render={({ field }) => (
+            <Input {...field} type="string" placeholder="" />
+          )}
+        />
+        {errors.bankBIC && <span className={styles.error}>{errors.bankBIC.message}</span>}
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>О преподавателе</label>
+        <Controller
+          name="about"
+          control={control}
+          rules={{ required: 'Обязательное поле' }}
+          render={({ field }) => (
+            <Input {...field} type="string" placeholder="Расскажите о себе, своем подходе, образовании, и т.д." 
+            className={styles.textarea}/>
+          )}
+        />
+        {errors.about && <span className={styles.error}>{errors.about.message}</span>}
+      </div>
+      <Button
+                    type="submit"
+                    variant={ButtonTypeEnum.PRIMARY}
+                    size={ButtonSizeEnum.NORMAL}
+                    isLoading={isSubmitting}>
+                    Создать профиль
+                </Button>
+    </form>
+  </Popup>)
 }
 
 export const TeacherCard = ({
   isApproved,
   profile,
   isLoading,
-  isCreating,
-  aboutTeacher,
-  onAboutChange,
-  onCreate,
 }: Props) => {
 
+  const [regPopupOpen, setRegPopupOpen] = useState(false);
   if (isApproved === undefined) return null;
 
   return (
@@ -48,21 +151,17 @@ export const TeacherCard = ({
           <p className={styles.cardDescription}>
             Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
           </p>
-          <textarea
-            className={styles.textarea}
-            value={aboutTeacher}
-            onChange={(e) => onAboutChange(e.target.value)}
-            placeholder="Расскажите о себе: опыт, специализация, подход к обучению…"
-          />
           <Button
             variant={ButtonTypeEnum.PRIMARY}
             size={ButtonSizeEnum.NORMAL}
-            onClick={onCreate}
-            isLoading={isCreating}
-            disabled={!aboutTeacher.trim()}
+            onClick={() => setRegPopupOpen(true)}
           >
             Создать профиль преподавателя
           </Button>
+          {regPopupOpen && 
+            <TeacherRegistrationPopup
+              onClose={() => setRegPopupOpen(false)}
+            />}
         </>
       )}
 

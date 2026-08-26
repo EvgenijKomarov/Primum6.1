@@ -3,6 +3,7 @@ using CoreConnection.DTOs;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
 using PrimumCore.Constants;
 using PrimumCore.Controllers;
 using PrimumCore.Services.Iterators;
@@ -88,6 +89,14 @@ namespace PrimumCore.Extentions
         {
             builder.Services.AddHttpClient<SignServiceClient>()
                 .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPaymentService(this WebApplicationBuilder builder, string paymentServiceUrl)
+        {
+            builder.Services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient, paymentServiceUrl));
 
             return builder;
         }

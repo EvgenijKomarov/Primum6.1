@@ -14,8 +14,11 @@ namespace PrimumCore.Controllers
     public class AvailableUserController(UserIterator iterator, ChatSignTokenIterator chatSignTokenIterator) : PrimumController
     {
         [HttpPost("create-teacher-profile")]
-        public async Task<ActionResult<int>> CreateTeacherProfile([FromRoute] int userId, [FromBody] string about)
-            => Ok(await iterator.CreateTeacherProfile(userId, about));
+        public async Task<ActionResult<int>> CreateTeacherProfile(
+            [FromRoute] int userId, 
+            [FromBody] TeacherRegistrationInputDto dto
+            )
+            => Ok(await iterator.CreateTeacherProfile(userId, dto));
 
         [HttpPost("create-student-profile")]
         public async Task<ActionResult<int>> CreateStudentProfile([FromRoute] int userId)

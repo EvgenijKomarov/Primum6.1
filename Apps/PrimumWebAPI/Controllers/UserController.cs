@@ -47,11 +47,11 @@ namespace PrimumWebAPI.Controllers
         /// <summary>
         /// Создать профиль преподавателя
         /// </summary>
-        /// <param name="about">О преподавателе (обязательно)</param>
+        /// <param name="data">О преподавателе (обязательно), включая банковские реквизиты</param>
         /// <returns></returns>
         [HttpPost("create-teacher-profile")]
-        public async Task<ActionResult<int>> CreateTeacherProfile([FromBody] string about)
-            => Ok(await client.CreateTeacherProfileAsync(User.GetUserId(), about));
+        public async Task<ActionResult<int>> CreateTeacherProfile([FromBody] TeacherRegistrationInputDto data)
+            => Ok(await client.CreateTeacherProfileAsync(User.GetUserId(), data));
 
         /// <summary>
         /// Создать профиль ученика

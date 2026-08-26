@@ -44,6 +44,7 @@ builder.AddContext(coreDbConnectionString);
 builder.AddProjectControllers();
 builder.AddPublishers(solutionEnvironment);
 builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
+builder.AddPaymentService(solutionEnvironment.PaymentService.PublicUrl);
 builder.AddLogging();
 
 var app = builder.Build();

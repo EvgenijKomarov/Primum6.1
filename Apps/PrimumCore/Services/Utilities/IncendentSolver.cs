@@ -3,13 +3,14 @@ using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class IncidentSolver(DatabaseIterator dbIterator)
+    public class IncidentSolver(DatabaseIterator dbIterator, PaymentServiceClient paymentServiceClient)
     {
         //User should be identified
         public virtual async Task<int> SolveIncident(int adminProfileId, Permission[] permissions, IncidentDecisionInputDto dto, int userId)
@@ -59,6 +60,10 @@ namespace PrimumCore.Services.Utilities
                             teacher.ApproveStatus = ApproveStatus.NeedManagerReview;
                             break;
                         case IncidentDecision.Approve:
+                            if(!await paymentServiceClient.EnroleTeacherRegistrationAsync(teacher.UserId))
+                            {
+                                throw new BusinessLogicException("Failed to register teacher in equiring");
+                            }
                             teacher.ApproveStatus = ApproveStatus.Approved;
                             break;
                         case IncidentDecision.Delete:

@@ -57,7 +57,8 @@
         "LessonsByDateDto",
         "FutureLessonDto",
         "CourseDtoLite",
-		"ChatSign"
+		"ChatSign",
+		"TeacherRegistrationInputDto"
       ],
       "generateNullableReferenceTypes": true, // Учитывать C# 11 required / nullable
       "generateRequiredProperties": true, // Генерировать модификатор 'required' в клиенте (если целевая версия .NET поддерживает)

@@ -16,6 +16,10 @@ class FakePaymentProcessor(object):
     #    print("Fakely parsed topup webhook")
     #    return {"success": True}
 
+    def request_topup(self, userId: int, amount: Decimal):
+        print(f"Fakely requested topup link")
+        return "https://fake-topup-link/"
+
     def withdrawn_student_balance(self, userId: int, amount: Decimal):
         print(f"Fakely withdrawned {amount} RUB to user {userId}")
 

@@ -29,5 +29,9 @@ export interface ConfirmEmailRequest {
 }
 
 export interface CreateTeacherProfileRequest {
-  aboutTeacher: string; // TODO: subject to change
+  about: string;
+  inn: string,
+  phone: string,
+  accountNumber: string,
+  bankBIC: string
 }

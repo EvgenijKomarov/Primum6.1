@@ -7,10 +7,11 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.ComponentModel.DataAnnotations;
+using PaymentServiceConnection;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class UserIterator(DatabaseIterator dbIterator, PasswordHasher passwordHasher)
+    public class UserIterator(DatabaseIterator dbIterator, PasswordHasher passwordHasher, PaymentServiceClient paymentServiceClient)
     {
         public async Task<int> Login(string mailAdress, string password)
         {
@@ -49,7 +50,7 @@ namespace PrimumCore.Services.Iterators
             return user.Id;
         }
 
-        public async Task<int> CreateTeacherProfile(int userId, string about)
+        public async Task<int> CreateTeacherProfile(int userId, TeacherRegistrationInputDto dto)
         {
             var user = await dbIterator.Users(false)
                 .One(x => x.Id == userId);
@@ -58,8 +59,13 @@ namespace PrimumCore.Services.Iterators
 
             user.TeacherProfile = new TeacherProfile
             {
-                About = about
+                About = dto.About
             };
+
+            if (!(await paymentServiceClient.RegTeacherAsync(userId, user.DisplayName, dto.INN, dto.Phone, dto.AccountNumber, dto.BankBIC)))
+            {
+                throw new BusinessLogicException("Failed to cache teacher payment credits");
+            }
 
             await dbIterator.SaveChangesAsync();
 

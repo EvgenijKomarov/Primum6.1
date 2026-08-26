@@ -5,7 +5,6 @@ import { topupStudentBallance, useStudentProfile } from '@/entity/student';
 import { useTeacherProfile } from '@/entity/teacher';
 import {
   createStudentProfile,
-  createTeacherProfile,
   sendEmailVerification,
   useCurrentUser,
   useUserStore,
@@ -48,9 +47,7 @@ export const ProfilePage = () => {
   const [chatSignToken, setChatSignToken] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [aboutTeacher, setAboutTeacher] = useState('');
   const [isCreatingStudent, setIsCreatingStudent] = useState(false);
-  const [isCreatingTeacher, setIsCreatingTeacher] = useState(false);
 
   useEffect(() => {
     if (user?.email) setEmail(user.email);
@@ -90,17 +87,6 @@ export const ProfilePage = () => {
       showToast('Профиль создан', 'success')
     } finally {
       setIsCreatingStudent(false);
-    }
-  };
-
-  const handleCreateTeacher = async () => {
-    setIsCreatingTeacher(true);
-    try {
-      await createTeacherProfile({ aboutTeacher });
-      await mutateUser();
-      showToast('Профиль создан и отправлен на утверждение', 'warning', 3000)
-    } finally {
-      setIsCreatingTeacher(false);
     }
   };
 
@@ -178,10 +164,6 @@ export const ProfilePage = () => {
                 isApproved={user.isApprovedTeacher}
                 profile={teacherProfile}
                 isLoading={teacherLoading}
-                isCreating={isCreatingTeacher}
-                aboutTeacher={aboutTeacher}
-                onAboutChange={setAboutTeacher}
-                onCreate={handleCreateTeacher}
               />
             </div>
           </>
