@@ -1,17 +1,129 @@
 @reference "@/global.css";
 
+@keyframes pixel-cycle {
+  0% {
+    background-color: var(--color-primary-light);
+    box-shadow:
+      var(--step) 0 var(--color-primary-base),
+      calc(var(--step) * 2) 0 var(--color-primary-dark),
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) transparent;
+  }
+  12.5% {
+    background-color: transparent;
+    box-shadow:
+      var(--step) 0 var(--color-primary-light),
+      calc(var(--step) * 2) 0 var(--color-primary-base),
+      calc(var(--step) * 2) var(--step) var(--color-primary-dark),
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) transparent;
+  }
+  25% {
+    background-color: transparent;
+    box-shadow:
+      var(--step) 0 transparent,
+      calc(var(--step) * 2) 0 var(--color-primary-light),
+      calc(var(--step) * 2) var(--step) var(--color-primary-base),
+      calc(var(--step) * 2) calc(var(--step) * 2) var(--color-primary-dark),
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) transparent;
+  }
+  37.5% {
+    background-color: transparent;
+    box-shadow:
+      var(--step) 0 transparent,
+      calc(var(--step) * 2) 0 transparent,
+      calc(var(--step) * 2) var(--step) var(--color-primary-light),
+      calc(var(--step) * 2) calc(var(--step) * 2) var(--color-primary-base),
+      var(--step) calc(var(--step) * 2) var(--color-primary-dark),
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) transparent;
+  }
+  50% {
+    background-color: transparent;
+    box-shadow:
+      var(--step) 0 transparent,
+      calc(var(--step) * 2) 0 transparent,
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) var(--color-primary-light),
+      var(--step) calc(var(--step) * 2) var(--color-primary-base),
+      0 calc(var(--step) * 2) var(--color-primary-dark),
+      0 var(--step) transparent;
+  }
+  62.5% {
+    background-color: transparent;
+    box-shadow:
+      var(--step) 0 transparent,
+      calc(var(--step) * 2) 0 transparent,
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) var(--color-primary-light),
+      0 calc(var(--step) * 2) var(--color-primary-base),
+      0 var(--step) var(--color-primary-dark);
+  }
+  75% {
+    background-color: var(--color-primary-dark);
+    box-shadow:
+      var(--step) 0 transparent,
+      calc(var(--step) * 2) 0 transparent,
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) var(--color-primary-light),
+      0 var(--step) var(--color-primary-base);
+  }
+  87.5% {
+    background-color: var(--color-primary-base);
+    box-shadow:
+      var(--step) 0 var(--color-primary-dark),
+      calc(var(--step) * 2) 0 transparent,
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) var(--color-primary-light);
+  }
+  100% {
+    background-color: var(--color-primary-light);
+    box-shadow:
+      var(--step) 0 var(--color-primary-base),
+      calc(var(--step) * 2) 0 var(--color-primary-dark),
+      calc(var(--step) * 2) var(--step) transparent,
+      calc(var(--step) * 2) calc(var(--step) * 2) transparent,
+      var(--step) calc(var(--step) * 2) transparent,
+      0 calc(var(--step) * 2) transparent,
+      0 var(--step) transparent;
+  }
+}
+
 .miniLoader {
-  @apply animate-[spin_1s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#09f] border-t-[#09f] rounded-full h-[18px] w-[18px] static mx-auto my-1;
+  --cell: 5px;
+  --gap: 3px;
+  --step: calc(var(--cell) + var(--gap));
+  @apply static mx-auto my-1;
+  width: var(--cell);
+  height: var(--cell);
+  animation: pixel-cycle 0.9s steps(1) infinite;
 }
+
 .loader {
-  @apply animate-[spin_1s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#09f] border-t-[#09f] rounded-full h-[5vmin] w-[5vmin] top-[calc(50%-2.5vmin)] left-[calc(50%-2.5vmin)] fixed z-[9999];
+  --cell: 1.3vmin;
+  --gap: 0.9vmin;
+  --step: calc(var(--cell) + var(--gap));
+  @apply fixed z-[9999];
+  width: var(--cell);
+  height: var(--cell);
+  top: calc(50% - var(--step) * 1.5);
+  left: calc(50% - var(--step) * 1.5);
+  animation: pixel-cycle 0.9s steps(1) infinite;
 }
-.loader:before {
-  @apply content-[''] animate-[spin_2s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#3cf] border-t-[#3cf] rounded-full absolute top-0 left-0 h-[4vmin] w-[4vmin];
-}
-.loader:after {
-  @apply content-[''] animate-[spin_3s_infinite_linear] border-[0.5vmin] border-transparent border-r-[#6ff] border-t-[#6ff] rounded-full absolute top-[.5vmin] left-[.5vmin] h-[3vmin] w-[3vmin];
-}
+
 .loader.sttc {
   @apply static mx-auto my-1;
 }
