@@ -6,8 +6,15 @@ export const formatDateLabel = (dateStr: string) => {
 };
 
 export const formatTimeSlot = (timeStr: string) => {
-  const [h] = timeStr.split(':').map(Number);
-  return `${h}:00 — ${h + 1}:00`;
+  const [h, m = 0, s = 0] = timeStr.split(':').map(Number);
+
+  const start = new Date(Date.UTC(1970, 0, 1, h, m, s));
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+  const fmt = (dt: Date) =>
+    `${dt.getHours()}:${String(dt.getMinutes()).padStart(2, '0')}`;
+
+  return `${fmt(start)} — ${fmt(end)}`;
 };
 
 export const isToday = (dateStr: string) => {

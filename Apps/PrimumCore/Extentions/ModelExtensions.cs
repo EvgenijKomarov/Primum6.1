@@ -1,3 +1,4 @@
+using Common.Utilities;
 using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
@@ -118,7 +119,8 @@ namespace PrimumCore.Extentions
                 LessonActivityGrade = x.Grading == null ? null : (int?)x.Grading.LessonActivityGrade,
                 RepetitionOfMaterialGrade = x.Grading == null ? null : (int?)x.Grading.RepetitionOfMaterialGrade,
                 StudyInitiativeGrade = x.Grading == null ? null : (int?)x.Grading.StudyInitiativeGrade,
-                FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade()
+                FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade(),
+                TeacherEarning = isStudentLink ? null : x.TeacherEarning
             });
 
         public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => queryable.Select(x => 
@@ -133,7 +135,9 @@ namespace PrimumCore.Extentions
                 IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(x)
             });
 
-        public static IQueryable<TeacherProfileDto> ToDto(this IQueryable<TeacherProfile> queryable) => queryable.Select(x => 
+        public static IQueryable<TeacherProfileDto> ToDto(this IQueryable<TeacherProfile> queryable,
+            bool isConfidential
+            ) => queryable.Select(x =>
             new TeacherProfileDto
             {
                 DisplayName = x.User.DisplayName,
@@ -143,7 +147,7 @@ namespace PrimumCore.Extentions
                 Rank = x.Rank.Rank,
                 Level = x.Rank.Level,
                 Experience = x.Experience,
-                ConvertionIndex = x.ConvertionIndex
+                ConvertionIndex = isConfidential ? null : x.ConvertionIndex
             });
 
         public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
@@ -248,7 +252,7 @@ namespace PrimumCore.Extentions
                 EarningMultiplier = x.EarningMultiplier,
             });
 
-        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
+        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink, EarningCalculationService service) => queryable
             .OrderBy(x => x.DateTime)
             .GroupBy(x => x.DateTime)
             .Select(x => new LessonsByDateDto
@@ -267,7 +271,12 @@ namespace PrimumCore.Extentions
                     LessonStatus = x.Status,
                     Id = x.Id,
                     CourseName = x.Abonement.Course.Name,
-                    CourseId = x.Abonement.Course.Id
+                    CourseId = x.Abonement.Course.Id,
+                    TeacherEarning = isStudentLink ? null : service.CalculateEarningsToLesson(
+                        x.Price, 
+                        x.Abonement.Course.Teacher.ConvertionIndex,
+                        x.Abonement.Course.Teacher.Rank.EarningMultiplier,
+                        x.Abonement.Lessons.Count(l => l.Price > 0 && l.DateTime < DateTime.UtcNow))
                 }).ToList()
             });
     }

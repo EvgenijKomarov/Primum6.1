@@ -10,7 +10,7 @@ export const resolveRoleLabel = (role: Role): string => {
   const labels: Record<Role, string> = {
     [Role.ADMIN]: 'Администратор',
     [Role.TEACHER]: 'Преподаватель',
-    [Role.STUDENT]: 'Студент',
+    [Role.STUDENT]: 'Ученик',
     [Role.GUEST]: 'Гость',
   };
   return labels[role] ?? role;

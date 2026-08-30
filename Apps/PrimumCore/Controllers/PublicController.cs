@@ -42,10 +42,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<UserDtoLite>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUserLite(userId, true));
 
         [HttpGet("teacher/{teacherId}")]
-        public async Task<ActionResult<TeacherProfileDto>> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId, true));
+        public async Task<ActionResult<TeacherProfileDto>> GetTeacher([FromRoute] int teacherId) => Ok(await teacherIterator.GetTeacher(teacherId, true, true));
 
         [HttpGet("teachers")]
-        public async Task<ActionResult<PageResult<TeacherProfileDto>>> GetTeachers([FromQuery] int page = 0, [FromQuery] int pageSize = 10) => Ok(await teacherIterator.GetTeachers(true, page, pageSize));
+        public async Task<ActionResult<PageResult<TeacherProfileDto>>> GetTeachers([FromQuery] int page = 0, [FromQuery] int pageSize = 10) => Ok(await teacherIterator.GetTeachers(true, true, page, pageSize));
 
         [HttpGet("courses-by-teacher/{teacherId}")]
         public async Task<ActionResult<PageResult<CourseDtoLite>>> GetCoursesByTeacher([FromRoute] int teacherId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 

@@ -85,5 +85,8 @@ export const api = {
   incidents: {
     commonIncidents: "/admin/incidents",
     incidentLogs: "/admin/incidents/logs"
+  },
+  teacherEarnings: {
+    base: "/teacher/earnings"
   }
 }

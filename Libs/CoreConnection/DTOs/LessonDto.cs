@@ -23,5 +23,7 @@ namespace CoreConnection.DTOs
         public required int? StudyInitiativeGrade { get; set; }
 
         public required float? FinalGrade { get; set; }
+
+        public required decimal? TeacherEarning { get; set; }
     }
 }

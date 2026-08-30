@@ -31,7 +31,7 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<PageResult<ChatSign>> GetChatSigns(int userId, int page, int pageSize)
         {
-            var user = await dbIterator.Users(true)
+            var user = await dbIterator.Users(false)
                 .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
             return await (await client.GetSignsAsync(userId)).ToPageResult(page, pageSize);

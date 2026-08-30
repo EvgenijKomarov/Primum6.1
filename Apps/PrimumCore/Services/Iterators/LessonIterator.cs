@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using System.Linq.Expressions;
+using Common.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class LessonIterator(DatabaseIterator dbIterator)
+    public class LessonIterator(DatabaseIterator dbIterator, EarningCalculationService calculationService)
     {
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
@@ -41,7 +42,7 @@ namespace PrimumCore.Services.Iterators
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
                 .Where(x => x.DateTime > DateTime.UtcNow)
-                .ToByDateDto(false)
+                .ToByDateDto(false, calculationService)
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -59,7 +60,7 @@ namespace PrimumCore.Services.Iterators
             return await dbIterator.Lessons()
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .Where(x => x.DateTime > DateTime.UtcNow)
-                .ToByDateDto(false)
+                .ToByDateDto(true, calculationService)
                 .ToPageResult(_page, _pageSize);
         }
 

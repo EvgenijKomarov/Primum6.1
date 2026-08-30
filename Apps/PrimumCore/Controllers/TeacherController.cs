@@ -1,7 +1,8 @@
-﻿using CoreConnection.DTOs;
+﻿using Common.Entities;
+using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using PrimumCore.Entities;
 using Microsoft.AspNetCore.Mvc;
+using PrimumCore.Entities;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
@@ -16,11 +17,16 @@ namespace PrimumCore.Controllers
         LessonIterator lessonIterator,
         AbonementIterator abonementIterator,
         StudentSheduleIterator studentSheduleIterator,
-        GradingIterator gradingIterator) : PrimumController
+        GradingIterator gradingIterator,
+        TeacherEarningIterator earningIterator) : PrimumController
     {
         [HttpGet("profile")]
         public async Task<ActionResult<TeacherProfileDto>> GetTeacherProfile([FromRoute] int userId)
-            => Ok(await teacherIterator.GetTeacher(userId, false));
+            => Ok(await teacherIterator.GetTeacher(userId, false, false));
+
+        [HttpGet("profile/earnings")]
+        public async Task<ActionResult<TeacherEarningDto>> GetTeacherEarnings([FromRoute] int userId)
+            => Ok(await earningIterator.GetTeacherEarning(userId));
 
         [HttpGet("last-lessons")]
         public async Task<ActionResult<PageResult<LessonDto>>> GetLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 

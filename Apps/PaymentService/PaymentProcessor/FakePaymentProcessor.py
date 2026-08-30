@@ -22,6 +22,7 @@ class FakePaymentProcessor(object):
 
     def withdrawn_student_balance(self, userId: int, amount: Decimal):
         print(f"Fakely withdrawned {amount} RUB to user {userId}")
+        return {"success": True}
 
     def process_lesson(self, teacherUserId: int, teacherCash: Decimal, platformCash: Decimal):
         print(f"Fakely sent {teacherCash} RUB to teacher {teacherUserId}")

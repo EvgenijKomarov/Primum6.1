@@ -19,7 +19,8 @@ export interface LessonDto extends Grading {
   price: number;
   lessonStatus: LessonStatus;
   dateTime: string;
-  lessonLink: string | null;
+  lessonLink?: string;
+  teacherEarning?: number;
 }
 
 export interface Grading {
@@ -56,6 +57,7 @@ export interface FutureLessonDto {
   price: number;
   lessonStatus: LessonStatus;
   time: string;
+  teacherEarning?: number;
 }
 
 export interface LessonsByDateDto {

@@ -23,7 +23,7 @@ const DAY_LABELS: Record<DayOfWeek, string> = {
 const INCIDENT_STATUSES: Record<IncidentStatus, string> = {
     [IncidentStatus.Unknown]: 'Неизвестен',
     [IncidentStatus.NeedModeration]: 'Нужна модерация',
-    [IncidentStatus.NeedAdministration]: 'Нужно администрирование',
+    [IncidentStatus.NeedAdministration]: 'Нужно исправление вручную',
     [IncidentStatus.NeedManagerApprovement]: 'Нужно одобрение менеджера',
     [IncidentStatus.NeedInspectation]: 'Нужно разбирательство',
 };

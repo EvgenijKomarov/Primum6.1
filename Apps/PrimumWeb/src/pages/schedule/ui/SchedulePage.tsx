@@ -85,7 +85,7 @@ export const SchedulePage = () => {
         <h1 className={styles.title}>Расписание</h1>
       </div>
       <p className={styles.hint}>
-        Нажмите на ячейку, чтобы добавить или убрать доступный слот. Слот — 1 час. Занятые ячейки (студент записан) нельзя удалить.
+        Нажмите на ячейку, чтобы добавить или убрать доступный слот. Слот — 1 час. Занятые ячейки (ученик записан) нельзя удалить.
       </p>
 
       <div className={styles.calendarWrapper}>
@@ -132,7 +132,7 @@ export const SchedulePage = () => {
                     onClick={() => handleSlotClick(d.value, hour)}
                     title={
                       status === 'booked' && slot
-                        ? `${slot.studentName ?? 'Студент'} — ${slot.courseName ?? 'курс'}`
+                        ? `${slot.studentName ?? 'Ученик'} — ${slot.courseName ?? 'курс'}`
                         : status === 'available'
                           ? 'Нажмите, чтобы убрать слот'
                           : 'Нажмите, чтобы добавить слот'

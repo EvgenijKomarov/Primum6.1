@@ -29,6 +29,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<GradingIterator>();
             builder.Services.AddScoped<PromocodeIterator>();
             builder.Services.AddScoped<AbonementIterator>();
+            builder.Services.AddScoped<TeacherEarningIterator>();
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
             builder.Services.AddScoped<RandomStringGenerator>();
@@ -41,6 +42,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<DatabaseIterator>();
             builder.Services.AddScoped<RanksIterator>();
             builder.Services.AddScoped<MathFormulas>();
+            builder.Services.AddScoped<EarningCalculationService>();
 
             return builder;
         }

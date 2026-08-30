@@ -6,10 +6,11 @@ import { Card } from '../Card/Card';
 interface PopupProps {
   title: string;
   onClose: () => void;
+  width?: string;
   children: React.ReactNode;
 }
 
-export const Popup = ({ onClose, children, title = "" }: PopupProps) => {
+export const Popup = ({ onClose, children, title = "", width }: PopupProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -40,7 +41,7 @@ export const Popup = ({ onClose, children, title = "" }: PopupProps) => {
       className={`${styles.overlay} ${visible ? styles.overlayVisible : ''}`}
       onTransitionEnd={handleTransitionEnd}
     >
-      <Card>
+      <Card width={width}>
         <div
           className={`${styles.popup} ${visible ? styles.popupVisible : ''}`}
           ref={ref}

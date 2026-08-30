@@ -10,6 +10,8 @@ public partial class Lesson: BaseEntity
 
     public decimal Price { get; set; }
 
+    public decimal? TeacherEarning { get; set; }
+
     public string? StudentLink { get; set; }
 
     public string? TeacherLink { get; set; }

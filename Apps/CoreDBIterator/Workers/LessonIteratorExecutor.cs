@@ -27,6 +27,7 @@ namespace CoreDBIterator.Workers
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
             var paymentClient = scope.ServiceProvider.GetRequiredService<PaymentServiceClient>();
+            var earningService = scope.ServiceProvider.GetRequiredService<EarningCalculationService>();
             var jitsiService = new JitsiLinkCreationService();
 
             var lessonsForIteration = context.Set<Lesson>()
@@ -41,6 +42,8 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Course)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.Rank)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Lessons)
                 .Where(l => l.Status == LessonStatus.Warned)
                 .Where(l => l.DateTime <= DateTime.UtcNow.AddMinutes(30))
                 .ToArray();
@@ -65,7 +68,13 @@ namespace CoreDBIterator.Workers
 
                     if (studentCash >= lesson.Price && AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
                     {
-                        var teacherCash = lesson.Price * Convert.ToDecimal(lesson.Abonement.Course.Teacher.Rank.EarningMultiplier);
+                        var teacherCash = earningService.CalculateEarningsToLesson(
+                            lesson.Price,
+                            teacher.ConvertionIndex,
+                            teacher.Rank.EarningMultiplier,
+                            lesson.Abonement.Lessons.Count(l => l.Price > 0 && l.DateTime < DateTime.UtcNow)
+                            );
+
                         await paymentClient.ProcessLessonPaymentAsync(
                             lesson.Id,
                             lesson.Abonement.Student.User.Id,
@@ -79,6 +88,7 @@ namespace CoreDBIterator.Workers
                             DateTime.UtcNow.ToString() + lesson.AbonementId.ToString());
                         lesson.StudentLink = tuple.guestLink;
                         lesson.TeacherLink = tuple.adminLink;
+                        lesson.TeacherEarning = teacherCash;
                         await publisher.Push(new LessonReadyEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,

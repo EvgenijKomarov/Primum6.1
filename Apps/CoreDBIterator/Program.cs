@@ -18,6 +18,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddTransient<ConverterToDateTimeService>();
+        services.AddTransient<EarningCalculationService>();
 
         services.AddHttpClient<PublisherService>()
                 .AddTypedClient((httpClient, sp) => new PublisherService(httpClient));

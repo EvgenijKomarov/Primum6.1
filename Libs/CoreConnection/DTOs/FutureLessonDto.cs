@@ -9,5 +9,7 @@ namespace CoreConnection.DTOs
     public class FutureLessonDto : AbstractLessonDto
     {
         public required TimeSpan Time { get; set; }
+
+        public required decimal? TeacherEarning {  get; set; }
     }
 }

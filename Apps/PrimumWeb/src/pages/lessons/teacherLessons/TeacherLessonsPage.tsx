@@ -22,11 +22,17 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
         </div>
       </div>
-      <div className={styles.cardRight}>
-        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-        </span>
-        <StatusBadge status={lesson.lessonStatus} />
+      <div className={styles.cardRigh}>
+        <div className={styles.cardInfo}>
+          <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+          <StatusBadge status={lesson.lessonStatus} />
+        </div>
+        {lesson.teacherEarning &&
+          <span className={`${styles.cardPrice} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
+          </span>}
       </div>
     </div>
   </Card>
@@ -45,26 +51,32 @@ const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => 
         </div>
       </div>
       <div className={styles.cardRight}>
-        {!lesson.finalGrade && lesson.lessonLink !== '' ? (
+        <div className={styles.cardInfo}>
+          {!lesson.finalGrade && lesson.lessonLink !== '' ? (
             <GradingPopup lessonId={lesson.id} onSubmit={onSubmit}/>
           ) : (
             <Gradinginfo {...lesson} />
           )}
-        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-        </span>
-        <StatusBadge status={lesson.lessonStatus} />
-        {lesson.lessonLink && (
-          <a
-            href={lesson.lessonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.linkBtn}
-          >
-            <ExternalLinkIcon />
-            Открыть
-          </a>
-        )}
+          <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+          <StatusBadge status={lesson.lessonStatus} />
+          {lesson.lessonLink && (
+            <a
+              href={lesson.lessonLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.linkBtn}
+            >
+              <ExternalLinkIcon />
+              Открыть
+            </a>
+          )}
+        </div>
+        {lesson.teacherEarning &&
+          <span className={`${styles.cardPrice} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
+          </span>}
       </div>
     </div>
   </Card>

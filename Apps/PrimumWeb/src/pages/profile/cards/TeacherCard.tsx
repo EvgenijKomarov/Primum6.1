@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { createTeacherProfile, type CreateTeacherProfileRequest } from '@/entity/user';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/shared/ui/Input';
+import { TeacherEarningInfo } from '@/widgets/popups/info/teacher-earning-info/TeacherEarningInfo';
 
 interface Props {
   /** true = approved, false = pending, null = not created, undefined = not a teacher */
@@ -140,8 +141,7 @@ export const TeacherCard = ({
       {/* Pending approval */}
       {isApproved === false && (
         <p className={styles.warning}>
-          Пожалуйста, подождите. Ваш профиль преподавателя находится на рассмотрении. Обычно это
-          занимает от нескольких часов до пары дней.
+          Ваш профиль преподавателя находится на рассмотрении. Возможно, с Вами свяжутся через почту или привязанные мессенджеры
         </p>
       )}
 
@@ -182,7 +182,8 @@ export const TeacherCard = ({
               { label: 'Уровень', value: profile.level },
               { label: 'Ранг', value: <TeacherRankInfo rankInput={profile.rank} /> },
               { label: 'Опыт', value: profile.experience },
-              { label: 'Конверсии', value: profile.convertionIndex ? profile.convertionIndex * 100 : '--'}
+              { label: 'Конверсия', value: profile.convertionIndex ? profile.convertionIndex * 100 : '--'},
+              { label: 'Доход с урока', value: <TeacherEarningInfo/> },
             ].map(({ label, value }) => (
               <StatCard
                 key={label}

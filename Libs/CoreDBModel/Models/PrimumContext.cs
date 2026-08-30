@@ -291,7 +291,7 @@ public partial class PrimumContext : DbContext
                     Level = 1,
                     Rank = "Начинающий наставник",
                     RequiredExperience = 0,
-                    EarningMultiplier = 0.3f
+                    EarningMultiplier = 0.0f
                 });
         });
 
