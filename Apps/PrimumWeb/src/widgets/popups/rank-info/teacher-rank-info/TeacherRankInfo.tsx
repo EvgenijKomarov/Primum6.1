@@ -44,7 +44,7 @@ export const TeacherRankInfo = ({ rankInput }: TeacherRankInfoProps) => {
                                 <td className={styles.td}>{rank.rank}</td>
                                 <td className={styles.td}>{rank.level}</td>
                                 <td className={styles.td}>{rank.requiredExperience}</td>
-                                <td className={styles.td}>{rank.earningMultiplier * 100}%</td>
+                                <td className={styles.td}>{(rank.earningMultiplier * 100).toFixed(0)}%</td>
                             </tr>
                         ))}
                         </tbody>

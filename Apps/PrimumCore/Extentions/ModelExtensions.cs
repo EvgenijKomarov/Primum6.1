@@ -276,7 +276,7 @@ namespace PrimumCore.Extentions
                         x.Price, 
                         x.Abonement.Course.Teacher.ConvertionIndex,
                         x.Abonement.Course.Teacher.Rank.EarningMultiplier,
-                        x.Abonement.Lessons.Count(l => l.Price > 0 && l.DateTime < DateTime.UtcNow))
+                        x.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened))
                 }).ToList()
             });
     }

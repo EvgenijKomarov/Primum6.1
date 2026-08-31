@@ -72,7 +72,7 @@ namespace CoreDBIterator.Workers
                             lesson.Price,
                             teacher.ConvertionIndex,
                             teacher.Rank.EarningMultiplier,
-                            lesson.Abonement.Lessons.Count(l => l.Price > 0 && l.DateTime < DateTime.UtcNow)
+                            lesson.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened)
                             );
 
                         await paymentClient.ProcessLessonPaymentAsync(

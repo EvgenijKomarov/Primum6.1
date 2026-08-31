@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CoreConnection.DTOs
 {
-    public class CourseRankDto: IHasId
+    public class CourseRankDto //не наследуется от IHasId чтобы не сортировалось по общим правилам
     {
         public required int Id { get; set; }
 

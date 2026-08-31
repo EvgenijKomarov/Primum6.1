@@ -1,10 +1,11 @@
-﻿using System;
+﻿using CoreConnection.DTOs.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CoreConnection.DTOs
 {
-    public class StudentRankDto
+    public class StudentRankDto //не наследуется от IHasId чтобы не сортировалось по общим правилам
     {
         public required int Id { get; set; }
 
