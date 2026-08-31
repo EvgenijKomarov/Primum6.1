@@ -52,11 +52,14 @@ namespace PrimumCore.Services.Iterators
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
 
-            if(courseDto.Name != course.Name || courseDto.Description != course.About)
+            if(courseDto.Name != course.Name || 
+               courseDto.Description != course.About ||
+               courseDto.CourseThemeId != course.CourseThemeId)
             {
                 course.ApproveStatus = ApproveStatus.NeedModeratorReview;
                 course.Name = courseDto.Name;
                 course.About = courseDto.Description;
+                course.CourseThemeId = courseDto.CourseThemeId;
             }
 
             course.Price = courseDto.Price;

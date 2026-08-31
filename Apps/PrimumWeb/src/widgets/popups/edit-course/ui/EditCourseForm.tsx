@@ -68,91 +68,98 @@ export const EditCourseForm = ({ setCoursePopupOpen, onSuccess, course }: EditCo
   return (
     <Popup title="Редактирование курса" onClose={() => setCoursePopupOpen(false)}>
       <form className={styles.form} onSubmit={onSubmit}>
-        <div className={styles.rowSection}>
+        <div className={styles.rows}>
+          <div className={styles.rowSection}>
             <span className={styles.hint}>При изменении этих полей курс снова уйдет на модерацию</span>
             <div className={styles.field}>
-            <label className={styles.label}>Название *</label>
-            <Controller
+              <label className={styles.label}>Название *</label>
+              <Controller
                 name="name"
                 control={control}
                 rules={{ required: 'Обязательное поле', minLength: { value: 3, message: 'Минимум 3 символа' } }}
                 render={({ field }) => (
                 <Input {...field} placeholder="Введите название курса" />
-                )}
-            />
-            {errors.name && <span className={styles.error}>{errors.name.message}</span>}
+              )}
+              />
+              {errors.name && <span className={styles.error}>{errors.name.message}</span>}
             </div>
 
             <div className={styles.field}>
-            <label className={styles.label}>Описание</label>
-            <Controller
+              <label className={styles.label}>Описание</label>
+              <Controller
                 name="description"
                 control={control}
                 render={({ field }) => (
-                <Input {...field} placeholder="Кратко опишите курс" />
+                <Input {...field} placeholder="Кратко опишите курс" height='3rem'/>
                 )}
-            />
+              />
             </div>
-        </div>
+            <div className={styles.field}>
+              <label className={styles.label}>Тема *</label>
+              <select
+                className={styles.select}
+                disabled={themesLoading}
+                defaultValue={String(course.courseThemeId)}
+                {...register('courseThemeId', { required: 'Выберите тему' })}
+              >
+                <option value="">— Выберите тему —</option>
+                {themes.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.themeName}
+                  </option>
+                ))}
+              </select>
+              {errors.courseThemeId && <span className={styles.error}>{errors.courseThemeId.message}</span>}
+            </div>
+          </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Тема *</label>
-          <select
-            className={styles.select}
-            disabled={themesLoading}
-            defaultValue={String(course.courseThemeId)}
-            {...register('courseThemeId', { required: 'Выберите тему' })}
-          >
-            <option value="">— Выберите тему —</option>
-            {themes.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.themeName}
-              </option>
-            ))}
-          </select>
-          {errors.courseThemeId && <span className={styles.error}>{errors.courseThemeId.message}</span>}
-        </div>
-        <div className={styles.field}>
-            <label className={styles.label}>Максимум уроков в неделю *</label>
-            <Controller
-              name="maxLessons"
-              control={control}
-              rules={{ required: 'Укажите количество', min: { value: 1, message: 'Минимум 1' } }}
-              render={({ field }) => (
-                <Input {...field} type="number" placeholder="10" />
-              )}
-            />
-            {errors.maxLessons && <span className={styles.error}>{errors.maxLessons.message}</span>}
-        </div>
-        <div className={styles.rowSection}>
+          <div className={styles.rowSection}>
+            <span className={styles.hint}>Изменения этих параметров будут применяться ко всем абонементам, но не повляют на уже заданные значения</span>
+            <div className={styles.field}>
+              <label className={styles.label}>Максимум уроков в неделю *</label>
+              <Controller
+                name="maxLessons"
+                control={control}
+                rules={{ required: 'Укажите количество', min: { value: 1, message: 'Минимум 1' } }}
+                render={({ field }) => (
+                  <Input {...field} type="number" placeholder="10" />
+                )}
+              />
+              {errors.maxLessons && <span className={styles.error}>{errors.maxLessons.message}</span>}
+            </div>
+          </div>
+
+          <div className={styles.rowSection}>
             <span className={styles.hint}>Изменения этих параметров будут применяться только к новым абонементам</span>
             <div className={styles.row}>
-                <div className={styles.field}>
-                    <label className={styles.label}>Бесплатных уроков</label>
-                    <Controller
-                        name="freeLessons"
-                        control={control}
-                        rules={{ min: { value: 0, message: 'Не менее 0' } }}
-                        render={({ field }) => (
-                        <Input {...field} type="number" placeholder="0" />
-                        )}
-                    />
-                    {errors.freeLessons && <span className={styles.error}>{errors.freeLessons.message}</span>}
-                </div>
-                <div className={styles.field}>
-                    <label className={styles.label}>Цена (₽) *</label>
-                    <Controller
-                    name="price"
+              <div className={styles.field}>
+                <label className={styles.label}>Бесплатных уроков</label>
+                  <Controller
+                    name="freeLessons"
                     control={control}
-                    rules={{ required: 'Укажите цену', min: { value: 0, message: 'Не менее 0' } }}
+                    rules={{ min: { value: 0, message: 'Не менее 0' } }}
                     render={({ field }) => (
-                        <Input {...field} type="number" placeholder="0" />
-                    )}
-                    />
-                    {errors.price && <span className={styles.error}>{errors.price.message}</span>}
-                </div>
+                    <Input {...field} type="number" placeholder="0" />
+                  )}
+                  />
+                  {errors.freeLessons && <span className={styles.error}>{errors.freeLessons.message}</span>}
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Цена (₽) *</label>
+                <Controller
+                name="price"
+                control={control}
+                rules={{ required: 'Укажите цену', min: { value: 0, message: 'Не менее 0' } }}
+                render={({ field }) => (
+                  <Input {...field} type="number" placeholder="0" />
+                )}
+                />
+                {errors.price && <span className={styles.error}>{errors.price.message}</span>}
+              </div>
             </div>
+          </div>
         </div>
+        
         <Button
           type="submit"
           variant={ButtonTypeEnum.PRIMARY}
