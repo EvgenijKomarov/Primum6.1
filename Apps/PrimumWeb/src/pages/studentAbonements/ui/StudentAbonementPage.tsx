@@ -13,6 +13,7 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { getPublicCourse, type CourseDtoLite } from '@/entity/course';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
+import { utcToLocal } from '@/shared/format/format-config';
 
 interface SheduleBadgeProps {
     dow: DayOfWeek;
@@ -24,8 +25,10 @@ interface SheduleBadgeProps {
 const SheduleBadge = ({dow, time, id, onMutate}: SheduleBadgeProps) => {
     const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
 
-    const dowString = translateDayOfWeek(dow);
-    const timeString = `${time}:00-${time+1}:00`;
+    const {localDay, localHour} = utcToLocal(dow, time)
+
+    const dowString = translateDayOfWeek(localDay);
+    const timeString = `${localHour}:00-${localHour+1}:00`;
 
     const handleDeleteShedule = async () => {
         await deleteStudentSchedule(id);

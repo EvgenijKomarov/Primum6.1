@@ -10,6 +10,7 @@ import { Loader } from '@/shared/ui/Loader';
 
 import styles from './SchedulePage.module.css';
 import { AbonementInfo } from '@/widgets/popups/info/abonement-info/AbonementInfo';
+import { localToUtc, utcToLocal } from '@/shared/format/format-config';
 
 const DAYS: { label: string; value: DayOfWeek }[] = [
   { label: 'Пн', value: DayOfWeek.Monday },
@@ -36,10 +37,15 @@ export const SchedulePage = () => {
   const { schedules, isLoading, mutate } = useTeacherSchedules();
   const [loadingKeys, setLoadingKeys] = useState<Set<string>>(new Set());
 
-  const scheduleMap = useMemo(
-    () => new Map<string, TeacherScheduleDto>(schedules.map((s) => [slotKey(s.dayOfWeek, s.time), s])),
-    [schedules],
-  );
+  const scheduleMap = useMemo(() => {
+    const map = new Map<string, TeacherScheduleDto>();
+    for (const s of schedules) {
+      const { localDay, localHour } = utcToLocal(s.dayOfWeek, s.time);
+      const key = slotKey(localDay, localHour);
+      map.set(key, s);
+    }
+    return map;
+  }, [schedules]);
 
   const setKeyLoading = (key: string, loading: boolean) => {
     setLoadingKeys((prev) => {
@@ -53,8 +59,8 @@ export const SchedulePage = () => {
   };
 
   const handleSlotClick = useCallback(
-    async (day: DayOfWeek, hour: number) => {
-      const key = slotKey(day, hour);
+    async (localDay: DayOfWeek, localHour: number) => {
+      const key = slotKey(localDay, localHour);
       if (loadingKeys.has(key)) return;
 
       const existing = scheduleMap.get(key);
@@ -65,8 +71,11 @@ export const SchedulePage = () => {
       setKeyLoading(key, true);
       try {
         if (status === 'empty') {
-          await createTeacherSchedule({ dayOfWeek: day, time: hour });
+          // Конвертируем локальное время в UTC перед отправкой на бэкенд
+          const { utcDay, utcHour } = localToUtc(localDay, localHour);
+          await createTeacherSchedule({ dayOfWeek: utcDay, time: utcHour });
         } else {
+          // existing содержит исходный DTO, мы просто удаляем его по ID
           await deleteTeacherSchedule(existing!.id);
         }
         await mutate();

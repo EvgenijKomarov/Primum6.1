@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { getPublicTeacherSchedules } from '@/entity/teacher';
 import { subscribeToCourse } from '@/entity/student';
@@ -13,6 +13,7 @@ import styles from './CourseScheduleSubscribe.module.css';
 import { Popup } from '@/shared/ui/Popup/Popup';
 import { translateException } from '@/features/exception-translation/translate-exception';
 import { translateDayOfWeek } from '@/features/translation/translation';
+import { utcToLocal } from '@/shared/format/format-config';
 
 const DAY_ORDER: DayOfWeek[] = [
   DayOfWeek.Monday,
@@ -24,6 +25,11 @@ const DAY_ORDER: DayOfWeek[] = [
   DayOfWeek.Sunday,
 ];
 
+type LocalSlot = TeacherScheduleDto & {
+  localDay: DayOfWeek;
+  localHour: number;
+};
+
 interface Props {
   course: CourseDtoLite;
   setSubscribePopupOpen: (open: boolean) => void;
@@ -31,7 +37,7 @@ interface Props {
 }
 
 export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopupOpen }: Props) => {
-  const [selectedSlot, setSelectedSlot] = useState<TeacherScheduleDto | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<LocalSlot | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const { data, isLoading } = useSWR(
@@ -41,15 +47,26 @@ export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopup
 
   const { fetch: doSubscribe, isLoading: isSubmitting } = useFetch(subscribeToCourse);
 
-  const slots = (data?.items ?? []).filter((s) => s.isAvailable);
+  const localSlots = useMemo<LocalSlot[]>(() => {
+    const rawSlots = (data?.items ?? []).filter((s) => s.isAvailable);
+    return rawSlots.map((slot) => {
+      const { localDay, localHour } = utcToLocal(slot.dayOfWeek, slot.time);
+      return { ...slot, localDay, localHour };
+    });
+  }, [data]);
 
-  const slotsByDay = DAY_ORDER.reduce<Record<DayOfWeek, TeacherScheduleDto[]>>(
-    (acc, day) => {
-      acc[day] = slots.filter((s) => s.dayOfWeek === day).sort((a, b) => a.time - b.time);
-      return acc;
-    },
-    {} as Record<DayOfWeek, TeacherScheduleDto[]>,
-  );
+  // 2. Группируем и сортируем слоты уже по локальному дню и часу
+  const slotsByDay = useMemo(() => {
+    return DAY_ORDER.reduce<Record<DayOfWeek, LocalSlot[]>>(
+      (acc, day) => {
+        acc[day] = localSlots
+          .filter((s) => s.localDay === day)
+          .sort((a, b) => a.localHour - b.localHour);
+        return acc;
+      },
+      {} as Record<DayOfWeek, LocalSlot[]>
+    );
+  }, [localSlots]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
@@ -69,6 +86,8 @@ export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopup
 
   const isFree = course.price === 0;
   const priceLabel = isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`;
+
+  const formatHour = (h: number) => String(h).padStart(2, '0');
 
   return (
     <Popup title="Запись на курс" onClose={() => { setSelectedSlot(null); setError(null); setSubscribePopupOpen(false); }}>
@@ -109,7 +128,7 @@ export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopup
               </div>
             ))}
           </>
-        ) : slots.length === 0 ? (
+        ) : localSlots.length === 0 ? (
           <div className={styles.empty}>
             <p className={styles.emptyText}>
               Преподаватель пока не добавил доступное время для записи
@@ -120,60 +139,68 @@ export const CourseScheduleSubscribe = ({ course, onSubscribe, setSubscribePopup
             <div key={day} className={styles.dayGroup}>
               <p className={styles.dayName}>{translateDayOfWeek(day)}</p>
               <div className={styles.slotsRow}>
-                {slotsByDay[day].map((slot) => (
-                  <button
-                    key={slot.id}
-                    className={styles.slotBtn}
-                    onClick={() => setSelectedSlot(slot)}
-                  >
-                    {slot.time}:00 — {slot.time + 1}:00
-                  </button>
-                ))}
+                {slotsByDay[day].map((slot) => {
+                  const startHour = formatHour(slot.localHour);
+                  const endHour = formatHour((slot.localHour + 1) % 24);
+                  const isSelected = selectedSlot?.id === slot.id;
+
+                  return (
+                    <button
+                      key={slot.id}
+                      className={`${styles.slotBtn} ${isSelected ? styles.slotBtnSelected : ''}`}
+                      onClick={() => setSelectedSlot(slot)}
+                    >
+                      {startHour}:00 — {endHour}:00
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ))
         )}
 
-        {selectedSlot && (<div className={styles.confirm}>
-          <div className={styles.sectionLabel}>Подтверждение записи</div>
-          <div className={styles.confirmCard}>
-            <div className={styles.confirmRow}>
-              <span className={styles.confirmLabel}>Курс</span>
-              <span className={styles.confirmValue}>{course.name ?? '—'}</span>
-            </div>
-            <div className={styles.confirmRow}>
-              <span className={styles.confirmLabel}>Преподаватель</span>
-              <span className={styles.confirmValue}>{course.teacherName ?? '—'}</span>
-            </div>
-            <div className={styles.confirmRow}>
-              <span className={styles.confirmLabel}>День</span>
-              <span className={styles.confirmValue}>{translateDayOfWeek(selectedSlot.dayOfWeek)}</span>
-            </div>
-            <div className={styles.confirmRow}>
-              <span className={styles.confirmLabel}>Время</span>
-              <span className={styles.confirmValue}>
-                {selectedSlot.time}:00 — {selectedSlot.time + 1}:00
-              </span>
-            </div>
-            <div className={styles.confirmRow}>
-              <span className={styles.confirmLabel}>Стоимость</span>
-              <span className={styles.confirmValue}>{priceLabel} / урок</span>
-            </div>
+        {selectedSlot && (
+          <div className={styles.confirm}>
+            <div className={styles.sectionLabel}>Подтверждение записи</div>
+            <div className={styles.confirmCard}>
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>Курс</span>
+                <span className={styles.confirmValue}>{course.name ?? '—'}</span>
+              </div>
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>Преподаватель</span>
+                <span className={styles.confirmValue}>{course.teacherName ?? '—'}</span>
+              </div>
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>День</span>
+                <span className={styles.confirmValue}>{translateDayOfWeek(selectedSlot.localDay)}</span>
+              </div>
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>Время</span>
+                <span className={styles.confirmValue}>
+                  {formatHour(selectedSlot.localHour)}:00 — {formatHour((selectedSlot.localHour + 1) % 24)}:00
+                </span>
+              </div>
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>Стоимость</span>
+                <span className={styles.confirmValue}>{priceLabel} / урок</span>
+              </div>
 
-            {error && <div className={styles.errorBanner}>{translateException(error)}</div>}
+              {error && <div className={styles.errorBanner}>{translateException(error)}</div>}
 
-            <div className={styles.confirmActions}>
-              <Button
-                variant={ButtonTypeEnum.PRIMARY}
-                size={ButtonSizeEnum.NORMAL}
-                onClick={handleConfirm}
-                isLoading={isSubmitting}
-              >
-                Подтвердить запись
-              </Button>
+              <div className={styles.confirmActions}>
+                <Button
+                  variant={ButtonTypeEnum.PRIMARY}
+                  size={ButtonSizeEnum.NORMAL}
+                  onClick={handleConfirm}
+                  isLoading={isSubmitting}
+                >
+                  Подтвердить запись
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>)}
+          </div>)
+        }
       </div>
     </Popup>
   );

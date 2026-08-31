@@ -84,14 +84,19 @@
   height: 2rem;
   padding: 0 0.875rem;
   border-radius: 0.5rem;
-  border: 1px solid var(--color-primary-light);
-  background-color: color-mix(in srgb, var(--color-primary-light) 10%, transparent);
-  color: var(--color-primary-light);
+  border: 1px solid var(--color-primary-base);
+  background-color: color-mix(in srgb, var(--color-primary-base) 10%, transparent);
+  color: var(--color-primary-base);
   font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 120ms ease, border-color 120ms ease;
   white-space: nowrap;
+}
+
+.slotBtnSelected{
+  background-color: color-mix(in srgb, var(--color-primary-light) 20%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary-light) 40%, transparent);
 }
 
 .slotBtn:hover {

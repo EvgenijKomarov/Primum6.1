@@ -1,3 +1,4 @@
+import type { DayOfWeek } from "@/entity/schedule";
 import { translateMonth } from "@/features/translation/translation";
 
 export const formatDateLabel = (dateStr: string) => {
@@ -30,4 +31,24 @@ export const formatDateTime = (iso: string) => {
   const hh = String(dt.getHours()).padStart(2, '0');
   const mm = String(dt.getMinutes()).padStart(2, '0');
   return `${d} ${m}, ${hh}:${mm}`;
+};
+
+/** Конвертирует UTC день/час в локальный день/час */
+export const utcToLocal = (utcDay: number, utcHour: number) => {
+  // 2024-01-01 был понедельник. Используем его как опорную неделю.
+  const date = new Date(Date.UTC(2024, 0, utcDay, utcHour));
+  const localDayJs = date.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+  const localDay = (localDayJs === 0 ? 7 : localDayJs) as DayOfWeek;
+  const localHour = date.getHours();
+  return { localDay, localHour };
+};
+
+/** Конвертирует локальный день/час в UTC день/час для отправки на бэкенд */
+export const localToUtc = (localDay: number, localHour: number) => {
+  // Создаем дату в локальном часовом поясе браузера
+  const date = new Date(2024, 0, localDay, localHour);
+  const utcDayJs = date.getUTCDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+  const utcDay = (utcDayJs === 0 ? 7 : utcDayJs) as DayOfWeek;
+  const utcHour = date.getUTCHours();
+  return { utcDay, utcHour };
 };
