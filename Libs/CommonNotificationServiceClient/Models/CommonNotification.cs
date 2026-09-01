@@ -20,6 +20,6 @@ namespace CommonNotificationServiceClient.Models
         public bool Seen { get; set; }
 
         [JsonPropertyName("datetime")]
-        public DateTime DateTime { get; set; }
+        public DateTimeOffset DateTime { get; set; }
     }
 }

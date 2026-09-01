@@ -33,8 +33,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                [StudentUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты"
+                [TeacherUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
             };
         }
 
@@ -42,8 +42,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты"
+                [TeacherUserId] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
             };
         }
 
@@ -51,8 +51,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты"
+                [TeacherUserId] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
             };
         }
     }

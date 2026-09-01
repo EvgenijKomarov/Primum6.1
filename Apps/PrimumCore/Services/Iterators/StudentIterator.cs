@@ -113,7 +113,8 @@ namespace PrimumCore.Services.Iterators
                 CourseName = course.Name,
                 AbonementId = abonement.Id,
                 AbonementSheduleId = abonementShedule.Id,
-                DayOfWeek = teacherShedule.DayOfWeek.ToString(),
+                DayOfWeek = teacherShedule.DayOfWeek,
+                TeacherTimezoneOffset = teacherShedule.Teacher.User.TimeZoneOffset,
                 Time = teacherShedule.Time
             });
 

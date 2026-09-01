@@ -19,39 +19,69 @@ namespace PublishServiceConnection.Events
 
         public required int TeacherUserId { get; set; }
 
+        public required TimeSpan TeacherTimezoneOffset { get; set; }
+
         public required string CourseName { get; set; }
 
         public required int AbonementId { get; set; }
 
         public required int AbonementSheduleId { get; set; }
 
-        public required string DayOfWeek { get; set; }
+        public required DayOfWeek DayOfWeek { get; set; }
 
         public required int Time {  get; set; }
 
         public string MailTitle => "Новый ученик, подписавшийся на Ваш курс";
         public Dictionary<int, string> ToChatBotNotifications()
         {
+            var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
+
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                [TeacherUserId] = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
             };
         }
 
         public Dictionary<int, string> ToMailNotifications()
         {
+            var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
+
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
             };
         }
 
         public Dictionary<int, string> ToCommonNotifications()
         {
+            var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
+
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(DayOfWeek)} {Time}:00",
+                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
             };
+        }
+
+        private (DayOfWeek Day, int Hour) ApplyOffset(DayOfWeek day, int hour, TimeSpan offset)
+        {
+            const int minutesInDay = 24 * 60;
+            const int minutesInWeek = 7 * minutesInDay;
+
+            // Переводим исходные день+час в общее число минут с начала недели
+            int totalMinutes = (int)day * minutesInDay + hour * 60;
+
+            // Прибавляем смещение (учитываем и часы, и минуты из TimeSpan)
+            totalMinutes += (int)offset.TotalMinutes;
+
+            // Корректно оборачиваем по модулю недели (в C# % может давать отрицательный результат)
+            totalMinutes %= minutesInWeek;
+            if (totalMinutes < 0)
+                totalMinutes += minutesInWeek;
+
+            int resultDay = totalMinutes / minutesInDay;
+            int resultHour = (totalMinutes % minutesInDay) / 60;
+
+            return ((DayOfWeek)resultDay, resultHour);
         }
     }
 }

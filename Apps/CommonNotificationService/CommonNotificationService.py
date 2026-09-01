@@ -66,14 +66,14 @@ async def get_by_user(userId: int):
 
     rows = await cursor.to_list(length=None)
     if not rows:
-        return {}
+        return []
     return [
         {
             "id": str(row["_id"]),
             "userId": row["userId"],
             "text": row["text"],
             "seen": row["seen"],
-            "datetime": row["datetime"]
+            "datetime": row["datetime"].isoformat().replace("+00:00", "Z")
         }
         for row in rows
     ]

@@ -42,6 +42,7 @@ namespace PrimumCore.Services.Iterators
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
                 MailAdress = dto.MailAdress,
+                TimeZoneOffset = TimeSpan.FromHours(dto.TimeZoneOffset),
                 Password = passwordHasher.HashPassword(dto.Password)
             };
             await dbIterator.AddAsync(user);
@@ -104,7 +105,8 @@ namespace PrimumCore.Services.Iterators
                     (
                          (e.Surname ?? "") + " " +
                          (e.Name ?? "") + " " +
-                         (e.Patronymic ?? "")).ToLower(),
+                         (e.Patronymic ?? "") + " " +
+                         e.Id).ToLower(),
                     $"%{displayName.ToLower()}%"))
                 .ToDto()
                 .ToPageResult(_page, _pageSize);

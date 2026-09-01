@@ -19,6 +19,8 @@ public partial class User: BaseEntity
 
     public bool IsMailChecked { get; set; } = false;
 
+    public TimeSpan TimeZoneOffset { get; set; } = TimeSpan.FromHours(3); // Moscow by default
+
     public StudentProfile? StudentProfile { get; set; }
 
     public TeacherProfile? TeacherProfile { get; set; }

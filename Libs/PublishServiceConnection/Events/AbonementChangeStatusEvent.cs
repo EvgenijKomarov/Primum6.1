@@ -30,7 +30,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Abonement}Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
+                [TeacherUserId] = $"{Emoticons.Abonement}Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
             };
         }
 
@@ -38,7 +38,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Абонемент (Id: {AbonementId}) по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
+                [TeacherUserId] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
             };
         }
 

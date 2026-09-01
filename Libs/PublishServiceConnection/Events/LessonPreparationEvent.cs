@@ -15,9 +15,13 @@ namespace PublishServiceConnection.Events
 
         public required int StudentUserId { get; set; }
 
+        public required TimeSpan StudentTimezoneOffset { get; set; }
+
         public required string TeacherName { get; set; }
 
         public required int TeacherUserId { get; set; }
+
+        public required TimeSpan TeacherTimezoneOffset { get; set; }
 
         public required string CourseName { get; set; }
 
@@ -36,9 +40,9 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
+                [TeacherUserId] = $"{Emoticons.Time}Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
                     + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией"),
-                [StudentUserId] = $"{Emoticons.Time}Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                [StudentUserId] = $"{Emoticons.Time}Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
                     (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
             };
         }
@@ -47,9 +51,9 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
+                [TeacherUserId] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
                     + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией"),
-                [StudentUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                [StudentUserId] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
                     (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
             };
         }
@@ -58,9 +62,9 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
+                [TeacherUserId] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
                     + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией"),
-                [StudentUserId] = $"Завтра случится занятие в {DateTime.ToString("HH:mm")} по курсу {CourseName}.\n" +
+                [StudentUserId] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
                     (IsEnoughMoney ? $"Вам должно хватить средств для оплаты занятия" : $"ВНИМАНИЕ! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
             };
         }

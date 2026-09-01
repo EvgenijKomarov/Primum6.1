@@ -19,7 +19,8 @@ namespace PrimumCore.Services.Iterators
                     (
                          (e.User.Surname ?? "") + " " +
                          (e.User.Name ?? "") + " " +
-                         (e.User.Patronymic ?? "")).ToLower(),
+                         (e.User.Patronymic ?? "") + " "+ 
+                         e.User.Id).ToLower(),
                     $"%{displayName.ToLower()}%"))
                 .ToDto(helper)
                 .ToPageResult(_page, _pageSize);

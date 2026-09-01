@@ -21,7 +21,8 @@ namespace PrimumCore.Services.Iterators
                 .WhereIf(!string.IsNullOrEmpty(searchString), e => EF.Functions.Like(
                     (
                          (e.Title ?? "") + " " +
-                         (e.Description ?? "")).ToLower(),
+                         (e.Description ?? "") + " "+
+                         e.Id).ToLower(),
                     $"%{searchString.ToLower()}%"))
                 .ToDto(true)
                 .ToPageResult(_page, _pageSize);

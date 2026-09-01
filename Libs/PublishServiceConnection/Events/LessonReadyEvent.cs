@@ -32,8 +32,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
-                [StudentUserId] = $"{BoolRes._true}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}"
+                [TeacherUserId] = $"{BoolRes._true}{Emoticons.Lesson}Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке: {TeacherLink}",
+                [StudentUserId] = $"{BoolRes._true}{Emoticons.Lesson}Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке: {StudentLink}"
             };
         }
 
@@ -41,8 +41,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {TeacherLink}",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\nОно будет доступно по ссылке: {StudentLink}"
+                [TeacherUserId] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке: {TeacherLink}",
+                [StudentUserId] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке: {StudentLink}"
             };
         }
 
@@ -50,8 +50,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n Ссылка доступна в личном кабинете",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} состоится совсем скоро!\n Ссылка доступна в личном кабинете"
+                [TeacherUserId] = $"Занятие с {StudentName} состоится через 30 минут!\n Ссылка доступна в личном кабинете",
+                [StudentUserId] = $"Занятие по {CourseName} состоится через 30 минут!\n Ссылка доступна в личном кабинете"
             };
         }
     }

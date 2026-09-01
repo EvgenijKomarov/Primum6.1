@@ -259,6 +259,8 @@ public partial class PrimumContext : DbContext
                 .HasForeignKey<StudentProfile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            entity.Property(e => e.TimeZoneOffset).HasDefaultValue(TimeSpan.FromHours(3));
+
             entity.HasQueryFilter(AvailabilityExpressions.IsUserAvailable);
         });
 

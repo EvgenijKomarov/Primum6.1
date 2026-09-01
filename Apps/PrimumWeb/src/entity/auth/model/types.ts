@@ -9,4 +9,5 @@ export interface RegisterDto {
   patronymic: string;
   mailAdress: string;
   password: string;
+  timeZoneOffset: number;
 }

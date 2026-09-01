@@ -34,7 +34,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [StudentUserId] = $"{Emoticons.Lesson}Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. " +
+                [StudentUserId] = $"{Emoticons.Lesson}Занятие по курсу {CourseName} было оценено на {Grade}. " +
                     $"Получено {StudentExp} опыта. {(EarnedCoins == 0 ? "" : $"{Emoticons.Coins}Начислено {EarnedCoins} монет!")}",
             };
         }
@@ -43,7 +43,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [StudentUserId] = $"Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
+                [StudentUserId] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
             };
         }
 
@@ -51,7 +51,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [StudentUserId] = $"Занятие за {DateTime.ToString("dd.MM.yyyy")} по курсу {CourseName} было оценено на {Grade}. " +
+                [StudentUserId] = $"Занятие по курсу {CourseName} было оценено на {Grade}. " +
                     $"Получено {StudentExp} опыта. {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
                 [TeacherUserId] = $"Вы получили {TeacherExp} опыта, а Ваш курс {CourseName} - {CourseExp} опыта",
             };

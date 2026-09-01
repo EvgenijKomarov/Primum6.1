@@ -17,5 +17,7 @@ namespace CoreConnection.DTOs
         public string MailAdress {  get; set; } = null!;
 
         public string Password { get; set; } = null!;
+
+        public int TimeZoneOffset { get; set; }
     }
 }

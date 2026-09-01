@@ -3,7 +3,7 @@ import { useFetch } from "@/shared/api/useFetch.ts";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import styles from "./styles.module.css";
 import { Input } from "@/shared/ui/Input";
-import { useUserStore } from "@/entity/user";
+import { sendEmailVerification, useUserStore } from "@/entity/user";
 import Button from "@/shared/ui/Button/Button.tsx";
 import { ButtonTypeEnum } from "@/shared/enums";
 import { translateException } from "@/features/exception-translation/translate-exception";
@@ -24,10 +24,11 @@ export const RegisterForm = ({ onSwitch, onSuccess, onMutate }: RegisterFormProp
 
 const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
   try {
-    const response = await fetchRegister(data);
+    const response = await fetchRegister({ ...data, timeZoneOffset: new Date().getTimezoneOffset() });
     setToken(response.data);
     onSuccess?.();
     await onMutate?.();
+    await sendEmailVerification({ correctiveMail: undefined });
   } catch (error) {
     form.setError('root', {
       message: error instanceof Error

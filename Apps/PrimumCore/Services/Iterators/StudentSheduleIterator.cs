@@ -54,7 +54,8 @@ namespace PrimumCore.Services.Iterators
                 CourseName = abonementShedule.Abonement.Course.Name,
                 AbonementId = abonementShedule.Abonement.Id,
                 AbonementSheduleId = abonementShedule.Id,
-                DayOfWeek = abonementShedule.TeacherShedule.DayOfWeek.ToString(),
+                DayOfWeek = abonementShedule.TeacherShedule.DayOfWeek,
+                TeacherTimezoneOffset = abonementShedule.TeacherShedule.Teacher.User.TimeZoneOffset,
                 Time = abonementShedule.TeacherShedule.Time
             };
             abonementShedule.Abonement.AbonementShedules.Remove(abonementShedule);
