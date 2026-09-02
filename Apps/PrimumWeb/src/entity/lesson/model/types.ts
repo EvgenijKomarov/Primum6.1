@@ -16,6 +16,7 @@ export interface LessonDto extends Grading {
   studentDisplayName: string;
   studentId: number;
   abonementId: number;
+  isReferal: boolean;
   price: number;
   lessonStatus: LessonStatus;
   dateTime: string;
@@ -54,6 +55,7 @@ export interface FutureLessonDto {
   studentDisplayName: string;
   studentId: number;
   abonementId: number;
+  isReferal: boolean;
   price: number;
   lessonStatus: LessonStatus;
   time: string;

@@ -121,9 +121,10 @@
 /* ── Lesson card ── */
 .card {
   display: flex;
+  gap: 1rem;
   align-items: center;
   transition: border-color 150ms ease;
-  height: 2.5rem;
+  height: 3rem;
 }
 
 .cardLeft {
@@ -160,6 +161,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+.cardCenter {
+
+}
+
 .cardRight {
   display: flex;
   gap: 0.5rem;
@@ -177,19 +182,28 @@
 
 /* ── Price ── */
 .cardPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: right;
+}
+
+.cardPriceValue {
   font-size: 0.8125rem;
   color: var(--color-secondary-light);
   font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  text-align: right;
 }
 
 .cardEarning {
   font-size: 0.8125rem;
-  color: var(--color-secondary-light);
+  color: var(--color-secondary-dark);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
 
-.cardPriceFree {
+.cardPriceValueFree {
   color: var(--color-functional-success);
 }
 

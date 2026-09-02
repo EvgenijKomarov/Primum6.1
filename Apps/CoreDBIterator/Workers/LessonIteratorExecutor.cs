@@ -72,7 +72,8 @@ namespace CoreDBIterator.Workers
                             lesson.Price,
                             teacher.ConvertionIndex,
                             teacher.Rank.EarningMultiplier,
-                            lesson.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened)
+                            lesson.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened),
+                            lesson.IsReferal
                             );
 
                         await paymentClient.ProcessLessonPaymentAsync(

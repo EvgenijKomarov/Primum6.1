@@ -114,6 +114,7 @@ namespace PrimumCore.Extentions
                 AbonementId = x.Abonement.Id,
                 Price = x.Price,
                 Id = x.Id,
+                IsReferal = x.IsReferal,
                 LessonStatus = x.Status,
                 HomeworkGrade = x.Grading == null ? null : (int?)x.Grading.HomeworkGrade,
                 LessonActivityGrade = x.Grading == null ? null : (int?)x.Grading.LessonActivityGrade,
@@ -270,13 +271,15 @@ namespace PrimumCore.Extentions
                     Price = x.Price,
                     LessonStatus = x.Status,
                     Id = x.Id,
+                    IsReferal = x.IsReferal,
                     CourseName = x.Abonement.Course.Name,
                     CourseId = x.Abonement.Course.Id,
                     TeacherEarning = isStudentLink ? null : service.CalculateEarningsToLesson(
                         x.Price, 
                         x.Abonement.Course.Teacher.ConvertionIndex,
                         x.Abonement.Course.Teacher.Rank.EarningMultiplier,
-                        x.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened))
+                        x.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened),
+                        x.IsReferal)
                 }).ToList()
             });
     }

@@ -16,6 +16,8 @@ public partial class Lesson: BaseEntity
 
     public string? TeacherLink { get; set; }
 
+    public bool IsReferal { get; set; }
+
     public DateTime DateTime { get; set; }
 
     public LessonStatus Status { get; set; } = LessonStatus.Waiting;

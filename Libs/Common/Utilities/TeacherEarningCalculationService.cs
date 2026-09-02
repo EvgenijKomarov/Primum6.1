@@ -56,8 +56,9 @@ namespace Common.Utilities
             return teacherEarnings.TotalEarningMultiplier + valueBySeries;
         }
 
-        public decimal CalculateEarningsToLesson(decimal lessonPrice, float? convertionIndex, float rankMultiplier, int happenedPayedLessonsCount)
+        public decimal CalculateEarningsToLesson(decimal lessonPrice, float? convertionIndex, float rankMultiplier, int happenedPayedLessonsCount, bool isReferal)
         {
+            if (isReferal) return lessonPrice * 0.8M; 
             return Math.Round(CalculateTotalToLesson(convertionIndex, rankMultiplier, happenedPayedLessonsCount) * lessonPrice, 2);
         }
 

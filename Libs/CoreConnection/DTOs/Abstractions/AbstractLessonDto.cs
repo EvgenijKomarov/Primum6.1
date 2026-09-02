@@ -11,6 +11,8 @@ namespace CoreConnection.DTOs.Abstractions
 
         public required int CourseId { get; set; }
 
+        public required bool IsReferal { get; set; }
+
         public required int Id { get; set; }
 
         public required string TeacherDisplayName { get; set; }

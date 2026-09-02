@@ -53,6 +53,7 @@ namespace CoreDBIterator.Workers
                         AbonementId = s.Abonement.Id,
                         DateTime = freeDateTime,
                         Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0m : s.Abonement.PricePerLesson,
+                        IsReferal = s.Abonement.IsReferal,
                         Status = LessonStatus.Waiting
                     };
                     context.Set<Lesson>().Add(lesson);

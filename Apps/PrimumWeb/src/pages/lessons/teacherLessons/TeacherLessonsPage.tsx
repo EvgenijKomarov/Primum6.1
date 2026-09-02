@@ -11,6 +11,9 @@ import { Gradinginfo } from "@/widgets/popups/info/grading-info/GradingInfo";
 import { StatusBadge } from "../studentLessons/StudentLessonsPage";
 import { GradingPopup } from "@/widgets/popups/grading-popup/GradingPopup";
 import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from "@/shared/format/format-config";
+import { Badge } from "@/shared/ui/Badge/Badge";
+import { BadgeTypeEnum } from "@/shared/enums/badge";
+import Button from "@/shared/ui/Button/Button";
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
   <Card hoverable={true} width={'100%'}>
@@ -22,17 +25,22 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
         </div>
       </div>
-      <div className={styles.cardRigh}>
+      <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
-          <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-          </span>
+          {lesson.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
         </div>
-        {lesson.teacherEarning &&
-          <span className={`${styles.cardEarning} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
-            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
-          </span>}
+      </div>
+      <div className={styles.cardRight}>
+        <div className={styles.cardPrice}>
+          <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceValueFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `Цена: ${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+          {(lesson.teacherEarning && lesson.teacherEarning !== 0) &&
+            <span className={styles.cardEarning}>
+              {`Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
+            </span>}
+        </div>
       </div>
     </div>
   </Card>
@@ -50,34 +58,34 @@ const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => 
           <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
         </div>
       </div>
-      <div className={styles.cardRight}>
+      <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
+          {lesson.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
+          <StatusBadge status={lesson.lessonStatus} />
           {!lesson.finalGrade && lesson.lessonLink !== '' ? (
             <GradingPopup lessonId={lesson.id} onSubmit={onSubmit}/>
           ) : (
             <Gradinginfo {...lesson} />
           )}
-          <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-          </span>
-          <StatusBadge status={lesson.lessonStatus} />
-          {lesson.lessonLink && (
-            <a
-              href={lesson.lessonLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.linkBtn}
-            >
-              <ExternalLinkIcon />
-              Открыть
-            </a>
-          )}
         </div>
-        {lesson.teacherEarning &&
-          <span className={`${styles.cardEarning} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
-            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Ваша доля: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
-          </span>}
       </div>
+      <div className={styles.cardRight}>
+        <div className={styles.cardPrice}>
+          <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceValueFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `Цена: ${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+          {(lesson.teacherEarning && lesson.teacherEarning !== 0) &&
+            <span className={styles.cardEarning}>
+              {`Ваш доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
+            </span>}
+        </div>
+      </div>
+      <Button 
+        disabled={!lesson.lessonLink}
+        onClick={() => window.open(lesson.lessonLink, '_blank')}
+        icon={<ExternalLinkIcon />}>
+        Открыть
+      </Button>
     </div>
   </Card>
 );
