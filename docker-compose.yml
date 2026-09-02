@@ -5,8 +5,6 @@ services:
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "4100:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d:ro
@@ -18,7 +16,7 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    
+
   core-db-migrate:
     build:
       context: ./Libs/CoreDBModel
@@ -30,16 +28,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    #restart: no
-    
+
   mongodb:
     image: mongo:7
     container_name: primum-mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    ports:
-      - "4110:27017"
     volumes:
       - mongo-data:/data/db
     networks:
@@ -52,13 +47,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-    ports:
-      - "4210:5672"
-      - "4211:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - primum-network
+    restart: unless-stopped
 
   signservice:
     build:
@@ -67,8 +60,6 @@ services:
     container_name: sign-service
     environment:
       MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
-    volumes:
-      - ./Apps/SignService:/app
     networks:
       - primum-network
     depends_on:
@@ -79,7 +70,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-      
+    restart: unless-stopped
+
   common-notification-service:
     build:
       context: Apps/CommonNotificationService
@@ -87,8 +79,6 @@ services:
     container_name: common-notification-service
     environment:
       MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
-    volumes:
-      - ./Apps/CommonNotificationService:/app
     networks:
       - primum-network
     depends_on:
@@ -99,8 +89,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-      
-  email-notification-service: #вообще взаимозависимы с ядром, хз как фиксить
+    restart: unless-stopped
+
+  email-notification-service:
     build:
       context: Apps/EmailNotificationService
       dockerfile: Dockerfile
@@ -109,8 +100,6 @@ services:
       CORE_URL: "http://primumcore:5000"
       EMAIL: ${EMAIL}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
-    volumes:
-      - ./Apps/EmailNotificationService:/app
     networks:
       - primum-network
     healthcheck:
@@ -119,7 +108,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-      
+    restart: unless-stopped
+
   payment-service:
     build:
       context: Apps/PaymentService
@@ -127,9 +117,7 @@ services:
     container_name: payment-service
     environment:
       MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
-      MODE: "Development"
-    volumes:
-      - ./Apps/PaymentService:/app
+      MODE: "Production"
     networks:
       - primum-network
     depends_on:
@@ -140,7 +128,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-      
+    restart: unless-stopped
+
   chat-bot-notification-service:
     build:
       context: Apps/ChatBotNotificationService
@@ -149,8 +138,6 @@ services:
     environment:
       SIGNSERVICE_URL: "http://signservice:5000"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
-    volumes:
-      - ./Apps/ChatBotNotificationService:/app
     depends_on:
       - rabbitmq
       - signservice
@@ -162,6 +149,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    restart: unless-stopped
 
   primumcore:
     build:
@@ -191,10 +179,9 @@ services:
         condition: service_started
       payment-service:
         condition: service_started
-    ports:
-      - "5004:5000"
     networks:
       - primum-network
+    restart: unless-stopped
 
   primumwebapi:
     build:
@@ -218,6 +205,7 @@ services:
       - common-notification-service
     networks:
       - primum-network
+    restart: unless-stopped
 
   botcore:
     build:
@@ -231,14 +219,13 @@ services:
       ASPNETCORE_HTTP_PORTS: "5000"
       GATEWAY_URL: ${GATEWAY_URL}
       ASPNETCORE_ENVIRONMENT: Production
-    ports:
-      - "5003:5000"
     depends_on:
       - primumcore
       - signservice
       - payment-service
     networks:
       - primum-network
+    restart: unless-stopped
 
   coredbiterator:
     build:
@@ -256,6 +243,7 @@ services:
         condition: service_completed_successfully
     networks:
       - primum-network
+    restart: unless-stopped
 
   primumweb:
     build:
@@ -268,6 +256,7 @@ services:
       - primumwebapi
     networks:
       - primum-network
+    restart: unless-stopped
 
 networks:
   primum-network:

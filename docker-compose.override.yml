@@ -1,5 +1,46 @@
 services:
+  postgres:
+    ports:
+      - "4100:5432"
+
+  mongodb:
+    ports:
+      - "4110:27017"
+
+  rabbitmq:
+    ports:
+      - "4210:5672"
+      - "4211:15672"
+
+  signservice:
+    volumes:
+      - ./Apps/SignService:/app
+
+  common-notification-service:
+    volumes:
+      - ./Apps/CommonNotificationService:/app
+
+  email-notification-service:
+    volumes:
+      - ./Apps/EmailNotificationService:/app
+
+  payment-service:
+    environment:
+      MODE: "Development"
+    volumes:
+      - ./Apps/PaymentService:/app
+
+  chat-bot-notification-service:
+    volumes:
+      - ./Apps/ChatBotNotificationService:/app
+
+  botcore:
+    ports:
+      - "5003:5000"
+      
   primumcore:
+    ports:
+      - "5004:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5000
