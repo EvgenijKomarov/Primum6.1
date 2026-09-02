@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddSignService();
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -38,16 +37,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-}
-
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
-{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 

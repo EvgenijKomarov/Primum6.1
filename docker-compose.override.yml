@@ -34,7 +34,13 @@ services:
     volumes:
       - ./Apps/ChatBotNotificationService:/app
 
+  primumwebapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  
   botcore:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5003:5000"
       
@@ -43,7 +49,6 @@ services:
       - "5004:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5000
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

@@ -38,7 +38,7 @@ builder.AddLogging();
 
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

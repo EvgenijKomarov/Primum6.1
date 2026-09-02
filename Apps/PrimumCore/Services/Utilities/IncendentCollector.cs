@@ -202,7 +202,8 @@ namespace PrimumCore.Services.Utilities
                             $"Teacher Name: {x.Teacher.User.DisplayName}\n" +
                             $"Price per lesson: {x.Price}\n" +
                             $"Maximum lessons: {x.MaxLessons}\n" +
-                            $"Free lessons: {x.FreeLessons}",
+                            $"Free lessons: {x.FreeLessons}\n" +
+                            $"About: {x.About}",
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 
@@ -218,12 +219,11 @@ namespace PrimumCore.Services.Utilities
                         CommonInfo =
                             $"Student: {x.Abonement.Student.User.DisplayName}\n" +
                             $"Student Id: {x.Abonement.Student.User.Id}\n" +
-                            $"Student mail: {x.Abonement.Student.User.MailAdress}\n" +
                             $"Teacher: {x.Abonement.Course.Teacher.User.DisplayName}\n" +
                             $"Teacher Id: {x.Abonement.Course.Teacher.User.Id}\n" +
                             $"Course: {x.Abonement.Course.Name}\n" +
                             $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
-                            $"DateTime: {x.DateTime:HH:mm dd.MM.yyyy}\n",
+                            $"DateTime (UTC): {x.DateTime:HH:mm dd.MM.yyyy}\n",
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 

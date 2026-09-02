@@ -91,7 +91,7 @@ services:
       start_period: 10s
     restart: unless-stopped
 
-  email-notification-service:
+  email-notification-service: #на самом деле зависит от ядра, хз че с этим делать
     build:
       context: Apps/EmailNotificationService
       dockerfile: Dockerfile
