@@ -6,6 +6,7 @@ import { usePublicCourses, type CourseDtoLite } from '@/entity/course';
 import { TeacherInfo } from '@/widgets/popups/info/teacher-info/TeacherInfo';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 import { EmptyIcon } from '@/shared/icons/types';
+import { Tabs, type TabItem } from '@/shared/ui/TabBar/TabBar';
 
 interface CourseCardProps {
   course: CourseDtoLite;
@@ -53,6 +54,8 @@ const CourseCard = ({ course }: CourseCardProps) => {
     );
 }
 
+const ALL_TAB_VALUE = 'all';
+
 export const CoursesBlock = () => {
     const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
     const { data: themesResult, isLoading: themesLoading } = usePublicThemes();
@@ -60,43 +63,46 @@ export const CoursesBlock = () => {
     const { courses, isLoading: coursesLoading } = usePublicCourses(selectedThemeId, 0, 3);
     const isLoading = themesLoading || coursesLoading;
 
+    const coursesContent = (
+        isLoading || courses.length === 0 ? (
+            <div className={styles.empty}>
+                <EmptyIcon />
+                <p className={styles.emptyText}>
+                    {selectedThemeId ? 'Курсов по этой теме пока нет' : 'Курсов пока нет'}
+                </p>
+            </div>
+        ) : (
+            <div className={styles.columns}>
+                {courses.map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                ))}
+            </div>
+        )
+    );
+
+    const activeTabValue = selectedThemeId === null ? ALL_TAB_VALUE : String(selectedThemeId);
+
+    const tabs: TabItem<string>[] = [
+        {
+            value: ALL_TAB_VALUE,
+            label: 'Все',
+            content: activeTabValue === ALL_TAB_VALUE ? coursesContent : null,
+        },
+        ...themes.map((theme): TabItem<string> => ({
+            value: String(theme.id),
+            label: theme.themeName ?? "",
+            content: activeTabValue === String(theme.id) ? coursesContent : null,
+        })),
+    ];
+
+    const handleTabChange = (value: string) => {
+        setSelectedThemeId(value === ALL_TAB_VALUE ? null : Number(value));
+    };
+
   return (
     <Block title='Наши курсы'>
         <div className={styles.coursesContent}>
-            <div className={styles.filterBar}>
-                <button
-                className={`${styles.chip} ${selectedThemeId === null ? styles.chipActive : ''}`}
-                onClick={() => setSelectedThemeId(null)}
-                >
-                Все
-                </button>
-                {themes.map((theme) => (
-                <button
-                    key={theme.id}
-                    className={`${styles.chip} ${selectedThemeId === theme.id ? styles.chipActive : ''}`}
-                    onClick={() => setSelectedThemeId(theme.id)}
-                >
-                    {theme.themeName}
-                </button>
-                ))}
-            </div>
-            {isLoading || courses.length === 0 ? (
-                <div className={styles.empty}>
-                    <EmptyIcon />
-                    <p className={styles.emptyText}>
-                        {selectedThemeId ? 'Курсов по этой теме пока нет' : 'Курсов пока нет'}
-                    </p>
-                </div>
-            ) : (
-                <div className={styles.columns}>
-                    {courses.map((course) => (
-                        <CourseCard
-                        key={course.id}
-                        course={course}
-                        />
-                    ))}
-                </div>
-            )}
+            <Tabs tabs={tabs} value={activeTabValue} onChange={handleTabChange} />
         </div>
     </Block>
   );
