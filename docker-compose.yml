@@ -24,7 +24,7 @@ services:
       context: ./Libs/CoreDBModel
       dockerfile: Dockerfile
     environment:
-      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
+      COREDB_URL: "Host=primum-postgres;Port=5432;Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
     networks:
       - primum-network
     depends_on:
@@ -39,7 +39,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
-      - "4110:${MONGO_PORT}"
+      - "4110:27017"
     volumes:
       - mongo-data:/data/db
     networks:
@@ -66,7 +66,7 @@ services:
       dockerfile: Dockerfile
     container_name: sign-service
     environment:
-      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
     volumes:
       - ./Apps/SignService:/app
     networks:
@@ -86,7 +86,7 @@ services:
       dockerfile: Dockerfile
     container_name: common-notification-service
     environment:
-      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
     volumes:
       - ./Apps/CommonNotificationService:/app
     networks:
@@ -126,7 +126,7 @@ services:
       dockerfile: Dockerfile
     container_name: payment-service
     environment:
-      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin"
+      MONGO_URI: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@primum-mongodb:27017/?authSource=admin"
       MODE: "Development"
     volumes:
       - ./Apps/PaymentService:/app
@@ -148,7 +148,7 @@ services:
     container_name: chat-bot-notification-service
     environment:
       SIGNSERVICE_URL: "http://signservice:5000"
-      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
     volumes:
       - ./Apps/ChatBotNotificationService:/app
     depends_on:
@@ -175,7 +175,7 @@ services:
       PAYMENTSERVICE_URL: "http://payment-service:5000"
       SIGNSERVICE_URL: "http://signservice:5000"
       GATEWAY_URL: ${GATEWAY_URL}
-      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
+      COREDB_URL: "Host=primum-postgres;Port=5432;Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: "5000"
     depends_on:
@@ -250,7 +250,7 @@ services:
       MAILNOTIFICATIONSERVICE_URL: "http://email-notification-service:5000"
       COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
       PAYMENTSERVICE_URL: "http://payment-service:5000"
-      COREDB_URL: "Host=${DB_HOST};Port=${DB_PORT};Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
+      COREDB_URL: "Host=primum-postgres;Port=5432;Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
     depends_on:
       core-db-migrate:
         condition: service_completed_successfully
