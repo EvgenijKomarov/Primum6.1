@@ -30,7 +30,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <StatusBadge status={lesson.lessonStatus} />
         </div>
         {lesson.teacherEarning &&
-          <span className={`${styles.cardPrice} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
+          <span className={`${styles.cardEarning} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
             {lesson.teacherEarning === 0 ? 'Бесплатно' : `Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
           </span>}
       </div>
@@ -74,8 +74,8 @@ const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => 
           )}
         </div>
         {lesson.teacherEarning &&
-          <span className={`${styles.cardPrice} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
-            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
+          <span className={`${styles.cardEarning} ${lesson.teacherEarning === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.teacherEarning === 0 ? 'Бесплатно' : `Ваша доля: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
           </span>}
       </div>
     </div>

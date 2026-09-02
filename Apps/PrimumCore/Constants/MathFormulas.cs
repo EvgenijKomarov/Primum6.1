@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
-using PrimumCore.Options;
 
 namespace PrimumCore.Constants
 {
-    public class MathFormulas(IOptions<CoreConstants> constants)
+    public class MathFormulas
     {
+        private const int StudentLessonExpFloor = 100;
+        private const int CourseGainExp = 450;
+        private const int TeacherGainExp = 300;
+
         public int CoinFormula(float finalGrade, decimal lessonCost)
         {
             const float maximumCashback = 0.1f;
@@ -17,17 +20,17 @@ namespace PrimumCore.Constants
 
         public int StudentExpFormula(float finalGrade)
         {
-            return (int)(finalGrade * 100) + constants.Value.StudentLessonExpFloor;
+            return (int)(finalGrade * 100) + StudentLessonExpFloor;
         }
 
         public int CourseExpFormula()
         {
-            return constants.Value.CourseGainExp;
+            return CourseGainExp;
         }
 
         public int TeacherExpFormula()
         {
-            return constants.Value.TeacherGainExp;
+            return TeacherGainExp;
         }
     }
 }
