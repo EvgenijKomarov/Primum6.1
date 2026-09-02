@@ -1,6 +1,6 @@
 import { fetcherInstance } from '@/shared/api/axios.ts';
 import { api } from '@/shared/config/api.ts';
-import type { StudentProfileDto, PaymentResponse } from '@/entity/student';
+import type { StudentProfileDto } from '@/entity/student';
 
 export const getStudentProfile = async () => {
   return await fetcherInstance<StudentProfileDto>({
@@ -17,7 +17,7 @@ export const subscribeToCourse = async (courseId: number, teacherScheduleId: num
 };
 
 export const topupStudentBallance = async (amount: number) => {
-  return await fetcherInstance<PaymentResponse>({
+  return await fetcherInstance<string>({
     method: 'POST',
     url: api.studentBalance.topup,
     params: {amount: amount}

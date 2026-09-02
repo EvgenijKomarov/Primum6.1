@@ -91,7 +91,7 @@ export const ProfilePage = () => {
   };
 
   const handleTopupRequest = async (amount: number) => {
-    const url = (await topupStudentBallance(amount)).data.url;
+    const url = (await topupStudentBallance(amount)).data;
     if (url) { window.open(url, '_blank'); }
   }
 
