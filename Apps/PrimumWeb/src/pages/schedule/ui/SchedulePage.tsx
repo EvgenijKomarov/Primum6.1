@@ -11,6 +11,7 @@ import { Loader } from '@/shared/ui/Loader';
 import styles from './SchedulePage.module.css';
 import { AbonementInfo } from '@/widgets/popups/info/abonement-info/AbonementInfo';
 import { localToUtc, utcToLocal } from '@/shared/format/format-config';
+import { translateDayOfWeek } from '@/features/translation/translation';
 
 const DAYS: { label: string; value: DayOfWeek }[] = [
   { label: 'Пн', value: DayOfWeek.Monday },
@@ -142,9 +143,7 @@ export const SchedulePage = () => {
                     title={
                       status === 'booked' && slot
                         ? `${slot.studentName ?? 'Ученик'} — ${slot.courseName ?? 'курс'}`
-                        : status === 'available'
-                          ? 'Нажмите, чтобы убрать слот'
-                          : 'Нажмите, чтобы добавить слот'
+                        : `${hour}:00 - ${translateDayOfWeek(d.value)}`
                     }
                   >
                     <div className={styles.slotContent}>

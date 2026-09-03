@@ -90,7 +90,7 @@ export const EditCourseForm = ({ setCoursePopupOpen, onSuccess, course }: EditCo
                 name="description"
                 control={control}
                 render={({ field }) => (
-                <Input {...field} placeholder="Кратко опишите курс" height='3rem'/>
+                <textarea {...field} placeholder="Кратко опишите курс" className={styles.textarea}/>
                 )}
               />
             </div>

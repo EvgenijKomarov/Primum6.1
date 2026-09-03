@@ -109,7 +109,7 @@ const TeacherRegistrationPopup = ({onClose}: {onClose: () => void}) => {
           control={control}
           rules={{ required: 'Обязательное поле' }}
           render={({ field }) => (
-            <Input {...field} type="string" placeholder="Расскажите о себе, своем подходе, образовании, и т.д." 
+            <textarea {...field} placeholder="Расскажите о себе, своем подходе, образовании, и т.д." 
             className={styles.textarea}/>
           )}
         />

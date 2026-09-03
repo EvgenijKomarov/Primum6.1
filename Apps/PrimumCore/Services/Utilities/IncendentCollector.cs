@@ -60,6 +60,7 @@ namespace PrimumCore.Services.Utilities
                     // Загрузка связанных логов (отдельный запрос, только для страницы)
                     dto.LinkedLogs = await dbIterator.IncidentLogs(false)
                         .LoadIncidentLogs(dto.ObjectId, dto.Meaning)
+                        .OrderByDescending(x => x.DateTime)
                         .ToListAsync(cancellationToken);
                     items.Add(dto);
                 }

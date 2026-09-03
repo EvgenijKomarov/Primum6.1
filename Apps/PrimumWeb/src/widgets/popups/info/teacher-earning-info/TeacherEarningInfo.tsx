@@ -17,9 +17,8 @@ export const TeacherEarningInfo = () => {
         {popupOpen && (
             <Popup
                 title="Доход с урока"
-                onClose={() => setPopupOpen(false)}
-                width={'70%'}>
-                <div className={styles.info}>
+                onClose={() => setPopupOpen(false)}>
+                <div className={styles.info} style={{ width: '60rem'}}>
                     <div className={styles.rows}>
                         <div className={styles.item}>
                             <div className={styles.row}>

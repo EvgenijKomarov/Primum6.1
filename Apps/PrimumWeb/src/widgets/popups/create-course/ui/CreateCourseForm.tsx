@@ -86,7 +86,7 @@ export const CreateCourseForm = ({ setCoursePopupOpen, onSuccess }: CreateCourse
             name="description"
             control={control}
             render={({ field }) => (
-              <Input {...field} placeholder="Кратко опишите курс" />
+              <textarea {...field} placeholder="Кратко опишите курс" className={styles.textarea} />
             )}
           />
         </div>

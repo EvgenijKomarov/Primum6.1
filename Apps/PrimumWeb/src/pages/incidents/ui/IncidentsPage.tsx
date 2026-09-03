@@ -71,9 +71,10 @@ export const IncidentCard = ({ incident, onMutate }: { incident: IncidentDto; on
                                 <Button 
                                     key={decision}
                                     onClick={() => {handleDecision(decision)}}
-                                    size={ButtonSizeEnum.NORMAL}
+                                    size={ButtonSizeEnum.SMALL}
                                     variant={ButtonTypeEnum.PRIMARY}
-                                    disabled={incidentDescription.trim() === ''}
+                                    disabled={incidentDescription.trim() === ''
+                                    }
                                 >
                                     {translateIncidentDecision(decision)}
                                 </Button>

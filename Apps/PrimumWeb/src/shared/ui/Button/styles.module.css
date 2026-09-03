@@ -28,7 +28,7 @@
   @apply bg-primary-pressed;
 }
 .primary-disabled {
-  @apply text-disabled-text bg-primary-disabled cursor-not-allowed;
+  @apply text-secondary-dark bg-primary-disabled cursor-not-allowed;
 }
 
 /* ── SECONDARY ── */
@@ -42,7 +42,7 @@
   @apply bg-secondary-light;
 }
 .secondary-disabled {
-  @apply text-disabled-text bg-secondary-dark cursor-not-allowed;
+  @apply text-secondary-light bg-secondary-dark cursor-not-allowed;
 }
 
 /* ── TEXT ── */
@@ -56,7 +56,7 @@
   @apply text-primary-pressed;
 }
 .text-disabled {
-  @apply p-0 bg-transparent text-disabled-text cursor-not-allowed;
+  @apply p-0 bg-transparent text-secondary-light cursor-not-allowed;
 }
 
 /* ── ICON ── */

@@ -24,9 +24,6 @@
   --color-background-primary-hover:   color-mix(in srgb, #e1f018 12%, transparent);
   --color-background-primary-active:  color-mix(in srgb, #e1f018 22%, transparent);
 
-  /* ── Semantic state ── */
-  --color-disabled-text: #64748b;
-
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
   --page-size: 80%;
 }
