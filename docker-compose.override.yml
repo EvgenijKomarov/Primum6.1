@@ -44,6 +44,16 @@ services:
     ports:
       - "5003:5000"
       
+  telegram-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/TelegramBot:/app/Apps/TelegramBot
+
+  max-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/MaxBot:/app/Apps/MaxBot
+      
   primumcore:
     ports:
       - "5004:5000"

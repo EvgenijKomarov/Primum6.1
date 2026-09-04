@@ -97,7 +97,7 @@ export const ProfilePage = () => {
 
   const handleLogout = async () => {
     clearStore();
-    await mutateUser(undefined, { revalidate: false });
+    await mutateUser();
     navigate('/auth', { replace: true });
   };
 

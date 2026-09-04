@@ -53,6 +53,34 @@ services:
       - primum-network
     restart: unless-stopped
 
+  telegram-bot: #у ботов контекст из корня, чтобы тянуть либки
+    build:
+      context: .
+      dockerfile: Apps/TelegramBot/Dockerfile
+    environment:
+      BOTCORE_URL: "http://botcore:5000"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+    depends_on:
+      - chat-bot-notification-service
+      - botcore
+    networks:
+      - primum-network
+
+  max-bot: #у ботов контекст из корня, чтобы тянуть либки
+    build:
+      context: .
+      dockerfile: Apps/MaxBot/Dockerfile
+    environment:
+      BOTCORE_URL: "http://botcore:5000"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
+      MAX_TOKEN: ${MAX_TOKEN}
+    depends_on:
+      - chat-bot-notification-service
+      - botcore
+    networks:
+      - primum-network
+
   signservice:
     build:
       context: Apps/SignService
