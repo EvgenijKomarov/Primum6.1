@@ -57,6 +57,12 @@ def publish(userId: int, message: str):
         )
     return {"status": "ok"}
 
+#хелсчек
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 if __name__ == "__main__":
     print("Starting server initialization...")
     

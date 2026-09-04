@@ -78,6 +78,11 @@ async def get_by_user(userId: int):
         for row in rows
     ]
 
+#хелсчек
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 
 # ==================== ТОЧКА ВХОДА ====================
 if __name__ == "__main__":

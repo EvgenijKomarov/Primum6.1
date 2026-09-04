@@ -54,6 +54,11 @@ services:
       - ./Libs/BotConnection:/app/Libs/BotConnection
       - ./Apps/MaxBot:/app/Apps/MaxBot
       
+  vk-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/VkBot:/app/Apps/VkBot
+      
   primumcore:
     ports:
       - "5004:5000"

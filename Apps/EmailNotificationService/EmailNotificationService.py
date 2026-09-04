@@ -49,6 +49,11 @@ def publish(userId: int, message: str):
     send_email(address, "SYSTEM", message)
     print(f"Successfully sent to {address} message: {message}")
 
+#хелсчек
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 if __name__ == "__main__":
     print("Starting server initialization...")
     

@@ -177,7 +177,12 @@ def get_student_balance(studentUserId: int):
         studentUserId, amount,
     )
     return amount
- 
+
+#хелсчек
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
  
 if __name__ == "__main__":
     print("Starting server initialization...")

@@ -96,6 +96,11 @@ async def set_seen(notif_id: str):
 
     return {"status": "ok"}
 
+#хелсчек
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 
 # ==================== ТОЧКА ВХОДА ====================
 if __name__ == "__main__":

@@ -40,6 +40,12 @@ services:
     networks:
       - primum-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -52,6 +58,12 @@ services:
     networks:
       - primum-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   telegram-bot: #у ботов контекст из корня, чтобы тянуть либки
     build:
@@ -62,12 +74,14 @@ services:
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
     depends_on:
-      - chat-bot-notification-service
-      - botcore
+      chat-bot-notification-service:
+        condition: service_healthy
+      botcore:
+        condition: service_healthy
     networks:
       - primum-network
 
-  max-bot: #у ботов контекст из корня, чтобы тянуть либки
+  max-bot:
     build:
       context: .
       dockerfile: Apps/MaxBot/Dockerfile
@@ -76,8 +90,26 @@ services:
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       MAX_TOKEN: ${MAX_TOKEN}
     depends_on:
-      - chat-bot-notification-service
-      - botcore
+      chat-bot-notification-service:
+        condition: service_healthy
+      botcore:
+        condition: service_healthy
+    networks:
+      - primum-network
+
+  vk-bot:
+    build:
+      context: .
+      dockerfile: Apps/VkBot/Dockerfile
+    environment:
+      BOTCORE_URL: "http://botcore:5000"
+      RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
+      VK_TOKEN: ${VK_TOKEN}
+    depends_on:
+      chat-bot-notification-service:
+        condition: service_healthy
+      botcore:
+        condition: service_healthy
     networks:
       - primum-network
 
@@ -91,7 +123,8 @@ services:
     networks:
       - primum-network
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
       interval: 5s
@@ -110,7 +143,8 @@ services:
     networks:
       - primum-network
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
       interval: 5s
@@ -149,7 +183,8 @@ services:
     networks:
       - primum-network
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
       interval: 5s
@@ -167,8 +202,10 @@ services:
       SIGNSERVICE_URL: "http://signservice:5000"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
     depends_on:
-      - rabbitmq
-      - signservice
+      rabbitmq:
+        condition: service_healthy
+      signservice:
+        condition: service_healthy
     networks:
       - primum-network
     healthcheck:
@@ -193,7 +230,6 @@ services:
       GATEWAY_URL: ${GATEWAY_URL}
       COREDB_URL: "Host=primum-postgres;Port=5432;Database=core_db;Username=${DB_USERNAME};Password=${DB_PASSWORD};SSL Mode=Disable;"
       ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_HTTP_PORTS: "5000"
     depends_on:
       core-db-migrate:
         condition: service_completed_successfully
@@ -210,6 +246,12 @@ services:
     networks:
       - primum-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   primumwebapi:
     build:
@@ -224,16 +266,25 @@ services:
       WEBAPI_JWT_LIFETIME_MINUTES: ${WEBAPI_JWT_LIFETIME_MINUTES}
       COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
       PRIMUMCORE_URL: "http://primumcore:5000"
-      ASPNETCORE_HTTP_PORTS: "5000"
       PAYMENTSERVICE_URL: "http://payment-service:5000"
     ports:
       - "4200:5000"
     depends_on:
-      - primumcore
-      - common-notification-service
+      primumcore:
+        condition: service_healthy
+      common-notification-service:
+        condition: service_healthy
+      core-db-migrate:
+        condition: service_completed_successfully
     networks:
       - primum-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   botcore:
     build:
@@ -244,16 +295,24 @@ services:
       SIGNSERVICE_URL: "http://signservice:5000"
       PRIMUMCORE_URL: "http://primumcore:5000"
       PAYMENTSERVICE_URL: "http://payment-service:5000"
-      ASPNETCORE_HTTP_PORTS: "5000"
       GATEWAY_URL: ${GATEWAY_URL}
       ASPNETCORE_ENVIRONMENT: Production
     depends_on:
-      - primumcore
-      - signservice
-      - payment-service
+      primumcore:
+        condition: service_healthy
+      signservice:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
     networks:
       - primum-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   coredbiterator:
     build:
@@ -281,7 +340,8 @@ services:
     ports:
       - "3001:80"
     depends_on:
-      - primumwebapi
+      primumwebapi:
+        condition: service_healthy
     networks:
       - primum-network
     restart: unless-stopped
