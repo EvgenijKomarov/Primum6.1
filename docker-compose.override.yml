@@ -1,15 +1,6 @@
 services:
-  postgres:
-    ports:
-      - "4100:5432"
-
-  mongodb:
-    ports:
-      - "4110:27017"
-
   rabbitmq:
     ports:
-      - "4210:5672"
       - "4211:15672"
 
   signservice:
@@ -37,27 +28,50 @@ services:
   primumwebapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./Apps/PrimumWebAPI:/app/Apps/PrimumWebAPI
+    depends_on:
+      primumcore:
+        condition: service_started
+      
+  coredbiterator:
+    volumes:
+      - ./Apps/CoreDBIterator:/app/Apps/CoreDBIterator
   
   botcore:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5003:5000"
+    volumes:
+      - ./Apps/BotCore:/app/Apps/BotCore
+    depends_on:
+      primumcore:
+        condition: service_started
       
   telegram-bot:
     volumes:
       - ./Libs/BotConnection:/app/Libs/BotConnection
       - ./Apps/TelegramBot:/app/Apps/TelegramBot
+    depends_on:
+      botcore:
+        condition: service_started
 
   max-bot:
     volumes:
       - ./Libs/BotConnection:/app/Libs/BotConnection
       - ./Apps/MaxBot:/app/Apps/MaxBot
+    depends_on:
+      botcore:
+        condition: service_started
       
   vk-bot:
     volumes:
       - ./Libs/BotConnection:/app/Libs/BotConnection
       - ./Apps/VkBot:/app/Apps/VkBot
+    depends_on:
+      botcore:
+        condition: service_started
       
   primumcore:
     ports:
@@ -65,7 +79,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./Apps/PrimumCore:/app/Apps/PrimumCore
+
+  primumweb:
+    depends_on:
+      primumwebapi:
+        condition: service_started

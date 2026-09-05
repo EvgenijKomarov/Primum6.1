@@ -10,6 +10,8 @@ services:
       - ./docker/init:/docker-entrypoint-initdb.d:ro
     networks:
       - primum-network
+    ports:
+      - "4100:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d core_db"]
       interval: 5s
@@ -40,6 +42,8 @@ services:
     networks:
       - primum-network
     restart: unless-stopped
+    ports:
+      - "4110:27017"
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -58,6 +62,8 @@ services:
     networks:
       - primum-network
     restart: unless-stopped
+    ports:
+      - "4210:5672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
@@ -234,15 +240,15 @@ services:
       core-db-migrate:
         condition: service_completed_successfully
       email-notification-service:
-        condition: service_started
+        condition: service_healthy
       chat-bot-notification-service:
-        condition: service_started
+        condition: service_healthy
       common-notification-service:
-        condition: service_started
+        condition: service_healthy
       signservice:
-        condition: service_started
+        condition: service_healthy
       payment-service:
-        condition: service_started
+        condition: service_healthy
     networks:
       - primum-network
     restart: unless-stopped
