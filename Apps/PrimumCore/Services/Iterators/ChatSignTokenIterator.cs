@@ -36,5 +36,10 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == userId);
             return await (await client.GetSignsAsync(userId)).ToPageResult(page, pageSize);
         }
+
+        public async Task<int> DeleteChatSign(int userId, ChatSign sign)
+        {
+            return await client.DeleteSignAsync(userId, sign.RealizationTag, sign.ChatId);
+        }
     }
 }

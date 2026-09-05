@@ -1,6 +1,6 @@
 import { fetcherInstance } from "@/shared/api/axios";
 import { api } from "@/shared/config/api";
-import type { ChatSignPageResult } from "../model/types";
+import type { ChatSign, ChatSignPageResult } from "../model/types";
 
 
 export const getChatSigns = async (page = 0, pageSize = 50) => {
@@ -27,5 +27,16 @@ export const confirmChatSign = async (token: string) => {
       'Content-Type': 'application/json',
     },
     data: JSON.stringify(token),
+  });
+};
+
+export const deleteChatSign = async (sign: ChatSign) => {
+  return await fetcherInstance({
+    method: 'DELETE',
+    url: api.user.chatSigns,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify(sign),
   });
 };

@@ -5,6 +5,7 @@ using PrimumCore.Services.Iterators;
 using Serilog;
 using SignServiceConnection.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using YamlDotNet.Core.Tokens;
 
 namespace PrimumCore.Controllers
 {
@@ -27,6 +28,10 @@ namespace PrimumCore.Controllers
         [HttpPost("confirm-chat/{token}")]
         public async Task<ActionResult<int>> ConfirmChat([FromRoute] int userId, [FromRoute] string token)
             => Ok(await chatSignTokenIterator.AddChat(userId, token));
+
+        [HttpDelete("delete-chat-sign")]
+        public async Task<ActionResult<int>> DeleteChatSign([FromRoute] int userId, [FromBody] ChatSign sign = null!)
+            => Ok(await chatSignTokenIterator.DeleteChatSign(userId, sign));
 
         [HttpGet("chat-signs")]
         public async Task<ActionResult<PageResult<ChatSign>>> GetChatSigns([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)

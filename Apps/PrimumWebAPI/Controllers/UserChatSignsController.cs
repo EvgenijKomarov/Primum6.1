@@ -28,5 +28,14 @@ namespace PrimumWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ChatSign>> ConfirmChatSign([FromBody] string token = null!)
             => Ok(await client.ConfirmChatAsync(User.GetUserId(), token));
+
+        /// <summary>
+        /// Удаляет чат-подпись у пользователя
+        /// </summary>
+        /// <param name="sign"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<ChatSign>> DeleteChatSign([FromBody] ChatSign sign = null!)
+            => Ok(await client.DeleteChatSignAsync(User.GetUserId(), sign));
     }
 }

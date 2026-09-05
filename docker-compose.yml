@@ -76,7 +76,7 @@ services:
       context: .
       dockerfile: Apps/TelegramBot/Dockerfile
     environment:
-      BOTCORE_URL: "http://botcore:5000"
+      BOTCORE_URL: "http://botcore:8080"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
     depends_on:
@@ -92,7 +92,7 @@ services:
       context: .
       dockerfile: Apps/MaxBot/Dockerfile
     environment:
-      BOTCORE_URL: "http://botcore:5000"
+      BOTCORE_URL: "http://botcore:8080"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       MAX_TOKEN: ${MAX_TOKEN}
     depends_on:
@@ -108,7 +108,7 @@ services:
       context: .
       dockerfile: Apps/VkBot/Dockerfile
     environment:
-      BOTCORE_URL: "http://botcore:5000"
+      BOTCORE_URL: "http://botcore:8080"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       VK_TOKEN: ${VK_TOKEN}
     depends_on:
@@ -253,7 +253,7 @@ services:
       - primum-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -271,10 +271,10 @@ services:
       WEBAPI_JWT_AUDIENCE: ${WEBAPI_JWT_AUDIENCE}
       WEBAPI_JWT_LIFETIME_MINUTES: ${WEBAPI_JWT_LIFETIME_MINUTES}
       COMMONNOTIFICATIONSERVICE_URL: "http://common-notification-service:5000"
-      PRIMUMCORE_URL: "http://primumcore:5000"
+      PRIMUMCORE_URL: "http://primumcore:8080"
       PAYMENTSERVICE_URL: "http://payment-service:5000"
     ports:
-      - "4200:5000"
+      - "4200:8080"
     depends_on:
       primumcore:
         condition: service_healthy
@@ -286,7 +286,7 @@ services:
       - primum-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -299,7 +299,7 @@ services:
     container_name: botcore
     environment:
       SIGNSERVICE_URL: "http://signservice:5000"
-      PRIMUMCORE_URL: "http://primumcore:5000"
+      PRIMUMCORE_URL: "http://primumcore:8080"
       PAYMENTSERVICE_URL: "http://payment-service:5000"
       GATEWAY_URL: ${GATEWAY_URL}
       ASPNETCORE_ENVIRONMENT: Production
@@ -314,7 +314,7 @@ services:
       - primum-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://0.0.0.0:5000/health"]
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/health"]
       interval: 10s
       timeout: 5s
       retries: 5

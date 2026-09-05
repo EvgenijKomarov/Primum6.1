@@ -16,6 +16,18 @@
   margin-bottom: 0.2rem;
 }
 
+.statHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.delete {
+  color: var(--color-functional-error);
+  font-size: 0.5rem;
+  cursor: pointer;
+}
+
 .statValue {
     font-size: 0.7rem;
     font-weight: 600;

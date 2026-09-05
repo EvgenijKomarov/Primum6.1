@@ -42,7 +42,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5003:5000"
+      - "5003:8080"
     volumes:
       - ./Apps/BotCore:/app/Apps/BotCore
     depends_on:
@@ -75,7 +75,7 @@ services:
       
   primumcore:
     ports:
-      - "5004:5000"
+      - "5004:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:

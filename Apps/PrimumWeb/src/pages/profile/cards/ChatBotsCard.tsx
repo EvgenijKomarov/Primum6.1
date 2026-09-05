@@ -6,15 +6,42 @@ import styles from '../ui/ProfilePage.module.css';
 import { Collapsible } from '@/shared/ui/Collapsible';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
+import { deleteChatSign } from '@/entity/chat-sign/api/chat-sign.api';
+import { useState } from 'react';
+import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 
 interface Props {
   chatSigns: ChatSign[];
   chatSignToken: string;
   onTokenChange: (v: string) => void;
   onConfirmSign: () => void;
+  mutateChatSigns: () => void;
 }
 
-export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfirmSign }: Props) => (
+const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
+  const [deletePopupOpen, setDeletePopupOpen] = useState(false);
+
+  return(
+  <>
+    <StatCard
+      title={sign.realizationTag}
+      value={sign.username ?? sign.chatId}
+      onDelete={async () => setDeletePopupOpen(true)}/>
+    {deletePopupOpen && (
+      <EnsurancePopup
+        description={`Вы уверены, что хотите отвязать профиль от чата бота в ${sign.realizationTag}?`}
+        setPopupOpen={setDeletePopupOpen}
+        onConfirm={async () => {
+          await deleteChatSign(sign);
+          await onDelete();
+          setDeletePopupOpen(false);
+        }}
+      />
+    )}
+  </>);
+}
+
+export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfirmSign, mutateChatSigns }: Props) => (
   <Card title="Чат боты" width={'40rem'}>
     <div className={styles.chatSignsSection}>
       {chatSigns.length === 0 ? (
@@ -24,13 +51,9 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
         </p>
       ) : (
         <div className={styles.stats}>
-          {chatSigns.map((sign, index) => (
-            <StatCard
-              key={`${sign.chatId}-${index}`}
-              title={sign.realizationTag}
-              value={sign.username ?? sign.chatId}
-            />
-          ))}
+          {chatSigns.map((sign, index) => 
+            <Sign key={`${sign.chatId}-${index}`} sign={sign} onDelete={mutateChatSigns} />)
+          }
         </div>
       )}
 

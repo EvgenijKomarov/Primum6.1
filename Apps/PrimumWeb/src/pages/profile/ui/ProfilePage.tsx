@@ -145,6 +145,7 @@ export const ProfilePage = () => {
                 chatSignToken={chatSignToken}
                 onTokenChange={setChatSignToken}
                 onConfirmSign={handleConfirmSign}
+                mutateChatSigns={mutateChatSigns}
               />}
         </div>
 

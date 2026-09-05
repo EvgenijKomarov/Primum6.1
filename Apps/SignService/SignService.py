@@ -78,6 +78,15 @@ async def get_by_user(userId: int):
         for row in rows
     ]
 
+# ----------- DELETE /delete-sign -----------
+@app.delete("/delete-sign")
+async def delete_sign(userId: int, realizationTag: str, chatId: int):
+    result = await app.state.users.delete_one(
+        {"realizationTag": realizationTag, "chatId": chatId, "userId": userId}
+    )
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Entity not found")
+
 #хелсчек
 @app.get("/health")
 async def health():
