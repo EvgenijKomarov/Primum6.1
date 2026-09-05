@@ -4,39 +4,49 @@ import { Input } from '@/shared/ui/Input';
 import styles from '../ui/ProfilePage.module.css';
 import { CheckIcon, EditIcon } from '@/shared/icons';
 import { Collapsible } from '@/shared/ui/Collapsible/Collapsible';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 import { Card } from '@/shared/ui/Card/Card';
+import { confirmEmail, sendEmailVerification, type UserDto } from '@/entity/user';
+import { useToast } from '@/shared/ui/Toast/useToast';
 
 interface Props {
-  email: string;
-  emailToken: string;
-  isConfirmed: boolean;
-  isEditing: boolean;
-  isSending: boolean;
-  onEmailChange: (v: string) => void;
-  onEmailTokenChange: (v: string) => void;
-  onSendVerification: () => void;
-  onConfirmEmail: () => void;
-  onStartEditing: () => void;
-  onCancelEditing: () => void;
+  user: UserDto;
+  mutateUser: () => void;
 }
 
-export const EmailCard = ({
-  email,
-  emailToken,
-  isConfirmed,
-  isEditing,
-  isSending,
-  onEmailChange,
-  onEmailTokenChange,
-  onSendVerification,
-  onConfirmEmail,
-  onStartEditing,
-  onCancelEditing,
-}: Props) => {
-  const inputDisabled = isConfirmed && !isEditing;
+export const EmailCard = ({ user, mutateUser }: Props) => {
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [emailToken, setEmailToken] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const { showToast } = useToast();
+
+  useEffect(() => {
+      if (user?.email) setEmail(user.email);
+    }, [user?.email]);
+
+  const inputDisabled = user.mailConfirmed && isEditingEmail;
+
+  const handleSendVerification = async () => {
+      setIsSending(true);
+      try {
+        await sendEmailVerification({ correctiveMail: email || undefined });
+        showToast('Письмо отправлено', 'success')
+      } finally {
+        setIsSending(false);
+        await mutateUser();
+      }
+    };
+  
+    const handleConfirmEmail = async () => {
+      await confirmEmail({ token: emailToken });
+      await mutateUser();
+      setIsEditingEmail(false);
+      setEmailToken('');
+      showToast('Почта подтверждена', 'success')
+    };
   
   return (
     <Card title="Почта"  width={'40rem'}>
@@ -47,24 +57,24 @@ export const EmailCard = ({
           <div className={styles.emailInputWrapper}>
             <Input
               value={email}
-              onChange={onEmailChange}
+              onChange={setEmail}
               disabled={inputDisabled}
               placeholder="Электронная почта"
               type="email"
             />
-            {isConfirmed && !isEditing && (
+            {user.mailConfirmed && !isEditingEmail && (
               <span className={styles.checkmark}>
                 <CheckIcon />
               </span>
             )}
           </div>
 
-          {isConfirmed && !isEditing ? (
+          {user.mailConfirmed && !isEditingEmail ? (
             <Button
               variant={ButtonTypeEnum.SECONDARY}
               size={ButtonSizeEnum.SMALL}
               icon={<EditIcon />}
-              onClick={onStartEditing}
+              onClick={() => setIsEditingEmail(true)}
             >
               Изменить
             </Button>
@@ -74,8 +84,8 @@ export const EmailCard = ({
                 variant={ButtonTypeEnum.PRIMARY}
                 size={ButtonSizeEnum.SMALL}
                 onClick={() => {
-                  if (isConfirmed) {setEnsurancePopupOpen(true);}
-                  else {onSendVerification();}
+                  if (user.mailConfirmed) {setEnsurancePopupOpen(true);}
+                  else {handleSendVerification();}
                 }}
                 isLoading={isSending}
                 disabled={!email.trim()}
@@ -84,14 +94,14 @@ export const EmailCard = ({
               </Button>
               {ensurancePopupOpen && <EnsurancePopup
                       setPopupOpen={setEnsurancePopupOpen}
-                      onConfirm={onSendVerification}
+                      onConfirm={handleSendVerification}
                       description="При отправке кода, ваш аккаунт станет неподтвержденным и невидимым для системы до тех пор, пока вы снова не подтведите почту. Вы уверены, что хотите отправить код?"
                     />}
-              {isConfirmed && isEditing && (
+              {user.mailConfirmed && isEditingEmail && (
                 <Button
                   variant={ButtonTypeEnum.SECONDARY}
                   size={ButtonSizeEnum.SMALL}
-                  onClick={onCancelEditing}
+                  onClick={() => setIsEditingEmail(false)}
                 >
                   Отмена
                 </Button>
@@ -100,7 +110,7 @@ export const EmailCard = ({
           )}
         </div>
 
-        {!isConfirmed && (
+        {!user.mailConfirmed && (
           <p className={styles.hint}>
             Почта не подтверждена. Введите адрес и отправьте код для подтверждения.
           </p>
@@ -112,7 +122,7 @@ export const EmailCard = ({
             <div className={styles.emailInputWrapper}>
               <Input
                 value={emailToken}
-                onChange={onEmailTokenChange}
+                onChange={setEmailToken}
                 placeholder="Код подтверждения"
                 type="emailToken"
               />
@@ -120,7 +130,7 @@ export const EmailCard = ({
             <Button
               variant={ButtonTypeEnum.PRIMARY}
               size={ButtonSizeEnum.SMALL}
-              onClick={onConfirmEmail}
+              onClick={() => handleConfirmEmail()}
             >
               Подтвердить
             </Button>

@@ -1,7 +1,7 @@
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
-import { useStudentBalance, type StudentProfileDto } from '@/entity/student';
+import { topupStudentBallance, useStudentBalance, useStudentProfile } from '@/entity/student';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
 import { StudentRankInfo } from '@/widgets/popups/rank-info/student-rank-info/StudentRankInfo';
@@ -9,21 +9,42 @@ import { CoinIcon } from '@/shared/icons/types';
 import { useState } from 'react';
 import { Popup } from '@/shared/ui/Popup';
 import { Input } from '@/shared/ui/Input';
+import { createStudentProfile, type UserDto } from '@/entity/user';
+import { useToast } from '@/shared/ui/Toast/useToast';
 
 interface Props {
   /** null = not created yet, undefined = loading */
-  isApproved: boolean | null | undefined;
-  profile: StudentProfileDto | undefined;
-  isLoading: boolean;
-  isCreating: boolean;
-  onCreate: () => void;
-  onRequestTopup: (amount: number) => void;
+  user: UserDto;
+  mutateUser: () => void;
 }
 
-export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCreate, onRequestTopup }: Props) => {
+export const StudentCard = ({ user, mutateUser }: Props) => {
+  const { showToast } = useToast();
+
+  const handleTopupRequest = async (amount: number) => {
+    const url = (await topupStudentBallance(amount)).data;
+    if (url) { window.open(url, '_blank'); }
+  }
+  const { studentProfile, isLoading: studentLoading } = useStudentProfile(
+    user?.isApprovedStudent !== null &&
+      user?.isApprovedStudent !== undefined &&
+      user?.isAvailable === true,
+  );
+  const handleCreateStudent = async () => {
+      setIsCreatingStudent(true);
+      try {
+        await createStudentProfile();
+        await mutateUser();
+        showToast('Профиль создан', 'success')
+      } finally {
+        setIsCreatingStudent(false);
+      }
+    };
+  
+  const [isCreatingStudent, setIsCreatingStudent] = useState(false);
   const [topupPopupOpen, setTopupPopupOpen] = useState(false);
   const [topupAmount, setTopupAmount] = useState(100);
-  const hasProfile = isApproved !== null && isApproved !== undefined;
+  const hasProfile = user?.isApprovedStudent !== null && user?.isApprovedStudent !== undefined;
 
   const { studentBalance } = useStudentBalance();
 
@@ -38,26 +59,26 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
           <Button
             variant={ButtonTypeEnum.PRIMARY}
             size={ButtonSizeEnum.NORMAL}
-            onClick={onCreate}
-            isLoading={isCreating}
+            onClick={handleCreateStudent}
+            isLoading={isCreatingStudent}
           >
             Создать профиль ученика
           </Button>
         </>
       )}
 
-      {hasProfile && (isLoading || !profile) && <div style={{ height: '4rem' }} />}
+      {hasProfile && (studentLoading || !studentProfile) && <div style={{ height: '4rem' }} />}
 
-      {hasProfile && profile && (
+      {hasProfile && studentProfile && (
         <>
           <div className={styles.stats}>
             {[
-              { label: 'Уровень', value: profile.level },
-              { label: 'Ранг', value: <StudentRankInfo rankInput={profile.rank} /> },
-              { label: 'Рейтинг', value: profile.rating != null ? profile.rating.toFixed(1) : '—' },
-              { label: 'Монеты', value: profile.coins },
+              { label: 'Уровень', value: studentProfile.level },
+              { label: 'Ранг', value: <StudentRankInfo rankInput={studentProfile.rank} /> },
+              { label: 'Рейтинг', value: studentProfile.rating != null ? studentProfile.rating.toFixed(1) : '—' },
+              { label: 'Монеты', value: studentProfile.coins },
               { label: 'Баланс', value: `${studentBalance ? studentBalance.toFixed(2) : '--'} ₽` },
-              { label: 'Опыт', value: profile.experience },
+              { label: 'Опыт', value: studentProfile.experience },
             ].map(({ label, value }) => (
               <StatCard
                 key={label}
@@ -90,7 +111,7 @@ export const StudentCard = ({ isApproved, profile, isLoading, isCreating, onCrea
                     variant={ButtonTypeEnum.PRIMARY}
                     size={ButtonSizeEnum.SMALL}
                     icon={<CoinIcon />}
-                    onClick={() => { onRequestTopup(topupAmount); }}
+                    onClick={() => { handleTopupRequest(topupAmount); }}
                   >
                     Пополнить
                   </Button>

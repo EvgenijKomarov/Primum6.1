@@ -6,17 +6,12 @@ import styles from '../ui/ProfilePage.module.css';
 import { Collapsible } from '@/shared/ui/Collapsible';
 import { Card } from '@/shared/ui/Card/Card';
 import { StatCard } from '@/shared/ui/StatCard/StatCard';
-import { deleteChatSign } from '@/entity/chat-sign/api/chat-sign.api';
+import { confirmChatSign, deleteChatSign } from '@/entity/chat-sign/api/chat-sign.api';
 import { useState } from 'react';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
-
-interface Props {
-  chatSigns: ChatSign[];
-  chatSignToken: string;
-  onTokenChange: (v: string) => void;
-  onConfirmSign: () => void;
-  mutateChatSigns: () => void;
-}
+import { useChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
+import type { UserDto } from '@/entity/user';
+import { useToast } from '@/shared/ui/Toast/useToast';
 
 const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
@@ -41,8 +36,26 @@ const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
   </>);
 }
 
-export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfirmSign, mutateChatSigns }: Props) => (
-  <Card title="Чат боты" width={'40rem'}>
+interface Props {
+  user: UserDto;
+}
+
+export const ChatBotsCard = ({ user }: Props) => {
+  const [chatSignToken, setChatSignToken] = useState('');
+  const { showToast } = useToast();
+
+  const { signs: chatSigns, mutate: mutateChatSigns } = useChatSigns(
+    user?.mailConfirmed === true,
+  );
+  
+  const handleConfirmSign = async () => {
+      await confirmChatSign(chatSignToken);
+      await mutateChatSigns();
+      setChatSignToken('');
+      showToast('Аккаунт успешно привязан', 'success')
+    };
+  
+  return <Card title="Чат боты" width={'40rem'}>
     <div className={styles.chatSignsSection}>
       {chatSigns.length === 0 ? (
         <p className={styles.cardDescription}>
@@ -62,7 +75,7 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
           <div className={styles.signInputWrapper}>
             <Input
               value={chatSignToken}
-              onChange={onTokenChange}
+              onChange={setChatSignToken}
               placeholder="Код привязки"
               type="chatSign"
             />
@@ -70,7 +83,7 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
           <Button
             variant={ButtonTypeEnum.PRIMARY}
             size={ButtonSizeEnum.SMALL}
-            onClick={onConfirmSign}
+            onClick={handleConfirmSign}
           >
             Подтвердить
           </Button>
@@ -78,4 +91,4 @@ export const ChatBotsCard = ({ chatSigns, chatSignToken, onTokenChange, onConfir
       </Collapsible>
     </div>
   </Card>
-);
+};

@@ -4,23 +4,22 @@ import styles from '../ui/ProfilePage.module.css';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 import { useState } from 'react';
 import { Card } from '@/shared/ui/Card/Card';
+import type { UserDto } from '@/entity/user';
 
 interface Props {
-  surname: string | null | undefined;
-  name: string | null | undefined;
-  patronymic: string | null | undefined;
+  user: UserDto;
   onLogout: () => void;
 }
 
-export const PersonalInfoCard = ({ surname, name, patronymic, onLogout }: Props) => {
+export const PersonalInfoCard = ({ user, onLogout }: Props) => {
   const [ensurancePopupOpen, setEnsurancePopupOpen] = useState(false);
   
   return (<Card title="Личные данные"  width={'40rem'}>
     <div className={styles.fields}>
       {[
-        { label: 'Фамилия', value: surname },
-        { label: 'Имя', value: name },
-        { label: 'Отчество', value: patronymic },
+        { label: 'Фамилия', value: user.surname },
+        { label: 'Имя', value: user.name },
+        { label: 'Отчество', value: user.patronymic },
       ].map(({ label, value }) => (
         <div key={label} className={styles.field}>
           <span className={styles.fieldLabel}>{label}</span>

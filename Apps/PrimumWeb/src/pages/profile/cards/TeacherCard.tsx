@@ -1,7 +1,7 @@
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 import styles from '../ui/ProfilePage.module.css';
-import type { TeacherProfileDto } from '@/entity/teacher';
+import { useTeacherProfile } from '@/entity/teacher';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { Card } from '@/shared/ui/Card/Card';
@@ -9,20 +9,12 @@ import { StatCard } from '@/shared/ui/StatCard/StatCard';
 import { TeacherRankInfo } from '@/widgets/popups/rank-info/teacher-rank-info/TeacherRankInfo';
 import { Popup } from '@/shared/ui/Popup';
 import { useState } from 'react';
-import { createTeacherProfile, type CreateTeacherProfileRequest } from '@/entity/user';
+import { createTeacherProfile, type CreateTeacherProfileRequest, type UserDto } from '@/entity/user';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/shared/ui/Input';
 import { TeacherEarningInfo } from '@/widgets/popups/info/teacher-earning-info/TeacherEarningInfo';
 
-interface Props {
-  /** true = approved, false = pending, null = not created, undefined = not a teacher */
-  isApproved: boolean | null | undefined;
-  profile: TeacherProfileDto | undefined;
-  isLoading: boolean;
-}
-
-const TeacherRegistrationPopup = ({onClose}: {onClose: () => void}) => {
-  
+const TeacherRegistrationPopup = ({onClose, mutateUser}: {onClose: () => void, mutateUser: () => void}) => {
   const {
           control,
           handleSubmit,
@@ -46,7 +38,8 @@ const TeacherRegistrationPopup = ({onClose}: {onClose: () => void}) => {
         bankBIC: values.bankBIC.trim()
       };
       await createTeacherProfile(dto);
-      onClose();
+      await onClose();
+      await mutateUser();
     });
 
   return (
@@ -126,27 +119,37 @@ const TeacherRegistrationPopup = ({onClose}: {onClose: () => void}) => {
   </Popup>)
 }
 
+interface Props {
+  user: UserDto;
+  mutateUser: () => void;
+}
+
 export const TeacherCard = ({
-  isApproved,
-  profile,
-  isLoading,
+  user,
+  mutateUser,
 }: Props) => {
 
+  const { teacherProfile, isLoading: teacherLoading } = useTeacherProfile(
+    user.isApprovedTeacher === true &&
+      user.isApprovedStudent !== undefined &&
+      user.isAvailable === true,
+  );
+
   const [regPopupOpen, setRegPopupOpen] = useState(false);
-  if (isApproved === undefined) return null;
+  if (user.isApprovedTeacher === undefined) return null;
 
   return (
     <Card title="Профиль преподавателя"  width={'40rem'}>
 
       {/* Pending approval */}
-      {isApproved === false && (
+      {user.isApprovedTeacher === false && (
         <p className={styles.warning}>
           Ваш профиль преподавателя находится на рассмотрении. Возможно, с Вами свяжутся через почту или привязанные мессенджеры
         </p>
       )}
 
       {/* Not created yet */}
-      {isApproved === null && (
+      {user.isApprovedTeacher === null && (
         <>
           <p className={styles.cardDescription}>
             Создайте профиль преподавателя, чтобы вести курсы и работать с учениками.
@@ -160,18 +163,19 @@ export const TeacherCard = ({
           </Button>
           {regPopupOpen && 
             <TeacherRegistrationPopup
-              onClose={() => setRegPopupOpen(false)}
+              onClose={() => {setRegPopupOpen(false)}}
+              mutateUser={mutateUser}
             />}
         </>
       )}
 
       {/* Approved — loading */}
-      {isApproved === true && (isLoading || !profile) && <div style={{ height: '4rem' }} />}
+      {user.isApprovedTeacher === true && (teacherLoading || !teacherProfile) && <div style={{ height: '4rem' }} />}
 
       {/* Approved — loaded */}
-      {isApproved === true && profile && (
+      {user.isApprovedTeacher === true && teacherProfile && (
         <>
-          {profile.isAvailable === true ? (
+          {teacherProfile.isAvailable === true ? (
             <Badge text="Доступен" badgeType={BadgeTypeEnum.Positive} />
           ): (
             <Badge text="Недоступен" badgeType={BadgeTypeEnum.Negative} />
@@ -179,10 +183,10 @@ export const TeacherCard = ({
 
           <div className={styles.stats}>
             {[
-              { label: 'Уровень', value: profile.level },
-              { label: 'Ранг', value: <TeacherRankInfo rankInput={profile.rank} /> },
-              { label: 'Опыт', value: profile.experience },
-              { label: 'Конверсия', value: profile.convertionIndex ? profile.convertionIndex * 100 : '--'},
+              { label: 'Уровень', value: teacherProfile.level },
+              { label: 'Ранг', value: <TeacherRankInfo rankInput={teacherProfile.rank} /> },
+              { label: 'Опыт', value: teacherProfile.experience },
+              { label: 'Конверсия', value: teacherProfile.convertionIndex ? teacherProfile.convertionIndex * 100 : '--'},
               { label: 'Доход с урока', value: <TeacherEarningInfo/> },
             ].map(({ label, value }) => (
               <StatCard
@@ -192,7 +196,7 @@ export const TeacherCard = ({
               />
             ))}
           </div>
-          {profile.about && <p className={styles.about}>{profile.about}</p>}
+          {teacherProfile.about && <p className={styles.about}>{teacherProfile.about}</p>}
         </>
       )}
     </Card>
