@@ -16,14 +16,17 @@ import { STATUS_CONFIG } from '../lessons.common';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from '@/shared/format/format-config';
 import Button from '@/shared/ui/Button/Button';
+import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 
 export const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
   return <Badge text={cfg.label} badgeType={cfg.cls} />;
 };
 
-const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate: () => void }) => (
-  <Card hoverable={true} width={'100%'}>
+const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate: () => void }) => {
+  const [statusEnsureOpen, setStatusEnsureOpen] = useState(false);
+
+  return <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
@@ -46,12 +49,20 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
       </div>
       <Button 
         disabled={!([LessonStatus.Freezed, LessonStatus.Waiting].includes(lesson.lessonStatus) && lesson.isAbonementActive)}
-        onClick={async () => {await changeLessonStatus(lesson.id); await onMutate();}}>
+        onClick={async () => setStatusEnsureOpen(true)}>
         {lesson.lessonStatus === LessonStatus.Freezed ? 'Разморозить' : 'Заморозить'}
       </Button>
+      {statusEnsureOpen && 
+        <EnsurancePopup
+          description={lesson.lessonStatus === LessonStatus.Waiting ? 
+            'Вы уверены, что хотите заморозить занятие? Деньги за него не спишутся, а ссылка не придет. Вы сможете разморозить его снова не ранее чем за сутки' : 
+            'Вы уверены, что хотите разморозить занятие? Оно снова будет доступно для списания'}
+          onConfirm={async () => {await changeLessonStatus(lesson.id); await onMutate();}}
+          setPopupOpen={setStatusEnsureOpen}
+        />}
     </div>
   </Card>
-);
+};
 
 // ── History lesson card ───────────────────────────────────────────────────────
 
