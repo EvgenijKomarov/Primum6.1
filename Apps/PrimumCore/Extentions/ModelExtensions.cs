@@ -280,7 +280,8 @@ namespace PrimumCore.Extentions
                         x.Abonement.Course.Teacher.ConvertionIndex,
                         x.Abonement.Course.Teacher.Rank.EarningMultiplier,
                         x.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened),
-                        x.IsReferal)
+                        x.IsReferal),
+                    IsAbonementActive = x.Abonement.AbonementStatus == AbonementStatus.Active
                 }).ToList()
             });
     }

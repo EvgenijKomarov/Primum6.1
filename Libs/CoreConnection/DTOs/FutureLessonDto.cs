@@ -11,5 +11,7 @@ namespace CoreConnection.DTOs
         public required TimeSpan Time { get; set; }
 
         public required decimal? TeacherEarning {  get; set; }
+
+        public required bool IsAbonementActive { get; set; }
     }
 }

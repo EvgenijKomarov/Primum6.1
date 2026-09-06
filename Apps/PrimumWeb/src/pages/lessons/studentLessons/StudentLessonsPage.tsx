@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  changeLessonStatus,
   useStudentFutureLessons,
   useStudentLessons,
 } from '@/entity/lesson';
@@ -14,13 +15,14 @@ import { translateDayOfWeek } from '@/features/translation/translation';
 import { STATUS_CONFIG } from '../lessons.common';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from '@/shared/format/format-config';
+import Button from '@/shared/ui/Button/Button';
 
 export const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
   return <Badge text={cfg.label} badgeType={cfg.cls} />;
 };
 
-const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
+const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate: () => void }) => (
   <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
@@ -30,12 +32,23 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
         </div>
       </div>
-      <div className={styles.cardRight}>
-        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-        </span>
-        <StatusBadge status={lesson.lessonStatus} />
+      <div className={styles.cardCenter}>
+        <div className={styles.cardInfo}>
+          <StatusBadge status={lesson.lessonStatus} />
+        </div>
       </div>
+      <div className={styles.cardRight}>
+        <div className={styles.cardPrice}>
+          <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+        </div>
+      </div>
+      <Button 
+        disabled={!([LessonStatus.Freezed, LessonStatus.Waiting].includes(lesson.lessonStatus) && lesson.isAbonementActive)}
+        onClick={async () => {await changeLessonStatus(lesson.id); await onMutate();}}>
+        {lesson.lessonStatus === LessonStatus.Freezed ? 'Разморозить' : 'Заморозить'}
+      </Button>
     </div>
   </Card>
 );
@@ -52,31 +65,32 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
           <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
         </div>
       </div>
-      <div className={styles.cardRight}>
-        <Gradinginfo {...lesson} />
-        <span className={`${styles.cardPrice} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
-          {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
-        </span>
-        <StatusBadge status={lesson.lessonStatus} />
-        {lesson.lessonLink && (
-          <a
-            href={lesson.lessonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.linkBtn}
-          >
-            <ExternalLinkIcon />
-            Открыть
-          </a>
-        )}
+      <div className={styles.cardCenter}>
+        <div className={styles.cardInfo}>
+          <StatusBadge status={lesson.lessonStatus} />
+          <Gradinginfo {...lesson} />
+        </div>
       </div>
+      <div className={styles.cardRight}>
+        <div className={styles.cardPrice}>
+          <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceFree : ''}`}>
+            {lesson.price === 0 ? 'Бесплатно' : `${Number(lesson.price).toFixed(0)} ₽`}
+          </span>
+        </div>
+      </div>
+      <Button 
+        disabled={!lesson.lessonLink}
+        onClick={() => window.open(lesson.lessonLink, '_blank')}
+        icon={<ExternalLinkIcon />}>
+        Открыть
+      </Button>
     </div>
   </Card>
 );
 
 // ── Date group ────────────────────────────────────────────────────────────────
 
-const DateGroup = ({ group }: { group: LessonsByDateDto }) => {
+const DateGroup = ({ group, onMutate }: { group: LessonsByDateDto, onMutate: () => void }) => {
   const today = isToday(group.date);
   return (
     <div className={styles.dateGroup}>
@@ -86,7 +100,7 @@ const DateGroup = ({ group }: { group: LessonsByDateDto }) => {
         {today && <span className={styles.dateHeadingToday}>Сегодня</span>}
       </div>
       <div className={styles.lessonList}>
-        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} />)}
+        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} onMutate={onMutate}/>)}
       </div>
     </div>
   );
@@ -95,7 +109,7 @@ const DateGroup = ({ group }: { group: LessonsByDateDto }) => {
 // ── Tab content ───────────────────────────────────────────────────────────────
 
 const UpcomingTab = () => {
-  const { groups, isLoading } = useStudentFutureLessons();
+  const { groups, isLoading, mutate } = useStudentFutureLessons();
 
   if (isLoading) return (
     <div className={styles.lessonList}>
@@ -110,7 +124,7 @@ const UpcomingTab = () => {
     </div>
   );
 
-  return <>{groups.map((g) => <DateGroup key={g.date} group={g} />)}</>;
+  return <>{groups.map((g) => <DateGroup key={g.date} group={g} onMutate={mutate}/>)}</>;
 };
 
 const HistoryTab = () => {

@@ -1,16 +1,19 @@
-﻿using CoreConnection.DTOs;
-using PrimumCore.Entities;
+﻿using Common.Utilities;
+using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
+using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PrimumCore.Entities;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
+using PublishServiceConnection;
+using PublishServiceConnection.Events;
 using System.Linq.Expressions;
-using Common.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class LessonIterator(DatabaseIterator dbIterator, EarningCalculationService calculationService)
+    public class LessonIterator(DatabaseIterator dbIterator, EarningCalculationService calculationService, PublisherService publisher)
     {
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
@@ -70,6 +73,34 @@ namespace PrimumCore.Services.Iterators
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .ToDto(true)
                 .One(x => x.Id == lessonId);
+        }
+
+        public async Task<int> ChangeLessonStatus(int studentId, int lessonId)
+        {
+            var lesson = await dbIterator.Lessons()
+                .Where(x => x.Abonement.Student.User.Id == studentId)
+                .One(x => x.Id == lessonId);
+
+            if (!(lesson.Status == LessonStatus.Freezed || lesson.Status == LessonStatus.Waiting)) throw new BusinessLogicException("Unchangeable lesson status");
+            if (lesson.Status == LessonStatus.Freezed && lesson.Abonement.AbonementStatus == AbonementStatus.Freezed) throw new BusinessLogicException("Abonement is freezed");
+
+            lesson.Status = lesson.Status == LessonStatus.Waiting ? LessonStatus.Freezed : LessonStatus.Waiting;
+            await publisher.Push(new LessonChangeStatusEvent
+            {
+                StudentName = lesson.Abonement.Student.User.DisplayName,
+                StudentUserId = lesson.Abonement.Student.User.Id,
+                TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = lesson.Abonement.Course.TeacherId,
+                CourseName = lesson.Abonement.Course.Name,
+                AbonementId = lesson.Abonement.Id,
+                LessonId = lesson.Id,
+                DateTime = lesson.DateTime,
+                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+                IsBecameFreezed = lesson.Status == LessonStatus.Freezed,
+            });
+
+            await dbIterator.SaveChangesAsync();
+            return lesson.Id;
         }
     }
 }

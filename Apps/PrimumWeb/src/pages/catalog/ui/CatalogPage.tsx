@@ -50,9 +50,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
         </div>
 
         <div className={styles.cardFooter}>
-          <span className={styles.cardTeacher}>
+          <div className={styles.cardTeacher}>
             <TeacherInfo teacherId={course.teacherId} />
-          </span>
+          </div>
           <div className={styles.cardFooterRight}>
             <span className={`${styles.cardPrice} ${isFree ? styles.cardPriceFree : ''}`}>
               {isFree ? 'Бесплатно' : `${course.price.toFixed(0)} ₽`}

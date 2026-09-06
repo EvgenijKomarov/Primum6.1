@@ -12,4 +12,6 @@ export const STATUS_CONFIG: Record<LessonStatus, { label: string; cls: BadgeType
   [LessonStatus.Missed]:            { label: 'Пропущено', cls: BadgeTypeEnum.Negative  },
   [LessonStatus.MissedWithoutReason]: { label: 'Пропущено', cls: BadgeTypeEnum.Negative },
   [LessonStatus.MissedDueToException]: { label: 'Техническая ошибка', cls: BadgeTypeEnum.Negative },
+  [LessonStatus.Freezed]:          { label: 'Заморожен',    cls: BadgeTypeEnum.Warning },
+  [LessonStatus.MissedDueToFreezing]:          { label: 'Пропущено из-за заморозки',    cls: BadgeTypeEnum.Negative },
 };

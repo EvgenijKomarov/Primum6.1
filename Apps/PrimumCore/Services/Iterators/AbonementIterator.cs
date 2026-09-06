@@ -7,6 +7,7 @@ using PublishServiceConnection.Events;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using CoreDBModel.Models;
+using LinqKit;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -52,7 +53,29 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == abonementId);
 
             abonement.AbonementStatus = status;
-            if (status == AbonementStatus.Deleted) { abonement.AbonementShedules.Clear(); }
+            if (status == AbonementStatus.Deleted) 
+            { 
+                abonement.AbonementShedules.Clear();
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Waiting)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Freezed);
+            }
+            else if (status == AbonementStatus.Freezed) 
+            {
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Waiting)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Freezed);
+            }
+            else if (status == AbonementStatus.Active)
+            {
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Freezed)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Waiting);
+            }
+
             await dbIterator.SaveChangesAsync();
             await publisher.Push(new AbonementChangeStatusEvent
             {

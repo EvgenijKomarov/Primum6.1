@@ -54,7 +54,7 @@ namespace CoreDBIterator.Workers
                         DateTime = freeDateTime,
                         Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0m : s.Abonement.PricePerLesson,
                         IsReferal = s.Abonement.IsReferal,
-                        Status = LessonStatus.Waiting
+                        Status = s.Abonement.AbonementStatus == AbonementStatus.Freezed ? LessonStatus.Freezed : LessonStatus.Waiting //если заморожен абонемент, заморожены будут и занятия
                     };
                     context.Set<Lesson>().Add(lesson);
                     logger?.LogInformation($"Created lesson with Id: {lesson.Id} for {lesson.AbonementId} at {lesson.DateTime}");

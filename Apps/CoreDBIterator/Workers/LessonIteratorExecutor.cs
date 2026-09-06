@@ -17,7 +17,7 @@ namespace CoreDBIterator.Workers
             {
                 logger.LogInformation("Lesson iteration running at: {time}", DateTimeOffset.Now);
                 await Action();
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
 
@@ -66,7 +66,7 @@ namespace CoreDBIterator.Workers
 
                     if (!await paymentClient.IsTeacherReadyAsync(teacher.User.Id)) throw new Exception("Teacher not ready to process payments");
 
-                    if (studentCash >= lesson.Price && AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие произошло
+                    if (studentCash >= lesson.Price)//Занятие произошло
                     {
                         var teacherCash = earningService.CalculateEarningsToLesson(
                             lesson.Price,
@@ -105,8 +105,7 @@ namespace CoreDBIterator.Workers
                         });
                         logger?.LogInformation($"Lesson {lesson.Id} happened successfully");
                     }
-                    else if (studentCash < lesson.Price &&
-                        AvailabilityExpressions.IsAbonementAvailable.Compile()(lesson.Abonement))//Занятие не оплачено и удаляется
+                    else//Занятие не оплачено и удаляется
                     {
                         lesson.Status = LessonStatus.Missed;
                         var notification = new LessonFailureEvent()
@@ -122,11 +121,6 @@ namespace CoreDBIterator.Workers
                         };
                         await publisher.Push(notification);
                         logger?.LogInformation($"Lesson {lesson.Id} not happened");
-                    }
-                    else //Занятие пропущено по сторонним причинам
-                    {
-                        logger?.LogInformation($"Lesson {lesson.Id} missed due to non-active abonement");
-                        context.Set<Lesson>().Remove(lesson);
                     }
                 }
                 catch (Exception ex) 

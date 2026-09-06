@@ -32,6 +32,7 @@ export const api = {
   studentLesson: {
     getLast: "/student/lessons/last",
     getFuture: "/student/lessons/future",
+    base: "/student/lessons"
   },
   teacherLesson: {
     getLast: "/teacher/lessons/last",

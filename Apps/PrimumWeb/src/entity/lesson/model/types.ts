@@ -4,7 +4,9 @@ export enum LessonStatus {
   Happened = 2,
   Missed = 3,
   MissedWithoutReason = 4,
-  MissedDueToException = 5
+  MissedDueToException = 5,
+  Freezed = 6,
+  MissedDueToFreezing = 7
 }
 
 export interface LessonDto extends Grading {
@@ -60,6 +62,7 @@ export interface FutureLessonDto {
   lessonStatus: LessonStatus;
   time: string;
   teacherEarning?: number;
+  isAbonementActive: boolean;
 }
 
 export interface LessonsByDateDto {

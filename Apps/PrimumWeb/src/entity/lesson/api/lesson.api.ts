@@ -42,3 +42,10 @@ export const gradeLesson = async (lessonId: number, data: GradingInputDto) => {
     data,
   });
 }
+
+export const changeLessonStatus = async (lessonId: number) => {
+  return await fetcherInstance<number>({
+    method: 'PATCH',
+    url: `${api.studentLesson.base}/${lessonId}`,
+  });
+}

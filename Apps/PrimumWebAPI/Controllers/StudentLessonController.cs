@@ -38,5 +38,14 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("{lessonId}")]
         public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int lessonId)
             => Ok(await client.LessonAsync(User.GetUserId(), lessonId));
+
+        /// <summary>
+        /// Поменять статус занятия
+        /// </summary>
+        /// <param name="lessonId"></param>
+        /// <returns></returns>
+        [HttpPatch("{lessonId}")]
+        public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int lessonId)
+            => Ok(await client.LessonChangeStatusAsync(User.GetUserId(), lessonId));
     }
 }
