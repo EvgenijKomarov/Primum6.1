@@ -79,6 +79,8 @@ services:
       BOTCORE_URL: "http://botcore:8080"
       RABBITMQ_URL: "amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@primum-rabbitmq:5672/"
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      # опционально: прокси для Telegram API, если он заблокирован (например socks5h через Tor на хосте)
+      TELEGRAM_PROXY: ${TELEGRAM_PROXY:-}
     depends_on:
       chat-bot-notification-service:
         condition: service_healthy
