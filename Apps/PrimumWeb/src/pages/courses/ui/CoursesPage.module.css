@@ -1,0 +1,135 @@
+@reference "@/global.css";
+
+.page {
+  min-height: calc(100vh - 3.75rem);
+  padding: 2.5rem 1.5rem;
+  max-width: var(--page-size);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 5rem 0;
+  color: var(--color-secondary-dark);
+  text-align: center;
+}
+
+.emptyText {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  gap: 1.25rem;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.courseName {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.badges {
+  display: grid;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  max-width: 80%;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.metaRow td {
+  width: 33.333%;
+  vertical-align: top;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.metaItemInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+}
+
+.metaLabel {
+  font-size: 0.6rem;
+  color: var(--color-secondary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.metaValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  text-wrap: nowrap;
+}
+
+.theme {
+  font-size: 0.8125rem;
+  color: var(--color-secondary-light);
+}
+
+.metaTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.description {
+  margin-top: 1rem;
+  padding: 1rem;
+  height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden; 
+  padding-right: 0.5rem; 
+  background-color: var(--color-secondary-darkest);
+  border: 1px solid var(--color-secondary-dark);
+  border-radius: 0.875rem;
+}
+
+.descriptionText {
+  font-size: 0.7rem;
+}
+
+.cardHead {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.pointingBadge {
+  cursor: pointer;
+}

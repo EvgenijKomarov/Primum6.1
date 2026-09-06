@@ -1,0 +1,91 @@
+.displayName {
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    font-size: 0.5rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    background-color: var(--color-primary-base);
+    color: var(--color-secondary-base);
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.rows {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.row {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.value{
+    text-wrap: balance;
+}
+
+.label {
+    color: var(--color-secondary-light);
+}
+
+.lightLabel {
+    color: var(--color-primary-base);
+    font-size: 0.8rem;
+}
+
+.description {
+    font-size: 0.8rem;
+}
+
+.hint{
+    margin: 0;
+    color: var(--color-secondary-light);
+    opacity: 0.7;
+    font-size: 0.65rem;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--color-secondary-light);
+    opacity: 0.15;
+    margin: 0.1rem 0;
+}
+
+.total {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.6rem;
+}
+
+.total .value {
+    font-size: 1.1rem;
+}
+
+.abonementBadge {
+    cursor: pointer;
+    text-align: center;
+    border-radius: 9999px;
+    font-size: 0.55rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+}

@@ -3,10 +3,11 @@ using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
+using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Services.Utilities
 {
-    public class AdminProfileHelper(PrimumContext context)
+    public class AdminProfileHelper(DatabaseIterator dbIterator)
     {
         public async Task<AdminProfile> CheckIteratingUser(int id, Permission permission)
         {
@@ -17,9 +18,7 @@ namespace PrimumCore.Services.Utilities
 
         public async Task<AdminProfile> GetIteratingUser(int id)
         {
-            return await context.Set<AdminProfile>()
-                .Include(x => x.User)
-                .Include(x => x.Permissions)
+            return await dbIterator.Admins()
                 .One(x => x.User.Id == id);
         }
 

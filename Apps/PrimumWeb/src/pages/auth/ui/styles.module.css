@@ -1,0 +1,10 @@
+@reference "@/global.css";
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100dvh;
+  background-color: var(--color-background-base);
+  padding: 1rem;
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreConnection.DTOs.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,7 @@ namespace CoreConnection.DTOs
         public required string AdminDisplayName { get; set; }
 
         public required string Description { get; set; }
+
+        public required bool IsRevisioned { get; set; }
     }
 }

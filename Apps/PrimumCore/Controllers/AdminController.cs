@@ -1,9 +1,10 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
-using Swashbuckle.AspNetCore.Annotations;
+using CoreConnection;
+using SignServiceConnection.Models;
 
 namespace PrimumCore.Controllers
 {
@@ -15,7 +16,8 @@ namespace PrimumCore.Controllers
         IncidentIterator IncidentIterator,
         PromocodeIterator promocodeIterator,
         UserIterator userIterator,
-        ThemeIterator themeIterator
+        ThemeIterator themeIterator, 
+        ChatSignTokenIterator chatSignTokenIterator
         ) : PrimumController
     {
         [HttpGet("profile")]
@@ -27,16 +29,16 @@ namespace PrimumCore.Controllers
             => Ok(await userIterator.GetUser(objectUserId, false));
 
         [HttpGet("get-users")]
-        public async Task<ActionResult<PageResult<UserDto>>> GetUsers([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await userIterator.GetUsers(false, page, pageSize));
+        public async Task<ActionResult<PageResult<UserDto>>> GetUsers([FromRoute] int userId, [FromQuery] string? displayName, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await userIterator.GetUsers(displayName, false, page, pageSize));
 
         [HttpGet("incidents")]
         public async Task<ActionResult<PageResult<IncidentDto>>> GetIncidents([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
             => Ok(await IncidentIterator.GetIncedents(userId, page, pageSize));
 
         [HttpGet("admins")]
-        public async Task<ActionResult<PageResult<AdminProfileDto>>> GetAdmins([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await iterator.GetAdmins(page, pageSize));
+        public async Task<ActionResult<PageResult<AdminProfileDto>>> GetAdmins([FromRoute] int userId,[FromQuery]string? displayName, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await iterator.GetAdmins(displayName, page, pageSize));
 
         [HttpGet("admin/{objectUserId}")]
         public async Task<ActionResult<AdminProfileDto>> GetAdmin([FromRoute] int userId, [FromRoute] int objectUserId) 
@@ -46,9 +48,10 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<PageResult<IncidentLogDto>>> GetIncidentLogs(
             [FromRoute] int userId, 
             [FromQuery] bool OnlyUnrevisioned = true, 
+            [FromQuery] int? adminUserId = null, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10) 
-            => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned, page, pageSize));
+            => Ok(await IncidentIterator.GetIncidentLogs(userId, OnlyUnrevisioned, adminUserId, page, pageSize));
 
         [HttpGet("incident-log/{logId}")]
         public async Task<ActionResult<IncidentLogDto>> GetIncidentLog([FromRoute] int userId, [FromRoute] int logId)
@@ -58,17 +61,17 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> RevisionIncidentLog([FromRoute] int userId, [FromRoute] int logId)
             => Ok(await IncidentIterator.RevisionIncidentLog(userId, logId));
 
+        [HttpGet("get-course-themes")]
+        public async Task<ActionResult<PageResult<CourseThemeDto>>> GetThemes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await themeIterator.GetThemes(false, page, pageSize));
+
         [HttpGet("all-promocodes")]
-        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await promocodeIterator.GetPromocodes(false, page, pageSize));
+        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] string? searchString, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await promocodeIterator.GetPromocodes(false, searchString, page, pageSize));
 
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, false));
-
-        [HttpPatch("add-cash/{objectUserId}")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int cash = 0) 
-            => Ok(await iterator.AddCash(userId, objectUserId, cash));
 
         [HttpPatch("ban/{objectUserId}")]
         public async Task<ActionResult<int>> BanUser([FromRoute] int userId, [FromRoute] int objectUserId)
@@ -109,5 +112,9 @@ namespace PrimumCore.Controllers
         [HttpDelete("delete-promocode/{promocodeId}")]
         public async Task<ActionResult<int>> DeletePromocode([FromRoute] int userId, [FromRoute] int promocodeId)
             => Ok(await promocodeIterator.DeletePromocode(userId, promocodeId));
+
+        [HttpGet("get-user-chat-signs/{objectUserId}")]
+        public async Task<ActionResult<PageResult<ChatSign>>> GetUserChatSigns([FromRoute] int userId, [FromRoute] int objectUserId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await chatSignTokenIterator.GetChatSigns(objectUserId, page, pageSize));
     }
 }

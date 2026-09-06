@@ -10,9 +10,13 @@ public partial class Abonement: BaseEntity
 
     public int StudentId { get; set; }
 
-    public int PricePerLesson { get; set; }
+    public decimal PricePerLesson { get; set; }
 
     public int FreeLessons { get; set; }
+
+    public float? Rating { get; set; } = null;
+
+    public bool IsReferal { get; set; } = false;
 
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 

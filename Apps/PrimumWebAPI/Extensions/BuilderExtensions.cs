@@ -1,9 +1,11 @@
-﻿using CoreConnection;
+﻿using CommonNotificationServiceClient;
+using CoreConnection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using PaymentServiceConnection;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Entities;
 using PrimumWebAPI.Services;
@@ -64,18 +66,24 @@ namespace PrimumWebAPI.Extensions
             return builder;
         }
 
-        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder, string coreUrl)
+        public static WebApplicationBuilder AddClients(this WebApplicationBuilder builder)
         {
+            var url = Environment.GetEnvironmentVariable("PRIMUMCORE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             builder.Services.AddHttpClient<AdminClient>()
-                .AddTypedClient((httpClient, sp) => new AdminClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new AdminClient(url, httpClient));
             builder.Services.AddHttpClient<StudentClient>()
-                .AddTypedClient((httpClient, sp) => new StudentClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new StudentClient(url, httpClient));
             builder.Services.AddHttpClient<UserClient>()
-                .AddTypedClient((httpClient, sp) => new UserClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new UserClient(url, httpClient));
             builder.Services.AddHttpClient<PublicClient>()
-                .AddTypedClient((httpClient, sp) => new PublicClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublicClient(url, httpClient));
             builder.Services.AddHttpClient<TeacherClient>()
-                .AddTypedClient((httpClient, sp) => new TeacherClient(coreUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new TeacherClient(url, httpClient));
+            builder.Services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient));
+            builder.Services.AddHttpClient<CommonNotificationClient>()
+                .AddTypedClient((httpClient, sp) => new CommonNotificationClient(httpClient));
 
             return builder;
         }
@@ -90,6 +98,9 @@ namespace PrimumWebAPI.Extensions
 
         public static WebApplicationBuilder AddAuth(this WebApplicationBuilder builder)
         {
+            var settings = new JwtSettings();
+            builder.Services.AddSingleton<JwtSettings>(x => settings);
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,14 +110,13 @@ namespace PrimumWebAPI.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = !string.IsNullOrEmpty(settings.Issuer),
+                    ValidateAudience = !string.IsNullOrEmpty(settings.Audience),
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
+                    ValidateIssuerSigningKey = settings.Seed != null,
+                    IssuerSigningKey = settings.Seed
                 };
             });
             return builder;

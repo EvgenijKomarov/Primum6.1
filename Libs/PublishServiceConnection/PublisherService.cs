@@ -1,25 +1,41 @@
 ﻿using PublishServiceConnection.Abstractions;
-using PublishServiceConnection.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
 
 namespace PublishServiceConnection
 {
-    public class PublisherService(string publisherUrl, HttpClient httpClient)
+    public class PublisherService(HttpClient httpClient)
     {
-        private PublisherClient client = new PublisherClient(publisherUrl, httpClient);
         public async Task Push(IPushable message)
         {
             if (message is IChatBotNotification chatNotification)
             {
-                await client.PushChatNotificationAsync(chatNotification.ToChatBotNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+                foreach(var notif in chatNotification.ToChatBotNotifications())
+                {
+                    var url = Environment.GetEnvironmentVariable("CHATBOTNOTIFICATIONSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+                    await PushNotification(notif.Key, notif.Value, url);
+                }
             }
             if (message is IMailNotification mailNotification) 
-            { 
-                await client.PushMailNotificationAsync(mailNotification.MailTitle, mailNotification.ToMailNotifications().ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value));
+            {
+                foreach (var notif in mailNotification.ToMailNotifications())
+                {
+                    var url = Environment.GetEnvironmentVariable("MAILNOTIFICATIONSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+                    await PushNotification(notif.Key, notif.Value, url);
+                }
             }
+            if (message is ICommonNotification commonNotification)
+            {
+                foreach (var notif in commonNotification.ToCommonNotifications())
+                {
+                    var url = Environment.GetEnvironmentVariable("COMMONNOTIFICATIONSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+                    await PushNotification(notif.Key, notif.Value, url);
+                }
+            }
+        }
+
+        private async Task PushNotification(int userId, string message, string route)
+        {
+            HttpResponseMessage response = await httpClient.PostAsync(route + $"/publish?userId={userId}&message={Uri.EscapeDataString(message)}", content: null);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

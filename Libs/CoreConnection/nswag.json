@@ -2,7 +2,7 @@
   "runtime": "Net100",
   "documentGenerator": {
     "fromDocument": {
-      "url": "https://localhost:5001/swagger/v1/swagger.json",
+      "url": "http://localhost:5004/swagger/v1/swagger.json",
       "output": null
     }
   },
@@ -12,7 +12,8 @@
       "namespace": "CoreConnection",
       "additionalNamespaceUsages": [
         "CoreConnection.DTOs",
-        "CoreConnection.DTOs.Inputs"
+        "CoreConnection.DTOs.Inputs",
+		"SignServiceConnection.Models"
       ],
       "generateDtoTypes": true, // Генерируем DTO
       "dtoTypesNamespace": "CoreConnection.DTOs",
@@ -49,7 +50,16 @@
         "LessonStatus",
         "Permission",
         "TokenMeaning",
-        "DayOfWeek"
+        "DayOfWeek",
+        "TeacherRankDto",
+        "StudentRankDto",
+        "CourseRankDto",
+        "LessonsByDateDto",
+        "FutureLessonDto",
+        "CourseDtoLite",
+		    "ChatSign",
+        "TeacherRegistrationInputDto",
+        "TeacherEarningDto"
       ],
       "generateNullableReferenceTypes": true, // Учитывать C# 11 required / nullable
       "generateRequiredProperties": true, // Генерировать модификатор 'required' в клиенте (если целевая версия .NET поддерживает)

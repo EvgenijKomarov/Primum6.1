@@ -1,4 +1,5 @@
-﻿using CoreDBModel.Models.Enums;
+﻿using CoreConnection.DTOs.Abstractions;
+using CoreDBModel.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,32 +8,22 @@ using System.Threading.Tasks;
 
 namespace CoreConnection.DTOs
 {
-    public class LessonDto : IHasId
+    public class LessonDto : AbstractLessonDto
     {
         public required DateTime DateTime {  get; set; }
 
-        public required string CourseName { get; set; }
-
-        public required int CourseId { get; set; }
-
-        public required int Id { get; set; }
-
-        public required string TeacherDisplayName { get; set; }
-
-        public required int TeacherId { get; set; }
-
-        public required string StudentDisplayName { get; set; }
-
-        public required int StudentId { get; set; }
-
         public required string? LessonLink { get; set; }
 
-        public required int AbonementId { get; set; }
+        public required int? HomeworkGrade { get; set; }
 
-        public required int Price { get; set; }
+        public required int? LessonActivityGrade { get; set; }
 
-        public required LessonStatus LessonStatus { get; set; }
+        public required int? RepetitionOfMaterialGrade { get; set; }
 
-        public required float? Grade { get; set; }
+        public required int? StudyInitiativeGrade { get; set; }
+
+        public required float? FinalGrade { get; set; }
+
+        public required decimal? TeacherEarning { get; set; }
     }
 }

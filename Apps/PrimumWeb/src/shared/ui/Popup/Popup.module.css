@@ -1,0 +1,30 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+}
+
+.popupVisible {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-secondary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}

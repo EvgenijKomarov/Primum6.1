@@ -1,0 +1,45 @@
+.filterBar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-secondary-dark);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border: 1px solid color-mix(in srgb, var(--color-primary-base) 50%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary-base) 0%, transparent);
+  color: var(--color-primary-base);
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background-color: color-mix(in srgb, var(--color-primary-base) 10%, transparent);
+  color: var(--color-primary-light);
+}
+
+.chipActive {
+  background-color: color-mix(in srgb, var(--color-primary-base) 18%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary-base) 50%, transparent);
+  color: var(--color-primary-base);
+}
+
+.chipActive:hover {
+  background-color: color-mix(in srgb, var(--color-primary-base) 26%, transparent);
+  color: var(--color-primary-light);
+}
+
+.tabContent {
+}

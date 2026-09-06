@@ -42,8 +42,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             return Finish(new EngineOutputMessage
             {
                 Message = $"Привет, {Emoticons.User}{input.User?.DisplayName}!\n" +
-                $"{Emoticons.Id}Id: {input.User?.Id}\n" +
-                $"{Emoticons.Cash}Балланс: {input.User?.Cash} рублей\n",
+                $"{Emoticons.Id}Id: {input.User?.Id}\n",
                 Buttons = buttons
             });
         }

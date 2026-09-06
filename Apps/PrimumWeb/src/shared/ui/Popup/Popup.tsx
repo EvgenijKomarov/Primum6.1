@@ -1,0 +1,58 @@
+import { useEffect, useRef, useState } from 'react';
+import styles from './Popup.module.css';
+import { createPortal } from 'react-dom';
+import { Card } from '../Card/Card';
+
+interface PopupProps {
+  title: string;
+  onClose: () => void;
+  width?: string;
+  children: React.ReactNode;
+}
+
+export const Popup = ({ onClose, children, title = "", width }: PopupProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true));
+  }, []);
+
+  const handleClose = () => {
+    setVisible(false);
+  };
+
+  const handleTransitionEnd = () => {
+    if (!visible) onClose();
+  };
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        handleClose();
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className={`${styles.overlay} ${visible ? styles.overlayVisible : ''}`}
+      onTransitionEnd={handleTransitionEnd}
+    >
+      <Card width={width}>
+        <div
+          className={`${styles.popup} ${visible ? styles.popupVisible : ''}`}
+          ref={ref}
+        >
+          <div className={styles.header}>
+            <span className={styles.title}>{title}</span>
+          </div>
+          {children}
+        </div>
+      </Card>
+    </div>,
+    document.body
+  );
+};

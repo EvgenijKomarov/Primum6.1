@@ -12,7 +12,7 @@ namespace PrimumCore.Middlewares
             }
             catch(ApiException ex)
             {
-                _logger.LogError(ex, "API exception occurred");
+                _logger.LogError(ex, "Core exception occurred");
                 context.Response.StatusCode = ex.StatusCode;
                 await context.Response.WriteAsJsonAsync(new
                 {

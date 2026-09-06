@@ -14,7 +14,8 @@
     <Content Include="nswag.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <!-- Avoid copying nswag.json to publish to prevent conflicts when multiple libs contain the same file -->
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
@@ -32,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoreDBModel\CoreDBModel.csproj" />
+    <ProjectReference Include="..\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 
 </Project>

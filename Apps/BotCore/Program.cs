@@ -1,20 +1,15 @@
 using BotCore.Extensions;
 using BotCore.Middlewares;
 using Microsoft.OpenApi;
-using SolutionConfiguration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.Services.AddSingleton<SolutionEnvironment>(sp => solutionEnvironment);
-builder.WebHost.UseUrls(solutionEnvironment.BotCore.SelfUrl);
-builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
+builder.AddSignService();
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -30,28 +25,26 @@ builder.Services.AddSwaggerGen(c =>
     // ⚠️ Важно: второй параметр true включает комментарии для контроллеров!
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
-builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl);
+builder.AddClients();
 builder.AddBotEngine();
 builder.AddNodes();
 builder.AddLogging();
 builder.AddServices();
 builder.AddMiddlewares();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
+
+app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 

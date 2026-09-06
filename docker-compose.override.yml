@@ -1,0 +1,87 @@
+services:
+  rabbitmq:
+    ports:
+      - "4211:15672"
+
+  signservice:
+    volumes:
+      - ./Apps/SignService:/app
+
+  common-notification-service:
+    volumes:
+      - ./Apps/CommonNotificationService:/app
+
+  email-notification-service:
+    volumes:
+      - ./Apps/EmailNotificationService:/app
+
+  payment-service:
+    environment:
+      MODE: "Development"
+    volumes:
+      - ./Apps/PaymentService:/app
+
+  chat-bot-notification-service:
+    volumes:
+      - ./Apps/ChatBotNotificationService:/app
+
+  primumwebapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./Apps/PrimumWebAPI:/app/Apps/PrimumWebAPI
+    depends_on:
+      primumcore:
+        condition: service_started
+      
+  coredbiterator:
+    volumes:
+      - ./Apps/CoreDBIterator:/app/Apps/CoreDBIterator
+  
+  botcore:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5003:8080"
+    volumes:
+      - ./Apps/BotCore:/app/Apps/BotCore
+    depends_on:
+      primumcore:
+        condition: service_started
+      
+  telegram-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/TelegramBot:/app/Apps/TelegramBot
+    depends_on:
+      botcore:
+        condition: service_started
+
+  max-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/MaxBot:/app/Apps/MaxBot
+    depends_on:
+      botcore:
+        condition: service_started
+      
+  vk-bot:
+    volumes:
+      - ./Libs/BotConnection:/app/Libs/BotConnection
+      - ./Apps/VkBot:/app/Apps/VkBot
+    depends_on:
+      botcore:
+        condition: service_started
+      
+  primumcore:
+    ports:
+      - "5004:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./Apps/PrimumCore:/app/Apps/PrimumCore
+
+  primumweb:
+    depends_on:
+      primumwebapi:
+        condition: service_started

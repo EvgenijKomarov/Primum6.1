@@ -1,0 +1,25 @@
+@reference "@/global.css";
+.formRow {
+  @apply flex w-full gap-[16px];
+}
+
+.formCol {
+  @apply min-w-0 flex-1;
+}
+
+.formActions {
+  @apply flex gap-[8px] mt-[16px];
+}
+
+.formError {
+  color: var(--color-error, var(--color-functional-error));
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.formRows{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

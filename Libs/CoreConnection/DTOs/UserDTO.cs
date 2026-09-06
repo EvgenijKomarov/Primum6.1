@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreConnection.DTOs.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,9 @@ namespace CoreConnection.DTOs
 
         public required string DisplayName { get; set; }
 
-        public required long Cash { get; set; }
+        public required int TimezoneOffset { get; set; }
+
+        public required string Email { get; set; }
 
         public required bool IsBanned { get; set; }
 

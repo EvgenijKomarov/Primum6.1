@@ -14,11 +14,11 @@ namespace PrimumWebAPI.Controllers
         /// Все занятия ученика, включая прошедшие и будущие
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<LessonDtoPageResult>> GetLessons(
+        [HttpGet("last")]
+        public async Task<ActionResult<LessonDtoPageResult>> GetLastLessons(
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)
-            => Ok(await client.LessonsAsync(User.GetUserId(), page, pageSize));
+            => Ok(await client.LastLessonsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
         /// Только будущие занятия
@@ -38,5 +38,14 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("{lessonId}")]
         public async Task<ActionResult<LessonDto>> GetLesson([FromRoute] int lessonId)
             => Ok(await client.LessonAsync(User.GetUserId(), lessonId));
+
+        /// <summary>
+        /// Поменять статус занятия
+        /// </summary>
+        /// <param name="lessonId"></param>
+        /// <returns></returns>
+        [HttpPatch("{lessonId}")]
+        public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int lessonId)
+            => Ok(await client.LessonChangeStatusAsync(User.GetUserId(), lessonId));
     }
 }

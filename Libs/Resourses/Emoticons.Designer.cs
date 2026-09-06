@@ -115,11 +115,20 @@ namespace Resourses {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 🏫.
+        ///   Ищет локализованную строку, похожую на 📚.
         /// </summary>
         public static string Course {
             get {
                 return ResourceManager.GetString("Course", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 🗓.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         

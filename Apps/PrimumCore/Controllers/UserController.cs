@@ -1,5 +1,6 @@
 ﻿using CoreConnection.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using PrimumCore.Entities;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
@@ -9,8 +10,7 @@ namespace PrimumCore.Controllers
     [Tags("User")]
     public class UserController(
         UserIterator userIterator, 
-        TokenIterator tokenIterator,
-        ChatSignTokenIterator chatSignTokenIterator) : PrimumController
+        TokenIterator tokenIterator) : PrimumController
     {
         [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int userId) => Ok(await userIterator.GetUser(userId, false));
@@ -25,9 +25,5 @@ namespace PrimumCore.Controllers
         [HttpPost("confirm-email/{token}")]
         public async Task<ActionResult<int>> ConfirmEmail([FromRoute] int userId, [FromRoute] string token)
             => Ok(await tokenIterator.ConfirmToken(userId, token));
-
-        [HttpPost("confirm-chat/{token}")]
-        public async Task<ActionResult<int>> ConfirmChat([FromRoute] int userId, [FromRoute] string token)
-            => Ok(await chatSignTokenIterator.AddChat(userId, token));
     }
 }

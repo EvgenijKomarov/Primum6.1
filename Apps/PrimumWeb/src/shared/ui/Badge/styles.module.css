@@ -1,0 +1,50 @@
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  align-self: flex-start;
+  border: 1.5px solid transparent;
+}
+
+.Positive {
+  background-color: color-mix(in srgb, var(--color-functional-success) 15%, transparent);
+  color: var(--color-functional-success);
+}
+
+.PositiveBorder {
+  border: 1.5px solid var(--color-functional-success);
+  cursor: pointer;
+}
+
+.Warning {
+  background-color: color-mix(in srgb, var(--color-functional-warning) 15%, transparent);
+  color: var(--color-functional-warning);
+}
+
+.WarningBorder {
+  border: 1.5px solid var(--color-functional-warning);
+  cursor: pointer;
+}
+
+.Negative {
+  background-color: color-mix(in srgb, var(--color-functional-error) 15%, transparent);
+  color: var(--color-functional-error);
+}
+
+.NegativeBorder {
+  border: 1.5px solid var(--color-functional-error);
+  cursor: pointer;
+}

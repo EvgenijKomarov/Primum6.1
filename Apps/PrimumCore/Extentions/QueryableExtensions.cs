@@ -1,8 +1,8 @@
-﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+﻿using PrimumCore.Entities;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using System.Linq.Expressions;
+using CoreConnection.DTOs.Abstractions;
 
 namespace PrimumCore.Extentions
 {
@@ -35,14 +35,62 @@ namespace PrimumCore.Extentions
             int page, 
             int pageSize,
             CancellationToken cancellationToken = default)
-            where TEntity : IHasId
+            where TEntity : class
         {
             var totalCount = await queryable.CountAsync(cancellationToken);
-            var pageItems = queryable.Skip(page * pageSize).Take(pageSize).OrderBy(x => x.Id);
+
+            if (queryable is IQueryable<IOrderable>)//combined sort
+            {
+                IOrderedQueryable<TEntity> orderedQuery = null;
+
+                if (typeof(IHasLevel).IsAssignableFrom(typeof(TEntity)))
+                {
+                    orderedQuery = orderedQuery is null ?
+                        queryable.OrderByDescending(x => ((IHasLevel)(object)x).Level) :
+                        orderedQuery.ThenByDescending(x => ((IHasLevel)(object)x).Level);
+                }
+
+                if (typeof(IHasRating).IsAssignableFrom(typeof(TEntity)))
+                {
+                    orderedQuery = orderedQuery is null ?
+                        queryable.OrderByDescending(x => ((IHasRating)(object)x).Rating) :
+                        orderedQuery.ThenByDescending(x => ((IHasRating)(object)x).Rating);
+                }
+
+                if (typeof(IHasId).IsAssignableFrom(typeof(TEntity)))
+                {
+                    orderedQuery = orderedQuery is null ? 
+                        queryable.OrderByDescending(x => ((IHasId)(object)x).Id) : 
+                        orderedQuery.ThenByDescending(x => ((IHasId)(object)x).Id);
+                }
+                if (orderedQuery is not null) queryable = orderedQuery;
+            }
+
+            var pageItems = queryable.Skip(page * pageSize).Take(pageSize);
 
             return new PageResult<TEntity>
             { 
                 Items = await pageItems.ToArrayAsync(cancellationToken),
+                TotalItemsCount = totalCount,
+                TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling((double)totalCount / pageSize),
+                CurrentPage = page
+            };
+        }
+
+        public static async Task<PageResult<TEntity>> ToPageResult<TEntity>(
+            this IEnumerable<TEntity> enumerable,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken = default)
+            where TEntity : class
+        {
+            var totalCount = enumerable.Count();
+
+            var pageItems = enumerable.Skip(page * pageSize).Take(pageSize);
+
+            return new PageResult<TEntity>
+            {
+                Items = pageItems.ToArray(),
                 TotalItemsCount = totalCount,
                 TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling((double)totalCount / pageSize),
                 CurrentPage = page

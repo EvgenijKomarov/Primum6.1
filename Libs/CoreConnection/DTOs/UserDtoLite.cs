@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreConnection.DTOs.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

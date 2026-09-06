@@ -22,6 +22,15 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.AbonementsAsync(User.GetUserId(), page, pageSize));
 
         /// <summary>
+        /// Создать реферальный абонемент
+        /// </summary>
+        /// <param name="token">реферальный токен</param>
+        /// <returns></returns>
+        [HttpPost("referal")]
+        public async Task<ActionResult<int>> CreateReferalAbonement([FromBody] string token = null!)
+            => Ok(await client.CreateReferalAbonementAsync(User.GetUserId(), token));
+
+        /// <summary>
         /// Конкретный абонемент ученика
         /// </summary>
         /// <param name="abonementId"></param>

@@ -362,3 +362,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+*.env
+
+# Idea
+
+**/.idea/
+
+# Custom
+*efbundle
+/Libs/CoreDBModel/efbundle

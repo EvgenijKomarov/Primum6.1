@@ -1,24 +1,18 @@
 ﻿using CoreConnection.DTOs;
 using Microsoft.IdentityModel.Tokens;
+using PrimumWebAPI.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace PrimumWebAPI.Services
 {
-    public class JwtTokenService
+    public class JwtTokenService(IConfiguration _configuration, JwtSettings settings)
     {
-        private readonly IConfiguration _configuration;
-
-        public JwtTokenService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
 
         public string GenerateToken(UserDto user)
         {
-            var securityKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var securityKey = settings.Seed;
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -28,13 +22,13 @@ namespace PrimumWebAPI.Services
                 new Claim(ClaimTypes.Surname, user.Surname)
             };
 
-            var expiryMinutes = int.Parse(_configuration["Jwt:ExpiryMinutes"] ?? "60");
+            var expiryMinutes = int.Parse(Environment.GetEnvironmentVariable("WEBAPI_JWT_LIFETIME_MINUTES") ?? "60");
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: settings.Issuer,
+                audience: settings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(settings.ExpirationMinutes),
                 signingCredentials: credentials
             );
 

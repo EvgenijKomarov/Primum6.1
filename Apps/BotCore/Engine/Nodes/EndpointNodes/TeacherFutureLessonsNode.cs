@@ -13,16 +13,21 @@ namespace BotCore.Engine.Nodes.EndpointNodes
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
-            var lessons = (await client.FutureLessonsAsync(input.UserId!.Value)).Items ?? new List<LessonDto>();
+            var lessonsByDate = (await client.FutureLessonsAsync(input.UserId!.Value)).Items ?? new List<LessonsByDateDto>();
             StringBuilder sb = new StringBuilder();
-            foreach (var lesson in lessons)
+            foreach (var date in lessonsByDate)
             {
-                sb.AppendLine($"[{lesson.DateTime.ToString("dd.MM HH:mm")}] {lesson.StudentDisplayName} ({lesson.CourseName}) - " +
-                    $"{LessonStatusRes.ResourceManager.GetString(lesson.LessonStatus.ToString()) ?? string.Empty}\n");
+                sb.AppendLine($"{Emoticons.Date}{DayOfWeekRes.ResourceManager.GetString(date.DayOfWeek.ToString())} ({date.Date.ToString("dd.MM")})");
+                foreach (var lesson in date.Lessons)
+                {
+                    sb.AppendLine($"[{lesson.Time.ToString("HH:mm")}] {lesson.StudentDisplayName} ({lesson.CourseName}) - " +
+                        $"{LessonStatusRes.ResourceManager.GetString(lesson.LessonStatus.ToString()) ?? string.Empty}\n");
+                }
+                sb.AppendLine("\n");
             }
             return Finish(new EngineOutputMessage
             {
-                Message = lessons.Count() == 0 ? $"{Emoticons.Lesson}Занятий в ближайшее время не запланировано" : sb.ToString(),
+                Message = lessonsByDate.Count() == 0 ? $"{Emoticons.Lesson}Занятий в ближайшее время не запланировано" : sb.ToString(),
                 Buttons = new EngineOutputButton[]
                 {
                     new EngineOutputButton

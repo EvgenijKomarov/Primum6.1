@@ -10,6 +10,16 @@ namespace PrimumWebAPI.Controllers
     [Authorize]
     public class AdminCourseThemeController(AdminClient client) : DefaultController
     {
+        
+        /// <summary>
+        /// Посмотреть все темы курсов
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<int>> GetThemes([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await client.GetCourseThemesAsync(User.GetUserId(), page, pageSize));
+
         /// <summary>
         /// Создать тему. Только для админов с правом EditCourseThemes
         /// </summary>

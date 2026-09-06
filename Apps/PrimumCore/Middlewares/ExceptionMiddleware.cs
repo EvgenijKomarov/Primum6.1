@@ -13,59 +13,38 @@ namespace PrimumCore.Middlewares
             catch (ProfileNotExistException ex)
             {
                 context.Response.StatusCode = 404;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (RequestingUserNotFoundException ex)
             {
                 context.Response.StatusCode = 404;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (BusinessLogicException ex)
             {
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (NoPermissionException ex)
             {
                 context.Response.StatusCode = 403;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (NotAvailableException ex)
             {
                 context.Response.StatusCode = 403;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = 404;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = ex.Message
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unhandled exception occurred");
                 context.Response.StatusCode = 520;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = "Unhandled exception occurred"
-                });
+                await context.Response.WriteAsync(ex.Message);
             }
         }
     }

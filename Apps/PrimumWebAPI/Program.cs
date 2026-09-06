@@ -6,42 +6,48 @@ using PrimumCore.Middlewares;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Extensions;
 using PrimumWebAPI.Services;
-using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PrimumWebAPI.SelfUrl);
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.AddAuth();
 builder.AddLogging();
 builder.AddControllers();
 builder.AddServices();
-builder.AddClients(solutionEnvironment.PrimumCore.PublicUrl);
+builder.AddClients();
 builder.AddSwagger();
+
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
+app.MapHealthChecks("/health");
+
 app.UseMiddleware<ExceptionMiddleware>();
 
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-
-}
-
-app.UseHttpsRedirection();
-
+//app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

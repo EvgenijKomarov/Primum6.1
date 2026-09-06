@@ -1,69 +1,78 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
-using CoreConnection.Entities;
-using CoreDBModel.Constants;
 using CoreDBModel.Models;
-using Microsoft.EntityFrameworkCore;
-using PrimumCore.Exceptions;
+using CoreDBModel.Models.Enums;
+using PrimumCore.Entities;
 using PrimumCore.Extentions;
-using System.Linq;
-using System.Linq.Expressions;
+using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class CourseIterator(PrimumContext context)
+    public class CourseIterator(DatabaseIterator dbIterator, RandomStringGenerator generator)
     {
-        private IQueryable<Course> Courses(bool isOnlyAvailable, Expression<Func<Course, bool>>? predicate) => context
-            .Set<Course>()
-            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsCourseAvailable)
-            .WhereIf(predicate is not null, predicate!)
-            .Include(x => x.CourseTheme)
-            .Include(x => x.Teacher)
-            .ThenInclude(x => x.User);
+        string _gatewayUrl = Environment.GetEnvironmentVariable("GATEWAY_URL") ?? throw new ArgumentNullException("Missing env variable");
 
         public async Task<PageResult<CourseDto>> GetCoursesByTeacher(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Courses(isOnlyAvailable)
+                .Where(x => x.Teacher.User.Id == teacherId)
+                .ToDto(_gatewayUrl)
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<CourseDto> GetCourseByTeacher(int teacherId, int courseId, bool isOnlyAvailable)
         {
-            return await Courses(isOnlyAvailable, x => x.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == courseId);
+            return await dbIterator.Courses(isOnlyAvailable)
+                .Where(x => x.Teacher.User.Id == teacherId)
+                .ToDto(_gatewayUrl)
+                .One(x => x.Id == courseId);
         }
 
-        public async Task<PageResult<CourseDto>> GetCourses(bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<CourseDtoLite>> GetCourses(bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Courses(isOnlyAvailable, null).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Courses(isOnlyAvailable).ToDtoLite().ToPageResult(_page, _pageSize);
         }
 
-        public async Task<CourseDto> GetCourse(int courseId, bool isOnlyAvailable)
+        public async Task<CourseDtoLite> GetCourse(int courseId, bool isOnlyAvailable)
         {
-            return await Courses(isOnlyAvailable, null).ToDto().One(x => x.Id == courseId);
+            return await dbIterator.Courses(isOnlyAvailable).ToDtoLite().One(x => x.Id == courseId);
         }
 
-        public async Task<PageResult<CourseDto>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<CourseDtoLite>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
         {
-            return await Courses(isOnlyAvailable, x => x.CourseTheme.Id == themeId).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Courses(isOnlyAvailable)
+                .Where(x => x.CourseTheme.Id == themeId)
+                .ToDtoLite()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
         {   
-            var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
+            var course = await dbIterator.Courses(false)
+                .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
+
+            if(courseDto.Name != course.Name || 
+               courseDto.Description != course.About ||
+               courseDto.CourseThemeId != course.CourseThemeId)
+            {
+                course.ApproveStatus = ApproveStatus.NeedModeratorReview;
+                course.Name = courseDto.Name;
+                course.About = courseDto.Description;
+                course.CourseThemeId = courseDto.CourseThemeId;
+            }
 
             course.Price = courseDto.Price;
             course.MaxLessons = courseDto.MaxLessons;
             course.FreeLessons = courseDto.FreeLessons;
 
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return course.Id;
         }
 
         public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto)
         {
-            var teacher = await context.Set<TeacherProfile>()
-                .Include(u => u.User)
-                .Include(a => a.Courses)
+            var teacher = await dbIterator.Teachers(true)
                 .One(x => x.User.Id == teacherId);
 
             var course = new Course
@@ -73,21 +82,23 @@ namespace PrimumCore.Services.Iterators
                 MaxLessons = courseDto.MaxLessons,
                 FreeLessons = courseDto.FreeLessons,
                 CourseThemeId = courseDto.CourseThemeId,
-                About = courseDto.Description
+                About = courseDto.Description,
+                ReferalToken = $"{teacherId}:{generator.GenerateRandomString()}"
             };
 
             teacher.Courses.Add(course);
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return course.Id;
         }
 
         public async Task<int> SwitchCourseActivity(int teacherId, int courseId, bool activity)
         {
-            var course = await Courses(false, x => x.Teacher.User.Id == teacherId)
+            var course = await dbIterator.Courses(false)
+                .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
 
             course.IsActive = activity;
-            await context.SaveChangesAsync();
+            await dbIterator.SaveChangesAsync();
             return course.Id;
         }
     }

@@ -1,20 +1,11 @@
-using CoreConnection.Entities;
-using CoreDBModel.Models;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using PrimumCore.Extentions;
-using PrimumCore.Services.GenerationProcessors;
-using SolutionConfiguration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var solutionEnvironment = await new ConfigurationClient().GetConfigurationAsync();
-builder.WebHost.UseUrls(solutionEnvironment.PrimumCore.SelfUrl);
-builder.Services.AddSingleton(sp => solutionEnvironment);
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument(s => s.DocumentProcessors.Add(new ExcludeNamespaceProcessor()));
+builder.Services.AddOpenApiDocument();
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
@@ -38,21 +29,26 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.AddDI();
-builder.AddContext(solutionEnvironment.CoreDatabaseConnection);
+builder.AddContext();
 builder.AddProjectControllers();
-builder.AddPublishers(solutionEnvironment.PublisherService.PublicUrl);
-builder.AddSignService(solutionEnvironment.SignService.PublicUrl);
+builder.AddPublishers();
+builder.AddSignService();
+builder.AddPaymentService();
 builder.AddLogging();
+
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>("SwaggerOn") == true)
+app.MapHealthChecks("/health");
+
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseRouting();
 app.UseAuthorization();

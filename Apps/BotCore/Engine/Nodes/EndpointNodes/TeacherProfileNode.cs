@@ -16,8 +16,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             {
                 Message = $"{Emoticons.Teacher}Профиль преподавателя\n" +
                 $"{Emoticons.User}Пользователь: {input.User?.DisplayName}!\n" +
-                $"{Emoticons.Id}Id: {input.User?.Id}\n" +
-                $"{Emoticons.Cash}Балланс: {input.User?.Cash} рублей\n",
+                $"{Emoticons.Id}Id: {input.User?.Id}\n",
                 Buttons = new EngineOutputButton[]
                 {
                     new EngineOutputButton

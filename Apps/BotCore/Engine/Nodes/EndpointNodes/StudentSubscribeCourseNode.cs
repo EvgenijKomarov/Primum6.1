@@ -12,12 +12,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         {
             var courseId = input.Arguments[0];
             var teacherId = input.Arguments[1];
-            var themeId = input.Arguments[2];
-            var sheduleId = input.Arguments[3];
+            var sheduleId = input.Arguments[2];
 
             await client.CourseSubscribeAsync(input.UserId!.Value, int.Parse(courseId), int.Parse(sheduleId));
 
-            input.Arguments = new List<string> { courseId, teacherId, themeId };
+            input.Arguments = new List<string> { courseId, teacherId };
             return Next<StudentExploreTeacherShedulesNode>(input);
         }
     }

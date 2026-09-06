@@ -31,7 +31,7 @@ namespace Common.Utilities
             [DayOfWeek.Sunday] = 6
         };
 
-        protected virtual DateTime GetCurrentTime() => DateTime.Now;
+        protected virtual DateTime GetCurrentTime() => DateTime.UtcNow;
 
         public virtual DayOfWeek GetDayOfWeek(string rusDOW)
         {

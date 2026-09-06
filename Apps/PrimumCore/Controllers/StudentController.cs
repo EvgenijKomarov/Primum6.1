@@ -1,5 +1,5 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
+using PrimumCore.Entities;
 using CoreDBModel.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Services.Iterators;
@@ -21,12 +21,12 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<StudentProfileDto>> GetStudentProfile([FromRoute] int userId)
             => Ok(await studentIterator.GetStudentProfile(userId));
 
-        [HttpGet("lessons")]
-        public async Task<ActionResult<PageResult<LessonDto>>> GetLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await lessonIterator.GetStudentLessons(userId, page, pageSize));
+        [HttpGet("last-lessons")]
+        public async Task<ActionResult<PageResult<LessonDto>>> GetHistoryLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
+            => Ok(await lessonIterator.GetStudentLastLessons(userId, page, pageSize));
 
         [HttpGet("future-lessons")]
-        public async Task<ActionResult<PageResult<LessonDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PageResult<LessonsByDateDto>>> GetFutureLessons([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
             => Ok(await lessonIterator.GetStudentFutureLessons(userId, page, pageSize));
 
         [HttpGet("lesson/{lessonId}")]
@@ -55,7 +55,7 @@ namespace PrimumCore.Controllers
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await sheduleIterator.GetAbonementShedules(userId, page, pageSize));
+            => Ok(await sheduleIterator.GetAbonementShedules(abonementId, page, pageSize));
 
         [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<PageResult<LessonDto>>> GetAbonementLessons(
@@ -73,8 +73,8 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetStudentPromocodes(userId, page, pageSize));
 
         [HttpGet("available-promocodes")]
-        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await promocodeIterator.GetPromocodes(true, page, pageSize));
+        public async Task<ActionResult<PageResult<PromocodeDto>>> GetPromocodes([FromRoute] int userId, [FromQuery] string? searchString, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+            => Ok(await promocodeIterator.GetPromocodes(true, searchString, page, pageSize));
 
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int userId, [FromRoute] int promocodeId)
@@ -103,5 +103,13 @@ namespace PrimumCore.Controllers
         [HttpDelete("abonement-delete/{abonementId}")]
         public async Task<ActionResult<int>> DeleteAbonement([FromRoute] int userId, [FromRoute] int abonementId)
             => Ok(await abonementIterator.AbonementChangeStatus(userId, abonementId, AbonementStatus.Deleted));
+
+        [HttpPost("create-referal-abonement/{token}")]
+        public async Task<ActionResult<int>> CreateReferalAbonement([FromRoute] int userId, [FromRoute] string token)
+            => Ok(await abonementIterator.CreateReferalAbonement(userId, token));
+
+        [HttpPatch("lesson-change-status/{lessonId}")]
+        public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int userId, [FromRoute] int lessonId)
+            => Ok(await lessonIterator.ChangeLessonStatus(userId, lessonId));
     }
 }

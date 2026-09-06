@@ -1,6 +1,7 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 
@@ -23,6 +24,7 @@ namespace CoreDBIterator.Workers
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
+            var paymentClient = scope.ServiceProvider.GetRequiredService<PaymentServiceClient>();
 
             var lessonsForPreparation = context.Set<Lesson>()
                 .Include(x => x.Abonement)
@@ -33,7 +35,7 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Where(l => l.Status == LessonStatus.Waiting)
-                .Where(l => l.DateTime <= DateTime.Now.AddDays(1))
+                .Where(l => l.DateTime <= DateTime.UtcNow.AddDays(1))
                 .ToArray();
 
             if (lessonsForPreparation.Length != 0)
@@ -52,13 +54,16 @@ namespace CoreDBIterator.Workers
                 {
                     StudentName = lesson.Abonement.Student.User.DisplayName,
                     StudentUserId = lesson.Abonement.Student.User.Id,
+                    StudentTimezoneOffset = lesson.Abonement.Student.User.TimeZoneOffset,
                     TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                     TeacherUserId = lesson.Abonement.Course.TeacherId,
+                    TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
                     CourseName = lesson.Abonement.Course.Name,
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
-                    IsEnoughMoney = lesson.Abonement.Student.User.Cash >= lesson.Price
+                    IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price,
+                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.TeacherId)
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }

@@ -1,0 +1,42 @@
+.homePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.blocksColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    width: 50%;
+}
+
+.blocks {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+}
+
+.headerTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 10rem;
+}
+
+.homeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3rem;
+}
+
+.title {
+    color: var(--color-primary-base);
+    font-size: 5rem;
+}
+
+.subtitle {
+    color: var(--color-primary-dark);
+}

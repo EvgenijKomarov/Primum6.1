@@ -1,8 +1,7 @@
 ﻿using Common.Utilities;
-using CoreConnection.DTOs;
 using CoreDBModel.Extensions;
-using CoreDBModel.Models;
-using Microsoft.EntityFrameworkCore;
+using PaymentServiceConnection;
+using PrimumCore.Constants;
 using PrimumCore.Controllers;
 using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
@@ -10,7 +9,6 @@ using PublishServiceConnection;
 using Serilog;
 using SignServiceConnection;
 using SignServiceConnection.Models;
-using SolutionConfiguration;
 
 namespace PrimumCore.Extentions
 {
@@ -31,6 +29,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<GradingIterator>();
             builder.Services.AddScoped<PromocodeIterator>();
             builder.Services.AddScoped<AbonementIterator>();
+            builder.Services.AddScoped<TeacherEarningIterator>();
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<ConverterToDateTimeService>();
             builder.Services.AddScoped<RandomStringGenerator>();
@@ -40,6 +39,10 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<IncidentCollector>();
             builder.Services.AddScoped<IncidentSolver>();
             builder.Services.AddScoped<AdminProfileHelper>();
+            builder.Services.AddScoped<DatabaseIterator>();
+            builder.Services.AddScoped<RanksIterator>();
+            builder.Services.AddScoped<MathFormulas>();
+            builder.Services.AddScoped<EarningCalculationService>();
 
             return builder;
         }
@@ -55,10 +58,10 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder, string publisherUrl)
+        public static WebApplicationBuilder AddPublishers(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<PublisherService>()
-                .AddTypedClient((httpClient, sp) => new PublisherService(publisherUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new PublisherService(httpClient));
 
             return builder;
         }
@@ -71,17 +74,25 @@ namespace PrimumCore.Extentions
             return builder;
         }
 
-        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder, string dbConnectionString)
+        public static WebApplicationBuilder AddContext(this WebApplicationBuilder builder)
         {
-            builder.Services.AddCoreContext(dbConnectionString);
+            builder.Services.AddCoreContext();
 
             return builder;
         }
 
-        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder, string signServiceUrl)
+        public static WebApplicationBuilder AddSignService(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient<SignServiceClient>()
-                .AddTypedClient((httpClient, sp) => new SignServiceClient(signServiceUrl, httpClient));
+                .AddTypedClient((httpClient, sp) => new SignServiceClient(httpClient));
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddPaymentService(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddHttpClient<PaymentServiceClient>()
+                .AddTypedClient((httpClient, sp) => new PaymentServiceClient(httpClient));
 
             return builder;
         }

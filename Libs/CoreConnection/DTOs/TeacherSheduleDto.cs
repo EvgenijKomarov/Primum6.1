@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreConnection.DTOs.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,7 @@ namespace CoreConnection.DTOs
         public required string? CourseName { get; set; }
 
         public required int? CourseId { get; set; }
+
+        public required int? AbonementId { get; set; }
     }
 }

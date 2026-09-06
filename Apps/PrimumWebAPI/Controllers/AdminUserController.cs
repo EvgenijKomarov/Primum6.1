@@ -16,9 +16,10 @@ namespace PrimumWebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<UserDtoPageResult>> GetUsers(
+            [FromQuery] string? displayName,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10) 
-            => Ok(await client.GetUsersAsync(User.GetUserId(), page, pageSize));
+            => Ok(await client.GetUsersAsync(User.GetUserId(), displayName, page, pageSize));
 
         /// <summary>
         /// Информация о конкретном пользователе
@@ -28,16 +29,15 @@ namespace PrimumWebAPI.Controllers
         [HttpGet("{objectUserId}")]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] int objectUserId)
             => Ok(await client.GetUserAsync(User.GetUserId(), objectUserId));
-
+        
         /// <summary>
-        /// Добавить (отнять при отрицательном значении cash) деньги у пользователя. Только для админов с правом AddCash
+        /// Чат-подписи пользователя
         /// </summary>
         /// <param name="objectUserId"></param>
-        /// <param name="cash"></param>
         /// <returns></returns>
-        [HttpPatch("{objectUserId}/cash")]
-        public async Task<ActionResult<int>> AddCash([FromRoute] int objectUserId, [FromBody] int cash = 0)
-            => Ok(await client.AddCashAsync(User.GetUserId(), objectUserId, cash));
+        [HttpGet("{objectUserId}/chat-signs")]
+        public async Task<ActionResult<UserDto>> GetUserChatSigns([FromRoute] int objectUserId)
+            => Ok(await client.GetUserChatSignsAsync(User.GetUserId(), objectUserId));
 
         /// <summary>
         /// Забанить/разбанить пользователя. Только для админов с правом ChangeBanStatus

@@ -17,9 +17,10 @@ namespace PrimumWebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<AdminProfileDtoPageResult>> GetAdmins(
+            [FromQuery] string? displayName,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10) 
-            => Ok(await client.AdminsAsync(User.GetUserId(), page, pageSize));
+            => Ok(await client.AdminsAsync(User.GetUserId(), displayName, page, pageSize));
 
         /// <summary>
         /// Конкретный админ

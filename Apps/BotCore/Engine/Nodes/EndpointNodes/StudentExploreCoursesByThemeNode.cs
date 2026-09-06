@@ -7,9 +7,9 @@ using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentExploreCoursesByThemeNode(PublicClient publicClient) : ScrollableEndpointNode<CourseDto>("stExplrCoursByTh")
+    public class StudentExploreCoursesByThemeNode(PublicClient publicClient) : ScrollableEndpointNode<CourseDtoLite>("stExplrCoursByTh")
     {
-        public override async Task<string> ItemInfo(CourseDto item, DataBuffer buffer)
+        public override async Task<string> ItemInfo(CourseDtoLite item, DataBuffer buffer)
         {
             return $"{Emoticons.Course}Курс:{item.Name}\n" +
                 $"{Emoticons.Cash}Стоимость урока:{item.Price}\n" +
@@ -20,13 +20,14 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 $"{Emoticons.Teacher}Преподаватель: {item.TeacherName}\n" +
                 $"О преподавателе: {item.TeacherAbout}";
         }
-        public override async Task<(CourseDto?, int)> GetItemAndTotalCount(int index, DataBuffer input)
+        public override async Task Initialize(int index, DataBuffer input)
         {
-            var themeId = input.Arguments[1];
+            var themeId = input.Arguments[0];
             var res = await publicClient.CoursesByThemeAsync(int.Parse(themeId), index, 1);
-            return (res.Items?.FirstOrDefault(), res.TotalPages);
+            TotalCount = res.TotalPages;
+            Item = res.Items?.FirstOrDefault();
         }
-        public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDto item, DataBuffer buffer)
+        public override async Task<IEnumerable<EngineOutputButton>> ItemButtons(CourseDtoLite item, DataBuffer buffer)
         {
             return new List<EngineOutputButton>()
             {
@@ -34,7 +35,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text=$"{Emoticons.Teacher}Расписание преподавателя",
                     EndpointNode = typeof(StudentExploreTeacherShedulesNode),
-                    Args = new List<string>{ item.Id.ToString(), item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
+                    Args = new List<string>{ item.TeacherId.ToString(), item.CourseThemeId.ToString()  }
                 }
             };
         }

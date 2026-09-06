@@ -18,9 +18,10 @@ namespace PrimumWebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<PromocodeDtoPageResult>> GetPromocodes(
+            [FromQuery] string? searchQuery,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)
-            => Ok(await client.AllPromocodesAsync(User.GetUserId(), page, pageSize));
+            => Ok(await client.AllPromocodesAsync(User.GetUserId(), searchQuery, page, pageSize));
 
         /// <summary>
         /// Конкретный промокод

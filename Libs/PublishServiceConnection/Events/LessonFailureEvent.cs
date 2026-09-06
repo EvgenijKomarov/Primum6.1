@@ -10,7 +10,7 @@ using System.Timers;
 
 namespace PublishServiceConnection.Events
 {
-    public class LessonFailureEvent : IChatBotNotification, IMailNotification
+    public class LessonFailureEvent : IChatBotNotification, IMailNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -33,8 +33,8 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                [StudentUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты"
+                [TeacherUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"{BoolRes._false}{Emoticons.Lesson}Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
             };
         }
 
@@ -42,8 +42,17 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты",
-                [StudentUserId] = $"Занятие в {DateTime.ToString("HH:mm")} не состоится в связи с невозможностью оплаты"
+                [TeacherUserId] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
+            };
+        }
+
+        public Dictionary<int, string> ToCommonNotifications()
+        {
+            return new Dictionary<int, string>
+            {
+                [TeacherUserId] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
+                [StudentUserId] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
             };
         }
     }

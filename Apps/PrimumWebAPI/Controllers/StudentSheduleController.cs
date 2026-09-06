@@ -35,7 +35,7 @@ namespace PrimumWebAPI.Controllers
         /// </summary>
         /// <param name="abonementSheduleId"></param>
         /// <returns></returns>
-        [HttpDelete("{sheduleId}")]
+        [HttpDelete("{abonementSheduleId}")]
         public async Task<ActionResult<int>> DeleteShedule([FromRoute] int abonementSheduleId)
             => Ok(await client.SheduleDeleteAsync(User.GetUserId(), abonementSheduleId));
     }

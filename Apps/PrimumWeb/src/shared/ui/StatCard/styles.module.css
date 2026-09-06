@@ -1,0 +1,34 @@
+.stat {
+  background-color: var(--color-secondary-darkest);
+  border: 1px solid var(--color-secondary-base);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+}
+
+.statLabel {
+  color: var(--color-secondary-base);
+  font-weight: 500;
+  font-size: 0.5rem;
+  
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.statHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.delete {
+  color: var(--color-functional-error);
+  font-size: 0.5rem;
+  cursor: pointer;
+}
+
+.statValue {
+    font-size: 0.7rem;
+    font-weight: 600;
+}

@@ -1,62 +1,82 @@
 ﻿using CoreConnection.DTOs;
-using CoreConnection.Entities;
-using CoreDBModel.Constants;
-using CoreDBModel.Extensions;
-using CoreDBModel.Models;
+using PrimumCore.Entities;
 using CoreDBModel.Models.Enums;
-using Microsoft.EntityFrameworkCore;
-using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
-using System.Linq;
-using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using PrimumCore.Exceptions;
+using CoreDBModel.Models;
+using LinqKit;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class AbonementIterator(PrimumContext context, PublisherService publisher)
+    public class AbonementIterator(DatabaseIterator dbIterator, PublisherService publisher)
     {
-        private IQueryable<Abonement> Abonements(bool isOnlyAlive, Expression<Func<Abonement, bool>>? predicate) => context
-            .Set<Abonement>()
-            .WhereIf(isOnlyAlive, AvailabilityExpressions.IsAbonementAlive)
-            .WhereIf(predicate is not null, predicate!)
-            .Include(x => x.Course)
-            .ThenInclude(x => x.Teacher)
-            .ThenInclude(x => x.User)
-            .Include(x => x.Student)
-            .ThenInclude(x => x.User)
-            .Include(x => x.Lessons)
-            .Include(x => x.Course)
-            .ThenInclude(x => x.CourseTheme);
-
         public async Task<PageResult<AbonementDto>> GetTeacherAbonements(int teacherId, int _page, int _pageSize)
         {
-            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Abonements(true)
+                .Where(x => x.Course.Teacher.User.Id == teacherId)
+                .ToDto()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<AbonementDto> GetTeacherAbonement(int teacherId, int abonementId)
         {
-            return await Abonements(true, x => x.Course.Teacher.User.Id == teacherId).ToDto().One(x => x.Id == abonementId);
+            return await dbIterator.Abonements(true)
+                .Where(x => x.Course.Teacher.User.Id == teacherId)
+                .ToDto()
+                .One(x => x.Id == abonementId);
         }
 
         public async Task<PageResult<AbonementDto>> GetStudentAbonements(int studentId, int _page, int _pageSize)
         {
-            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().ToPageResult(_page, _pageSize);
+            return await dbIterator.Abonements(false)
+                .Where(x => x.Student.User.Id == studentId)
+                .ToDto()
+                .ToPageResult(_page, _pageSize);
         }
 
         public async Task<AbonementDto> GetStudentAbonement(int studentId, int abonementId)
         {
-            return await Abonements(false, x => x.Student.User.Id == studentId).ToDto().One(x => x.Id == abonementId);
+            return await dbIterator.Abonements(false)
+                .Where(x => x.Student.User.Id == studentId)
+                .ToDto()
+                .One(x => x.Id == abonementId);
         }
 
         public async Task<int> AbonementChangeStatus(int studentId, int abonementId, AbonementStatus status)
         {
-            var abonement = await Abonements(false, x => x.Student.User.Id == studentId)
+            var abonement = await dbIterator.Abonements(false)
+                .Include(x => x.AbonementShedules)
+                .Where(x => x.Student.User.Id == studentId)
                 .One(x => x.Id == abonementId);
 
             abonement.AbonementStatus = status;
-            if (status == AbonementStatus.Deleted) { abonement.AbonementShedules.Clear(); }
-            await context.SaveChangesAsync();
+            if (status == AbonementStatus.Deleted) 
+            { 
+                abonement.AbonementShedules.Clear();
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Waiting)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Freezed);
+            }
+            else if (status == AbonementStatus.Freezed) 
+            {
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Waiting)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Freezed);
+            }
+            else if (status == AbonementStatus.Active)
+            {
+                abonement.Lessons
+                    .Where(x => x.Status == LessonStatus.Freezed)
+                    .ToArray()
+                    .ForEach(x => x.Status = LessonStatus.Waiting);
+            }
+
+            await dbIterator.SaveChangesAsync();
             await publisher.Push(new AbonementChangeStatusEvent
             {
                 StudentName = abonement.Student.User.DisplayName,
@@ -67,6 +87,32 @@ namespace PrimumCore.Services.Iterators
                 AbonementId = abonement.Id,
                 AbonementStatus = abonement.AbonementStatus.ToString()
             });
+            return abonement.Id;
+        }
+
+        public async Task<int> CreateReferalAbonement(int studentId, string token)
+        {
+            var course = await dbIterator.Courses(false)
+                .One(x => x.ReferalToken == token);
+            var student = await dbIterator.Students()
+                .Include(x => x.Abonements)
+                .One(x => x.User.Id == studentId);
+
+            if (student.Abonements.Any(x => x.CourseId == course.Id))
+            {
+                throw new BusinessLogicException("Abonement already created");
+            }
+
+            var abonement = new Abonement
+            {
+                Course = course,
+                PricePerLesson = course.Price,
+                FreeLessons = course.FreeLessons,
+                IsReferal = true
+            };
+            student.Abonements.Add(abonement);
+            
+            await dbIterator.SaveChangesAsync();
             return abonement.Id;
         }
     }

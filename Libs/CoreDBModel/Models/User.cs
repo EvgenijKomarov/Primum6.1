@@ -15,11 +15,11 @@ public partial class User: BaseEntity
 
     public string Patronymic { get; set; } = null!;
 
-    public long Cash { get; set; }
-
     public bool IsBanned { get; set; } = false;
 
     public bool IsMailChecked { get; set; } = false;
+
+    public TimeSpan TimeZoneOffset { get; set; } = TimeSpan.FromHours(3); // Moscow by default
 
     public StudentProfile? StudentProfile { get; set; }
 

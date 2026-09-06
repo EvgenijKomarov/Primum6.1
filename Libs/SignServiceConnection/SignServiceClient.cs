@@ -1,6 +1,7 @@
 ﻿using SignServiceConnection.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http.Json;
 using System.Reflection.Metadata;
 using System.Text;
@@ -18,10 +19,12 @@ namespace SignServiceConnection
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        public SignServiceClient(string signServiceUrl, HttpClient httpClient)
+        public SignServiceClient(HttpClient httpClient)
         {
+            var url = Environment.GetEnvironmentVariable("SIGNSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
+
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _httpClient.BaseAddress = new Uri(signServiceUrl);
+            _httpClient.BaseAddress = new Uri(url);
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 
@@ -65,6 +68,18 @@ namespace SignServiceConnection
 
             return await response.Content.ReadFromJsonAsync<List<ChatSign>>(_jsonOptions, ct)
                 ?? new List<ChatSign>();
+        }
+
+        /// <summary>
+        /// Удаляет подпись пользователя по realizationTag и chatId
+        /// </summary>
+        public async Task<int> DeleteSignAsync(int userId, string realizationTag, long chatId, CancellationToken ct = default)
+        {
+            var requestUrl = $"/delete-sign?realizationTag={Uri.EscapeDataString(realizationTag)}&chatId={chatId}&userId={userId}";
+            var response = await _httpClient.DeleteAsync(requestUrl, ct);
+
+            await EnsureSuccessAsync(response, ct);
+            return userId;
         }
 
         /// <summary>
