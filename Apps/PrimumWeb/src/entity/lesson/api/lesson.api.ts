@@ -43,9 +43,9 @@ export const gradeLesson = async (lessonId: number, data: GradingInputDto) => {
   });
 }
 
-export const changeLessonStatus = async (lessonId: number) => {
+export const cancelLesson = async (lessonId: number) => {
   return await fetcherInstance<number>({
     method: 'PATCH',
-    url: `${api.studentLesson.base}/${lessonId}`,
+    url: `${api.studentLesson.base}/${lessonId}/cancel`,
   });
 }

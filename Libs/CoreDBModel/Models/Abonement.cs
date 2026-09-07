@@ -27,4 +27,16 @@ public partial class Abonement: BaseEntity
     public virtual ICollection<AbonementShedule> AbonementShedules { get; set; } = new List<AbonementShedule>();
 
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
+
+    public int FreeLessonsSpent()
+    {
+        LessonStatus[] cancelledStatuses = [
+            LessonStatus.MissedDueToException,
+            LessonStatus.MissedDueToFreezing,
+            LessonStatus.Cancelled,
+        ];
+
+        return Lessons
+            .Count(x => x.Price == 0m && !cancelledStatuses.Contains(x.Status));
+    }
 }

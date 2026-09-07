@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  changeLessonStatus,
+  cancelLesson,
   useStudentFutureLessons,
   useStudentLessons,
 } from '@/entity/lesson';
@@ -24,7 +24,7 @@ export const StatusBadge = ({ status }: { status: LessonStatus }) => {
 };
 
 const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate: () => void }) => {
-  const [statusEnsureOpen, setStatusEnsureOpen] = useState(false);
+  const [cancelEnsureOpen, setCancelEnsureOpen] = useState(false);
 
   return <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
@@ -48,17 +48,15 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
         </div>
       </div>
       <Button 
-        disabled={!([LessonStatus.Freezed, LessonStatus.Waiting].includes(lesson.lessonStatus) && lesson.isAbonementActive)}
-        onClick={async () => setStatusEnsureOpen(true)}>
-        {lesson.lessonStatus === LessonStatus.Freezed ? 'Разморозить' : 'Заморозить'}
+        disabled={lesson.lessonStatus !== LessonStatus.Waiting}
+        onClick={async () => setCancelEnsureOpen(true)}>
+        {'Отменить'}
       </Button>
-      {statusEnsureOpen && 
+      {cancelEnsureOpen && 
         <EnsurancePopup
-          description={lesson.lessonStatus === LessonStatus.Waiting ? 
-            'Вы уверены, что хотите заморозить занятие? Деньги за него не спишутся, а ссылка не придет. Вы сможете разморозить его снова не ранее чем за сутки' : 
-            'Вы уверены, что хотите разморозить занятие? Оно снова будет доступно для списания'}
-          onConfirm={async () => {await changeLessonStatus(lesson.id); await onMutate();}}
-          setPopupOpen={setStatusEnsureOpen}
+          description={'Вы уверены, что хотите отменить занятие?'}
+          onConfirm={async () => {await cancelLesson(lesson.id); await onMutate();}}
+          setPopupOpen={setCancelEnsureOpen}
         />}
     </div>
   </Card>

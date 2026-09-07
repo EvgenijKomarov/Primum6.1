@@ -29,6 +29,7 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Course)
                 .Include(x => x.TeacherShedule)
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.UtcNow)
+                .Where(s => s.Abonement.AbonementStatus == AbonementStatus.Active)
                 .ToArrayAsync();
 
             if (availableForProlongation.Length != 0) 
@@ -52,9 +53,9 @@ namespace CoreDBIterator.Workers
                     {
                         AbonementId = s.Abonement.Id,
                         DateTime = freeDateTime,
-                        Price = s.Abonement.FreeLessons > s.Abonement.Lessons.Count() ? 0m : s.Abonement.PricePerLesson,
+                        Price = s.Abonement.FreeLessons > s.Abonement.FreeLessonsSpent() ? 0m : s.Abonement.PricePerLesson,
                         IsReferal = s.Abonement.IsReferal,
-                        Status = s.Abonement.AbonementStatus == AbonementStatus.Freezed ? LessonStatus.Freezed : LessonStatus.Waiting //если заморожен абонемент, заморожены будут и занятия
+                        Status = LessonStatus.Waiting
                     };
                     context.Set<Lesson>().Add(lesson);
                     logger?.LogInformation($"Created lesson with Id: {lesson.Id} for {lesson.AbonementId} at {lesson.DateTime}");

@@ -92,7 +92,7 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
     }
 
     const ACTIVATION_CONFIG: Record<AbonementStatus, {popupDescription: string, handler: () => void}> = {
-        [AbonementStatus.Active]: { popupDescription: 'Вы уверены, что хотите заморозить абонемент? Занятия будут заморожены, и их статус можно будет изменить только разморозив абонемент. Замороженные занятия не будут списывать средства, и ссылка по ним приходить не будет', handler: hadleFreezeAbonement },
+        [AbonementStatus.Active]: { popupDescription: 'Вы уверены, что хотите заморозить абонемент? Расписание останется, но новые занятия создаваться перестанут', handler: hadleFreezeAbonement },
         [AbonementStatus.Freezed]: { popupDescription: 'Вы уверены, что хотите активировать абонемент?', handler: hadleActivateAbonement },
         [AbonementStatus.Deleted]: { popupDescription: 'Вы уверены, что хотите активировать абонемент?', handler: hadleActivateAbonement },
     }

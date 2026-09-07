@@ -40,12 +40,12 @@ namespace PrimumWebAPI.Controllers
             => Ok(await client.LessonAsync(User.GetUserId(), lessonId));
 
         /// <summary>
-        /// Поменять статус занятия
+        /// Отменить занятие
         /// </summary>
         /// <param name="lessonId"></param>
         /// <returns></returns>
-        [HttpPatch("{lessonId}")]
-        public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int lessonId)
-            => Ok(await client.LessonChangeStatusAsync(User.GetUserId(), lessonId));
+        [HttpPatch("{lessonId}/cancel")]
+        public async Task<ActionResult<int>> CancelLesson([FromRoute] int lessonId)
+            => Ok(await client.LessonCancelAsync(User.GetUserId(), lessonId));
     }
 }

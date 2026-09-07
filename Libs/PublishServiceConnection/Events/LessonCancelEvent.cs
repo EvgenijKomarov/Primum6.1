@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PublishServiceConnection.Events
 {
-    public class LessonChangeStatusEvent : IChatBotNotification, ICommonNotification
+    public class LessonCancelEvent : IChatBotNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -26,25 +26,19 @@ namespace PublishServiceConnection.Events
 
         public required DateTime DateTime { get; set; }
 
-        public required bool IsBecameFreezed { get; set; }
-
         public Dictionary<int, string> ToChatBotNotifications()
         {
-            var status = IsBecameFreezed ? "Заморожен" : "Активен";
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Lesson}Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} " +
-                    $"сменило статус на ({status})"
+                [TeacherUserId] = $"{Emoticons.Lesson}Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} отменено учеником"
             };
         }
 
         public Dictionary<int, string> ToCommonNotifications()
         {
-            var status = IsBecameFreezed ? "Заморожен" : "Активен";
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} " +
-                    $"сменило статус на ({status})"
+                [TeacherUserId] = $"Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} отменено учеником"
             };
         }
     }

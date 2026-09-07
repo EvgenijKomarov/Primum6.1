@@ -56,24 +56,6 @@ namespace PrimumCore.Services.Iterators
             if (status == AbonementStatus.Deleted) 
             { 
                 abonement.AbonementShedules.Clear();
-                abonement.Lessons
-                    .Where(x => x.Status == LessonStatus.Waiting)
-                    .ToArray()
-                    .ForEach(x => x.Status = LessonStatus.Freezed);
-            }
-            else if (status == AbonementStatus.Freezed) 
-            {
-                abonement.Lessons
-                    .Where(x => x.Status == LessonStatus.Waiting)
-                    .ToArray()
-                    .ForEach(x => x.Status = LessonStatus.Freezed);
-            }
-            else if (status == AbonementStatus.Active)
-            {
-                abonement.Lessons
-                    .Where(x => x.Status == LessonStatus.Freezed)
-                    .ToArray()
-                    .ForEach(x => x.Status = LessonStatus.Waiting);
             }
 
             await dbIterator.SaveChangesAsync();

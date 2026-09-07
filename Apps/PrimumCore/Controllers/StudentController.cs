@@ -108,8 +108,8 @@ namespace PrimumCore.Controllers
         public async Task<ActionResult<int>> CreateReferalAbonement([FromRoute] int userId, [FromRoute] string token)
             => Ok(await abonementIterator.CreateReferalAbonement(userId, token));
 
-        [HttpPatch("lesson-change-status/{lessonId}")]
+        [HttpPatch("lesson-cancel/{lessonId}")]
         public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int userId, [FromRoute] int lessonId)
-            => Ok(await lessonIterator.ChangeLessonStatus(userId, lessonId));
+            => Ok(await lessonIterator.CancelLesson(userId, lessonId));
     }
 }

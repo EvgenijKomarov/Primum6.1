@@ -5383,7 +5383,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<int> LessonChangeStatusAsync(int userId, int lessonId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<int> LessonCancelAsync(int userId, int lessonId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -5403,10 +5403,10 @@ namespace CoreConnection
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/student/{userId}/lesson-change-status/{lessonId}"
+                    // Operation Path: "api/student/{userId}/lesson-cancel/{lessonId}"
                     urlBuilder_.Append("api/student/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append("/lesson-change-status/");
+                    urlBuilder_.Append("/lesson-cancel/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(lessonId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);

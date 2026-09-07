@@ -10,7 +10,6 @@ namespace CoreDBModel.Models.Enums
     {
         //ЕЩЕ ДОЛГО ДО ЗАНЯТИЯ
         Waiting = 0, // ожидает начала
-        Freezed = 6, //заморожено, не будет итерироваться
 
         //ЗА СУТКИ ДО, УЖЕ НЕЛЬЗЯ ОТМЕНИТЬ
         Warned = 1, // предупрежден за сутки
@@ -21,6 +20,8 @@ namespace CoreDBModel.Models.Enums
         Missed = 3, //пропущено без объяснений, надо разобраться почему
         MissedWithoutReason = 4, //пропущено без уважительной причины
         MissedDueToException = 5, // пропущено из-за технических проблем или ошибок
-        MissedDueToFreezing = 7 // пропущено из-за заморозки занятия
+        MissedDueToFreezing = 7, // пропущено из-за заморозки занятия
+
+        Cancelled = 6, // отменен учеником
     }
 }

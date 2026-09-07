@@ -75,17 +75,16 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == lessonId);
         }
 
-        public async Task<int> ChangeLessonStatus(int studentId, int lessonId)
+        public async Task<int> CancelLesson(int studentId, int lessonId)
         {
             var lesson = await dbIterator.Lessons()
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .One(x => x.Id == lessonId);
 
-            if (!(lesson.Status == LessonStatus.Freezed || lesson.Status == LessonStatus.Waiting)) throw new BusinessLogicException("Unchangeable lesson status");
-            if (lesson.Status == LessonStatus.Freezed && lesson.Abonement.AbonementStatus == AbonementStatus.Freezed) throw new BusinessLogicException("Abonement is freezed");
+            if (lesson.Status != LessonStatus.Waiting) throw new BusinessLogicException("Unchangeable lesson status");
 
-            lesson.Status = lesson.Status == LessonStatus.Waiting ? LessonStatus.Freezed : LessonStatus.Waiting;
-            await publisher.Push(new LessonChangeStatusEvent
+            lesson.Status = LessonStatus.Cancelled;
+            await publisher.Push(new LessonCancelEvent
             {
                 StudentName = lesson.Abonement.Student.User.DisplayName,
                 StudentUserId = lesson.Abonement.Student.User.Id,
@@ -96,7 +95,6 @@ namespace PrimumCore.Services.Iterators
                 LessonId = lesson.Id,
                 DateTime = lesson.DateTime,
                 TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
-                IsBecameFreezed = lesson.Status == LessonStatus.Freezed,
             });
 
             await dbIterator.SaveChangesAsync();
