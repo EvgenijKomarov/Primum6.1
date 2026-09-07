@@ -32,7 +32,7 @@ public partial class Abonement: BaseEntity
     {
         LessonStatus[] cancelledStatuses = [
             LessonStatus.MissedDueToException,
-            LessonStatus.MissedDueToFreezing,
+            LessonStatus.MissedWithoutReason,
             LessonStatus.Cancelled,
         ];
 

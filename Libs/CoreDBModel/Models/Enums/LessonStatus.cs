@@ -20,7 +20,6 @@ namespace CoreDBModel.Models.Enums
         Missed = 3, //пропущено без объяснений, надо разобраться почему
         MissedWithoutReason = 4, //пропущено без уважительной причины
         MissedDueToException = 5, // пропущено из-за технических проблем или ошибок
-        MissedDueToFreezing = 7, // пропущено из-за заморозки занятия
 
         Cancelled = 6, // отменен учеником
     }

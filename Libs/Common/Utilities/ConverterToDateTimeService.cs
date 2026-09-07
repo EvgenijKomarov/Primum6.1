@@ -45,10 +45,10 @@ namespace Common.Utilities
             return translation;
         }
 
-        public virtual DateTime GetNextSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
+        public virtual DateTime GetNextSuitableDateNextWeek(DayOfWeek dayOfWeek, int hours)
         {
             DateTime now = GetCurrentTime();
-            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
+            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddDays(7).AddHours(hours);
             return date;
         }
 
