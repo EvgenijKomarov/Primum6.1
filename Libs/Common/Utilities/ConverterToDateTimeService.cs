@@ -56,7 +56,7 @@ namespace Common.Utilities
         {
             DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
-            date = (date - GetCurrentTime()).Days > blockedDays ? date : date.AddDays(7);
+            date = (date - now).TotalDays > blockedDays ? date : date.AddDays(7);
             return date;
         }
     }

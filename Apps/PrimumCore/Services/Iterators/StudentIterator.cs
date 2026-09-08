@@ -96,7 +96,7 @@ namespace PrimumCore.Services.Iterators
                 await dbIterator.AddAsync(new Lesson
                 {
                     Abonement = abonement,
-                    Price = abonement.Course.FreeLessons >= abonement.Lessons.Count() ? 0 : abonement.PricePerLesson,
+                    Price = abonement.Course.FreeLessons >= abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
                     DateTime = suitableDate,
                     Status = LessonStatus.Waiting
                 });

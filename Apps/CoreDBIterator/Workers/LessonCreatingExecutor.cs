@@ -43,7 +43,7 @@ namespace CoreDBIterator.Workers
 
             foreach (var s in availableForProlongation)
             {
-                var freeDateTime = datetimeService.GetNextSuitableDateThisWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
+                var freeDateTime = datetimeService.GetNextSuitableDateNextWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
 
                 s.LastIteration = DateTime.UtcNow;
                 logger.LogInformation($"Set LastIterationTime of {s.Id} for {freeDateTime}");
