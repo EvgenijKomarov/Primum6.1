@@ -123,6 +123,9 @@
   <data name="Lesson" xml:space="preserve">
     <value>Урок</value>
   </data>
+  <data name="LessonReport" xml:space="preserve">
+    <value>Жалоба на занятие</value>
+  </data>
   <data name="Student" xml:space="preserve">
     <value>Ученик</value>
   </data>

@@ -142,6 +142,12 @@ namespace PrimumCore.Services.Utilities
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Lesson, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
+                Permission.InspectReportedLessons =>
+                    await dbIterator.Lessons()
+                        .Where(x => x.ReportStatus != LessonReportStatus.Ok)
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.LessonReport, permission, x.Id))
+                        .ToListAsync(cancellationToken),
+
                 _ => new List<IncidentKey>()
             };
         }
@@ -213,7 +219,7 @@ namespace PrimumCore.Services.Utilities
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
-                        Status = x.Status == LessonStatus.MissedDueToException ? 
+                        Status = x.Status == LessonStatus.MissedDueToException ?
                             IncidentStatus.NeedAdministration : IncidentStatus.NeedInspectation,
                         Meaning = IncidentMeaning.Lesson,
                         Decisions = decisions,
@@ -225,6 +231,26 @@ namespace PrimumCore.Services.Utilities
                             $"Course: {x.Abonement.Course.Name}\n" +
                             $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
                             $"DateTime (UTC): {x.DateTime:HH:mm dd.MM.yyyy}\n",
+                        LinkedLogs = null
+                    }).FirstOrDefaultAsync(cancellationToken),
+
+                IncidentMeaning.LessonReport => await dbIterator.Lessons()
+                    .Where(x => x.Id == key.ObjectId)
+                    .Select(x => new IncidentDto
+                    {
+                        ObjectId = x.Id,
+                        Status = IncidentStatus.NeedInspectation,
+                        Meaning = IncidentMeaning.LessonReport,
+                        Decisions = decisions,
+                        CommonInfo =
+                            $"Student: {x.Abonement.Student.User.DisplayName}\n" +
+                            $"Student Id: {x.Abonement.Student.User.Id}\n" +
+                            $"Teacher: {x.Abonement.Course.Teacher.User.DisplayName}\n" +
+                            $"Teacher Id: {x.Abonement.Course.Teacher.User.Id}\n" +
+                            $"Course: {x.Abonement.Course.Name}\n" +
+                            $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
+                            $"DateTime (UTC): {x.DateTime:HH:mm dd.MM.yyyy}\n" +
+                            $"\nReport: {x.ReportStatus}",
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 

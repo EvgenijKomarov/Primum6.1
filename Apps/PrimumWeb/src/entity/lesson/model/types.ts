@@ -5,7 +5,8 @@ export enum LessonStatus {
   Missed = 3,
   MissedWithoutReason = 4,
   MissedDueToException = 5,
-  Cancelled = 6
+  Cancelled = 6,
+  MissedByValidReason = 7,
 }
 
 export enum LessonReportStatus {

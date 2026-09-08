@@ -570,6 +570,7 @@ public partial class PrimumContext : DbContext
         foreach (var entry in teacherEntries)
         {
             var profile = entry.Entity;
+            if (profile.Experience < 0) { profile.Experience = 0; }
 
             var suitableRank = TeacherRanks
                 .OrderByDescending(r => r.RequiredExperience)
@@ -587,6 +588,7 @@ public partial class PrimumContext : DbContext
         foreach (var entry in teacherEntries)
         {
             var profile = entry.Entity;
+            if(profile.Experience < 0) { profile.Experience = 0; }
 
             var suitableRank = StudentRanks
                 .OrderByDescending(r => r.RequiredExperience)
@@ -604,6 +606,7 @@ public partial class PrimumContext : DbContext
         foreach (var entry in teacherEntries)
         {
             var profile = entry.Entity;
+            if (profile.Experience < 0) { profile.Experience = 0; }
 
             var suitableRank = CourseRanks
                 .OrderByDescending(r => r.RequiredExperience)

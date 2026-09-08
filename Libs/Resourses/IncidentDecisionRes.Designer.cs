@@ -88,11 +88,29 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Легкая вина.
+        /// </summary>
+        public static string LightBlame {
+            get {
+                return ResourceManager.GetString("LightBlame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вины нет.
+        /// </summary>
+        public static string Pardon {
+            get {
+                return ResourceManager.GetString("Pardon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Проверено.
         /// </summary>
-        public static string Revisioned {
+        public static string Revise {
             get {
-                return ResourceManager.GetString("Revisioned", resourceCulture);
+                return ResourceManager.GetString("Revise", resourceCulture);
             }
         }
         
@@ -111,6 +129,24 @@ namespace Resourses {
         public static string SendToManager {
             get {
                 return ResourceManager.GetString("SendToManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пропущено без уважительной причины.
+        /// </summary>
+        public static string SetMissedByNoReason {
+            get {
+                return ResourceManager.GetString("SetMissedByNoReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пропущено по уважительной причине.
+        /// </summary>
+        public static string SetMissedByValidReason {
+            get {
+                return ResourceManager.GetString("SetMissedByValidReason", resourceCulture);
             }
         }
     }

@@ -126,7 +126,13 @@
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
-  <data name="Revisioned" xml:space="preserve">
+  <data name="LightBlame" xml:space="preserve">
+    <value>Легкая вина</value>
+  </data>
+  <data name="Pardon" xml:space="preserve">
+    <value>Вины нет</value>
+  </data>
+  <data name="Revise" xml:space="preserve">
     <value>Проверено</value>
   </data>
   <data name="SendToAdministrator" xml:space="preserve">
@@ -134,5 +140,11 @@
   </data>
   <data name="SendToManager" xml:space="preserve">
     <value>Отправить на утверждение менеджеру</value>
+  </data>
+  <data name="SetMissedByNoReason" xml:space="preserve">
+    <value>Пропущено без уважительной причины</value>
+  </data>
+  <data name="SetMissedByValidReason" xml:space="preserve">
+    <value>Пропущено по уважительной причине</value>
   </data>
 </root>

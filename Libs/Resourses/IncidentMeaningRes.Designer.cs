@@ -79,6 +79,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Жалоба на занятие.
+        /// </summary>
+        public static string LessonReport {
+            get {
+                return ResourceManager.GetString("LessonReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ученик.
         /// </summary>
         public static string Student {

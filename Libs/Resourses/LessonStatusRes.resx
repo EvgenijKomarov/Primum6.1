@@ -126,6 +126,9 @@
   <data name="Missed" xml:space="preserve">
     <value>😢Пропущено</value>
   </data>
+  <data name="MissedByValidReason" xml:space="preserve">
+    <value>😢Пропущено по уважительной причине</value>
+  </data>
   <data name="MissedDueToException" xml:space="preserve">
     <value>😭Пропущено из-за технической ошибки</value>
   </data>

@@ -14,6 +14,7 @@ export enum IncidentMeaning {
     Student = 2,
     Course = 3,
     Lesson = 4,
+    LessonReport = 5
 }
 
 export enum IncidentDecision {
@@ -21,8 +22,12 @@ export enum IncidentDecision {
     Delete = 1,
     SendToAdministrator = 2,
     SendToManager = 3,
-    Revisioned = 4,
-    BanUser = 5
+    SetMissedByNoReason = 4,
+    BanUser = 5,
+    SetMissedByValidReason = 6,
+    LightBlame = 8,
+    Pardon = 10,
+    Revise = 7,
 }
 
 export interface IncidentDto {

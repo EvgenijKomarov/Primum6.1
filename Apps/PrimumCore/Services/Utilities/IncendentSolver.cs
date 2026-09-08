@@ -137,10 +137,13 @@ namespace PrimumCore.Services.Utilities
 
                     switch(decision)
                     {
-                        case IncidentDecision.Delete:
-                            await dbIterator.RemoveAsync(lesson);
+                        case IncidentDecision.SetMissedByValidReason:
+                            lesson.Status = LessonStatus.MissedByValidReason;
                             break;
-                        case IncidentDecision.Revisioned:
+                        case IncidentDecision.Revise:
+                            lesson.Status = LessonStatus.MissedByValidReason;
+                            break;
+                        case IncidentDecision.SetMissedByNoReason:
                             lesson.Status = LessonStatus.MissedWithoutReason;
                             break;
                         case IncidentDecision.BanUser:
@@ -149,10 +152,50 @@ namespace PrimumCore.Services.Utilities
                             await dbIterator.RemoveRangeAsync(lesson.Abonement.AbonementShedules);
                             await dbIterator.RemoveRangeAsync(lesson.Abonement.Student.Abonements);
                             break;
+
                     }
                     return lesson.Id;
                 }
             },
+            {   
+                IncidentMeaning.LessonReport,
+                async (id, decision) =>
+                {
+                    var lesson = await dbIterator.Lessons()
+                        .One(x => x.Id == id);
+
+                    switch(decision)
+                    {
+                        case IncidentDecision.Pardon:
+                            lesson.ReportStatus = LessonReportStatus.Ok;
+                            break;
+                        case IncidentDecision.LightBlame:
+                            if (lesson.ReportStatus.ToString().StartsWith("Teacher"))
+                            {
+                                lesson.Abonement.Course.Teacher.Experience -= 1000;
+                            }
+                            if (lesson.ReportStatus.ToString().StartsWith("Student"))
+                            {
+                                lesson.Abonement.Student.Experience -= 1000;
+                            }
+                            lesson.ReportStatus = LessonReportStatus.Ok;
+                            break;
+                        case IncidentDecision.BanUser:
+                            if (lesson.ReportStatus.ToString().StartsWith("Teacher"))
+                            {
+                                lesson.Abonement.Course.Teacher.User.IsBanned = true;
+                            }
+                            if (lesson.ReportStatus.ToString().StartsWith("Student"))
+                            {
+                                lesson.Abonement.Student.User.IsBanned = true;
+                            }
+                            lesson.ReportStatus = LessonReportStatus.Ok;
+                            break;
+
+                    }
+                    return lesson.Id;
+                }
+            }
         };
     }
 }

@@ -11,5 +11,6 @@ namespace CoreDBModel.Models.Enums
         Student = 2,
         Course = 3,
         Lesson = 4,
+        LessonReport = 5,
     }
 }

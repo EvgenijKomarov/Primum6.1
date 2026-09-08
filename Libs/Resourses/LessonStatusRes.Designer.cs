@@ -88,6 +88,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на 😢Пропущено по уважительной причине.
+        /// </summary>
+        public static string MissedByValidReason {
+            get {
+                return ResourceManager.GetString("MissedByValidReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 😭Пропущено из-за технической ошибки.
         /// </summary>
         public static string MissedDueToException {

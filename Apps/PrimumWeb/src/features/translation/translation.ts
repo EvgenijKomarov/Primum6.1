@@ -35,6 +35,7 @@ const INCIDENT_MEANINGS: Record<IncidentMeaning, string> = {
     [IncidentMeaning.Student]: 'Ученик',
     [IncidentMeaning.Course]: 'Курс',
     [IncidentMeaning.Lesson]: 'Занятие',
+    [IncidentMeaning.LessonReport]: 'Жалоба на занятие',
 }
 
 const INCIDENT_DECISIONS: Record<IncidentDecision, string> = {
@@ -42,8 +43,12 @@ const INCIDENT_DECISIONS: Record<IncidentDecision, string> = {
     [IncidentDecision.Delete]: 'Удалить',
     [IncidentDecision.SendToAdministrator]: 'Отправить на исправление',
     [IncidentDecision.SendToManager]: 'Отправить на утверждение',
-    [IncidentDecision.Revisioned]: 'Проведено разбирательство',
+    [IncidentDecision.Revise]: 'Проведено разбирательство',
     [IncidentDecision.BanUser]: 'Забанить пользователя',
+    [IncidentDecision.SetMissedByValidReason]: 'Пропущено по уважительной причине',
+    [IncidentDecision.LightBlame]: 'Легкая вина',
+    [IncidentDecision.Pardon]: 'Вины нет',
+    [IncidentDecision.SetMissedByNoReason]: 'Пропущено не по уважительной причине',
 }
 
 const REPORT_STATUSES: Record<LessonReportStatus, string> = {

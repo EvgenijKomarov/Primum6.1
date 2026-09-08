@@ -30,8 +30,8 @@ namespace CoreDBModel.Models.Enums
         [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.Approve)]
         [AvailableIncident(IncidentMeaning.Teacher, IncidentDecision.Delete)]
         ApproveTeachers = 11,
-        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
-        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Revisioned)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.SetMissedByValidReason)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.SetMissedByNoReason)]
         [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.BanUser)]
         InspectMissedLessons = 12,
         CreateAdminProfiles = 13,
@@ -40,8 +40,11 @@ namespace CoreDBModel.Models.Enums
         DeletePromocodes = 16,
         ChangeBanStatus = 17,
         EditCourseThemes = 18,
-        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Revise)]
         AdministrateMissedLessons = 19,
+        [AvailableIncident(IncidentMeaning.LessonReport, IncidentDecision.LightBlame)]
+        [AvailableIncident(IncidentMeaning.LessonReport, IncidentDecision.BanUser)]
+        [AvailableIncident(IncidentMeaning.LessonReport, IncidentDecision.Pardon)]
         InspectReportedLessons = 20,
     }
 }

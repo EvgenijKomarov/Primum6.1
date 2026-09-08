@@ -123,6 +123,7 @@ namespace PrimumCore.Services.Iterators
             }
 
             if (lesson.ReportStatus != LessonReportStatus.Ok) throw new BusinessLogicException("Lesson already reported");
+            if (lesson.Status != LessonStatus.Happened) throw new BusinessLogicException("Lesson not happened");
             if (!reportStatus.ToString().StartsWith(isStudentReporting ? "Teacher" : "Student")) throw new BusinessLogicException("Wrong report status");
 
             lesson.ReportStatus = reportStatus;
