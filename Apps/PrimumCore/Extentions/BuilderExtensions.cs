@@ -43,6 +43,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<RanksIterator>();
             builder.Services.AddScoped<MathFormulas>();
             builder.Services.AddScoped<EarningCalculationService>();
+            builder.Services.AddScoped<AllowedAdminsCollector>();
 
             return builder;
         }

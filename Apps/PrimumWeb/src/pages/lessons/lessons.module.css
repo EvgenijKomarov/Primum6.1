@@ -250,6 +250,12 @@
   opacity: 0.8;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
 /* ── History date stamp ── */
 .historyDate {
   font-size: 0.8rem;

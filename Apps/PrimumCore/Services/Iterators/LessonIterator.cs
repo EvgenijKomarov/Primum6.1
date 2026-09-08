@@ -7,13 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Entities;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
+using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class LessonIterator(DatabaseIterator dbIterator, EarningCalculationService calculationService, PublisherService publisher)
+    public class LessonIterator(
+        DatabaseIterator dbIterator, 
+        EarningCalculationService calculationService, 
+        PublisherService publisher, 
+        AllowedAdminsCollector collector)
     {
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
@@ -95,6 +100,45 @@ namespace PrimumCore.Services.Iterators
                 LessonId = lesson.Id,
                 DateTime = lesson.DateTime,
                 TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+            });
+
+            await dbIterator.SaveChangesAsync();
+            return lesson.Id;
+        }
+
+        public async Task<int> ReportLesson(int userId, int lessonId, LessonReportStatus reportStatus, bool isStudentReporting)
+        {
+            Lesson lesson;
+            if (isStudentReporting)
+            {
+                lesson = await dbIterator.Lessons()
+                   .Where(x => x.Abonement.Student.User.Id == userId)
+                   .One(x => x.Id == lessonId);
+            }
+            else
+            {
+                lesson = lesson = await dbIterator.Lessons()
+                   .Where(x => x.Abonement.Course.Teacher.User.Id == userId)
+                   .One(x => x.Id == lessonId);
+            }
+
+            if (lesson.ReportStatus != LessonReportStatus.Ok) throw new BusinessLogicException("Lesson already reported");
+            if (!reportStatus.ToString().StartsWith(isStudentReporting ? "Teacher" : "Student")) throw new BusinessLogicException("Wrong report status");
+
+            lesson.ReportStatus = reportStatus;
+
+            await publisher.Push(new LessonReportEvent
+            {
+                AllowedAdminIds = (await collector.GetAllowedAdmins([Permission.InspectReportedLessons])).Select(x => x.UserId),
+                StudentName = lesson.Abonement.Student.User.DisplayName,
+                StudentUserId = lesson.Abonement.Student.User.Id,
+                TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = lesson.Abonement.Course.TeacherId,
+                CourseName = lesson.Abonement.Course.Name,
+                AbonementId = lesson.Abonement.Id,
+                LessonId = lesson.Id,
+                DateTime = lesson.DateTime,
+                ReportStatus = reportStatus.ToString(),
             });
 
             await dbIterator.SaveChangesAsync();

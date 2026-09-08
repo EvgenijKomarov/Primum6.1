@@ -59,7 +59,7 @@ export const GradingPopup = ({ lessonId }: GradingPopupProps) => {
                     onClose={() => setPopupOpen(false)}>
                     <div className={styles.content}>
                         <span className={styles.hint}>
-                            Оцените занятие, чтобы получить опыт за занятие. 
+                            Оцените занятие, чтобы получить опыт. 
                             Не оцененные категории не влияют на общую оценку. 
                             Должна быть оценена хотя бы одна категория.</span>
                         <form className={styles.form} onSubmit={onSubmit}>

@@ -1,6 +1,7 @@
 ﻿using Common.Entities;
 using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using PrimumCore.Entities;
 using PrimumCore.Services.Iterators;
@@ -107,5 +108,9 @@ namespace PrimumCore.Controllers
         [HttpDelete("shedule-delete/{sheduleId}")]
         public async Task<ActionResult<int>> DeleteShedule([FromRoute] int userId, [FromRoute] int sheduleId) 
             => Ok(await sheduleIterator.DeleteTeacherShedule(userId, sheduleId));
+
+        [HttpPatch("lesson-report/{lessonId}")]
+        public async Task<ActionResult<int>> ReportLesson([FromRoute] int userId, [FromRoute] int lessonId, [FromQuery] LessonReportStatus reportStatus)
+            => Ok(await lessonIterator.ReportLesson(userId, lessonId, reportStatus, false));
     }
 }

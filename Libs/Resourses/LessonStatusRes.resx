@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancelled" xml:space="preserve">
+    <value>❌Отменено</value>
+  </data>
   <data name="Happened" xml:space="preserve">
     <value>🏁Прошло</value>
   </data>
   <data name="Missed" xml:space="preserve">
     <value>😢Пропущено</value>
+  </data>
+  <data name="MissedDueToException" xml:space="preserve">
+    <value>😭Пропущено из-за технической ошибки</value>
   </data>
   <data name="MissedWithoutReason" xml:space="preserve">
     <value>😭Пропущено без причины</value>

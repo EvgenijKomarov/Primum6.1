@@ -111,5 +111,9 @@ namespace PrimumCore.Controllers
         [HttpPatch("lesson-cancel/{lessonId}")]
         public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int userId, [FromRoute] int lessonId)
             => Ok(await lessonIterator.CancelLesson(userId, lessonId));
+
+        [HttpPatch("lesson-report/{lessonId}")]
+        public async Task<ActionResult<int>> ReportLesson([FromRoute] int userId, [FromRoute] int lessonId, [FromQuery] LessonReportStatus reportStatus)
+            => Ok(await lessonIterator.ReportLesson(userId, lessonId, reportStatus, true));
     }
 }

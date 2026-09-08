@@ -27,6 +27,8 @@ namespace CoreConnection.DTOs.Abstractions
 
         public required decimal Price { get; set; }
 
+        public required bool IsReported { get; set; }
+
         public required LessonStatus LessonStatus { get; set; }
     }
 }

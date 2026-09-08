@@ -3,6 +3,7 @@ import { BadgeTypeEnum } from "@/shared/enums/badge";
 import styles from './styles.module.css'
 import { DayOfWeek } from "@/entity/schedule/model/types";
 import { IncidentDecision, IncidentMeaning, IncidentStatus } from "@/entity/incident/model/types";
+import { LessonReportStatus } from "@/entity/lesson";
 
 const STATUS_TRANSLATION: Record<AbonementStatus, {label: string, badgeType: BadgeTypeEnum, cls: string}> = {
         [AbonementStatus.Active]: { label: 'Активен', badgeType: BadgeTypeEnum.Positive, cls: styles.Positive},
@@ -45,6 +46,16 @@ const INCIDENT_DECISIONS: Record<IncidentDecision, string> = {
     [IncidentDecision.BanUser]: 'Забанить пользователя',
 }
 
+const REPORT_STATUSES: Record<LessonReportStatus, string> = {
+  [LessonReportStatus.Ok]: 'Нет жалоб',
+  [LessonReportStatus.StudentBadBehavior]: 'Неприемлемое поведение ученика',
+  [LessonReportStatus.TeacherBadBehavior]: 'Неприемлемое поведение преподавателя',
+  [LessonReportStatus.StudentInappropriateContent]: 'Неприемлемый контент ученика',
+  [LessonReportStatus.TeacherInappropriateContent]: 'Неприемлемый контент преподавателя',
+  [LessonReportStatus.StudentHaventConnected]: 'Ученик не подключился',
+  [LessonReportStatus.TeacherHaventConnected]: 'Преподаватель не подключился',
+}
+
 const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
@@ -67,6 +78,10 @@ export function translateDayOfWeek(dow: DayOfWeek): string {
 
 export function translateMonth(month: number): string {
     return RU_MONTHS[month];
+}
+
+export function translateReportStatus(status: LessonReportStatus): string {
+    return REPORT_STATUSES[status];
 }
 
 export function translateGrade(grading: number, fixedLabel = false): { label: string, value: number, hint: string} {

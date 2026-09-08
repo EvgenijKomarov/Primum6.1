@@ -47,5 +47,15 @@ namespace PrimumWebAPI.Controllers
         [HttpPatch("{lessonId}/cancel")]
         public async Task<ActionResult<int>> CancelLesson([FromRoute] int lessonId)
             => Ok(await client.LessonCancelAsync(User.GetUserId(), lessonId));
+
+        /// <summary>
+        /// Пожаловаться на занятие
+        /// </summary>
+        /// <param name="lessonId"></param>
+        /// <param name="reportStatus">тип жалобы</param>
+        /// <returns></returns>
+        [HttpPatch("{lessonId}/report")]
+        public async Task<ActionResult<int>> ReportLesson([FromRoute] int lessonId, [FromBody] LessonReportStatus reportStatus)
+            => Ok(await client.LessonReportAsync(User.GetUserId(), lessonId, reportStatus));
     }
 }

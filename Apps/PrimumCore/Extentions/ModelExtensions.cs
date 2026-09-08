@@ -121,7 +121,8 @@ namespace PrimumCore.Extentions
                 RepetitionOfMaterialGrade = x.Grading == null ? null : (int?)x.Grading.RepetitionOfMaterialGrade,
                 StudyInitiativeGrade = x.Grading == null ? null : (int?)x.Grading.StudyInitiativeGrade,
                 FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade(),
-                TeacherEarning = isStudentLink ? null : x.TeacherEarning
+                TeacherEarning = isStudentLink ? null : x.TeacherEarning,
+                IsReported = x.ReportStatus != LessonReportStatus.Ok
             });
 
         public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => queryable.Select(x => 
@@ -281,7 +282,8 @@ namespace PrimumCore.Extentions
                         x.Abonement.Course.Teacher.Rank.EarningMultiplier,
                         x.Abonement.Lessons.Count(l => l.Price > 0 && l.Status == LessonStatus.Happened),
                         x.IsReferal),
-                    IsAbonementActive = x.Abonement.AbonementStatus == AbonementStatus.Active
+                    IsAbonementActive = x.Abonement.AbonementStatus == AbonementStatus.Active,
+                    IsReported = x.ReportStatus != LessonReportStatus.Ok
                 }).ToList()
             });
     }

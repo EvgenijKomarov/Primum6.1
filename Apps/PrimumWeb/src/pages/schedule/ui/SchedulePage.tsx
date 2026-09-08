@@ -152,7 +152,7 @@ export const SchedulePage = () => {
                       )}
                       {status === 'booked' && slot?.abonementId  && (
                         <AbonementInfo 
-                          abonementId={slot.abonementId ?? 1} 
+                          abonementId={slot.abonementId} 
                           badgeStyle={styles.abonementBadge}/>
                       )}
                     </div>

@@ -17,6 +17,9 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from '@/shared/format/format-config';
 import Button from '@/shared/ui/Button/Button';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
+import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
+import { BadgeTypeEnum } from '@/shared/enums/badge';
+import { ReportLessonPopup } from '@/widgets/popups/report-lesson/ReportLessonPopup';
 
 export const StatusBadge = ({ status }: { status: LessonStatus }) => {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG[LessonStatus.Waiting];
@@ -47,11 +50,15 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
           </span>
         </div>
       </div>
-      <Button 
-        disabled={lesson.lessonStatus !== LessonStatus.Waiting}
-        onClick={async () => setCancelEnsureOpen(true)}>
-        {'Отменить'}
-      </Button>
+      <div className={styles.buttons}>
+        <Button 
+          variant={ButtonTypeEnum.PRIMARY}
+          size={ButtonSizeEnum.SMALL}
+          disabled={lesson.lessonStatus !== LessonStatus.Waiting}
+          onClick={async () => setCancelEnsureOpen(true)}>
+          {'Отменить'}
+        </Button>
+      </div>
       {cancelEnsureOpen && 
         <EnsurancePopup
           description={'Вы уверены, что хотите отменить занятие?'}
@@ -64,7 +71,10 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
 
 // ── History lesson card ───────────────────────────────────────────────────────
 
-const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
+const HistoryCard = ({ lesson, onMutate }: { lesson: LessonDto, onMutate: () => void }) => {
+  const [reportStatusPopupOpen, setReportStatusPopupOpen] = useState(false);
+
+  return (
   <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
@@ -76,6 +86,7 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
       </div>
       <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
+          {lesson.isReported ? <Badge text='Обжаловано' badgeType={BadgeTypeEnum.Negative}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
           <Gradinginfo {...lesson} />
         </div>
@@ -87,15 +98,34 @@ const HistoryCard = ({ lesson }: { lesson: LessonDto }) => (
           </span>
         </div>
       </div>
-      <Button 
-        disabled={!lesson.lessonLink}
-        onClick={() => window.open(lesson.lessonLink, '_blank')}
-        icon={<ExternalLinkIcon />}>
-        Открыть
-      </Button>
+      <div className={styles.buttons}>
+        <Button 
+          variant={ButtonTypeEnum.PRIMARY}
+          size={ButtonSizeEnum.SMALL}
+          disabled={!lesson.lessonLink}
+          onClick={() => window.open(lesson.lessonLink, '_blank')}
+          icon={<ExternalLinkIcon />}>
+          Открыть
+        </Button>
+        <Button 
+          variant={ButtonTypeEnum.PRIMARY}
+          size={ButtonSizeEnum.SMALL}
+          disabled={lesson.isReported || lesson.lessonStatus !== LessonStatus.Happened}
+          onClick={async () => setReportStatusPopupOpen(true)}>
+          {'Пожаловаться'}
+        </Button>
+      </div>
+      {reportStatusPopupOpen && 
+        <ReportLessonPopup 
+          lessonId={lesson.id}
+          isStudentReporting={true}
+          onClose={() => setReportStatusPopupOpen(false)}
+          onReport={() => onMutate()}
+          />}
     </div>
   </Card>
 );
+}
 
 // ── Date group ────────────────────────────────────────────────────────────────
 
@@ -109,7 +139,7 @@ const DateGroup = ({ group, onMutate }: { group: LessonsByDateDto, onMutate: () 
         {today && <span className={styles.dateHeadingToday}>Сегодня</span>}
       </div>
       <div className={styles.lessonList}>
-        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} onMutate={onMutate}/>)}
+        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} onMutate={onMutate} />)}
       </div>
     </div>
   );
@@ -137,7 +167,7 @@ const UpcomingTab = () => {
 };
 
 const HistoryTab = () => {
-  const { lessons, isLoading } = useStudentLessons();
+  const { lessons, isLoading, mutate } = useStudentLessons();
 
   if (isLoading) return (
     <div className={styles.lessonList}>
@@ -154,7 +184,7 @@ const HistoryTab = () => {
 
   return (
     <div className={styles.lessonList}>
-      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} />)}
+      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onMutate={() => mutate()}/>)}
     </div>
   );
 };
@@ -192,7 +222,7 @@ export const StudentLessonsPage = () => {
         </button>
       </div>
 
-      {activeTab === 'upcoming' ? <UpcomingTab /> : <HistoryTab />}
+      {activeTab === 'upcoming' ? <UpcomingTab/> : <HistoryTab/>}
     </div>
   );
 };

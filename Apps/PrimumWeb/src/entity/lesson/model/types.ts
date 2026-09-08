@@ -8,6 +8,19 @@ export enum LessonStatus {
   Cancelled = 6
 }
 
+export enum LessonReportStatus {
+  Ok = 0,
+
+  TeacherHaventConnected = 2,
+  StudentHaventConnected = 3,
+
+  TeacherInappropriateContent = 4,
+  StudentInappropriateContent = 5,
+
+  TeacherBadBehavior = 6,
+  StudentBadBehavior = 7,
+}
+
 export interface LessonDto extends Grading {
   id: number;
   courseName: string;
@@ -23,6 +36,7 @@ export interface LessonDto extends Grading {
   dateTime: string;
   lessonLink?: string;
   teacherEarning?: number;
+  isReported: boolean;
 }
 
 export interface Grading {
@@ -62,6 +76,7 @@ export interface FutureLessonDto {
   time: string;
   teacherEarning?: number;
   isAbonementActive: boolean;
+  isReported: boolean;
 }
 
 export interface LessonsByDateDto {

@@ -18,6 +18,8 @@ public partial class Lesson: BaseEntity
 
     public bool IsReferal { get; set; }
 
+    public LessonReportStatus ReportStatus { get; set; } = LessonReportStatus.Ok;
+
     public DateTime DateTime { get; set; }
 
     public LessonStatus Status { get; set; } = LessonStatus.Waiting;

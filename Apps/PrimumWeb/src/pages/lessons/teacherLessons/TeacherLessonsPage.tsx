@@ -3,7 +3,7 @@ import { useTeacherLessons } from "@/entity/lesson/model/useTeacherLessons";
 import { useState } from "react";
 import styles from '../lessons.module.css';
 import { CalendarIcon, ExternalLinkIcon } from "@/shared/icons/types";
-import type { FutureLessonDto, LessonDto, LessonsByDateDto } from "@/entity/lesson";
+import { LessonStatus, type FutureLessonDto, type LessonDto, type LessonsByDateDto } from "@/entity/lesson";
 import { Card } from "@/shared/ui/Card/Card";
 import { translateDayOfWeek } from "@/features/translation/translation";
 import { AbonementInfo } from "@/widgets/popups/info/abonement-info/AbonementInfo";
@@ -14,6 +14,8 @@ import { formatDateLabel, formatDateTime, formatTimeSlot, isToday } from "@/shar
 import { Badge } from "@/shared/ui/Badge/Badge";
 import { BadgeTypeEnum } from "@/shared/enums/badge";
 import Button from "@/shared/ui/Button/Button";
+import { ButtonSizeEnum, ButtonTypeEnum } from "@/shared/enums";
+import { ReportLessonPopup } from "@/widgets/popups/report-lesson/ReportLessonPopup";
 
 const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
   <Card hoverable={true} width={'100%'}>
@@ -36,7 +38,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceValueFree : ''}`}>
             {lesson.price === 0 ? 'Бесплатно' : `Цена: ${Number(lesson.price).toFixed(0)} ₽`}
           </span>
-          {(lesson.teacherEarning && lesson.teacherEarning !== 0) &&
+          {lesson?.teacherEarning !== 0 &&
             <span className={styles.cardEarning}>
               {`Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
             </span>}
@@ -48,7 +50,10 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
 
 // ── History lesson card ───────────────────────────────────────────────────────
 
-const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => void }) => (
+const HistoryCard = ({ lesson, onSubmit, onMutate }: { lesson: LessonDto, onSubmit: () => void, onMutate: () => void }) => {
+  const [reportStatusPopupOpen, setReportStatusPopupOpen] = useState(false);
+
+  return (
   <Card hoverable={true} width={'100%'}>
     <div className={styles.card}>
       <div className={styles.cardLeft}>
@@ -61,6 +66,7 @@ const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => 
       <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
           {lesson.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
+          {lesson.isReported ? <Badge text='Обжаловано' badgeType={BadgeTypeEnum.Negative}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
           {!lesson.finalGrade && lesson.lessonLink !== '' ? (
             <GradingPopup lessonId={lesson.id} onSubmit={onSubmit}/>
@@ -80,15 +86,31 @@ const HistoryCard = ({ lesson, onSubmit }: { lesson: LessonDto, onSubmit: () => 
             </span>}
         </div>
       </div>
-      <Button 
-        disabled={!lesson.lessonLink}
-        onClick={() => window.open(lesson.lessonLink, '_blank')}
-        icon={<ExternalLinkIcon />}>
-        Открыть
-      </Button>
+      <div className={styles.buttons}>
+        <Button 
+          disabled={!lesson.lessonLink}
+          onClick={() => window.open(lesson.lessonLink, '_blank')}
+          icon={<ExternalLinkIcon />}>
+          Открыть
+        </Button>
+        <Button 
+          variant={ButtonTypeEnum.PRIMARY}
+          size={ButtonSizeEnum.SMALL}
+          disabled={lesson.isReported || lesson.lessonStatus !== LessonStatus.Happened}
+          onClick={async () => setReportStatusPopupOpen(true)}>
+          {'Пожаловаться'}
+        </Button>
+        {reportStatusPopupOpen && 
+                <ReportLessonPopup 
+                  lessonId={lesson.id}
+                  isStudentReporting={false}
+                  onClose={() => setReportStatusPopupOpen(false)}
+                  onReport={() => onMutate()}
+                  />}
+      </div>
     </div>
   </Card>
-);
+)};
 
 // ── Date group ────────────────────────────────────────────────────────────────
 
@@ -147,7 +169,7 @@ const HistoryTab = () => {
 
   return (
     <div className={styles.lessonList}>
-      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} }/>)}
+      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} } onMutate={mutate}/>)}
     </div>
   );
 };

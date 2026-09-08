@@ -41,6 +41,7 @@ namespace CoreDBModel.Models.Enums
         ChangeBanStatus = 17,
         EditCourseThemes = 18,
         [AvailableIncident(IncidentMeaning.Lesson, IncidentDecision.Delete)]
-        AdministrateMissedLessons = 19
+        AdministrateMissedLessons = 19,
+        InspectReportedLessons = 20,
     }
 }

@@ -4,7 +4,7 @@ import { getStudentLessons } from '@/entity/lesson';
 import type { LessonDto } from '@/entity/lesson';
 
 export const useStudentLessons = () => {
-  const { data, isLoading } = useSWR(
+  const { data, isLoading, mutate } = useSWR(
     [api.studentLesson.getLast],
     async () => (await getStudentLessons(0, 500)).data,
   );
@@ -13,5 +13,5 @@ export const useStudentLessons = () => {
     (a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime(),
   );
 
-  return { lessons: sorted, isLoading };
+  return { lessons: sorted, isLoading, mutate };
 };

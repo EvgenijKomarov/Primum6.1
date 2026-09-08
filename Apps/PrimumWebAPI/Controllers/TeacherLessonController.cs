@@ -49,5 +49,15 @@ namespace PrimumWebAPI.Controllers
         [HttpPost("{lessonId}/grade")]
         public async Task<ActionResult<int>> GradeLesson([FromRoute] int lessonId, [FromBody] GradingInputDto gradingDto = null!)
             => Ok(await client.LessonGradeAsync(User.GetUserId(), lessonId, gradingDto));
+
+        /// <summary>
+        /// Пожаловаться на занятие
+        /// </summary>
+        /// <param name="lessonId"></param>
+        /// <param name="reportStatus">тип жалобы</param>
+        /// <returns></returns>
+        [HttpPatch("{lessonId}/report")]
+        public async Task<ActionResult<int>> ReportLesson([FromRoute] int lessonId, [FromBody] LessonReportStatus reportStatus)
+            => Ok(await client.LessonReportAsync(User.GetUserId(), lessonId, reportStatus));
     }
 }

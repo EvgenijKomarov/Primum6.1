@@ -61,6 +61,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на ❌Отменено.
+        /// </summary>
+        public static string Cancelled {
+            get {
+                return ResourceManager.GetString("Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 🏁Прошло.
         /// </summary>
         public static string Happened {
@@ -75,6 +84,15 @@ namespace Resourses {
         public static string Missed {
             get {
                 return ResourceManager.GetString("Missed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 😭Пропущено из-за технической ошибки.
+        /// </summary>
+        public static string MissedDueToException {
+            get {
+                return ResourceManager.GetString("MissedDueToException", resourceCulture);
             }
         }
         

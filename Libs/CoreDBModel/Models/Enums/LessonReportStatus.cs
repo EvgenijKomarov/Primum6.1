@@ -6,7 +6,7 @@ namespace CoreDBModel.Models.Enums
 {
     public enum LessonReportStatus
     {
-        Ok = 1,
+        Ok = 0,
 
         TeacherHaventConnected = 2,
         StudentHaventConnected = 3,
@@ -16,7 +16,5 @@ namespace CoreDBModel.Models.Enums
 
         TeacherBadBehavior = 6,
         StudentBadBehavior = 7,
-
-
     }
 }
