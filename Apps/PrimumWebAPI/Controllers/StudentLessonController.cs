@@ -57,5 +57,14 @@ namespace PrimumWebAPI.Controllers
         [HttpPatch("{lessonId}/report")]
         public async Task<ActionResult<int>> ReportLesson([FromRoute] int lessonId, [FromBody] LessonReportStatus reportStatus)
             => Ok(await client.LessonReportAsync(User.GetUserId(), lessonId, reportStatus));
+
+        /// <summary>
+        /// Создать занятие отработку
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateWorkoffLesson([FromBody] LessonWorkoffInputDto dto)
+            => Ok(await client.CreateWorkoffLessonAsync(User.GetUserId(), dto));
     }
 }

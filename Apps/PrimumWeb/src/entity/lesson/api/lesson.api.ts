@@ -67,3 +67,12 @@ export const teacherReportLesson = async (lessonId: number, data: LessonReportSt
     data,
   });
 }
+
+export const createWorkoffLesson = async (dateTime: string, abonementId: number) => {
+  return await fetcherInstance<number>({
+    method: 'POST',
+    url: api.studentLesson.base,
+    headers: { 'Content-Type': 'application/json' },
+    data: {dateTime, abonementId},
+  });
+}

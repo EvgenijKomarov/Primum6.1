@@ -27,4 +27,23 @@ public partial class Lesson: BaseEntity
     public virtual Abonement Abonement { get; set; } = null!;
 
     public virtual StudentGrading? Grading { get; set; }
+
+    public bool IsNormal() 
+    {
+        LessonStatus[] normalStatuses = [LessonStatus.Waiting, LessonStatus.Warned, LessonStatus.Happened];
+        return normalStatuses.Contains(Status);
+    }
+
+    public bool IsFreeLessonSpent()
+    {
+        LessonStatus[] spentStatuses = 
+        [
+            LessonStatus.Waiting, 
+            LessonStatus.Warned, 
+            LessonStatus.Happened, 
+            LessonStatus.MissedWithoutReason,
+            LessonStatus.Missed,
+        ];
+        return Price == 0 && spentStatuses.Contains(Status);
+    }
 }

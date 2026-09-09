@@ -51,5 +51,14 @@ namespace PrimumWebAPI.Controllers
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)
             => Ok(await client.TeacherShedulesAsync(teacherId, page, pageSize));
+
+        /// <summary>
+        /// Свободное время преподавателя
+        /// </summary>
+        /// <param name="teacherId">Id преподавателя</param>
+        /// <returns></returns>
+        [HttpGet("{teacherId}/free-time")]
+        public async Task<ActionResult<DateTime[]>> GetTeacherFreeTime([FromRoute] int teacherId)
+            => Ok(await client.TeacherFreetimeAsync(teacherId));
     }
 }

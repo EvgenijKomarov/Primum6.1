@@ -32,13 +32,6 @@ public partial class Abonement: BaseEntity
 
     public int FreeLessonsSpent()
     {
-        LessonStatus[] cancelledStatuses = [
-            LessonStatus.MissedDueToException,
-            LessonStatus.Cancelled,
-            LessonStatus.MissedByValidReason
-        ];
-
-        return Lessons
-            .Count(x => x.Price == 0m && !cancelledStatuses.Contains(x.Status));
+        return Lessons.Count(x => x.IsFreeLessonSpent());
     }
 }

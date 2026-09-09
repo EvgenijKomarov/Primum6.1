@@ -24,3 +24,10 @@ export const getPublicTeacherSchedules = async (teacherId: number, page = 0, pag
     params: { page, pageSize },
   });
 };
+
+export const getTeacherFreeTime = async (teacherId: number) => {
+  return await fetcherInstance<string[]>({
+    method: 'GET',
+    url: `${api.publicTeacher.getSchedules}/${teacherId}/free-time`,
+  });
+};

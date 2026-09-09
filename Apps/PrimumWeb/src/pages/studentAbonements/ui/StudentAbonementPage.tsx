@@ -14,6 +14,7 @@ import { getPublicCourse, type CourseDtoLite } from '@/entity/course';
 import { CourseScheduleSubscribe } from '@/widgets/popups/select-shedule/ui/CourseScheduleSubscribe';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { utcToLocal } from '@/shared/format/format-config';
+import { CreateWorkoffLesson } from '@/widgets/popups/create-workoff-lesson/ui/CreateWorkoffLesson';
 
 interface SheduleBadgeProps {
     dow: DayOfWeek;
@@ -174,6 +175,9 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
                             course={course}
                             onSubscribe={mutate}/>
                     )}
+                </div>
+                <div className={styles.buttons}>
+                    <CreateWorkoffLesson abonement={abonement} mutateAbonements={mutateAbonements}/>
                 </div>
             </div>
         </Card>

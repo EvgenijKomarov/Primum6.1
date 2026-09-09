@@ -44,6 +44,12 @@ namespace CoreDBIterator.Workers
             foreach (var s in availableForProlongation)
             {
                 var freeDateTime = datetimeService.GetNextSuitableDateNextWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
+                //Проверка есть ли такой же слот
+                var sameLesson = await context
+                    .Set<Lesson>()
+                    .Include(x => x.Abonement)
+                    .FirstOrDefaultAsync(x => x.DateTime == freeDateTime && x.Abonement.Id == s.Abonement.Id);
+                if (sameLesson is not null && sameLesson.IsNormal()) { freeDateTime = freeDateTime.AddDays(7); } //скип недельки если слот занят
 
                 s.LastIteration = DateTime.UtcNow;
                 logger.LogInformation($"Set LastIterationTime of {s.Id} for {freeDateTime}");

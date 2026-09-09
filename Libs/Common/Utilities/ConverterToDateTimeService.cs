@@ -8,7 +8,6 @@ namespace Common.Utilities
 {
     public class ConverterToDateTimeService
     {
-        private int blockedDays = 3;
         private Dictionary<string, DayOfWeek> weekDays = new Dictionary<string, DayOfWeek>()
         {
             ["Понедельник"] = DayOfWeek.Monday,
@@ -52,7 +51,7 @@ namespace Common.Utilities
             return date;
         }
 
-        public virtual DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours)
+        public virtual DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours, int blockedDays = 3)
         {
             DateTime now = GetCurrentTime();
             var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);

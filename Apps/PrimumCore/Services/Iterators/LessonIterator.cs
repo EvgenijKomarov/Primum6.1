@@ -1,5 +1,6 @@
 ﻿using Common.Utilities;
 using CoreConnection.DTOs;
+using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
@@ -18,7 +19,8 @@ namespace PrimumCore.Services.Iterators
         DatabaseIterator dbIterator, 
         EarningCalculationService calculationService, 
         PublisherService publisher, 
-        AllowedAdminsCollector collector)
+        AllowedAdminsCollector collector,
+        TeacherIterator teacherIterator)
     {
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
@@ -144,6 +146,58 @@ namespace PrimumCore.Services.Iterators
             });
 
             await dbIterator.SaveChangesAsync();
+            return lesson.Id;
+        }
+
+        public async Task<int> CreateWorkoffLesson(int userId, LessonWorkoffInputDto dto)
+        {
+            var dateTime = dto.DateTime.ToUniversalTime();
+
+            var abonement = await dbIterator
+                .Students()
+                .Include(x => x.Abonements)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
+                .Include(x => x.User)
+                .Where(x => x.User.Id == userId)
+                .SelectMany(x => x.Abonements)
+                .One(x => x.Id == dto.AbonementId);
+
+            if (abonement.CancelledLessons == 0) throw new BusinessLogicException("No cancelled lessons to workoff");
+            if (!(await teacherIterator.GetTeacherAvailableTime(abonement.Course.Teacher.User.Id)).Contains(dateTime))
+                throw new BusinessLogicException("Date is not allowed");
+
+            var lesson = new Lesson
+            {
+                Abonement = abonement,
+                Price = abonement.Course.FreeLessons >= abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
+                DateTime = dateTime,
+                Status = LessonStatus.Waiting
+            };
+
+            //Проверка есть ли такой же слот
+            var sameLesson = await dbIterator.Lessons().FirstOrDefaultAsync(x => x.DateTime == dateTime && x.Abonement.Id == abonement.Id);
+            if (sameLesson is not null && sameLesson.IsNormal()) throw new BusinessLogicException("Invalid datetime");
+            else
+            {
+                await dbIterator.AddAsync(lesson);
+            }
+            abonement.CancelledLessons -= 1;
+
+            await dbIterator.SaveChangesAsync();
+            await publisher.Push(new WorkoffLessonCreatedEvent
+            {
+                StudentName = lesson.Abonement.Student.User.DisplayName,
+                StudentUserId = lesson.Abonement.Student.User.Id,
+                TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
+                TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
+                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+                CourseName = lesson.Abonement.Course.Name,
+                AbonementId = lesson.Abonement.Id,
+                LessonId = lesson.Id,
+                DateTime = lesson.DateTime
+            });
             return lesson.Id;
         }
     }

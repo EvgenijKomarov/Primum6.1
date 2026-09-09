@@ -1,7 +1,8 @@
 ﻿using CoreConnection.DTOs;
-using PrimumCore.Entities;
+using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
+using PrimumCore.Entities;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
@@ -107,6 +108,10 @@ namespace PrimumCore.Controllers
         [HttpPost("create-referal-abonement/{token}")]
         public async Task<ActionResult<int>> CreateReferalAbonement([FromRoute] int userId, [FromRoute] string token)
             => Ok(await abonementIterator.CreateReferalAbonement(userId, token));
+
+        [HttpPost("create-workoff-lesson")]
+        public async Task<ActionResult<int>> CreateWorkoffLesson([FromRoute] int userId, [FromBody] LessonWorkoffInputDto dto = null!)
+            => Ok(await lessonIterator.CreateWorkoffLesson(userId, dto));
 
         [HttpPatch("lesson-cancel/{lessonId}")]
         public async Task<ActionResult<int>> LessonChangeStatus([FromRoute] int userId, [FromRoute] int lessonId)

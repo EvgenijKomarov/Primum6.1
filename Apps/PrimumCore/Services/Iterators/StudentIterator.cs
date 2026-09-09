@@ -90,17 +90,17 @@ namespace PrimumCore.Services.Iterators
 
             await dbIterator.AddAsync(abonementShedule);
 
-            if (!dbIterator.Lessons()
-                .Any(x => x.DateTime == suitableDate && x.Abonement.Id == abonement.Id))
+            //Проверка есть ли такой же слот
+            var sameLesson = await dbIterator.Lessons().FirstOrDefaultAsync(x => x.DateTime == suitableDate && x.Abonement.Id == abonement.Id);
+            if (sameLesson is not null && sameLesson.IsNormal()) { suitableDate = suitableDate.AddDays(7); } //скип недельки если слот занят
+            
+            await dbIterator.AddAsync(new Lesson
             {
-                await dbIterator.AddAsync(new Lesson
-                {
-                    Abonement = abonement,
-                    Price = abonement.Course.FreeLessons >= abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
-                    DateTime = suitableDate,
-                    Status = LessonStatus.Waiting
-                });
-            }
+                Abonement = abonement,
+                Price = abonement.Course.FreeLessons >= abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
+                DateTime = suitableDate,
+                Status = LessonStatus.Waiting
+            });
 
             await dbIterator.SaveChangesAsync();
 
