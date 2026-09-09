@@ -158,7 +158,7 @@ namespace PrimumCore.Services.Utilities
                 }
             },
             {   
-                IncidentMeaning.LessonReport,
+                IncidentMeaning.LessonReport,//TODO: Допилить 
                 async (id, decision) =>
                 {
                     var lesson = await dbIterator.Lessons()

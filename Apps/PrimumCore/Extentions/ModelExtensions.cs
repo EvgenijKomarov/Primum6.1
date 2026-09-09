@@ -21,6 +21,7 @@ namespace PrimumCore.Extentions
                 Id = x.Id,
                 CourseName = x.Course.Name,
                 CourseId = x.Course.Id,
+                CancelledLessons = x.CancelledLessons,
                 CourseThemeName = x.Course.CourseTheme.ThemeName,
                 CourseThemeId = x.Course.CourseTheme.Id,
                 PricePerLesson = x.PricePerLesson,

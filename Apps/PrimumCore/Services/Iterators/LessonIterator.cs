@@ -89,6 +89,7 @@ namespace PrimumCore.Services.Iterators
             if (lesson.Status != LessonStatus.Waiting) throw new BusinessLogicException("Unchangeable lesson status");
 
             lesson.Status = LessonStatus.Cancelled;
+            lesson.Abonement.CancelledLessons += 1;
             await publisher.Push(new LessonCancelEvent
             {
                 StudentName = lesson.Abonement.Student.User.DisplayName,

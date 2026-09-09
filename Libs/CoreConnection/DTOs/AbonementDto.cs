@@ -36,6 +36,8 @@ namespace CoreConnection.DTOs
 
         public required int MaxLessons { get; set; }
 
+        public required int CancelledLessons { get; set; }
+
         public required AbonementStatus AbonementStatus { get; set; }
 
         public required bool IsReferal { get; set; }

@@ -18,6 +18,8 @@ public partial class Abonement: BaseEntity
 
     public bool IsReferal { get; set; } = false;
 
+    public int CancelledLessons { get; set; } = 0;
+
     public AbonementStatus AbonementStatus { get; set; } = AbonementStatus.Active;
 
     public virtual Course Course { get; set; } = null!;

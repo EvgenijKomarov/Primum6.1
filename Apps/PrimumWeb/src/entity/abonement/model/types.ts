@@ -29,6 +29,7 @@ export interface AbonementDto {
   pricePerLesson: number;
   rating: number | null;
   abonementStatus: AbonementStatus;
+  cancelledLessons: number,
   isReferal: boolean;
   freeLessons: number;
   maxLessons: number;

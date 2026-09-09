@@ -146,6 +146,10 @@ const AbonementCard = ({ abonement, mutateAbonements }: AbonementCardProps) => {
                             <span className={styles.statLabel}>Цена за урок: </span>
                             <span className={styles.statValue}>{abonement.pricePerLesson}</span>
                         </div>
+                        <div className={styles.stat}>
+                            <span className={styles.statLabel}>Отмененные уроки: </span>
+                            <span className={styles.statValue}>{abonement.cancelledLessons}</span>
+                        </div>
                     </div>
                     <div className={styles.cardContentColumn}>
                         {schedules.map((schedule, index) => (
