@@ -29,6 +29,8 @@ namespace CoreConnection.DTOs.Abstractions
 
         public required bool IsReported { get; set; }
 
+        public required bool IsWorkoff { get; set; }
+
         public required LessonStatus LessonStatus { get; set; }
     }
 }

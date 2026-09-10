@@ -18,9 +18,9 @@ namespace PrimumCore.Constants
             return (int)(lessonCost * (decimal)cashBackIndex);
         }
 
-        public int StudentExpFormula(float finalGrade)
+        public int StudentExpFormula(float finalGrade, int cancelledLessons)
         {
-            return (int)(finalGrade * 100) + StudentLessonExpFloor;
+            return (int)(finalGrade * 100) + Math.Max(0, 10 * (10 - cancelledLessons));
         }
 
         public int CourseExpFormula()

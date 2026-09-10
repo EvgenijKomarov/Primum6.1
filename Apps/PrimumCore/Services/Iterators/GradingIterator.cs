@@ -31,7 +31,7 @@ namespace PrimumCore.Services.Iterators
 
             var avgGrade = lessonGrading.GetFinalGrade();
             var courseExp = formulas.CourseExpFormula();
-            var studentExp = formulas.StudentExpFormula(avgGrade);
+            var studentExp = formulas.StudentExpFormula(avgGrade, lesson.Abonement.CancelledLessons);
             var teacherExp = formulas.TeacherExpFormula();
 
             //if lesson is free -> x2 exp for teacher

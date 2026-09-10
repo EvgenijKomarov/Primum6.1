@@ -27,6 +27,8 @@ namespace CoreDBIterator.Workers
             var availableForProlongation = await context.Set<AbonementShedule>()
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Course)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Lessons)
                 .Include(x => x.TeacherShedule)
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.UtcNow)
                 .Where(s => s.Abonement.AbonementStatus == AbonementStatus.Active)

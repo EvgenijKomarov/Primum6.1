@@ -44,8 +44,9 @@ namespace PrimumCore.Services.Iterators
             return teacher
                 .TeacherShedules
                 .Where(x => !busySchedules.Any(y => y.DayOfWeek == x.DayOfWeek && y.Hour == x.Time))
-                .Select(x => dateTimeService.GetNextSuitableDateNextWeek(x.DayOfWeek, x.Time))
-                .Where(x => x < DateTime.UtcNow.AddDays(7)); //избыточная проверка, чтобы даты были точно в пределе одной недели
+                .Select(x => dateTimeService.GetNextFreeSuitableDateThisWeek(x.DayOfWeek, x.Time, 1))
+                .Where(x => x < DateTime.UtcNow.AddDays(7)) //избыточная проверка, чтобы даты были точно в пределе одной недели
+                .OrderBy(x => x);
         }
     }
 }

@@ -159,6 +159,8 @@ namespace PrimumCore.Services.Iterators
                 .ThenInclude(x => x.Course)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
+                .Include(x => x.Abonements)
+                .ThenInclude(x => x.Lessons)
                 .Include(x => x.User)
                 .Where(x => x.User.Id == userId)
                 .SelectMany(x => x.Abonements)
@@ -171,9 +173,11 @@ namespace PrimumCore.Services.Iterators
             var lesson = new Lesson
             {
                 Abonement = abonement,
-                Price = abonement.Course.FreeLessons >= abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
+                Price = abonement.Course.FreeLessons > abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
                 DateTime = dateTime,
-                Status = LessonStatus.Waiting
+                Status = LessonStatus.Waiting,
+                IsReferal = abonement.IsReferal,
+                IsWorkoff = true
             };
 
             //Проверка есть ли такой же слот

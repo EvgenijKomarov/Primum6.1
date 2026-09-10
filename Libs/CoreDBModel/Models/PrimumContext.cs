@@ -132,6 +132,7 @@ public partial class PrimumContext : DbContext
             entity.HasIndex(e => e.Id).IsUnique();
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.ReportStatus).HasDefaultValue(LessonReportStatus.Ok);
+            entity.Property(e => e.IsWorkoff).HasDefaultValue(false);
 
             entity.HasOne(d => d.Abonement).WithMany(a => a.Lessons).HasForeignKey(d => d.AbonementId)
                 .OnDelete(DeleteBehavior.Restrict);

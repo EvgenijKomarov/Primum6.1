@@ -38,6 +38,7 @@ export interface LessonDto extends Grading {
   lessonLink?: string;
   teacherEarning?: number;
   isReported: boolean;
+  isWorkoff: boolean;
 }
 
 export interface Grading {
@@ -78,6 +79,7 @@ export interface FutureLessonDto {
   teacherEarning?: number;
   isAbonementActive: boolean;
   isReported: boolean;
+  isWorkoff: boolean;
 }
 
 export interface LessonsByDateDto {

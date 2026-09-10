@@ -40,6 +40,7 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
       </div>
       <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
+          {lesson.isWorkoff ? <Badge text='Отработка' badgeType={BadgeTypeEnum.Warning}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
         </div>
       </div>
@@ -87,6 +88,7 @@ const HistoryCard = ({ lesson, onMutate }: { lesson: LessonDto, onMutate: () => 
       <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
           {lesson.isReported ? <Badge text='Обжаловано' badgeType={BadgeTypeEnum.Negative}/> : <></>}
+          {lesson.isWorkoff ? <Badge text='Отработка' badgeType={BadgeTypeEnum.Warning}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
           <Gradinginfo {...lesson} />
         </div>

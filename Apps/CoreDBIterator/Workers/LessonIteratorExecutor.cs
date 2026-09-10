@@ -108,7 +108,7 @@ namespace CoreDBIterator.Workers
                     else//Занятие не оплачено и удаляется
                     {
                         lesson.Status = LessonStatus.Missed;
-                        var notification = new LessonFailureEvent()
+                        await publisher.Push(new LessonFailureEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,
                             StudentUserId = lesson.Abonement.Student.User.Id,
@@ -118,14 +118,15 @@ namespace CoreDBIterator.Workers
                             AbonementId = lesson.Abonement.Id,
                             LessonId = lesson.Id,
                             DateTime = lesson.DateTime
-                        };
-                        await publisher.Push(notification);
+                        });
+                        if (lesson.IsWorkoff) lesson.Abonement.CancelledLessons += 1;
                         logger?.LogInformation($"Lesson {lesson.Id} not happened");
                     }
                 }
                 catch (Exception ex) 
                 {
                     lesson.Status = LessonStatus.MissedDueToException;
+                    if (lesson.IsWorkoff) lesson.Abonement.CancelledLessons += 1;
                     logger?.LogInformation($"Lesson {lesson.Id} iteration failed", ex);
                 }
             }

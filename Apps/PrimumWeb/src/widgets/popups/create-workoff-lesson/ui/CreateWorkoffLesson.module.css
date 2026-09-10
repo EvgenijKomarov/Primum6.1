@@ -3,4 +3,31 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    overflow-y: auto;
+    margin: 0.5rem;
+    height: 19rem;
+    border: 1px solid var(--color-secondary-dark);
+    border-radius: 0.875rem;
+    width: 50%;
+}
+
+.buttonContainer{
+    justify-items: center;
+
+}
+
+.content {
+    margin: 1rem;
+}
+
+.description {
+    color: var(--color-secondary-light);
+    width: 20rem;
+    padding-top: 0.5rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
 }

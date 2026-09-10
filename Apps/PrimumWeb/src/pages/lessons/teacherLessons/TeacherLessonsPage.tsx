@@ -30,6 +30,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
       <div className={styles.cardCenter}>
         <div className={styles.cardInfo}>
           {lesson.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
+          {lesson.isWorkoff ? <Badge text='Отработка' badgeType={BadgeTypeEnum.Warning}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
         </div>
       </div>
@@ -67,6 +68,7 @@ const HistoryCard = ({ lesson, onSubmit, onMutate }: { lesson: LessonDto, onSubm
         <div className={styles.cardInfo}>
           {lesson.isReferal ? <Badge text='Реферальный' badgeType={BadgeTypeEnum.Positive}/> : <></>}
           {lesson.isReported ? <Badge text='Обжаловано' badgeType={BadgeTypeEnum.Negative}/> : <></>}
+          {lesson.isWorkoff ? <Badge text='Отработка' badgeType={BadgeTypeEnum.Warning}/> : <></>}
           <StatusBadge status={lesson.lessonStatus} />
           {!lesson.finalGrade && lesson.lessonLink !== '' ? (
             <GradingPopup lessonId={lesson.id} onSubmit={onSubmit}/>
