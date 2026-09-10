@@ -1,8 +1,8 @@
-﻿using Common.Utilities;
-using CoreDBModel.Constants;
+﻿using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using SharedCoreBusinessLogic;
 
 namespace CoreDBIterator.Workers
 {
@@ -14,7 +14,7 @@ namespace CoreDBIterator.Workers
             {
                 logger.LogInformation("Lesson creation running at: {time}", DateTimeOffset.Now);
                 await Action();
-                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
             }
         }
 
@@ -22,7 +22,7 @@ namespace CoreDBIterator.Workers
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
-            var datetimeService = scope.ServiceProvider.GetRequiredService<ConverterToDateTimeService>();
+            var lessonBuilder = scope.ServiceProvider.GetRequiredService<LessonBuilder>();
 
             var availableForProlongation = await context.Set<AbonementShedule>()
                 .Include(x => x.Abonement)
@@ -45,26 +45,9 @@ namespace CoreDBIterator.Workers
 
             foreach (var s in availableForProlongation)
             {
-                var freeDateTime = datetimeService.GetNextSuitableDateNextWeek(s.TeacherShedule.DayOfWeek, s.TeacherShedule.Time);
-                //Проверка есть ли такой же слот
-                var sameLesson = await context
-                    .Set<Lesson>()
-                    .Include(x => x.Abonement)
-                    .FirstOrDefaultAsync(x => x.DateTime == freeDateTime && x.Abonement.Id == s.Abonement.Id);
-                if (sameLesson is not null && sameLesson.IsNormal()) { freeDateTime = freeDateTime.AddDays(7); } //скип недельки если слот занят
-
-                s.LastIteration = DateTime.UtcNow;
-                logger.LogInformation($"Set LastIterationTime of {s.Id} for {freeDateTime}");
                 if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {
-                    var lesson = new Lesson()
-                    {
-                        AbonementId = s.Abonement.Id,
-                        DateTime = freeDateTime,
-                        Price = s.Abonement.FreeLessons > s.Abonement.FreeLessonsSpent() ? 0m : s.Abonement.PricePerLesson,
-                        IsReferal = s.Abonement.IsReferal,
-                        Status = LessonStatus.Waiting
-                    };
+                    var lesson = await lessonBuilder.Build(s, SlotPickPolicy.NextWeek, SlotConflictPolicy.SkipWeek);
                     context.Set<Lesson>().Add(lesson);
                     logger?.LogInformation($"Created lesson with Id: {lesson.Id} for {lesson.AbonementId} at {lesson.DateTime}");
                 }

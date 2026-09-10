@@ -24,5 +24,6 @@
 		<ProjectReference Include="..\..\Libs\CoreDBModel\CoreDBModel.csproj" />
 		<ProjectReference Include="..\..\Libs\PaymentServiceClient\PaymentServiceClient.csproj" />
 		<ProjectReference Include="..\..\Libs\PublishServiceConnection\PublishServiceConnection.csproj" />
+		<ProjectReference Include="..\..\Libs\SharedCoreBusinessLogic\SharedCoreBusinessLogic.csproj" />
 	</ItemGroup>
 </Project>

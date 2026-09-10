@@ -1,9 +1,11 @@
 using Common.Utilities;
 using CoreDBIterator.Workers;
 using CoreDBModel.Extensions;
+using CoreDBModel.Models;
 using PaymentServiceConnection;
 using PublishServiceConnection;
 using Serilog;
+using SharedCoreBusinessLogic;
 
 // For a non-web Worker Service use the generic Host builder and register Serilog on the host
 Log.Logger = new LoggerConfiguration()
@@ -17,8 +19,9 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
                      .Enrich.FromLogContext())
     .ConfigureServices((context, services) =>
     {
-        services.AddTransient<ConverterToDateTimeService>();
-        services.AddTransient<EarningCalculationService>();
+        services.AddScoped<EarningCalculationService>();
+        services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<PrimumContext>().Set<Lesson>());
+        services.AddScoped<LessonBuilder>();
 
         services.AddHttpClient<PublisherService>()
                 .AddTypedClient((httpClient, sp) => new PublisherService(httpClient));

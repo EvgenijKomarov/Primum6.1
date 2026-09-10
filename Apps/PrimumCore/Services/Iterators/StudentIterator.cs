@@ -8,10 +8,15 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
+using SharedCoreBusinessLogic;
 
 namespace PrimumCore.Services.Iterators
 {
-    public class StudentIterator(DatabaseIterator dbIterator, ConverterToDateTimeService dateTimeService, PublisherService publisher)
+    public class StudentIterator(
+        DatabaseIterator dbIterator, 
+        ConverterToDateTimeService dateTimeService, 
+        PublisherService publisher,
+        LessonBuilder lessonBuilder)
     {
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {
@@ -79,28 +84,15 @@ namespace PrimumCore.Services.Iterators
             {
                 throw new BusinessLogicException("Can't create more shedules than course's maximum shedules per week");
             }
-
-            var suitableDate = dateTimeService.GetNextFreeSuitableDateThisWeek(teacherShedule.DayOfWeek, teacherShedule.Time);
             var abonementShedule = new AbonementShedule
             {
                 TeacherShedule = teacherShedule,
-                LastIteration = suitableDate,
+                LastIteration = DateTime.UtcNow,
+                Abonement = abonement
             };
-            abonement.AbonementShedules.Add(abonementShedule);
 
             await dbIterator.AddAsync(abonementShedule);
-
-            //Проверка есть ли такой же слот
-            var sameLesson = await dbIterator.Lessons().FirstOrDefaultAsync(x => x.DateTime == suitableDate && x.Abonement.Id == abonement.Id);
-            if (sameLesson is not null && sameLesson.IsNormal()) { suitableDate = suitableDate.AddDays(7); } //скип недельки если слот занят
-            
-            await dbIterator.AddAsync(new Lesson
-            {
-                Abonement = abonement,
-                Price = abonement.Course.FreeLessons > abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
-                DateTime = suitableDate,
-                Status = LessonStatus.Waiting
-            });
+            await dbIterator.AddAsync(await lessonBuilder.Build(abonementShedule, SlotPickPolicy.Nearest, SlotConflictPolicy.SkipWeek));
 
             await dbIterator.SaveChangesAsync();
 

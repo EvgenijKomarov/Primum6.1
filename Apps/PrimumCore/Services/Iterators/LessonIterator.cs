@@ -11,6 +11,7 @@ using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
+using SharedCoreBusinessLogic;
 using System.Linq.Expressions;
 
 namespace PrimumCore.Services.Iterators
@@ -20,7 +21,8 @@ namespace PrimumCore.Services.Iterators
         EarningCalculationService calculationService, 
         PublisherService publisher, 
         AllowedAdminsCollector collector,
-        TeacherIterator teacherIterator)
+        TeacherIterator teacherIterator,
+        LessonBuilder lessonBuilder)
     {
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
@@ -170,23 +172,8 @@ namespace PrimumCore.Services.Iterators
             if (!(await teacherIterator.GetTeacherAvailableTime(abonement.Course.Teacher.User.Id)).Contains(dateTime))
                 throw new BusinessLogicException("Date is not allowed");
 
-            var lesson = new Lesson
-            {
-                Abonement = abonement,
-                Price = abonement.Course.FreeLessons > abonement.FreeLessonsSpent() ? 0 : abonement.PricePerLesson,
-                DateTime = dateTime,
-                Status = LessonStatus.Waiting,
-                IsReferal = abonement.IsReferal,
-                IsWorkoff = true
-            };
-
-            //Проверка есть ли такой же слот
-            var sameLesson = await dbIterator.Lessons().FirstOrDefaultAsync(x => x.DateTime == dateTime && x.Abonement.Id == abonement.Id);
-            if (sameLesson is not null && sameLesson.IsNormal()) throw new BusinessLogicException("Invalid datetime");
-            else
-            {
-                await dbIterator.AddAsync(lesson);
-            }
+            var lesson = await lessonBuilder.Build(abonement, dto.DateTime, SlotConflictPolicy.Throw, isWorkoff: true);
+            await dbIterator.AddAsync(lesson);
             abonement.CancelledLessons -= 1;
 
             await dbIterator.SaveChangesAsync();

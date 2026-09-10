@@ -3,6 +3,7 @@ WORKDIR /src
 COPY Apps/PrimumCore Apps/PrimumCore
 COPY Libs/CoreConnection Libs/CoreConnection
 COPY Libs/Common Libs/Common
+COPY Libs/SharedCoreBusinessLogic Libs/SharedCoreBusinessLogic
 COPY Libs/CoreDBModel Libs/CoreDBModel
 COPY Libs/PublishServiceConnection Libs/PublishServiceConnection
 COPY Libs/SignServiceConnection Libs/SignServiceConnection

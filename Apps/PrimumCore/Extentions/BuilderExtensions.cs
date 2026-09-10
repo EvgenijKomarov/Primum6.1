@@ -1,5 +1,6 @@
 ﻿using Common.Utilities;
 using CoreDBModel.Extensions;
+using CoreDBModel.Models;
 using PaymentServiceConnection;
 using PrimumCore.Constants;
 using PrimumCore.Controllers;
@@ -7,6 +8,7 @@ using PrimumCore.Services.Iterators;
 using PrimumCore.Services.Utilities;
 using PublishServiceConnection;
 using Serilog;
+using SharedCoreBusinessLogic;
 using SignServiceConnection;
 using SignServiceConnection.Models;
 
@@ -44,6 +46,8 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<MathFormulas>();
             builder.Services.AddScoped<EarningCalculationService>();
             builder.Services.AddScoped<AllowedAdminsCollector>();
+            builder.Services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<DatabaseIterator>().Lessons());
+            builder.Services.AddScoped<LessonBuilder>();
 
             return builder;
         }

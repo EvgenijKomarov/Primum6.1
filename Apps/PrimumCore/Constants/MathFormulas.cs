@@ -4,7 +4,6 @@ namespace PrimumCore.Constants
 {
     public class MathFormulas
     {
-        private const int StudentLessonExpFloor = 100;
         private const int CourseGainExp = 450;
         private const int TeacherGainExp = 300;
 

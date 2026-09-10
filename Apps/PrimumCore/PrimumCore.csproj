@@ -31,6 +31,7 @@
     <ProjectReference Include="..\..\Libs\CoreConnection\CoreConnection.csproj" />
     <ProjectReference Include="..\..\Libs\PaymentServiceClient\PaymentServiceClient.csproj" />
     <ProjectReference Include="..\..\Libs\PublishServiceConnection\PublishServiceConnection.csproj" />
+    <ProjectReference Include="..\..\Libs\SharedCoreBusinessLogic\SharedCoreBusinessLogic.csproj" />
     <ProjectReference Include="..\..\Libs\SignServiceConnection\SignServiceConnection.csproj" />
   </ItemGroup>
 

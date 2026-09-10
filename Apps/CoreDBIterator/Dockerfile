@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY Apps/CoreDBIterator Apps/CoreDBIterator
-COPY /Libs/Common Libs/Common
+COPY Libs/Common Libs/Common
+COPY Libs/SharedCoreBusinessLogic Libs/SharedCoreBusinessLogic
 COPY Libs/CoreDBModel Libs/CoreDBModel
 COPY Libs/PublishServiceConnection Libs/PublishServiceConnection
 COPY Libs/Resourses Libs/Resourses
