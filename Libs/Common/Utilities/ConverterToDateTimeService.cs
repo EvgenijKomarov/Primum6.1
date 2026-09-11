@@ -30,5 +30,35 @@ namespace Common.Utilities
             var translation = weekDays.First(x => x.Value == dow).Key;
             return translation;
         }
+
+
+
+        private Dictionary<DayOfWeek, int> rusOrder = new Dictionary<DayOfWeek, int>()
+        {
+            [DayOfWeek.Monday] = 0,
+            [DayOfWeek.Tuesday] = 1,
+            [DayOfWeek.Wednesday] = 2,
+            [DayOfWeek.Thursday] = 3,
+            [DayOfWeek.Friday] = 4,
+            [DayOfWeek.Saturday] = 5,
+            [DayOfWeek.Sunday] = 6
+        };
+
+        protected virtual DateTime GetCurrentTime() => DateTime.UtcNow;
+
+        public virtual DateTime GetNextSuitableDateNextWeek(DayOfWeek dayOfWeek, int hours)
+        {
+            DateTime now = GetCurrentTime();
+            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddDays(7).AddHours(hours);
+            return date;
+        }
+
+        public virtual DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours, int blockedDays = 3)
+        {
+            DateTime now = GetCurrentTime();
+            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
+            date = (date - now).TotalDays > blockedDays ? date : date.AddDays(7);
+            return date;
+        }
     }
 }

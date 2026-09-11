@@ -21,6 +21,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
     {
         services.AddScoped<EarningCalculationService>();
         services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<PrimumContext>().Set<Lesson>());
+        services.AddScoped<ConverterToDateTimeService>();
         services.AddScoped<LessonBuilder>();
 
         services.AddHttpClient<PublisherService>()

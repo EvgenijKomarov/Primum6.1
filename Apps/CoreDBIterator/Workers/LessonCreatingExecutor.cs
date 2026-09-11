@@ -31,7 +31,6 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Lessons)
                 .Include(x => x.TeacherShedule)
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.UtcNow)
-                .Where(s => AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 .ToArrayAsync();
 
             if (availableForProlongation.Length != 0) 
@@ -49,7 +48,12 @@ namespace CoreDBIterator.Workers
                 {
                     var lesson = await lessonBuilder.Build(s, SlotPickPolicy.NextWeek, SlotConflictPolicy.SkipWeek);
                     context.Set<Lesson>().Add(lesson);
-                    logger?.LogInformation($"Created lesson with Id: {lesson.Id} for {lesson.AbonementId} at {lesson.DateTime}");
+                    logger?.LogInformation($"Created lesson for {lesson.AbonementId} at {lesson.DateTime}");
+                }
+                else
+                {
+                    s.LastIteration = DateTime.UtcNow;
+                    logger?.LogInformation($"Lesson creation iterrupted due to unalive abonement");
                 }
             }
 

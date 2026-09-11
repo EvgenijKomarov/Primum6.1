@@ -1,44 +1,16 @@
-﻿using CoreDBModel.Models;
+﻿using Common.Utilities;
+using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace SharedCoreBusinessLogic
 {
-    public class LessonBuilder(IQueryable<Lesson> lessons)
+    public class LessonBuilder(IQueryable<Lesson> lessons, ConverterToDateTimeService convertionService)
     {
         public decimal CalculatePrice(Abonement abonement) =>
         abonement.Course.FreeLessons > abonement.FreeLessonsSpent()
             ? 0m
             : abonement.PricePerLesson;
-
-
-        private Dictionary<DayOfWeek, int> rusOrder = new Dictionary<DayOfWeek, int>()
-        {
-            [DayOfWeek.Monday] = 0,
-            [DayOfWeek.Tuesday] = 1,
-            [DayOfWeek.Wednesday] = 2,
-            [DayOfWeek.Thursday] = 3,
-            [DayOfWeek.Friday] = 4,
-            [DayOfWeek.Saturday] = 5,
-            [DayOfWeek.Sunday] = 6
-        };
-
-        protected virtual DateTime GetCurrentTime() => DateTime.UtcNow;
-
-        protected virtual DateTime GetNextSuitableDateNextWeek(DayOfWeek dayOfWeek, int hours)
-        {
-            DateTime now = GetCurrentTime();
-            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddDays(7).AddHours(hours);
-            return date;
-        }
-
-        protected virtual DateTime GetNextFreeSuitableDateThisWeek(DayOfWeek dayOfWeek, int hours, int blockedDays = 3)
-        {
-            DateTime now = GetCurrentTime();
-            var date = now.Date.AddDays(rusOrder[dayOfWeek] - rusOrder[now.DayOfWeek]).AddHours(hours);
-            date = (date - now).TotalDays > blockedDays ? date : date.AddDays(7);
-            return date;
-        }
 
         /// <summary>
         /// Проверяет занятость слота. Если занят — либо кидает исключение,
@@ -89,6 +61,8 @@ namespace SharedCoreBusinessLogic
             };
         }
 
+        protected virtual DateTime GetCurrentTime() => DateTime.UtcNow;
+
         /// <summary>
         /// Должны быть подгружены абонемент и расписание препода
         /// </summary>
@@ -106,8 +80,8 @@ namespace SharedCoreBusinessLogic
         {
             var date = pickPolicy switch
             {
-                SlotPickPolicy.Nearest => GetNextFreeSuitableDateThisWeek(abonementSchedule.TeacherShedule.DayOfWeek, abonementSchedule.TeacherShedule.Time),
-                SlotPickPolicy.NextWeek => GetNextSuitableDateNextWeek(abonementSchedule.TeacherShedule.DayOfWeek, abonementSchedule.TeacherShedule.Time),
+                SlotPickPolicy.Nearest => convertionService.GetNextFreeSuitableDateThisWeek(abonementSchedule.TeacherShedule.DayOfWeek, abonementSchedule.TeacherShedule.Time),
+                SlotPickPolicy.NextWeek => convertionService.GetNextSuitableDateNextWeek(abonementSchedule.TeacherShedule.DayOfWeek, abonementSchedule.TeacherShedule.Time),
                 _ => throw new ArgumentOutOfRangeException(nameof(pickPolicy))
             };
             date = await ResolveSlot(abonementSchedule.Abonement.Id, date, conflictPolicy);
