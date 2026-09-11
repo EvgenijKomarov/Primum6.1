@@ -2,6 +2,7 @@
   width: 100%;
   max-width: var(--page-size);
   margin-inline: auto;
+  padding: 2rem;
   padding-inline: 1rem;
 }
 

@@ -1,12 +1,11 @@
 import { clsx } from 'clsx';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 import { useCurrentUser } from '@/entity/user';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
 import Button from '@/shared/ui/Button/Button.tsx';
 
 import styles from './Header.module.css';
-import { NAV_ITEMS } from "@/widgets/header/config";
 import { resolveDisplayName, resolveRoleLabel } from "@/widgets/header/lib";
 import { useEffect, useRef, useState } from 'react';
 import { BellIcon } from '@/shared/icons/types';
@@ -77,8 +76,6 @@ export const Header = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const navItems = NAV_ITEMS[role];
-
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
@@ -98,18 +95,6 @@ export const Header = () => {
       <Link to="/" className={styles.logo}>PrimumCode</Link>
 
       {showActions && (<div className={styles.headerActions}>
-        <nav className={styles.nav}>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) => clsx(styles.navLink, isActive && styles.navLinkActive)}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
         <div className={styles.actions}>
           {user ? (
             <div className={styles.right}>

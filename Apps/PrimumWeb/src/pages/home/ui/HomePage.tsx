@@ -25,39 +25,32 @@ export const HomePage = () => {
           <TypewriterText className={styles.title} text='PrimumCode'/>
           <TypewriterText className={styles.subtitle} text='Там, где идеи становятся кодом'/>
         </div>
-        <ToggleButton 
-          checked={teacherCardsOpen} 
-          onChange={setTeacherCardsOpen} 
+        <ToggleButton
+          checked={teacherCardsOpen}
+          onChange={setTeacherCardsOpen}
           label="Для преподавателя"/>
       </div>
       <div className={styles.blocks}>
-        {teacherCardsOpen ? 
-        <div className={styles.blocks}>
-          <div className={styles.blocksColumn}>
+        {teacherCardsOpen ? (
+          <>
             <CommonTeacherInfoBlock/>
             <ManagementTeacherBlock/>
             <IntegrationTeacherBlock/>
-          </div>
-          <div className={styles.blocksColumn}>
             <GamificationTeacherBlock/>
             <MonetizationTeacherBlock/>
             <HowToBeginTeacherBlock />
-          </div>
-        </div> :
-        <div className={styles.blocks}>
-          <div className={styles.blocksColumn}>
+          </>
+        ) : (
+          <>
             <AboutUsBlock />
             <CoursesBlock />
             <HowToBeginBlock />
-          </div>
-          <div className={styles.blocksColumn}>
             <IntegrationBlock />
             <GamificationBlock />
             <FAQBlock />
-          </div>
-        </div>
-        }
+          </>
+        )}
       </div>
     </div>
   );
-}
+};
