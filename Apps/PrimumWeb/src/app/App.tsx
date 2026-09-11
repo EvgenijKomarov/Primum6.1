@@ -5,12 +5,15 @@ import { ToastProvider } from '@/shared/ui/Toast/ToastContext';
 import { Header } from '@/widgets/header';
 import { ModalRoot } from '@/widgets/modal';
 import { SideNav } from '@/widgets/side-nav/ui/SideNav';
+import { useState } from 'react';
 
 function App() {
+  const [sideOpen, setSideOpen] = useState(false);
+
   return (
     <CurrentUserProvider>
-      <Header />
-      <SideNav />
+      <Header setIsOpen={setSideOpen} isOpen={sideOpen}/>
+      <SideNav isOpen={sideOpen} setIsOpen={setSideOpen}/>
       <ToastProvider>
         <PageContainer>
           <AppRouter />
