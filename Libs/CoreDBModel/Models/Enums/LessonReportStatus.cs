@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreDBModel.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

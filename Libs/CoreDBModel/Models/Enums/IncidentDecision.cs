@@ -17,6 +17,7 @@ namespace CoreDBModel.Models.Enums
         SetMissedByValidReason = 6,
 
         LightBlame = 8,
+        HardBlame = 9,
         Pardon = 10,
     }
 }

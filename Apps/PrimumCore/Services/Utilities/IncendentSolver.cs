@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
+using CoreDBModel.Models.Attributes;
 using CoreDBModel.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
@@ -157,42 +158,115 @@ namespace PrimumCore.Services.Utilities
                     return lesson.Id;
                 }
             },
-            {   
-                IncidentMeaning.LessonReport,//TODO: Допилить 
+            {
+                IncidentMeaning.LessonReport,
                 async (id, decision) =>
                 {
+                    Dictionary<LessonReportStatus, PenaltyRule> penalties = new Dictionary<LessonReportStatus, PenaltyRule>
+                    {
+                        { LessonReportStatus.Ok, new PenaltyRule
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {},
+                                HardPenalty = async (lesson) => {},
+                                BanUser = async (lesson) => {},
+                            }
+                        },
+                        { LessonReportStatus.TeacherHaventConnected, new PenaltyRule // TODO: продумать ролбэк для пропущенных занятий преподом
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Course.Teacher.Experience -= 1000; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Status = LessonStatus.MissedByValidReason;
+                                    lesson.Abonement.FreeLessons += 1;
+                                    lesson.Abonement.Course.Teacher.Experience -= 1000;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Course.Teacher.User.IsBanned = true; },
+                            }
+                        },
+                        { LessonReportStatus.StudentHaventConnected, new PenaltyRule //TODO: мб и не надо штрафовать опытом
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Student.Experience -= 200; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Abonement.Student.Experience -= 500;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Student.User.IsBanned = true; },
+                            }
+                        },
+                        { LessonReportStatus.TeacherInappropriateContent, new PenaltyRule
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Course.Teacher.Experience -= 500; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Abonement.Course.Teacher.Experience -= 1000;
+                                    lesson.Abonement.Course.ApproveStatus = ApproveStatus.NeedModeratorReview;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Course.Teacher.User.IsBanned = true; },
+                            }
+                        },
+                        { LessonReportStatus.TeacherBadBehavior, new PenaltyRule
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Course.Teacher.Experience -= 500; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Abonement.Course.Teacher.Experience -= 1000;
+                                    lesson.Abonement.Course.Teacher.ApproveStatus = ApproveStatus.NeedModeratorReview;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Course.Teacher.User.IsBanned = true; },
+                            }
+                        },
+                        { LessonReportStatus.StudentInappropriateContent, new PenaltyRule
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Student.Experience -= 200; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Abonement.Student.Experience -= 500;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Student.User.IsBanned = true; },
+                            }
+                        },
+                        { LessonReportStatus.StudentBadBehavior, new PenaltyRule
+                            {
+                                Pardon = async (lesson) => {},
+                                LightPenalty = async (lesson) => {lesson.Abonement.Student.Experience -= 200; },
+                                HardPenalty = async (lesson) =>
+                                {
+                                    lesson.Abonement.Student.Experience -= 500;
+                                },
+                                BanUser = async (lesson) => {lesson.Abonement.Student.User.IsBanned = true; },
+                            }
+                        },
+                    };
+
                     var lesson = await dbIterator.Lessons()
                         .One(x => x.Id == id);
-
-                    switch(decision)
+                    if(penalties.TryGetValue(lesson.ReportStatus, out var penalty))
                     {
-                        case IncidentDecision.Pardon:
-                            lesson.ReportStatus = LessonReportStatus.Ok;
-                            break;
-                        case IncidentDecision.LightBlame:
-                            if (lesson.ReportStatus.ToString().StartsWith("Teacher"))
-                            {
-                                lesson.Abonement.Course.Teacher.Experience -= 1000;
-                            }
-                            if (lesson.ReportStatus.ToString().StartsWith("Student"))
-                            {
-                                lesson.Abonement.Student.Experience -= 1000;
-                            }
-                            lesson.ReportStatus = LessonReportStatus.Ok;
-                            break;
-                        case IncidentDecision.BanUser:
-                            if (lesson.ReportStatus.ToString().StartsWith("Teacher"))
-                            {
-                                lesson.Abonement.Course.Teacher.User.IsBanned = true;
-                            }
-                            if (lesson.ReportStatus.ToString().StartsWith("Student"))
-                            {
-                                lesson.Abonement.Student.User.IsBanned = true;
-                            }
-                            lesson.ReportStatus = LessonReportStatus.Ok;
-                            break;
-
+                        switch(decision)
+                        {
+                            case IncidentDecision.Pardon:
+                                penalty.Pardon(lesson);
+                                break;
+                            case IncidentDecision.LightBlame:
+                                penalty.LightPenalty(lesson);
+                                break;
+                            case IncidentDecision.HardBlame:
+                                penalty.HardPenalty(lesson);
+                                break;
+                            case IncidentDecision.BanUser:
+                                penalty.BanUser(lesson);
+                                break;
+                        }
                     }
+                    else throw new ArgumentNullException(nameof(decision));
+
+                    lesson.ReportStatus = LessonReportStatus.Ok;
                     return lesson.Id;
                 }
             }

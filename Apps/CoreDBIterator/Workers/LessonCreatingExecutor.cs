@@ -31,7 +31,7 @@ namespace CoreDBIterator.Workers
                 .ThenInclude(x => x.Lessons)
                 .Include(x => x.TeacherShedule)
                 .Where(s => s.LastIteration.AddDays(7) <= DateTime.UtcNow)
-                .Where(s => s.Abonement.AbonementStatus == AbonementStatus.Active)
+                .Where(s => AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 .ToArrayAsync();
 
             if (availableForProlongation.Length != 0) 
