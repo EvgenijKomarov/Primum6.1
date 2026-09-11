@@ -38,7 +38,7 @@ export const utcToLocal = (utcDay: number, utcHour: number) => {
   // 2024-01-01 был понедельник. Используем его как опорную неделю.
   const date = new Date(Date.UTC(2024, 0, utcDay, utcHour));
   const localDayJs = date.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
-  const localDay = (localDayJs === 0 ? 7 : localDayJs) as DayOfWeek;
+  const localDay = localDayJs as DayOfWeek;
   const localHour = date.getHours();
   return { localDay, localHour };
 };
@@ -48,7 +48,7 @@ export const localToUtc = (localDay: number, localHour: number) => {
   // Создаем дату в локальном часовом поясе браузера
   const date = new Date(2024, 0, localDay, localHour);
   const utcDayJs = date.getUTCDay(); // 0=Вс, 1=Пн, ..., 6=Сб
-  const utcDay = (utcDayJs === 0 ? 7 : utcDayJs) as DayOfWeek;
+  const utcDay = utcDayJs as DayOfWeek;
   const utcHour = date.getUTCHours();
   return { utcDay, utcHour };
 };
