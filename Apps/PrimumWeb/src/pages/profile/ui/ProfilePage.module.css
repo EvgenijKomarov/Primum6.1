@@ -1,13 +1,5 @@
 @reference "@/global.css";
 
-.page {
-  min-height: calc(100vh - 3.75rem);
-  padding: 2.5rem 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
 .container {
   width: 100%;
   display: flex;

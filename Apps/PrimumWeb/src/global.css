@@ -25,7 +25,14 @@
   --color-background-primary-active:  color-mix(in srgb, #e1f018 22%, transparent);
 
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
-  --page-size: 80%;
+  --page-size: 80rem;
+  --page-padding: 1rem;
+  --page-padding-mobile: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.125rem; }
+  h2 { font-size: 16px; }
 }
 
 @font-face {
