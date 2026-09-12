@@ -27,13 +27,11 @@
 }
 
 .headerActions {
-  position: relative;
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-width: 0;
 }
 
 .desktopNav {
@@ -55,7 +53,6 @@
   color: var(--color-primary-base);
   background-color: var(--color-secondary-base);
   text-decoration: none;
-  white-space: nowrap;
   transition: background-color 150ms ease, color 150ms ease;
 }
 
@@ -92,16 +89,12 @@
     display: none;
   }
 
-  .headerActions {
-    justify-content: flex-end;
-  }
-
   .mobileActions {
     display: flex;
   }
 }
 
-/* ---- UserMenu / Notifications (общие для дропдаунов) ---- */
+/* ---- UserMenu / Notifications ---- */
 
 .userMenu {
   position: relative;
@@ -266,7 +259,7 @@
   content: '';
   position: absolute;
   bottom: -0.5rem;
-  right: 0;
+  right: 0rem;
   width: 0;
   height: 0;
   border-style: solid;

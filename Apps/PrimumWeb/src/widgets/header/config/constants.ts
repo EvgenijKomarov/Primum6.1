@@ -1,6 +1,6 @@
 import { Role } from "@/shared/enums/auth.ts";
 
-interface NavItem {
+export interface NavItem {
   label: string;
   path: string;
 }

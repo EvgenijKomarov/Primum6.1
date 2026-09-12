@@ -34,7 +34,6 @@ export const ProfilePage = () => {
     );
   }
 
-  if (!user && userLoading) {navigate('/auth')};
   if(!user) return null;
 
   return (
