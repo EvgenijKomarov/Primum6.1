@@ -6,10 +6,11 @@ import Button from '@/shared/ui/Button/Button.tsx';
 
 import styles from './Header.module.css';
 import { useEffect, useRef, useState } from 'react';
-import { BellIcon } from '@/shared/icons/types';
+import { BellIcon, MenuIcon } from '@/shared/icons/types';
 import { useCommonNotifications } from '@/entity/commonNotification/model/useCommonNotifications';
 import { setSeenNotification } from '@/entity/commonNotification/api/common-notification.api';
 import { formatDateTime } from '@/shared/format/format-config';
+import { SideNav } from '@/widgets/side-nav/ui/SideNav';
 const Notifications = () => {
   const { notifications, isLoading, mutate } = useCommonNotifications();
   const [open, setOpen] = useState(false);
@@ -69,54 +70,47 @@ const Notifications = () => {
 }
 
 
-interface Props {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}
-export const Header = ({isOpen, setIsOpen}: Props) => {
+export const Header = () => {
   const navigate = useNavigate();
   const { user, } = useCurrentUser();
   const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const handleClick = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [open]);
 
   const location = useLocation();
-  const showActions = location.pathname !== '/auth';
+  const showActions = !['/auth'].includes(location.pathname);
+  const showHeader = !['/'].includes(location.pathname);
 
   return (
-    <header className={styles.header}>
-      <Link to="/" className={styles.logo}>PrimumCode</Link>
+    <>
+      {showHeader && (
+        <>
+          <SideNav isOpen={open} setIsOpen={setOpen}/>
+          <header className={styles.header}>
+            <Link to="/profile" className={styles.logo}>PrimumCode</Link>
 
-      {showActions && (<div className={styles.headerActions}>
-        <div className={styles.actions}>
-          {user ? (
-            <div className={styles.right}>
-              <Notifications
-              />
-              <Button 
-                onClick={() => setIsOpen(!isOpen)}/>
-            </div>
-          ) : (
-            <Button
-              variant={ButtonTypeEnum.SECONDARY}
-              size={ButtonSizeEnum.SMALL}
-              onClick={() => navigate('/auth')}
-            >
-              Войти/Зарегистрироваться
-            </Button>
-          )}
-        </div>
-      </div>) }
-    </header>
+            {showActions && (<div className={styles.headerActions}>
+              <div className={styles.actions}>
+                {user ? (
+                  <div className={styles.right}>
+                    <Notifications
+                    />
+                    <Button 
+                      icon={<MenuIcon/>}
+                      onClick={() => setOpen(!open)}/>
+                  </div>
+                ) : (
+                  <Button
+                    variant={ButtonTypeEnum.SECONDARY}
+                    size={ButtonSizeEnum.SMALL}
+                    onClick={() => navigate('/auth')}
+                  >
+                    Войти/Зарегистрироваться
+                  </Button>
+                )}
+              </div>
+            </div>) }
+          </header>
+        </>
+        )}
+    </>
   );
 };

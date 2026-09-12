@@ -34,7 +34,8 @@ export const ProfilePage = () => {
     );
   }
 
-  if (!user) return null;
+  if (!user && userLoading) {navigate('/auth')};
+  if(!user) return null;
 
   return (
     <div className={styles.page}>

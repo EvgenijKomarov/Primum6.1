@@ -16,7 +16,7 @@ export const AuthGuard = ({ children, roles = [] }: AuthGuardProps) => {
   if (!token) return <Navigate to="/auth" replace />;
   if (isLoading) return <Loader />;
   if (!user) return <Navigate to="/auth" replace />;
-  if (roles.length > 0 && !roles.includes(role)) return <Navigate to="/" replace />;
+  if (roles.length > 0 && !roles.includes(role)) return <Navigate to="/profile" replace />;
 
   return <>{children}</>;
 };
