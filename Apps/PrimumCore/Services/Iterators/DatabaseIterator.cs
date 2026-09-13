@@ -45,6 +45,9 @@ namespace PrimumCore.Services.Iterators
             .Include(x => x.User)
             .Include(x => x.Permissions);
 
+        public IQueryable<ConsultationRequest> ConsultationRequests(bool isOnlyUnrevisioned) => context.Set<ConsultationRequest>()
+            .WhereIf(isOnlyUnrevisioned, x => x.IsRevisioned == false);
+
         public IQueryable<CourseTheme> Themes(bool isOnlyAvailable) => context
             .Set<CourseTheme>()
             .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsThemeAvailable);

@@ -9,6 +9,8 @@
 
 .formActions {
   @apply flex gap-[8px] mt-[16px];
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .formError {

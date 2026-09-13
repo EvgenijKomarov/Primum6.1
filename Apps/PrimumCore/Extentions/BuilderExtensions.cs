@@ -48,6 +48,7 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<AllowedAdminsCollector>();
             builder.Services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<DatabaseIterator>().Lessons());
             builder.Services.AddScoped<LessonBuilder>();
+            builder.Services.AddScoped<ConsultationRequestIterator>();
 
             return builder;
         }

@@ -1,6 +1,8 @@
 ﻿using CoreConnection.DTOs;
-using PrimumCore.Entities;
+using CoreConnection.DTOs.Inputs;
+using CoreDBModel.Models;
 using Microsoft.AspNetCore.Mvc;
+using PrimumCore.Entities;
 using PrimumCore.Services.Iterators;
 
 namespace PrimumCore.Controllers
@@ -15,7 +17,8 @@ namespace PrimumCore.Controllers
         TeacherSheduleIterator sheduleIterator,
         ThemeIterator themeIterator,
         RanksIterator ranksIterator,
-        PromocodeIterator promocodeIterator
+        PromocodeIterator promocodeIterator,
+        ConsultationRequestIterator requestIterator
         ) : PrimumController
     {
         [HttpGet("login")]
@@ -85,5 +88,9 @@ namespace PrimumCore.Controllers
         [HttpGet("promocode/{promocodeId}")]
         public async Task<ActionResult<PromocodeDto>> GetPromocode([FromRoute] int promocodeId)
             => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
+
+        [HttpPost("consultation-request")]
+        public async Task<ActionResult<PromocodeDto>> PostRequest([FromBody] ConsultationRequestInput input)
+            => Ok(await requestIterator.CreateConsultationRequest(input));
     }
 }

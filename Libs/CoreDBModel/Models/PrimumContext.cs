@@ -56,6 +56,8 @@ public partial class PrimumContext : DbContext
 
     public virtual DbSet<StudentRank> StudentRanks { get; set; }
 
+    public virtual DbSet<ConsultationRequest> ConsultationRequests { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Abonement>(entity =>
@@ -79,6 +81,18 @@ public partial class PrimumContext : DbContext
             entity.HasOne(d => d.Student).WithMany(p => p.Abonements)
                 .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ConsultationRequest>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Id).IsUnique();
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.IsRevisioned)
+                .HasDefaultValue(false);
         });
 
         modelBuilder.Entity<AbonementShedule>(entity =>
