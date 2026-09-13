@@ -8,10 +8,20 @@
   justify-content: center;
 }
 
-.containerColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.containers {
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.containers > * {
+  break-inside: avoid;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .containers {
+    columns: 1;
+  }
 }
 
 .cardHeader {

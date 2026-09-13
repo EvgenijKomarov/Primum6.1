@@ -39,29 +39,26 @@ export const ProfilePage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <div className={styles.containerColumn}>
+        <div className={styles.containers}>
           <PersonalInfoCard
             user={user}
             onLogout={handleLogout}
           />
           <EmailCard user={user} mutateUser={mutateUser}/>
           {user.mailConfirmed && <ChatBotsCard user={user}/>}
-        </div>
-
-        {user.mailConfirmed ? (
-          <>
-            <div className={styles.containerColumn}>
+          {user.mailConfirmed ? (
+            <>
               <StudentCard user={user} mutateUser={mutateUser}/>
               <TeacherCard user={user} mutateUser={mutateUser}/>
-            </div>
-          </>
-        ) : (
-          <Card width={'40rem'}>
-            <p className={styles.warning}>
-              Подтвердите почту, чтобы получить доступ к созданию профилей ученика и преподавателя.
-            </p>
-          </Card>
-        )}
+            </>
+          ) : (
+            <Card width={'40rem'}>
+              <p className={styles.warning}>
+                Подтвердите почту, чтобы получить доступ к созданию профилей ученика и преподавателя.
+              </p>
+            </Card>
+          )}
+        </div>
 
       </div>
     </div>

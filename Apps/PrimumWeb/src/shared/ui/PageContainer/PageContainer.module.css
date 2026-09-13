@@ -8,6 +8,6 @@
 
 @media (max-width: 640px) {
   .container {
-    padding-inline: 0.75rem;
+    overflow-x: auto;
   }
 }
