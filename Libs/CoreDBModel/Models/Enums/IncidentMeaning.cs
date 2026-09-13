@@ -12,5 +12,6 @@ namespace CoreDBModel.Models.Enums
         Course = 3,
         Lesson = 4,
         LessonReport = 5,
+        Consultation = 6
     }
 }

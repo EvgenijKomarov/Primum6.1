@@ -9,6 +9,7 @@ export type CurrentUserContextValue = {
   setActiveRole: (role: Role) => void;
   isLoading: boolean;
   mutate: () => void;
+  logout: () => Promise<void>;
 };
 
 export const CurrentUserContext = createContext<CurrentUserContextValue | null>(null);

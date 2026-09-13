@@ -11,7 +11,6 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  overflow-x: hidden;
 }
 
 .logo {
@@ -203,6 +202,26 @@
 }
 
 /* ---- Notifications ---- */
+
+.notificationsDropdown {
+  width: 30rem;
+  max-width: calc(100vw - 1.5rem);
+}
+
+@media (max-width: 640px) {
+  .dropdown {
+    right: -0.75rem; /* компенсируем паддинг header, чтобы прижать к правому краю экрана */
+  }
+
+  .notificationsDropdown {
+    width: calc(100vw - 1.5rem);
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .notificationsTabs {
+    max-height: 60vh; /* на мобиле высокий список тоже лучше ограничить по высоте экрана */
+  }
+}
 
 .notificationCount {
   position: absolute;

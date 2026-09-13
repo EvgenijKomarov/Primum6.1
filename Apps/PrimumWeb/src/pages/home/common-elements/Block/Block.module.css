@@ -49,6 +49,7 @@
 @media (max-width: 768px) {
   .cardContent {
     flex-direction: column;
+    height: 100% !important;
   }
   .cardImage, .cardChild {
     width: 100% !important;

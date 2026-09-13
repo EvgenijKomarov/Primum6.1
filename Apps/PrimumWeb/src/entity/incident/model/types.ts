@@ -14,7 +14,8 @@ export enum IncidentMeaning {
     Student = 2,
     Course = 3,
     Lesson = 4,
-    LessonReport = 5
+    LessonReport = 5,
+    Consultation = 6,
 }
 
 export enum IncidentDecision {

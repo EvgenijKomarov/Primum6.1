@@ -28,7 +28,7 @@ export const Header = () => {
 
   return (
     <header className={styles.header}>
-      <Link to="/profile" className={styles.logo}>PrimumCode</Link>
+      <Link to={showActions ? '/profile' : '/'} className={styles.logo}>PrimumCode</Link>
 
       {showActions && (
         <div className={styles.headerActions}>
@@ -50,6 +50,7 @@ export const Header = () => {
           </div>
 
           <div className={styles.mobileActions}>
+            <Notifications />
             <Button
               size={ButtonSizeEnum.NORMAL}
               icon={<MenuIcon />}

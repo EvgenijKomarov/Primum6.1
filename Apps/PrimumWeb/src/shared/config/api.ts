@@ -7,6 +7,9 @@ export const api = {
     self: "/admin",
     other: "/admin/other-admins",
   },
+  publicConsultation: {
+    base: "/public/consultation"
+  },
   userNotifications: {
     getAll: "/user/common-notifications",
     setSeen: "/user/common-notifications/set-seen"

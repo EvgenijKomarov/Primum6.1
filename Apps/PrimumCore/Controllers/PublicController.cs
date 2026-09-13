@@ -90,7 +90,7 @@ namespace PrimumCore.Controllers
             => Ok(await promocodeIterator.GetPromocode(promocodeId, true));
 
         [HttpPost("consultation-request")]
-        public async Task<ActionResult<PromocodeDto>> PostRequest([FromBody] ConsultationRequestInput input)
+        public async Task<ActionResult<int>> PostRequest([FromBody] ConsultationRequestInput input)
             => Ok(await requestIterator.CreateConsultationRequest(input));
     }
 }

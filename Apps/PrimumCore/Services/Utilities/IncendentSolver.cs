@@ -158,6 +158,26 @@ namespace PrimumCore.Services.Utilities
                     return lesson.Id;
                 }
             },
+            { 
+                IncidentMeaning.Consultation,
+                async (id, decision) =>
+                {
+                    var req = await dbIterator.ConsultationRequests(false)
+                        .One(x => x.Id == id);
+
+                    switch(decision)
+                    {
+                        case IncidentDecision.Revise:
+                            req.IsRevisioned = true;
+                            break;
+                        case IncidentDecision.Delete:
+                            await dbIterator.RemoveAsync(req);
+                            break;
+
+                    }
+                    return req.Id;
+                }
+            },
             {
                 IncidentMeaning.LessonReport,
                 async (id, decision) =>

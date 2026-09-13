@@ -148,6 +148,12 @@ namespace PrimumCore.Services.Utilities
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.LessonReport, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
+                Permission.InspectConsultationRequests =>
+                    await dbIterator.ConsultationRequests(false)
+                        .Where(x => x.IsRevisioned == false)
+                        .Select(x => new IncidentKey(x.Id, IncidentMeaning.Consultation, permission, x.Id))
+                        .ToListAsync(cancellationToken),
+
                 _ => new List<IncidentKey>()
             };
         }
@@ -251,6 +257,21 @@ namespace PrimumCore.Services.Utilities
                             $"CourseTheme: {x.Abonement.Course.CourseTheme.ThemeName}\n" +
                             $"DateTime (UTC): {x.DateTime:HH:mm dd.MM.yyyy}\n" +
                             $"\nReport: {x.ReportStatus}",
+                        LinkedLogs = null
+                    }).FirstOrDefaultAsync(cancellationToken),
+
+                IncidentMeaning.Consultation => await dbIterator.ConsultationRequests(false)
+                    .Where(x => x.Id == key.ObjectId)
+                    .Select(x => new IncidentDto
+                    {
+                        ObjectId = x.Id,
+                        Status = IncidentStatus.NeedInspectation,
+                        Meaning = IncidentMeaning.Consultation,
+                        Decisions = decisions,
+                        CommonInfo =
+                            $"DisplayName: {x.DisplayName}\n" +
+                            $"Email: {x.Email}\n" +
+                            $"Phone: {x.PhoneNumber}",
                         LinkedLogs = null
                     }).FirstOrDefaultAsync(cancellationToken),
 

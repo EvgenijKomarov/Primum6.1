@@ -36,6 +36,7 @@ const INCIDENT_MEANINGS: Record<IncidentMeaning, string> = {
     [IncidentMeaning.Course]: 'Курс',
     [IncidentMeaning.Lesson]: 'Занятие',
     [IncidentMeaning.LessonReport]: 'Жалоба на занятие',
+    [IncidentMeaning.Consultation]: 'Консультация',
 }
 
 const INCIDENT_DECISIONS: Record<IncidentDecision, string> = {

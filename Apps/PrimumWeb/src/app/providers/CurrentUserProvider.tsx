@@ -43,9 +43,19 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
     setActiveRoleState(newRole);
   }, []);
 
+  // Явная очистка кэша юзера — не полагаемся на побочный эффект
+  // неудачного рефетча после выхода из аккаунта
+  const logout = useCallback(async () => {
+    await mutate(undefined, { revalidate: false });
+  }, [mutate]);
+
+  const refetch = useCallback(() => {
+    mutate();
+  }, [mutate]);
+
   const value = useMemo(
-    () => ({ user, role, availableRoles, setActiveRole, isLoading, mutate }),
-    [user, role, availableRoles, setActiveRole, isLoading, mutate]
+    () => ({ user, role, availableRoles, setActiveRole, isLoading, mutate: refetch, logout }),
+    [user, role, availableRoles, setActiveRole, isLoading, refetch, logout]
   );
 
   return (

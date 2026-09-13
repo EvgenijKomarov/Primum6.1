@@ -46,5 +46,8 @@ namespace CoreDBModel.Models.Enums
         [AvailableIncident(IncidentMeaning.LessonReport, IncidentDecision.BanUser)]
         [AvailableIncident(IncidentMeaning.LessonReport, IncidentDecision.Pardon)]
         InspectReportedLessons = 20,
+        [AvailableIncident(IncidentMeaning.Consultation, IncidentDecision.Delete)]
+        [AvailableIncident(IncidentMeaning.Consultation, IncidentDecision.Revise)]
+        InspectConsultationRequests = 21
     }
 }

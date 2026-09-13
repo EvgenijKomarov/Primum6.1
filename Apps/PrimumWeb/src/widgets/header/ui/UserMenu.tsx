@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 import clsx from 'clsx';
 
 import { useCurrentUser } from '@/entity/user';
@@ -11,7 +10,6 @@ import styles from './Header.module.css';
 import { useOnClickOutside } from '@/shared/lib/useOnClickOutside/useOnClickOutside';
 
 export const UserMenu = () => {
-  const navigate = useNavigate();
   const { user, role, setActiveRole, availableRoles } = useCurrentUser();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -19,11 +17,7 @@ export const UserMenu = () => {
   useOnClickOutside(rootRef, () => setIsOpen(false), isOpen);
 
   if (!user) {
-    return (
-      <Button variant={ButtonTypeEnum.SECONDARY} size={ButtonSizeEnum.SMALL} onClick={() => navigate('/auth')}>
-        Войти/Зарегистрироваться
-      </Button>
-    );
+    return null;
   }
 
   return (

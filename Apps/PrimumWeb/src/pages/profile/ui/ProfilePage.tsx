@@ -15,11 +15,11 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
   const clearStore = useUserStore((s) => s.clear);
 
-  const { user, isLoading: userLoading, mutate: mutateUser } = useCurrentUser();
+  const { user, isLoading: userLoading, mutate: mutateUser, logout } = useCurrentUser();
 
   const handleLogout = async () => {
+    await logout(); // явно чистим кэш юзера
     clearStore();
-    await mutateUser();
     navigate('/auth', { replace: true });
   };
 

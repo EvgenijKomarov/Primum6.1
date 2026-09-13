@@ -25,7 +25,7 @@ export const Notifications = () => {
   };
 
   return (
-    <div className={styles.userMenu} ref={rootRef}>
+    <div className={styles.userMenu} ref={rootRef} style = {{zIndex: '1'}}>
       <Button
         variant={ButtonTypeEnum.PRIMARY}
         size={ButtonSizeEnum.SMALL}
@@ -37,7 +37,7 @@ export const Notifications = () => {
       </Button>
 
       {isOpen && (
-        <div className={styles.dropdown} style={{ width: '30rem' }}>
+        <div className={`${styles.dropdown} ${styles.notificationsDropdown}`}>
           {notifications.length === 0 ? (
             <span className={styles.notificationText}>Уведомлений нет</span>
           ) : (
