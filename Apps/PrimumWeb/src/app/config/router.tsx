@@ -19,9 +19,10 @@ interface RouteDef {
   path: string;
   element: ReactNode;
   roles?: Role[];
+  noLayout?: boolean;
 }
 
-interface PrivateRoute extends RouteDef {
+export interface PrivateRoute extends RouteDef {
   id: number;
 }
 
@@ -33,6 +34,7 @@ const ROUTES_DEF: RouteDef[] = [
   {
     path: '/',
     element: <HomePage />,
+    noLayout: true,
   },
   {
     path: '/profile',
