@@ -13,11 +13,6 @@
 
 .buttonContainer{
     justify-items: center;
-
-}
-
-.content {
-    margin: 1rem;
 }
 
 .description {
@@ -30,4 +25,15 @@
     display: flex;
     flex-direction: row;
     gap: 0.6rem;
+    margin: 1rem;
+}
+
+@media (max-width: 620px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .buttons {
+    width: 100%;
+  }
 }

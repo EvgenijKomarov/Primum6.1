@@ -20,3 +20,10 @@
     transform: translateY(-0.3rem);
     box-shadow: var(--card-shadow);
 }
+
+@media (max-width: 620px) {
+  .card {
+    width: 100vw;
+    overflow-x: auto;
+  }
+}

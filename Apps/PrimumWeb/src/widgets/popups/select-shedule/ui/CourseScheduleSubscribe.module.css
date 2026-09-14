@@ -1,5 +1,14 @@
 @reference "@/global.css";
 
+
+
+@media (max-width: 620px) {
+  .content {
+    width: 150vw;
+  }
+}
+
+
 /* ── Course summary ── */
 .courseInfo {
   background-color: var(--color-secondary-darkest);
@@ -178,6 +187,7 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  justify-content: space-between;
 }
 
 .confirmLabel {

@@ -89,3 +89,10 @@
     font-weight: 500;
     padding: 0.2rem 0.55rem;
 }
+
+@media (max-width: 620px) {
+  .info {
+    width: 100vw;
+    overflow-x: auto;
+  }
+}
