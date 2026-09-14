@@ -1,7 +1,7 @@
 .card {
   padding: 25px;
 
-  background: var(#2d2d2c);
+  background: #2d2d2c;
 
   border: 2px solid var(--color-secondary-base);
 }
