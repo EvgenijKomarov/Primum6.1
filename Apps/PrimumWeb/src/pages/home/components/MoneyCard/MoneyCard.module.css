@@ -1,0 +1,28 @@
+.card {
+  min-height: 200px;
+
+  padding: 30px 22px;
+
+  background: #343433;
+
+  border: 2px solid var(--color-secondary-base);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.percent {
+  color: var(--color-primary-base);
+
+  font-size: 21px;
+
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 10px;
+  line-height: 1.8;
+}

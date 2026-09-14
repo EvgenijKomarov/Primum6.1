@@ -1,0 +1,22 @@
+.card {
+  padding: 25px;
+
+  background: var(#2d2d2c);
+
+  border: 2px solid var(--color-secondary-base);
+}
+
+.card strong {
+  display: block;
+
+  color: var(--color-primary-base);
+
+  font-size: 10px;
+
+  margin-bottom: 13px;
+}
+
+.card span {
+  color: var(--color-muted);
+  font-size: 16px;
+}

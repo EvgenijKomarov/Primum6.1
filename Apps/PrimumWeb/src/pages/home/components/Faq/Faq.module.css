@@ -1,0 +1,39 @@
+.section {
+  padding: 140px 0;
+  background: var(--color-black);
+
+  border-top: 2px solid var(--color-secondary-base);
+}
+
+.head {
+  text-align: center;
+}
+
+.label {
+  color: var(--color-primary-base);
+
+  font-size: 9px;
+
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: clamp(27px, 4vw, 44px);
+  line-height: 1.45;
+}
+
+.list {
+  max-width: 900px;
+
+  margin: 60px auto 0;
+}
+
+@media (max-width: 620px) {
+  .section {
+    padding: 90px 0;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}

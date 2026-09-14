@@ -1,0 +1,57 @@
+.section {
+  padding: 10vh;
+  background: var(--color-primary-base);
+  color: var(--color-black);
+}
+
+.label {
+  color: var(--color-black);
+
+  font-size: 9px;
+
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 80px;
+
+  align-items: center;
+}
+
+.title {
+  max-width: 600px;
+
+  font-size: clamp(27px, 4vw, 44px);
+  line-height: 1.45;
+
+  margin-bottom: 25px;
+}
+
+.description {
+  max-width: 600px;
+
+  font-size: 23px;
+}
+
+@media (max-width: 950px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .section {
+    padding: 90px 0;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .form {
+    padding: 23px;
+  }
+}

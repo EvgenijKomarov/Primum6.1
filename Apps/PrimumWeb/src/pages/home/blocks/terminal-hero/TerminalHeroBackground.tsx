@@ -232,8 +232,16 @@ export default function TerminalHeroBackground({
         zIndex,
         pointerEvents: "none",
         overflow: "hidden",
+        backgroundColor: "var(--color-black)"
       }}
     >
+      <style>{`
+        @media (max-width: 768px) {
+          .terminal-hero-bg {
+            display: none !important;
+          }
+        }
+      `}</style>
       <div
         ref={scrollRef}
         style={{

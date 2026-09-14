@@ -1,0 +1,33 @@
+.btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 56px;
+
+  padding: 17px 25px;
+
+  border: 2px solid var(--color-primary-base);
+
+  font-size: 10px;
+
+  transition: .15s;
+}
+
+.primary {
+  background: var(--color-primary-base);
+  color: var(--color-black);
+
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.primary:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.outline:hover {
+  background: var(--color-primary-base);
+  color: var(--color-black);
+}

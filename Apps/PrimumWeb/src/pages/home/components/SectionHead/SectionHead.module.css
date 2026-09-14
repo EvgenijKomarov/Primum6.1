@@ -1,0 +1,32 @@
+.head {
+  margin-bottom: 65px;
+}
+
+.label {
+  color: var(--color-primary-base);
+
+  font-size: 9px;
+
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: clamp(27px, 4vw, 44px);
+  line-height: 1.45;
+
+  margin-bottom: 25px;
+}
+
+.description {
+  max-width: 700px;
+
+  color: var(--color-muted);
+
+  font-size: 22px;
+}
+
+@media (max-width: 620px) {
+  .title {
+    font-size: 24px;
+  }
+}

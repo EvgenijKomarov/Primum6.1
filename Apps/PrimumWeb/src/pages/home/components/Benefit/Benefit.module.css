@@ -1,0 +1,20 @@
+.benefit {
+  padding: 30px;
+
+  background: #343433;
+
+  border: 2px solid var(--color-secondary-base);
+}
+
+.title {
+  color: var(--color-primary-base);
+
+  font-size: 10px;
+
+  margin-bottom: 13px;
+}
+
+.description {
+  color: var(--color-muted);
+  font-size: 17px;
+}

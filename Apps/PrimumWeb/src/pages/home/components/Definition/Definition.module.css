@@ -1,0 +1,22 @@
+.definition {
+  padding: 28px;
+
+  border-left: 3px solid var(--color-primary-base);
+
+  background: var(#272727);
+}
+
+.definition strong {
+  display: block;
+
+  color: var(--color-primary-base);
+
+  font-size: 10px;
+
+  margin-bottom: 14px;
+}
+
+.definition p {
+  color: var(--color-muted);
+  font-size: 16px;
+}

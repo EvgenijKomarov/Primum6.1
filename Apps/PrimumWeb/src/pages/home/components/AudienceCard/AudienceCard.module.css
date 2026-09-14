@@ -1,0 +1,35 @@
+.card {
+  min-width: 245px;
+
+  padding: 20px 24px;
+
+  border: 2px solid var(--color-secondary-base);
+  background: rgba(39, 39, 39, .9);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  transition: .2s;
+}
+
+.card:hover {
+  border-color: var(--color-primary-base);
+  transform: translateY(-4px);
+}
+
+.card span:first-child {
+  font-size: 10px;
+}
+
+.arrow {
+  color: var(--color-primary-base);
+  font-size: 12px;
+  padding-left: 1rem;
+}
+
+@media (max-width: 620px) {
+  .card {
+    width: 100%;
+  }
+}

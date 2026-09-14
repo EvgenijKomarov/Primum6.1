@@ -1,0 +1,35 @@
+.feature {
+  display: flex;
+
+  gap: 20px;
+
+  padding: 24px 0;
+
+  border-bottom: 1px solid var(--color-secondary-base);
+}
+
+.number {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--color-primary-base);
+  color: var(--color-black);
+
+  font-size: 9px;
+}
+
+.title {
+  font-size: 11px;
+
+  margin-bottom: 9px;
+}
+
+.description {
+  color: var(--color-muted);
+  font-size: 17px;
+}

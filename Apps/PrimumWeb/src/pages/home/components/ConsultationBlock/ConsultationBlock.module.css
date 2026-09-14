@@ -1,0 +1,43 @@
+.form {
+  padding: 38px;
+
+  background: var(--color-secondary-base);
+
+  box-shadow: 12px 12px 0 var(--color-secondary-dark);
+}
+
+.form input {
+  width: 100%;
+
+  padding: 17px;
+
+  margin-bottom: 15px;
+
+  border: 2px solid var(--color-secondary-base);
+
+  outline: none;
+
+  background: #272727;
+
+  color: var(--color-white);
+
+  font-size: 14px;
+}
+
+.form input:focus {
+  border-color: var(--color-primary-base);
+}
+
+.form button {
+  width: 100%;
+
+  padding: 19px;
+
+  border: none;
+
+  background: var(--color-primary-base);
+  color: var(--color-black);
+  font-size: 10px;
+
+  cursor: pointer;
+}

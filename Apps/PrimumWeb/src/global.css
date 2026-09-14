@@ -24,6 +24,13 @@
   --color-background-primary-hover:   color-mix(in srgb, #e1f018 12%, transparent);
   --color-background-primary-active:  color-mix(in srgb, #e1f018 22%, transparent);
 
+
+  --color-secondary-surface: #2d2d2c;
+  --color-secondary-card:    #343433;
+  --color-black:             #151515;
+  --color-white:             #ffffff;
+  --color-muted: #a9a9a5;
+
   --card-shadow: 0.5rem 0.5rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
   --page-size: 90rem;
   --page-padding: 1rem;
