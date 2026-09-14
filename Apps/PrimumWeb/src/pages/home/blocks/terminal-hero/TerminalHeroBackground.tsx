@@ -157,6 +157,7 @@ const DEFAULT_LINES = [
  
 const ACCENT = "var(--color-secondary-base)";
 const TEXT = "var(--color-secondary-base)";
+const MAX_HISTORY = 60;
  
 export default function TerminalHeroBackground({
   lines = DEFAULT_LINES,
@@ -185,7 +186,6 @@ export default function TerminalHeroBackground({
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => {
-        setHistory([]);
         setCurrent("");
         setLineIndex(0);
         setCharIndex(0);
@@ -204,7 +204,11 @@ export default function TerminalHeroBackground({
     }
  
     const t = setTimeout(() => {
-      setHistory((h) => [...h, fullLine]);
+      setHistory((h) => {
+        const next = [...h, fullLine];
+        // не даём истории расти бесконечно — держим только последние N строк
+        return next.length > MAX_HISTORY ? next.slice(next.length - MAX_HISTORY) : next;
+      });
       setCurrent("");
       setCharIndex(0);
       setLineIndex((i) => i + 1);

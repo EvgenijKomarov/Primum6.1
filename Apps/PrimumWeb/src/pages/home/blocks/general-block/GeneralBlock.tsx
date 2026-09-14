@@ -31,7 +31,7 @@ export const GeneralBlock = () => {
                 <>
                     <button 
                         className={styles.btn}
-                        style={{padding: '1rem'}}
+                        style={{padding: '25px 32px'}}
                         onClick={() => navigate('/profile')}>
                     {`Войти как ${user.name}`}
                     </button>

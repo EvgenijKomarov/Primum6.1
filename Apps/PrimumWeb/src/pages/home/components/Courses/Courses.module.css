@@ -1,6 +1,7 @@
 .section {
   padding: 10vh;
   background: var(--color-black);
+  min-height: 80vh;
 }
 
 .grid {
@@ -9,6 +10,107 @@
 
   gap: 28px;
 }
+
+.course {
+  background: #343433;
+
+  border: 2px solid var(--color-secondary-base);
+
+  overflow: hidden;
+
+  transition: .2s;
+}
+
+.course:hover {
+  border-color: var(--color-primary-base);
+  transform: translateY(-5px);
+}
+
+.course img {
+  height: 290px;
+
+  object-fit: cover;
+
+  filter:
+    grayscale(.75)
+    contrast(1.1)
+    brightness(.82);
+}
+
+.content {
+  padding: 32px;
+}
+
+.code {
+  color: var(--color-primary-base);
+
+  font-size: 8px;
+
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: 18px;
+  line-height: 1.5;
+
+  margin-bottom: 16px;
+}
+
+.description {
+  min-height: 60px;
+
+  color: var(--color-muted);
+
+  margin-bottom: 30px;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  padding: 20px 0;
+
+  border-top: 1px solid var(--color-secondary-base);
+  border-bottom: 1px solid var(--color-secondary-base);
+
+  margin-bottom: 25px;
+}
+
+.info small {
+  display: block;
+
+  color: var(--color-muted);
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+.info strong {
+  font-size: 9px;
+}
+
+.bottom {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.teacher {
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+.price {
+  color: var(--color-primary-base);
+  font-size: 16px;
+
+  white-space: nowrap;
+}
+
 
 @media (max-width: 950px) {
   .grid {
@@ -19,5 +121,67 @@
 @media (max-width: 620px) {
   .section {
     padding: 90px 0;
+  }
+}
+
+
+.themes {
+  display: flex;
+  gap: 12px;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 28px 0 12px;
+  margin-bottom: 20px;
+
+  scrollbar-width: thin;
+}
+
+.themes::-webkit-scrollbar {
+  height: 4px;
+}
+
+.themes::-webkit-scrollbar-thumb {
+  background: var(--color-secondary-base);
+}
+
+.theme {
+  flex: 0 0 auto;
+
+  padding: 10px 20px;
+
+  border: 1px solid var(--color-secondary-base);
+  background: transparent;
+
+  color: var(--color-muted);
+  font-size: 13px;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: .2s;
+}
+
+.theme:hover {
+  border-color: var(--color-primary-base);
+  color: var(--color-white, #fff);
+}
+
+.themeActive {
+  border-color: var(--color-primary-base);
+  background: var(--color-primary-base);
+  color: var(--color-black);
+}
+
+@media (max-width: 620px) {
+  .themes {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .theme {
+    width: 100%;
+    text-align: left;
   }
 }
