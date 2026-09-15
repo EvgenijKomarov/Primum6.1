@@ -35,6 +35,7 @@ const CreatePromocodePopup = ({onClose, onMutate}: {onClose:() => void, onMutate
         };
         await addPromocode(dto);
         onMutate();
+        onClose();
       });
     
 

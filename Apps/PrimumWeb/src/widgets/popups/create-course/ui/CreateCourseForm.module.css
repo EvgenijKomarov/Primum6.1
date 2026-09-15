@@ -76,3 +76,9 @@
   height: 5rem;
   overflow-y: auto;
 }
+
+@media (max-width: 640px) {
+  .field {
+    justify-content: space-between;
+  }
+}

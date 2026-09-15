@@ -150,7 +150,7 @@ const UpcomingTab = () => {
     </div>
   );
 
-  return <>{groups.map((g) => <DateGroup key={g.date} group={g} />)}</>;
+  return <>{groups.map((g) => <div className={styles.lesson}><DateGroup key={g.date} group={g} /></div>)}</>;
 };
 
 const HistoryTab = () => {
@@ -171,7 +171,7 @@ const HistoryTab = () => {
 
   return (
     <div className={styles.lessonList}>
-      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} } onMutate={mutate}/>)}
+      {lessons.map((l) => <div className={styles.lesson}><HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} } onMutate={mutate}/></div>)}
     </div>
   );
 };

@@ -41,6 +41,17 @@
   flex-direction: column;
 }
 
+@media (max-width: 640px) {
+  .courseThemeTabContent {
+    padding-bottom: 1rem;
+    overflow-x: auto;
+  }
+
+  .card {
+    object-fit: contain;
+  }
+}
+
 .cardName {
   font-size: 1rem;
   font-weight: 600;

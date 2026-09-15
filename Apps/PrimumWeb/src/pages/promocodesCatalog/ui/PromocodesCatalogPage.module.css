@@ -122,6 +122,19 @@
   background-color: var(--color-secondary-dark);
   border-radius: 3px;
 }
+@media (max-width: 640px) {
+  .cardDescription {
+    height: 40rem;
+  }
+  .content {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .cardContent {
+    flex-direction: column;
+  }
+}
 .cardDescription::-webkit-scrollbar {
   width: 6px;
 }

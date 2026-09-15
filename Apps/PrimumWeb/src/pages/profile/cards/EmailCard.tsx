@@ -24,6 +24,7 @@ export const EmailCard = ({ user, mutateUser }: Props) => {
   const { showToast } = useToast();
 
   useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (user?.email) setEmail(user.email);
     }, [user?.email]);
 

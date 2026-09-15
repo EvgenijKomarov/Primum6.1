@@ -111,3 +111,42 @@
   color: var(--color-functional-error);
   margin-top: 0.125rem;
 }
+
+@media (max-width: 640px) {
+  .themesList {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .promocodesList {
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rowDescription {
+    height: 5rem;
+    width: 69%;
+    overflow-x: unset;
+    overflow-y: auto;
+  }
+
+  .row {
+    width: 55rem;
+  }
+
+  .rowSmall {
+    width: 35rem;
+  }
+
+  .listHeader {
+    flex-direction: column;
+  }
+
+  .textarea {
+    width: 20rem;
+    font-size: 0.8rem;
+  }
+}

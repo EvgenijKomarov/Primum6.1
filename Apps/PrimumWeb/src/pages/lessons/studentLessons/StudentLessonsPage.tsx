@@ -141,7 +141,10 @@ const DateGroup = ({ group, onMutate }: { group: LessonsByDateDto, onMutate: () 
         {today && <span className={styles.dateHeadingToday}>Сегодня</span>}
       </div>
       <div className={styles.lessonList}>
-        {group.lessons.map((l) => <UpcomingCard key={l.id} lesson={l} onMutate={onMutate} />)}
+        {group.lessons.map((l) => 
+          <div className={styles.lesson}>
+            <UpcomingCard key={l.id} lesson={l} onMutate={onMutate} />
+          </div>)}
       </div>
     </div>
   );
@@ -165,7 +168,11 @@ const UpcomingTab = () => {
     </div>
   );
 
-  return <>{groups.map((g) => <DateGroup key={g.date} group={g} onMutate={mutate}/>)}</>;
+  return <>{groups.map((g) => 
+      <div className={styles.lesson}>
+        <DateGroup key={g.date} group={g} onMutate={mutate}/>
+      </div>)}
+    </>;
 };
 
 const HistoryTab = () => {
@@ -186,7 +193,10 @@ const HistoryTab = () => {
 
   return (
     <div className={styles.lessonList}>
-      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onMutate={() => mutate()}/>)}
+      {lessons.map((l) => 
+        <div className={styles.lesson}>
+          <HistoryCard key={l.id} lesson={l} onMutate={() => mutate()}/>
+        </div>)}
     </div>
   );
 };

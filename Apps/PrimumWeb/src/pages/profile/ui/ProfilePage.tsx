@@ -38,7 +38,6 @@ export const ProfilePage = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.container}>
         <div className={styles.containers}>
           <PersonalInfoCard
             user={user}
@@ -59,8 +58,6 @@ export const ProfilePage = () => {
             </Card>
           )}
         </div>
-
-      </div>
     </div>
   );
 };

@@ -64,7 +64,7 @@ const PromocodeCard = ({ promocode, studentCoins, mutateEntities }: PromocodeCar
                                             <span className={styles.cardCodeValue}>Код скрыт</span>
                                         )}
                                         <Button onClick={() => {setShowCode(!showCode)}}>
-                                            {`Нажмите, чтобы ${showCode ? 'скрыть' : 'показать'} промокод`}
+                                            {`${showCode ? 'Скрыть' : 'Показать'} промокод`}
                                         </Button>
                                     </div>
                             </div>

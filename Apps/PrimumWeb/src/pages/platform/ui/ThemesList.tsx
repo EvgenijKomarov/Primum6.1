@@ -123,7 +123,7 @@ export const ThemesList = (admin: AdminProfileDto | undefined) => {
     const [createPopupOpen, setCreatePopupOpen] = useState(false);
 
     return (
-        <div className={styles.promocodesPage}>
+        <div className={styles.themesPage}>
             <div className={styles.listHeader}>
                 <Button 
                         disabled={!admin?.permissions['EditCourseThemes']}

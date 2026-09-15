@@ -41,14 +41,14 @@ const LogsPopup = ({adminUserId, onClose}: {adminUserId?: number, onClose: () =>
     return (
         <Popup title='Логи действий' onClose={onClose}>
             <div className={styles.logContent}>
-                <p className={styles.onlyUnrevisioned}>
+                <div className={styles.onlyUnrevisioned}>
                     Только непроверенные
                     <input
                         type="checkbox"
                         checked={isOnlyRevisioned}
                         onChange={(e) => setIsOnlyRevisioned(e.target.checked)}
                     />
-                </p>
+                </div>
                 <div className={styles.logsList}>
                     {isLoading ? <Loader/> : logs.map((log)=><LogCard incidentLog={log} onMutate={async () => await mutate()}/>)}
                 </div>

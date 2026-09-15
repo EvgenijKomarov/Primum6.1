@@ -150,3 +150,39 @@
   font-size: 0.9375rem;
   margin: 0;
 }
+
+@media (max-width: 640px) {
+  .incidentFooter {
+    flex-direction: column;
+    height: 10rem;
+  }
+
+  .incidentDetails {
+    flex-direction: column;
+    height: 25rem;
+  }
+
+  .textarea {
+    width: 100%;
+  }
+
+  .incidentDecisions {
+    width: 100%;
+  }
+
+  .incidentInfo {
+    width: 100%;
+  }
+
+  .incidentHistory {
+    width: 100%;
+    border: 1px solid var(--color-secondary-dark)
+  }
+
+  .incidentLog {
+    width: 30rem;
+  }
+
+  .incidentBody {
+  }
+}

@@ -28,6 +28,12 @@
   transform: translateY(0) scale(1);
 }
 
+@media (max-width: 640px) {
+  .toast {
+    font-size: 10px;
+  }
+}
+
 .success  { background: #1D9E75; }
 .error    { background: #E24B4A; }
 .info     { background: #378ADD; }

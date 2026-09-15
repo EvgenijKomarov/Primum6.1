@@ -21,9 +21,11 @@
     box-shadow: var(--card-shadow);
 }
 
-@media (max-width: 620px) {
+@media (max-width: 640px) {
   .card {
     width: 100vw;
     overflow-x: auto;
+    transform: translateY(-0.1rem);
+    box-shadow: 0.3rem 0.3rem 0rem color-mix(in srgb, var(--color-secondary-dark) 90%, transparent);
   }
 }

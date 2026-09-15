@@ -213,6 +213,38 @@
   flex-shrink: 0;
 }
 
+@media (max-width: 640px) {
+  .lessonList {
+    overflow-x: auto;
+  }
+  .lessonList::-webkit-scrollbar {
+    height: 0;
+  }
+
+  .cardItem {
+    flex: 0 0 60rem;
+    width: 60rem;
+    scroll-snap-align: start;
+  }
+
+  .lesson {
+    width: 80rem;
+  }
+
+  .card {
+    flex-wrap: nowrap;
+  }
+
+  .cardMeta {
+    flex-wrap: nowrap;
+  }
+
+  .cardInfo {
+    flex-direction: column;
+    gap:0.5rem;
+  }
+}
+
 /* ── Link button ── */
 .linkBtn {
   display: inline-flex;
