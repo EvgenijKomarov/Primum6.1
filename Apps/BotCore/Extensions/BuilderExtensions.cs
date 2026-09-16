@@ -72,10 +72,6 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<StudentAbonementDeleteNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementActivateDeactivateNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentBoughtPromocodesNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentSubscribeCourseNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentExploreTeacherShedulesNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentExploreCoursesByThemeNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentExploreThemesNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherAllLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherAbonementsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherCoursesNode, DataBuffer, EngineOutputMessage>();

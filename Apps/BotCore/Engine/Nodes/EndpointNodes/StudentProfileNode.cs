@@ -39,11 +39,6 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                     },
                     new EngineOutputButton
                     {
-                        Text = $"{Emoticons.Theme}Доступные курсы по темам",
-                        EndpointNode = typeof(StudentExploreThemesNode)
-                    },
-                    new EngineOutputButton
-                    {
                         Text = $"{Emoticons.Promocode}Мои промокоды",
                         EndpointNode = typeof(StudentBoughtPromocodesNode)
                     },

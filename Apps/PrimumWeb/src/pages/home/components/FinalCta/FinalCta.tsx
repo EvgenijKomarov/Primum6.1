@@ -16,14 +16,15 @@ interface FinalCtaProps {
 }
 
 const defaultActions: FinalCtaAction[] = [
-  { href: '#students', label: 'НАЧАТЬ УЧИТЬСЯ', variant: 'primary' },
-  { href: '#teachers', label: 'СТАТЬ ПРЕПОДАВАТЕЛЕМ', variant: 'outline' },
+  { href: '#main', label: 'ЗАРЕГИСТРИРОВАТЬСЯ', variant: 'primary' },
+  { href: '#teachers', label: 'ПРЕПОДАВАТЕЛЯМ', variant: 'outline' },
+  { href: '#students', label: 'БУДУЩИМ УЧЕНИКАМ', variant: 'outline' },
 ]
 
 export default function FinalCta({
   label = '// SYSTEM READY',
   title = 'Готовы начать?',
-  description = 'Выберите свой путь в PrimumCode — учиться или преподавать.',
+  description = 'Зарегистрируйтесь, подтвердите почту, и создайте профиль в личном кабинете',
   actions = defaultActions,
 }: FinalCtaProps) {
   return (

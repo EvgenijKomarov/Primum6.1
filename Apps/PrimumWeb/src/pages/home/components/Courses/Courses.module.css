@@ -69,6 +69,7 @@
   grid-template-columns: repeat(3, 1fr);
 
   padding: 20px 0;
+  gap: 1rem;
 
   border-top: 1px solid var(--color-secondary-base);
   border-bottom: 1px solid var(--color-secondary-base);
@@ -81,7 +82,7 @@
 
   color: var(--color-muted);
 
-  font-size: 13px;
+  font-size: 10px;
 
   margin-bottom: 5px;
 }
@@ -178,6 +179,10 @@
   .themes {
     flex-direction: column;
     overflow-x: visible;
+  }
+
+  .info strong {
+    overflow-x: auto;
   }
 
   .theme {

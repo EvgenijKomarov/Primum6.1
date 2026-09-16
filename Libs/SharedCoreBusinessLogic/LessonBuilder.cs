@@ -18,6 +18,7 @@ namespace SharedCoreBusinessLogic
         /// </summary>
         protected virtual async Task<DateTime> ResolveSlot(int abonementId, DateTime desiredDateTime, SlotConflictPolicy policy)
         {
+            desiredDateTime = desiredDateTime.ToUniversalTime();
             var sameLesson = await lessons
                 .Include(x => x.Abonement)
                 .FirstOrDefaultAsync(x => x.DateTime == desiredDateTime && x.Abonement.Id == abonementId);

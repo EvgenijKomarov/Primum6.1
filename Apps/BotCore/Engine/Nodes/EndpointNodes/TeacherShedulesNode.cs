@@ -12,7 +12,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         public override async Task<string> ItemInfo(TeacherSheduleDto item, DataBuffer buffer)
         {
             return $"{Emoticons.Shedule}Расписание: {DayOfWeekRes.ResourceManager.GetString(item.DayOfWeek.ToString()) ?? string.Empty} {item.Time}:00\n" +
-                $"{Emoticons.Student}Ученик: {(item.IsAvailable ? item.StudentName : "отсутствует")}";
+                $"{Emoticons.Student}Ученик: {(!item.IsAvailable ? item.StudentName : "отсутствует")}";
         }
         public override async Task Initialize(int index, DataBuffer input)
         {

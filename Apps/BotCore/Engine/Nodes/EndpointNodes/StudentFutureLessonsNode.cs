@@ -20,7 +20,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 sb.AppendLine($"{Emoticons.Date}{DayOfWeekRes.ResourceManager.GetString(date.DayOfWeek.ToString())} ({date.Date.ToString("dd.MM")})");
                 foreach (var lesson in date.Lessons)
                 {
-                    sb.AppendLine($"{Emoticons.Lesson}[{lesson.Time.ToString("HH:mm")}] {lesson.CourseName} - " +
+                    sb.AppendLine($"{Emoticons.Lesson}[{lesson.Time.ToString(@"hh\:mm")}] {lesson.CourseName} - " +
                     $"{LessonStatusRes.ResourceManager.GetString(lesson.LessonStatus.ToString()) ?? string.Empty}\n");
                 }
                 sb.AppendLine("\n");
