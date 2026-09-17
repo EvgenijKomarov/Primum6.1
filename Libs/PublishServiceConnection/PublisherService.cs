@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 
 namespace PublishServiceConnection
 {
@@ -19,7 +20,7 @@ namespace PublishServiceConnection
                 foreach (var notif in mailNotification.ToMailNotifications())
                 {
                     var url = Environment.GetEnvironmentVariable("MAILNOTIFICATIONSERVICE_URL") ?? throw new ArgumentNullException("Missing env variable");
-                    await PushNotification(notif.Key, notif.Value, url);
+                    await PushNotification(notif.Key, mailNotification.MailTitle, notif.Value, url, mailNotification.Template);
                 }
             }
             if (message is ICommonNotification commonNotification)
@@ -35,6 +36,18 @@ namespace PublishServiceConnection
         private async Task PushNotification(int userId, string message, string route)
         {
             HttpResponseMessage response = await httpClient.PostAsync(route + $"/publish?userId={userId}&message={Uri.EscapeDataString(message)}", content: null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        private async Task PushNotification(string address, string subject, string message, string route, EmailTemplate template)
+        {
+            var url = route
+                + $"/publish?address={Uri.EscapeDataString(address)}"
+                + $"&subject={Uri.EscapeDataString(subject)}"
+                + $"&message={Uri.EscapeDataString(message)}"
+                + $"&template={Uri.EscapeDataString(template.ToString())}";
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, content: null);
             response.EnsureSuccessStatusCode();
         }
     }

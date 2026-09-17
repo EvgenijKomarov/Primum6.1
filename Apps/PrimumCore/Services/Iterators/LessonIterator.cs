@@ -100,6 +100,7 @@ namespace PrimumCore.Services.Iterators
                 StudentUserId = lesson.Abonement.Student.User.Id,
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = lesson.Abonement.Course.TeacherId,
+                TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                 CourseName = lesson.Abonement.Course.Name,
                 AbonementId = lesson.Abonement.Id,
                 LessonId = lesson.Id,
@@ -136,6 +137,7 @@ namespace PrimumCore.Services.Iterators
             await publisher.Push(new LessonReportEvent
             {
                 AllowedAdminIds = (await collector.GetAllowedAdmins([Permission.InspectReportedLessons])).Select(x => x.UserId),
+                AllowedAdminEmails = (await collector.GetAllowedAdmins([Permission.InspectReportedLessons])).Select(x => x.User.MailAdress),
                 StudentName = lesson.Abonement.Student.User.DisplayName,
                 StudentUserId = lesson.Abonement.Student.User.Id,
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
@@ -184,6 +186,7 @@ namespace PrimumCore.Services.Iterators
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                 TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+                TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                 CourseName = lesson.Abonement.Course.Name,
                 AbonementId = lesson.Abonement.Id,
                 LessonId = lesson.Id,

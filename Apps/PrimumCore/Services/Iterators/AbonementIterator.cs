@@ -65,6 +65,7 @@ namespace PrimumCore.Services.Iterators
                 StudentUserId = abonement.Student.User.Id,
                 TeacherName = abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = abonement.Course.Teacher.User.Id,
+                TeacherEmail = abonement.Course.Teacher.User.MailAdress,
                 CourseName = abonement.Course.Name,
                 AbonementId = abonement.Id,
                 AbonementStatus = abonement.AbonementStatus.ToString()

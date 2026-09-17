@@ -55,6 +55,8 @@ namespace CoreDBIterator.Workers
                     StudentName = lesson.Abonement.Student.User.DisplayName,
                     StudentUserId = lesson.Abonement.Student.User.Id,
                     StudentTimezoneOffset = lesson.Abonement.Student.User.TimeZoneOffset,
+                    TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
+                    StudentEmail = lesson.Abonement.Student.User.MailAdress,
                     TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                     TeacherUserId = lesson.Abonement.Course.TeacherId,
                     TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,

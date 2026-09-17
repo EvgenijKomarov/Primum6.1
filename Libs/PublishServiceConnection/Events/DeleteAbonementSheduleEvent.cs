@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace PublishServiceConnection.Events
 
         public required string CourseName { get; set; }
 
+        public required string TeacherEmail { get; set; }
+
         public required int AbonementId { get; set; }
 
         public required int AbonementSheduleId { get; set; }
@@ -30,6 +33,8 @@ namespace PublishServiceConnection.Events
         public required DayOfWeek DayOfWeek { get; set; }
 
         public required int Time { get; set; }
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
 
         public string MailTitle => "Удаление абонемента одного из учеников";
         public Dictionary<int, string> ToChatBotNotifications()
@@ -42,13 +47,13 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
             var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
 
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [TeacherUserId] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
+                [TeacherEmail] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
             };
         }
 

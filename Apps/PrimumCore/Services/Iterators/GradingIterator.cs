@@ -57,6 +57,7 @@ namespace PrimumCore.Services.Iterators
                 CourseName = lesson.Abonement.Course.Name,
                 StudentDisplayName = lesson.Abonement.Student.User.DisplayName,
                 StudentUserId = lesson.Abonement.Student.User.Id,
+                StudentEmail = lesson.Abonement.Student.User.MailAdress,
                 DateTime = lesson.DateTime,
                 TeacherDisplayName = lesson.Abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,

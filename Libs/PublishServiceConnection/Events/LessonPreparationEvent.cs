@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,10 @@ namespace PublishServiceConnection.Events
 
         public required int AbonementId { get; set; }
 
+        public required string TeacherEmail { get; set; }
+
+        public required string StudentEmail { get; set; }
+
         public required int LessonId { get; set; }
 
         public required DateTime DateTime { get; set; }
@@ -34,6 +39,8 @@ namespace PublishServiceConnection.Events
         public required bool IsEnoughMoney { get; set; }
 
         public required bool IsTeacherReady { get; set; }
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
 
         public string MailTitle => "Уведомление о будущем занятии";
         public Dictionary<int, string> ToChatBotNotifications()
@@ -47,13 +54,13 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [TeacherUserId] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
+                [TeacherEmail] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
                     + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией"),
-                [StudentUserId] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
+                [StudentEmail] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
                     (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
             };
         }

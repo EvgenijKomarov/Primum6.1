@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,15 @@ namespace PublishServiceConnection.Events
 
         public required int TeacherUserId { get; set; }
 
+        public required string TeacherEmail { get; set; }
+
         public required string CourseName { get; set; }
 
         public required int AbonementId { get; set; }
 
         public required string AbonementStatus { get; set; }
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
 
         public string MailTitle => "Изменение статуса абонемента";
         public Dictionary<int, string> ToChatBotNotifications()
@@ -34,11 +39,11 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [TeacherUserId] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
+                [TeacherEmail] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
             };
         }
 

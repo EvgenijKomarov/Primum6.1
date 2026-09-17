@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace PublishServiceConnection.Events
         public required int CourseId;
 
         public required string TeacherDisplayName;
+        public required string StudentEmail { get; set; }
 
         public required int TeacherUserId;
 
@@ -30,6 +32,8 @@ namespace PublishServiceConnection.Events
         public required int StudentExp { get; set; }
 
         public string MailTitle => "Оценка занятия";
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -39,11 +43,11 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [StudentUserId] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
+                [StudentEmail] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
             };
         }
 

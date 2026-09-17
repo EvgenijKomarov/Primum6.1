@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace PublishServiceConnection.Events
 
         public required int TeacherTimezoneOffset { get; set; }
 
+        public required string TeacherEmail { get; set; }
+
         public required string CourseName { get; set; }
 
         public required int AbonementId { get; set; }
@@ -25,6 +28,8 @@ namespace PublishServiceConnection.Events
         public required int LessonId { get; set; }
 
         public required DateTime DateTime { get; set; }
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
 
         public string MailTitle => "Уведомление о создании занятия-отработки";
         public Dictionary<int, string> ToChatBotNotifications()
@@ -35,11 +40,11 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [TeacherUserId] = $"Занятие-отработка с {StudentName} было создано на {DateTime.AddHours(TeacherTimezoneOffset)}"
+                [TeacherEmail] = $"Занятие-отработка с {StudentName} было создано на {DateTime.AddHours(TeacherTimezoneOffset)}"
             };
         }
 

@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System.Diagnostics;
 using System.Text.Json;
@@ -21,11 +22,17 @@ namespace PublishServiceConnection.Events
 
         public required int LessonId { get; set; }
 
+        public required string TeacherEmail { get; set; }
+
+        public required string StudentEmail { get; set; }
+
         public required DateTime DateTime { get; set; }
 
         public required string TeacherLink { get; set; }
 
         public required string StudentLink { get; set; }
+
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
 
         public string MailTitle => "Уведомление о будущем занятии";
         public Dictionary<int, string> ToChatBotNotifications()
@@ -37,12 +44,12 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<int, string> ToMailNotifications()
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [TeacherUserId] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке: {TeacherLink}",
-                [StudentUserId] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке: {StudentLink}"
+                [TeacherEmail] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке: {TeacherLink}",
+                [StudentEmail] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке: {StudentLink}"
             };
         }
 

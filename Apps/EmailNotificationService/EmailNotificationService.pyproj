@@ -22,9 +22,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EmailNotificationService.py" />
+    <Compile Include="TemplateRender.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="templates\ConfirmationEmail.html" />
+    <Content Include="templates\InfoEmail.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="templates\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

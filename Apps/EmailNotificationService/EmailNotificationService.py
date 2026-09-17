@@ -8,6 +8,7 @@ import aio_pika
 import smtplib
 import requests
 from email.message import EmailMessage
+from TemplateRender import EmailTemplate, render_email
 
 EMAIL=os.getenv("EMAIL")
 EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD")
@@ -15,26 +16,31 @@ CORE_URL=os.getenv("CORE_URL")
 
 app = FastAPI(title="FastAPI → SMTP")
 
-def send_email(address: str, subject: str, body: str):
-    if EMAIL == "" or EMAIL_PASSWORD == "":
+def send_email(
+    address: str,
+    subject: str,
+    body: str,
+    template: EmailTemplate = EmailTemplate.INFO,
+) -> None:
+    if not EMAIL or not EMAIL_PASSWORD:
         print("❌ Ошибка: EMAIL и EMAIL_PASSWORD должны быть установлены в переменных окружения.")
-        print("Adress: ", address)
-        print("Body: ", body)
+        print("Address:", address)
+        print("Body:", body)
         return
-
+ 
     msg = EmailMessage()
-    msg["Subject"]= subject
+    msg["Subject"] = subject
     msg["From"] = EMAIL
     msg["To"] = address
-    msg.set_content(body)
-
+    msg.set_content(body)  # текстовый фолбэк для клиентов без HTML
+ 
+    html = render_email(template, subject, body)
+    msg.add_alternative(html, subtype="html")
+ 
     try:
         with smtplib.SMTP_SSL("smtp.yandex.ru", 465) as server:
-            server.set_debuglevel(1)
             server.login(EMAIL, EMAIL_PASSWORD)
-            server.auth_plain()
             server.send_message(msg)
-            server.quit()
         print("✅ Письмо успешно отправлено!")
     except smtplib.SMTPAuthenticationError:
         print("❌ Ошибка авторизации: проверьте пароль приложения и наличие 2FA.")
@@ -42,11 +48,8 @@ def send_email(address: str, subject: str, body: str):
         print(f"❌ Ошибка SMTP: {e}")
 
 @app.post("/publish")
-def publish(userId: int, message: str):
-    response = requests.get(f"{CORE_URL}/api/user/{userId}/get-mail", timeout=10)
-    response.raise_for_status()
-    address = response.text.strip()
-    send_email(address, "SYSTEM", message)
+def publish(address: str, subject: str, message: str, template: EmailTemplate = EmailTemplate.INFO):
+    send_email(address, subject, message, template)
     print(f"Successfully sent to {address} message: {message}")
 
 #хелсчек

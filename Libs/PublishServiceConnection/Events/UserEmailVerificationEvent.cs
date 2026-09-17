@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,13 @@ namespace PublishServiceConnection.Events
         public required int UserId { get; set; }
 
         public string MailTitle => "Подтверждение почты";
-        public Dictionary<int, string> ToMailNotifications()
+
+        public EmailTemplate Template { get; } = EmailTemplate.ConfirmationEmail;
+        public Dictionary<string, string> ToMailNotifications()
         {
-            return new Dictionary<int, string>
+            return new Dictionary<string, string>
             {
-                [UserId] = $"Для полного доступа на площадку, пожалуйста, перейдите по ссылке\n" +
+                [EmailAdress] = $"Для полного доступа на площадку, пожалуйста, перейдите по ссылке\n" +
                 $"{AuthUrl}/confirm-email?token={Token}\n" +
                 $"Или введите токен подтверждения на сайте в личном кабинете:\n" +
                 $"{Token}",

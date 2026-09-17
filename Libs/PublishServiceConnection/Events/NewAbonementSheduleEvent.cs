@@ -1,4 +1,5 @@
 ﻿using PublishServiceConnection.Abstractions;
+using PublishServiceConnection.Enums;
 using Resourses;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PublishServiceConnection.Events
 {
-    public class NewAbonementSheduleEvent : IChatBotNotification, IMailNotification, ICommonNotification
+    public class NewAbonementSheduleEvent : IChatBotNotification, ICommonNotification
     {
         public required string StudentName { get; set; }
 
@@ -31,6 +32,8 @@ namespace PublishServiceConnection.Events
 
         public required int Time {  get; set; }
 
+        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
+
         public string MailTitle => "Новый ученик, подписавшийся на Ваш курс";
         public Dictionary<int, string> ToChatBotNotifications()
         {
@@ -39,16 +42,6 @@ namespace PublishServiceConnection.Events
             return new Dictionary<int, string>
             {
                 [TeacherUserId] = $"{Emoticons.Student}Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
-            };
-        }
-
-        public Dictionary<int, string> ToMailNotifications()
-        {
-            var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
-
-            return new Dictionary<int, string>
-            {
-                [TeacherUserId] = $"Ученик {StudentName} записался на занятия по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
             };
         }
 
