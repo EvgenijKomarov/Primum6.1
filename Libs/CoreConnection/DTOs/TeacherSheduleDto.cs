@@ -17,6 +17,8 @@ namespace CoreConnection.DTOs
 
         public required bool IsAvailable { get; set; }
 
+        public required int TeacherId { get; set; }
+
         public required string? StudentName { get; set; }
 
         public required int? StudentId { get; set; }

@@ -1,5 +1,6 @@
 ﻿using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
+using Common.Utilities;
 using CoreConnection;
 using Engine;
 using Engine.Nodes;
@@ -7,7 +8,10 @@ using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class StudentAbonementSheduleNode(StudentClient client) : EndpointNode<DataBuffer, EngineOutputMessage>("stShedule")
+    public class StudentAbonementSheduleNode(
+        StudentClient client,
+        ConverterToDateTimeService datetimeService,
+        UserClient userClient) : EndpointNode<DataBuffer, EngineOutputMessage>("stShedule")
     {
         public async override Task<INodeResult<DataBuffer, EngineOutputMessage>> Invoke(DataBuffer input, CancellationToken? token = null)
         {
@@ -16,14 +20,17 @@ namespace BotCore.Engine.Nodes.EndpointNodes
 
             var abon = await client.AbonementAsync(input.UserId!.Value, int.Parse(abonId));
             var shedule = await client.SheduleGetAsync(input.UserId!.Value, int.Parse(sheduleId));
+            var user = await userClient.ProfileAsync(abon.StudentId);
+
+            var appliedSchedule = datetimeService.ApplyTimeZoneOffset(shedule.DayOfWeek, shedule.Time, user.TimezoneOffset);
 
             return Finish(new EngineOutputMessage
             {
                 Message = $"{Emoticons.Shedule}Расписание:\n" +
                 $"{Emoticons.Course}Курс: {abon.CourseName}\n" +
                 $"{Emoticons.Teacher}Преподаватель: {abon.TeacherDisplayName}\n" +
-                $"День недели: {DayOfWeekRes.ResourceManager.GetString(shedule.DayOfWeek.ToString())}\n" +
-                $"Время: {shedule.Time}:00",
+                $"День недели: {datetimeService.GetRusTranslation(appliedSchedule.Day)}\n" +
+                $"Время: {appliedSchedule.Hour}:00",
                 Buttons = new EngineOutputButton[]
                 {
                     new EngineOutputButton

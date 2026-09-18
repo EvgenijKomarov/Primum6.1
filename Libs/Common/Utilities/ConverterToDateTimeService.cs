@@ -60,5 +60,29 @@ namespace Common.Utilities
             date = (date - now).TotalDays > blockedDays ? date : date.AddDays(7);
             return date;
         }
+
+        public virtual (DayOfWeek Day, int Hour) ApplyTimeZoneOffset(DayOfWeek day, int hour, TimeSpan offset)
+        {
+            if (hour < 0 || hour > 23)
+                throw new ArgumentOutOfRangeException(nameof(hour), "Час должен быть в диапазоне 0-23");
+
+            const int hoursInWeek = 7 * 24;
+
+            // Переводим (день, час) в абсолютное количество часов от начала недели (Sunday = 0)
+            int totalHours = (int)day * 24 + hour;
+
+            // Добавляем смещение. Math.Floor гарантирует корректное округление
+            // в меньшую сторону даже для отрицательных и дробных (например, +5:30) смещений.
+            int offsetHours = (int)Math.Floor(offset.TotalHours);
+            totalHours += offsetHours;
+
+            // Приводим результат к диапазону [0, hoursInWeek) с корректной обработкой отрицательных значений
+            int normalized = ((totalHours % hoursInWeek) + hoursInWeek) % hoursInWeek;
+
+            DayOfWeek resultDay = (DayOfWeek)(normalized / 24);
+            int resultHour = normalized % 24;
+
+            return (resultDay, resultHour);
+        }
     }
 }

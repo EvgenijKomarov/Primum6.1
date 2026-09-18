@@ -6,6 +6,7 @@ COPY Libs/CoreDBModel Libs/CoreDBModel
 COPY Libs/SignServiceConnection Libs/SignServiceConnection
 COPY Libs/PaymentServiceClient Libs/PaymentServiceClient
 COPY Libs/Resourses Libs/Resourses
+COPY Libs/Common Libs/Common
 WORKDIR /src/Apps/BotCore
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish --no-restore -p:UseAppHost=false

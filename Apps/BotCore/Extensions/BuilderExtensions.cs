@@ -5,6 +5,7 @@ using BotCore.Engine.Middlewares;
 using BotCore.Engine.Nodes.EndpointNodes;
 using BotCore.Services;
 using BotCore.Services.Iterators;
+using Common.Utilities;
 using CoreConnection;
 using Engine;
 using Engine.Extensions;
@@ -103,6 +104,7 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<BotIterator>();
             builder.Services.AddScoped<InOutConverter>();
 
+            builder.Services.AddScoped<ConverterToDateTimeService>();
             builder.Services.AddTransient<ChatSignTokenWorker>();
 
             return builder;

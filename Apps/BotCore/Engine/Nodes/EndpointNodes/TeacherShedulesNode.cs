@@ -1,17 +1,23 @@
 ﻿using BotCore.Engine.Abstractions;
 using BotCore.Engine.Entities;
 using BotCore.Engine.Entities.Outputs;
+using Common.Utilities;
 using CoreConnection;
 using CoreConnection.DTOs;
 using Resourses;
 
 namespace BotCore.Engine.Nodes.EndpointNodes
 {
-    public class TeacherShedulesNode(TeacherClient client) : ScrollableEndpointNode<TeacherSheduleDto>("tchShedules")
+    public class TeacherShedulesNode(
+        TeacherClient client, 
+        ConverterToDateTimeService datetimeService, 
+        UserClient userClient) : ScrollableEndpointNode<TeacherSheduleDto>("tchShedules")
     {
         public override async Task<string> ItemInfo(TeacherSheduleDto item, DataBuffer buffer)
         {
-            return $"{Emoticons.Shedule}Расписание: {DayOfWeekRes.ResourceManager.GetString(item.DayOfWeek.ToString()) ?? string.Empty} {item.Time}:00\n" +
+            var user = await userClient.ProfileAsync(item.TeacherId);
+            var schedule = datetimeService.ApplyTimeZoneOffset(item.DayOfWeek, item.Time, user.TimezoneOffset);
+            return $"{Emoticons.Shedule}Расписание: {datetimeService.GetRusTranslation(schedule.Day)} {schedule.Hour}:00\n" +
                 $"{Emoticons.Student}Ученик: {(!item.IsAvailable ? item.StudentName : "отсутствует")}";
         }
         public override async Task Initialize(int index, DataBuffer input)

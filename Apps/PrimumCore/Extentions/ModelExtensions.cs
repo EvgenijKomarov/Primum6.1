@@ -185,6 +185,7 @@ namespace PrimumCore.Extentions
                 DayOfWeek = x.DayOfWeek,
                 Time = x.Time,
                 IsAvailable = AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(x),
+                TeacherId = x.Teacher.User.Id,
                 StudentName = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Student.User.DisplayName,
                 StudentId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Student.User.Id,
                 CourseName = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Course.Name,
