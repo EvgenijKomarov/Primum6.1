@@ -36,6 +36,39 @@ const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
   </>);
 }
 
+const SocialLinks = () => {
+  const socials = [
+    { name: 'Telegram', url: import.meta.env.VITE_TELEGRAM_URL, color: '#26A5E4' },
+    { name: 'MAX', url: import.meta.env.VITE_MAX_URL, color: '#7C3AED' },
+    { name: 'VK', url: import.meta.env.VITE_VK_URL, color: '#0077FF' },
+  ];
+
+  return (<div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      {socials.map(({ name, url, color }) => (
+        <a
+          key={name}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 16px',
+            borderRadius: '8px',
+            backgroundColor: color,
+            color: '#fff',
+            textDecoration: 'none',
+            fontWeight: 500,
+            cursor: 'pointer'
+          }}
+        >
+          {name}
+        </a>
+      ))}
+    </div>);
+}
+
 interface Props {
   user: UserDto;
 }
@@ -56,6 +89,7 @@ export const ChatBotsCard = ({ user }: Props) => {
     };
   
   return <Card title="Чат боты" width={'40rem'}>
+    <SocialLinks />
     <div className={styles.chatSignsSection}>
       {chatSigns.length === 0 ? (
         <p className={styles.cardDescription}>

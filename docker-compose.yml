@@ -348,6 +348,10 @@ services:
     container_name: primumweb
     ports:
       - "3001:80"
+    environment:
+      VITE_TELEGRAM_URL: ${TELEGRAM_BOT_LINK}
+      VITE_MAX_URL: ${MAX_BOT_LINK}
+      VITE_VK_URL: ${VK_BOT_LINK}
     depends_on:
       primumwebapi:
         condition: service_healthy

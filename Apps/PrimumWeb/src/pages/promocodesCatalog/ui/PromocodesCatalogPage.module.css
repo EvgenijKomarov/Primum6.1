@@ -83,6 +83,11 @@
   margin: 0;
 }
 
+.content {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
 
 
 .cardContent {
@@ -125,11 +130,6 @@
 @media (max-width: 640px) {
   .cardDescription {
     height: 40rem;
-  }
-  .content {
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
   }
   .cardContent {
     flex-direction: column;
