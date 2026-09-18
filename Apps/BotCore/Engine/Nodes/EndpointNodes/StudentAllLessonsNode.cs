@@ -16,7 +16,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         {
             var user = await userClient.ProfileAsync(item.StudentId);
 
-            return $"{Emoticons.Lesson}Занятие за {item.DateTime.AddHours(user.TimezoneOffset).ToString("HH:mm dd.MM.yyyy")}\n" +
+            return $"{Emoticons.Lesson}Занятие за {item.DateTime.Add(user.TimezoneOffset).ToString("HH:mm dd.MM.yyyy")}\n" +
                 $"{Emoticons.Course}Курс: {item.CourseName}\n" +
                 $"{Emoticons.Teacher}Преподаватель: {item.TeacherDisplayName}\n" +
                 $"{Emoticons.Grade}Оценка: {(item.FinalGrade.HasValue ? item.FinalGrade.Value : "отсутствует")}\n" +

@@ -102,31 +102,53 @@
   }
 }
 
-.miniLoader {
+/* ── Обёртка — реально резервирует место под весь паттерн 3×3 ── */
+.wrap {
+  --size: calc(var(--step) * 2 + var(--cell));
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* сама анимируемая точка всегда прибита к (0,0) обёртки — остальное дорисует box-shadow */
+.pixel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cell);
+  height: var(--cell);
+  animation: pixel-cycle 0.9s steps(1) infinite;
+}
+
+.miniWrap {
   --cell: 5px;
   --gap: 3px;
   --step: calc(var(--cell) + var(--gap));
-  @apply static mx-auto my-1;
-  width: var(--cell);
-  height: var(--cell);
-  animation: pixel-cycle 0.9s steps(1) infinite;
 }
 
-.loader {
+.loaderWrap {
   --cell: 1.3vmin;
   --gap: 0.9vmin;
   --step: calc(var(--cell) + var(--gap));
-  @apply fixed z-[9999];
-  width: var(--cell);
-  height: var(--cell);
-  top: calc(50% - var(--step) * 1.5);
-  left: calc(50% - var(--step) * 1.5);
-  animation: pixel-cycle 0.9s steps(1) infinite;
 }
 
-.loader.sttc {
-  @apply static mx-auto my-1;
+/* ── Позиционирование обёртки относительно родителя ── */
+.fixed {
+  position: fixed;
+  z-index: 9999;
+  top: calc(50% - var(--size) / 2);
+  left: calc(50% - var(--size) / 2);
 }
-.loader.abslt {
-  @apply absolute;
+
+.abslt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sttc {
+  @apply mx-auto my-1;
 }

@@ -18,7 +18,7 @@ namespace PublishServiceConnection.Events
 
         public required int TeacherUserId { get; set; }
 
-        public required int TeacherTimezoneOffset { get; set; }
+        public required TimeSpan TeacherTimezoneOffset { get; set; }
 
         public required string TeacherEmail { get; set; }
 
@@ -38,7 +38,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"{Emoticons.Lesson}Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} отменено учеником"
+                [TeacherUserId] = $"{Emoticons.Lesson}Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником"
             };
         }
 
@@ -46,7 +46,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<string, string>
             {
-                [TeacherEmail] = $"Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} отменено учеником",
+                [TeacherEmail] = $"Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником",
             };
         }
 
@@ -54,7 +54,7 @@ namespace PublishServiceConnection.Events
         {
             return new Dictionary<int, string>
             {
-                [TeacherUserId] = $"Занятие с {StudentName} в {DateTime.AddHours(TeacherTimezoneOffset)} отменено учеником"
+                [TeacherUserId] = $"Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником"
             };
         }
     }

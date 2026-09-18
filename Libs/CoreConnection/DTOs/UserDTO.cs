@@ -19,7 +19,7 @@ namespace CoreConnection.DTOs
 
         public required string DisplayName { get; set; }
 
-        public required int TimezoneOffset { get; set; }
+        public required TimeSpan TimezoneOffset { get; set; }
 
         public required string Email { get; set; }
 

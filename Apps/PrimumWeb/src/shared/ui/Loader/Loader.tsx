@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import styles from './styles.module.css';
 
@@ -10,11 +10,15 @@ interface ILoader {
 export const Loader = ({ position = 'fixed', miniLoader }: ILoader) => {
   return (
     <div
-      className={clsx([
-        miniLoader ? styles.miniLoader : styles.loader,
+      className={clsx(
+        styles.wrap,
+        miniLoader ? styles.miniWrap : styles.loaderWrap,
+        position === 'fixed' && styles.fixed,
         position === 'absolute' && styles.abslt,
-        position === 'static' && styles.sttc,
-      ])}
-    ></div>
+        position === 'static' && styles.sttc
+      )}
+    >
+      <div className={styles.pixel} />
+    </div>
   );
 };

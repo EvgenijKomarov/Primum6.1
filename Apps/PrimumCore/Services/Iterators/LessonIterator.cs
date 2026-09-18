@@ -105,7 +105,7 @@ namespace PrimumCore.Services.Iterators
                 AbonementId = lesson.Abonement.Id,
                 LessonId = lesson.Id,
                 DateTime = lesson.DateTime,
-                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
             });
 
             await dbIterator.SaveChangesAsync();
@@ -185,7 +185,7 @@ namespace PrimumCore.Services.Iterators
                 StudentUserId = lesson.Abonement.Student.User.Id,
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                 TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
-                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset.Hours,
+                TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
                 TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                 CourseName = lesson.Abonement.Course.Name,
                 AbonementId = lesson.Abonement.Id,

@@ -24,7 +24,7 @@ export const RegisterForm = ({ onSwitch, onSuccess, onMutate }: RegisterFormProp
 
 const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
   try {
-    const response = await fetchRegister({ ...data, timeZoneOffset: new Date().getTimezoneOffset() });
+    const response = await fetchRegister({ ...data, timeZoneOffset: -(new Date().getTimezoneOffset()) });
     setToken(response.data);
     onSuccess?.();
     await onMutate?.();

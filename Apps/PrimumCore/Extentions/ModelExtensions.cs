@@ -207,7 +207,7 @@ namespace PrimumCore.Extentions
                 IsAdmin = x.AdminProfile != null,
                 Email = x.MailAdress,
                 IsBanned = x.IsBanned,
-                TimezoneOffset = x.TimeZoneOffset.Hours,
+                TimezoneOffset = x.TimeZoneOffset,
                 MailConfirmed = x.IsMailChecked,
                 IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(x)
             });

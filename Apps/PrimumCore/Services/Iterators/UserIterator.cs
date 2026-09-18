@@ -42,7 +42,7 @@ namespace PrimumCore.Services.Iterators
                 Surname = dto.Surname,
                 Patronymic = dto.Patronymic,
                 MailAdress = dto.MailAdress,
-                TimeZoneOffset = TimeSpan.FromHours(dto.TimeZoneOffset),
+                TimeZoneOffset = TimeSpan.FromMinutes(dto.TimeZoneOffset),
                 Password = passwordHasher.HashPassword(dto.Password)
             };
             await dbIterator.AddAsync(user);
