@@ -9,7 +9,7 @@ using PrimumCore.Services.Utilities;
 using System.ComponentModel.DataAnnotations;
 using PaymentServiceConnection;
 using CoreDBModel.Services;
-using Common.Extensions;
+using CoreDBModel.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {

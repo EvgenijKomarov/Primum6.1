@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Common.Extensions
+namespace CoreDBModel.Extensions
 {
     public static class LinqExtensions
     {

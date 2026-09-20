@@ -5,7 +5,7 @@ using CoreDBModel.Models.Enums;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using CoreDBModel.Services;
-using Common.Extensions;
+using CoreDBModel.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace PrimumCore.Services.Iterators

@@ -10,7 +10,7 @@ using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.Linq.Expressions;
 using CoreDBModel.Services;
-using Common.Extensions;
+using CoreDBModel.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {

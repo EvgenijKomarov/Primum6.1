@@ -1,5 +1,4 @@
-﻿using Common.Extensions;
-using CoreDBModel.Extensions;
+﻿using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
 using LinqKit;

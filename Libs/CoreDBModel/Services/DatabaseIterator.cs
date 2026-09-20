@@ -1,4 +1,4 @@
-﻿using Common.Extensions;
+﻿using CoreDBModel.Extensions;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;

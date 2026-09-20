@@ -7,7 +7,7 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using CoreDBModel.Services;
-using Common.Extensions;
+using CoreDBModel.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {

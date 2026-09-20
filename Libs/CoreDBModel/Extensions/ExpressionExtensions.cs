@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
-namespace Common.Extensions
+namespace CoreDBModel.Extensions
 {
     public static class ExpressionExtensions
     {
