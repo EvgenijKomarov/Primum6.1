@@ -1,6 +1,8 @@
 import styles from './FinalCta.module.css'
 import Container from '../Container/Container'
-import Button from '../Button/Button'
+import HomepageButton from '../Button/HomepageButton'
+import { useNavigate } from 'react-router'
+import { RichButton } from '../RichButton/RichButton'
 
 export interface FinalCtaAction {
   href: string
@@ -16,7 +18,6 @@ interface FinalCtaProps {
 }
 
 const defaultActions: FinalCtaAction[] = [
-  { href: '#main', label: 'ЗАРЕГИСТРИРОВАТЬСЯ', variant: 'primary' },
   { href: '#teachers', label: 'ПРЕПОДАВАТЕЛЯМ', variant: 'outline' },
   { href: '#students', label: 'БУДУЩИМ УЧЕНИКАМ', variant: 'outline' },
 ]
@@ -27,6 +28,8 @@ export default function FinalCta({
   description = 'Зарегистрируйтесь, подтвердите почту, и создайте профиль в личном кабинете',
   actions = defaultActions,
 }: FinalCtaProps) {
+  const navigate = useNavigate();
+
   return (
     <section className={styles.section}>
       <Container>
@@ -35,10 +38,14 @@ export default function FinalCta({
         <p className={styles.description}>{description}</p>
 
         <div className={styles.buttons}>
+          <RichButton
+            label='ЗАРЕГИСТРИРОВАТЬСЯ'
+            onClick={() => navigate('/auth')}
+          />
           {actions.map((action) => (
-            <Button key={action.href + action.label} href={action.href} variant={action.variant}>
+            <HomepageButton key={action.href + action.label} href={action.href} variant={action.variant}>
               {action.label}
-            </Button>
+            </HomepageButton>
           ))}
         </div>
       </Container>

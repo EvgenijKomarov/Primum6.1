@@ -3,6 +3,7 @@ import TypewriterText from "../../common-elements/TypewriterText/TypewriterText"
 import styles from './GeneralBlock.module.css'
 import { useNavigate } from "react-router";
 import { ConsultationBlock } from "../../components/ConsultationBlock/ConsultationBlock";
+import { RichButton } from "../../components/RichButton/RichButton";
 
 export const GeneralBlock = () => {
     const { user, isLoading } = useCurrentUser();
@@ -21,20 +22,15 @@ export const GeneralBlock = () => {
                     <p className={styles.defText}>Оставьте заявку, и мы свяжемся с Вами</p>
                     <ConsultationBlock/>
                     <p className={styles.defText}>или</p>
-                    <button
-                        className={styles.btn}
-                        onClick={() => navigate('/auth')}>
-                        Войти/Зарегистрироваться
-                    </button>
+                    <RichButton
+                        label='Войти/Зарегистрироваться'
+                        onClick={() => navigate('/auth')}/>
                 </>
             ) : (
                 <>
-                    <button 
-                        className={styles.btn}
-                        style={{padding: '25px 32px'}}
-                        onClick={() => navigate('/profile')}>
-                    {`Войти как ${user.name}`}
-                    </button>
+                    <RichButton
+                        label={`Войти как ${user.name}`}
+                        onClick={() => navigate('/profile')}/>
                 </>
             )}
         </div>

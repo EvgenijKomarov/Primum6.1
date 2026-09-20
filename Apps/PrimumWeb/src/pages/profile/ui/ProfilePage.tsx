@@ -34,7 +34,13 @@ export const ProfilePage = () => {
     );
   }
 
-  if(!user) return null;
+  if(!user && !userLoading){
+    navigate('/auth', { replace: true });
+  }
+
+  if(!user) {
+    return null;
+  }
 
   return (
     <div className={styles.page}>

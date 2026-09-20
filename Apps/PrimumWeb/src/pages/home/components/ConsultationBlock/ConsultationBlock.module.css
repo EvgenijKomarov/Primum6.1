@@ -11,8 +11,6 @@
 
   padding: 17px;
 
-  margin-bottom: 15px;
-
   border: 2px solid var(--color-secondary-base);
 
   outline: none;
@@ -24,8 +22,22 @@
   font-size: 14px;
 }
 
+@media (max-width: 48rem) {
+  .form input {
+    font-size: 10px;
+  }
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
 .form input:focus {
   border-color: var(--color-primary-base);
+}
+
+.error {
+  color: var(--color-functional-error);
 }
 
 .form button {

@@ -106,32 +106,3 @@
 .bigButton:hover {
   @apply bg-primary-hover;
 }
-
-.btn {
-  display: inline-flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 56px;
-
-  padding: 17px 25px;
-
-  border: 2px solid var(--color-primary-base);
-
-  font-size: 10px;
-
-  transition: .15s;
-}
-
-.btn {
-  background: var(--color-primary-base);
-  color: var(--color-black);
-
-  box-shadow: 6px 6px 0 var(--color-secondary-dark);
-}
-
-.btn:hover {
-  transform: translate(4px, 4px);
-  box-shadow: 2px 2px 0 var(--color-black);
-}
