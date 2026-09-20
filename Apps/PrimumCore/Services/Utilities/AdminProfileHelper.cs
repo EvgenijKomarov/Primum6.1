@@ -19,7 +19,7 @@ namespace PrimumCore.Services.Utilities
 
         public async Task<AdminProfile> GetIteratingUser(int id)
         {
-            return await dbIterator.Admins()
+            return await dbIterator.Admins(true)
                 .Include(x => x.Permissions)
                 .Include(x => x.IncidentLogs)
                 .One(x => x.User.Id == id);

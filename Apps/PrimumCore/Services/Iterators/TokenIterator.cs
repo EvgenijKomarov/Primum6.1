@@ -22,7 +22,6 @@ namespace PrimumCore.Services.Iterators
         {
             var user = await dbIterator.Users(false)
                 .Include(x => x.VerificationTokens)
-                .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
             //if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
@@ -62,7 +61,6 @@ namespace PrimumCore.Services.Iterators
         {
             var user = await dbIterator.Users(false)
                 .Include(x => x.VerificationTokens)
-                .IgnoreQueryFilters()
                 .One(x => x.Id == userId);
 
             var token = user.VerificationTokens.FirstOrDefault(x => x.Token == inputToken);

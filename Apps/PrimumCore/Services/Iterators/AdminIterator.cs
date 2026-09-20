@@ -16,7 +16,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<AdminProfileDto>> GetAdmins(string? displayName, int _page, int _pageSize)
         {
             return await dbIterator
-                .Admins()
+                .Admins(false)
                 .Include(x => x.User)
                 .WhereIf(!string.IsNullOrEmpty(displayName), e => EF.Functions.Like(
                     (
@@ -31,14 +31,14 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<AdminProfileDto> GetAdmin(int userId)
         {
-            return await dbIterator.Admins().ToDto(helper).One(x => x.UserId == userId);
+            return await dbIterator.Admins(false).ToDto(helper).One(x => x.UserId == userId);
         }
 
         public async Task<int> EditPermissions(int userId, int objUserId, Dictionary<string, bool> editedPermissions)
         {
             var iteratingAdmin = await helper.CheckIteratingUser(userId, Permission.EditPermissions);
 
-            var admin = await dbIterator.Admins()
+            var admin = await dbIterator.Admins(false)
                 .Include(x => x.User)
                 .Include(x => x.Permissions)
                 .One(x => x.User.Id == objUserId);

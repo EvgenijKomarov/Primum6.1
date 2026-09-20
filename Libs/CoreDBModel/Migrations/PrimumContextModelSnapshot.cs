@@ -70,7 +70,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Abonements");
+                    b.ToTable("Abonements", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.AbonementShedule", b =>
@@ -100,7 +100,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("TeacherSheduleId")
                         .IsUnique();
 
-                    b.ToTable("AbonementShedules");
+                    b.ToTable("AbonementShedules", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.AdminPermission", b =>
@@ -135,7 +135,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("PromoterAdminProfileId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.AdminProfile", b =>
@@ -163,7 +163,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("AdminProfiles");
+                    b.ToTable("AdminProfiles", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.ConsultationRequest", b =>
@@ -199,7 +199,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("ConsultationRequests");
+                    b.ToTable("ConsultationRequests", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.Course", b =>
@@ -267,7 +267,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.CourseRank", b =>
@@ -296,7 +296,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("CourseRanks");
+                    b.ToTable("CourseRanks", (string)null);
 
                     b.HasData(
                         new
@@ -404,7 +404,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("CourseThemes");
+                    b.ToTable("CourseThemes", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.IncidentLog", b =>
@@ -441,7 +441,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("IncidentLogs");
+                    b.ToTable("IncidentLogs", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.Lesson", b =>
@@ -496,7 +496,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.Promocode", b =>
@@ -535,7 +535,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Promocodes");
+                    b.ToTable("Promocodes", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.StudentGrading", b =>
@@ -572,7 +572,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("StudentGradings");
+                    b.ToTable("StudentGradings", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.StudentProfile", b =>
@@ -614,7 +614,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("StudentProfiles");
+                    b.ToTable("StudentProfiles", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.StudentRank", b =>
@@ -646,7 +646,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("StudentRanks");
+                    b.ToTable("StudentRanks", (string)null);
 
                     b.HasData(
                         new
@@ -781,7 +781,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("TeacherProfiles");
+                    b.ToTable("TeacherProfiles", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.TeacherRank", b =>
@@ -813,7 +813,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("TeacherRanks");
+                    b.ToTable("TeacherRanks", (string)null);
 
                     b.HasData(
                         new
@@ -935,7 +935,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherShedules");
+                    b.ToTable("TeacherShedules", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.User", b =>
@@ -985,7 +985,7 @@ namespace CoreDBModel.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.VerificationToken", b =>
@@ -1022,7 +1022,7 @@ namespace CoreDBModel.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VerificationTokens");
+                    b.ToTable("VerificationTokens", (string)null);
                 });
 
             modelBuilder.Entity("CoreDBModel.Models.Abonement", b =>

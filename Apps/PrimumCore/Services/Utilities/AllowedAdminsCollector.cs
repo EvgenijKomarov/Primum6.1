@@ -11,7 +11,7 @@ namespace PrimumCore.Services.Utilities
         public async Task<List<AdminProfile>> GetAllowedAdmins(Permission[] permissions)
         {
             return await dbIterator
-                .Admins()
+                .Admins(true)
                 .Include(x => x.Permissions)
                 .Where(x => x.Permissions.Select(p => p.Permission).Any(p => permissions.Contains(p)))
                 .ToListAsync();

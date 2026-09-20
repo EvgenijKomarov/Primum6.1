@@ -36,7 +36,9 @@ namespace CoreDBModel.Services
             .Include(x => x.Teacher)
             .ThenInclude(x => x.User);
 
-        public IQueryable<AdminProfile> Admins() => context.Set<AdminProfile>();
+        public IQueryable<AdminProfile> Admins(bool isOnlyAvailable) => context
+            .Set<AdminProfile>()
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsAdminAvailable);
 
         public IQueryable<ConsultationRequest> ConsultationRequests(bool isOnlyUnrevisioned) => context.Set<ConsultationRequest>()
             .WhereIf(isOnlyUnrevisioned, x => x.IsRevisioned == false);
@@ -76,8 +78,7 @@ namespace CoreDBModel.Services
 
         public IQueryable<User> Users(bool isOnlyAvailable) => context
             .Set<User>()
-            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable)
-            .IgnoreQueryFilters();
+            .WhereIf(isOnlyAvailable, AvailabilityExpressions.IsUserAvailable);
 
         public IQueryable<StudentRank> StudentRanks() => context
             .Set<StudentRank>();

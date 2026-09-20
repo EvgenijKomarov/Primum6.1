@@ -242,7 +242,7 @@ export default function TerminalHeroBackground({
       <style>{`
         @media (max-width: 768px) {
           .terminal-hero-bg {
-            display: none !important;
+            color: transparent
           }
         }
       `}</style>

@@ -28,12 +28,20 @@ namespace CoreDBModel.Constants
         public static Expression<Func<Abonement, bool>> IsAbonementAvailable =>
             IsAbonementAvailableBase;
 
+        public static Expression<Func<AdminProfile, bool>> IsAdminAvailable =>
+            IsAdminAvailableBase.AndWithProperty(s => s.User, IsUserAvailable);
+
         public static Expression<Func<Abonement, bool>> IsAbonementAlive =>
             IsAbonementAliveBase;
 
         public static Expression<Func<CourseTheme, bool>> IsThemeAvailable =>
             IsThemeAvailableBase;
 
+
+        //-----------------------------------------------------------------------------
+
+        private static Expression<Func<AdminProfile, bool>> IsAdminAvailableBase =>
+            u => true;
 
         private static Expression<Func<User, bool>> IsUserAvailableBase =>
             u => !u.IsBanned && u.IsMailChecked;

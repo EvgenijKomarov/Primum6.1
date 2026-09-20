@@ -15,7 +15,7 @@
 }
 
 .generalBlock {
-  height: 100vh;
+  height: 110vh;
   padding: 10%;
   display: flex;
   flex-direction: row;
@@ -59,6 +59,7 @@
   }
   .rightBlock {
     width: 90vw;
+    padding-bottom: 10rem;
   }
   .headerTitle {
     margin-left: 0;
@@ -70,6 +71,14 @@
   }
   .defTextTitle{
     font-size: 1rem;
+  }
+  .defText{
+    font-size: 0.8rem;
+  }
+  .text{
+    background-color: var(--color-secondary-base);
+    padding: 0.5rem;
+    box-shadow: 8px 8px 0 var(--color-secondary-dark);
   }
 }
 

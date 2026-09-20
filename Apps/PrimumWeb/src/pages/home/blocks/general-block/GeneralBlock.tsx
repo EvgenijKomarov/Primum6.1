@@ -18,8 +18,10 @@ export const GeneralBlock = () => {
         <div className={styles.rightBlock}>
             {(user === undefined || isLoading) ? (
                 <>
-                    <p className={styles.defTextTitle}>Желаете проконсультироваться?</p>
-                    <p className={styles.defText}>Оставьте заявку, и мы свяжемся с Вами</p>
+                    <div className={styles.text}>
+                        <p className={styles.defTextTitle} style={{paddingBottom: '1rem'}}>Желаете проконсультироваться?</p>
+                        <p className={styles.defText}>Оставьте заявку, и мы свяжемся с Вами</p>
+                    </div>
                     <ConsultationBlock/>
                     <p className={styles.defText}>или</p>
                     <RichButton

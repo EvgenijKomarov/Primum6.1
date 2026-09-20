@@ -19,7 +19,7 @@
 .btn {
   background: var(--color-primary-base);
   color: var(--color-black);
-  box-shadow: 6px 6px 0 var(--color-secondary-dark);
+  box-shadow: 6px 6px 0 var(--color-secondary-base);
 }
 
 @media (hover: hover) and (pointer: fine) {
