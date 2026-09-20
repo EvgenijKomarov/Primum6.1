@@ -95,14 +95,3 @@
   font-weight: 500;
   color: var(--color-secondary-light);
 }
-
-.bigButton {
-  @apply bg-primary-base text-secondary-base;
-  @apply cursor-pointer rounded-md text-sm font-bold tracking-[0.3px] border border-transparent flex gap-2 items-center justify-center transition-colors duration-200;
-  @apply min-h-14 px-4;
-  white-space: nowrap;
-  user-select: none;
-}
-.bigButton:hover {
-  @apply bg-primary-hover;
-}

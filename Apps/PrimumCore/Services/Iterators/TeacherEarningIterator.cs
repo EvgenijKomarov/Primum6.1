@@ -1,6 +1,7 @@
 ﻿using Common.Utilities;
 using CoreConnection.DTOs;
 using CoreDBModel.Services;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
 
 namespace PrimumCore.Services.Iterators
@@ -9,7 +10,7 @@ namespace PrimumCore.Services.Iterators
     {
         public async Task<TeacherEarningDto> GetTeacherEarning(int teacherId)
         {
-            var teacher = await dbIterator.Teachers(false).One(x => x.UserId == teacherId);
+            var teacher = await dbIterator.Teachers(false).Include(x => x.Rank).One(x => x.UserId == teacherId);
             var resp = service.CalculateToTeacher(teacher.ConvertionIndex, teacher.Rank.EarningMultiplier);
             return new TeacherEarningDto
             {
