@@ -1,4 +1,5 @@
 ﻿using CoreDBModel.Models;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,13 +14,20 @@ namespace CoreDBModel.Extensions
         {
             var url = Environment.GetEnvironmentVariable("COREDB_URL") ?? throw new ArgumentNullException("Missing env variable");
 
-            services.AddDbContext<PrimumContext>(options =>
-                options.UseNpgsql(url, npgsql =>
-                {
-                    npgsql.MigrationsAssembly(typeof(PrimumContext).Assembly.FullName);
-                    npgsql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null); // Авто-ретрай при кратковременных сбоях
-                    npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                }));
+            services.AddScoped<DatabaseIterator>(sp =>
+            {
+                var options = new DbContextOptionsBuilder<PrimumContext>()
+                    .UseNpgsql(url, npgsql =>
+                    {
+                        npgsql.MigrationsAssembly(typeof(PrimumContext).Assembly.FullName);
+                        npgsql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                        npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    })
+                    .Options;
+
+                var context = new PrimumContext(options);
+                return new DatabaseIterator(context);
+            });
 
             return services;
         }

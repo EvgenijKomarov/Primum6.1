@@ -1,5 +1,6 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;

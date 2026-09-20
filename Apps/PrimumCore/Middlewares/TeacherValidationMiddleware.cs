@@ -1,7 +1,9 @@
 ﻿using CoreDBModel.Constants;
 using CoreDBModel.Models;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
+using PrimumCore.Extentions;
 
 namespace PrimumCore.Middlewares
 {
@@ -19,8 +21,8 @@ namespace PrimumCore.Middlewares
                 int.TryParse(userIdObj?.ToString(), out int userId))
             {
                 var dbContext = context.RequestServices
-                    .GetRequiredService<PrimumContext>();
-                var user = await dbContext.Set<User>()
+                    .GetRequiredService<DatabaseIterator>();
+                var user = await dbContext.Users(true)
                     .Include(x => x.TeacherProfile)
                     .FirstOrDefaultAsync(x => x.Id == userId);
 

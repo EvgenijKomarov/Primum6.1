@@ -7,6 +7,7 @@ using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 using System.Linq.Expressions;
+using CoreDBModel.Services;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -15,6 +16,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<AbonementSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
         {
             return await dbIterator.AbonementShedules()
+                .Include(x => x.Abonement)
                 .Where(x => x.Abonement.Id == abonementId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
@@ -23,6 +25,9 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<AbonementSheduleDto>> GetStudentShedules(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.AbonementShedules()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
@@ -31,6 +36,9 @@ namespace PrimumCore.Services.Iterators
         public async Task<AbonementSheduleDto> GetStudentShedule(int studentId, int sheduleId)
         {
             return await dbIterator.AbonementShedules()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .ToDto()
                 .One(x => x.Id == sheduleId);
@@ -41,6 +49,13 @@ namespace PrimumCore.Services.Iterators
             var abonementShedule = await dbIterator.AbonementShedules()
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.AbonementShedules)
+                .Include(x => x.TeacherShedule)
+                .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .One(x => x.Id == abonementSheduleId);
             if (abonementShedule.Abonement.Student.User.Id != studentId) { throw new BusinessLogicException("Only owner can delete shedule"); }

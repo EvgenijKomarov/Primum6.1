@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Iterators;
 using System.Data;
+using CoreDBModel.Services;
 
 namespace PrimumCore.Services.Utilities
 {
@@ -84,30 +85,35 @@ namespace PrimumCore.Services.Utilities
             {
                 Permission.ModerateTeachers =>
                     await dbIterator.Users(false)
+                        .Include(x => x.TeacherProfile)
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedModeratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateTeachers =>
                     await dbIterator.Users(false)
+                        .Include(x => x.TeacherProfile)
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedAdministratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ApproveTeachers =>
                     await dbIterator.Users(false)
+                        .Include(x => x.TeacherProfile)
                         .Where(x => x.TeacherProfile.ApproveStatus == ApproveStatus.NeedManagerReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Teacher, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.ModerateStudents =>
                     await dbIterator.Users(false)
+                        .Include(x => x.StudentProfile)
                         .Where(x => x.StudentProfile.ApproveStatus == ApproveStatus.NeedModeratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Student, permission, x.Id))
                         .ToListAsync(cancellationToken),
 
                 Permission.AdministrateStudents =>
                     await dbIterator.Users(false)
+                        .Include(x => x.StudentProfile)
                         .Where(x => x.StudentProfile.ApproveStatus == ApproveStatus.NeedAdministratorReview)
                         .Select(x => new IncidentKey(x.Id, IncidentMeaning.Student, permission, x.Id))
                         .ToListAsync(cancellationToken),
@@ -171,6 +177,7 @@ namespace PrimumCore.Services.Utilities
             {
                 IncidentMeaning.Teacher => await dbIterator.Users(false)
                     .Where(x => x.Id == key.ObjectId)
+                    .Include(x => x.TeacherProfile)
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
@@ -204,6 +211,8 @@ namespace PrimumCore.Services.Utilities
 
                 IncidentMeaning.Course => await dbIterator.Courses(false)
                     .Where(x => x.Id == key.ObjectId)
+                    .Include(x => x.Teacher)
+                    .ThenInclude(t => t.User)
                     .Select(x => new IncidentDto
                     {
                         ObjectId = x.Id,
@@ -221,6 +230,16 @@ namespace PrimumCore.Services.Utilities
                     }).FirstOrDefaultAsync(cancellationToken),
 
                 IncidentMeaning.Lesson => await dbIterator.Lessons()
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Student)
+                    .ThenInclude(s => s.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Course)
+                    .ThenInclude(c => c.Teacher)
+                    .ThenInclude(t => t.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Course)
+                    .ThenInclude(c => c.CourseTheme)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {
@@ -241,6 +260,16 @@ namespace PrimumCore.Services.Utilities
                     }).FirstOrDefaultAsync(cancellationToken),
 
                 IncidentMeaning.LessonReport => await dbIterator.Lessons()
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Student)
+                    .ThenInclude(s => s.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Course)
+                    .ThenInclude(c => c.Teacher)
+                    .ThenInclude(t => t.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Course)
+                    .ThenInclude(c => c.CourseTheme)
                     .Where(x => x.Id == key.ObjectId)
                     .Select(x => new IncidentDto
                     {

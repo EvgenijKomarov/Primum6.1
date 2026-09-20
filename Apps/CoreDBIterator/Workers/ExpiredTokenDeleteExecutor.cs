@@ -1,4 +1,5 @@
 ﻿using CoreDBModel.Models;
+using CoreDBModel.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,10 +21,10 @@ namespace CoreDBIterator.Workers
         public async Task Action()
         {
             using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<DatabaseIterator>();
 
-            VerificationToken[] expiredVerificationTokens = context.Set<VerificationToken>()
-                .Where(x => x.LifeTime < DateTime.UtcNow || x.IsUsed == true)
+            VerificationToken[] expiredVerificationTokens = context.VerificationTokens(false)
+                .Where(x => x.LifeTime < DateTime.UtcNow)
                 .ToArray();
 
             if (expiredVerificationTokens.Length == 0)
@@ -37,7 +38,7 @@ namespace CoreDBIterator.Workers
 
             foreach(var token in expiredVerificationTokens)
             {
-                context.Set<VerificationToken>().Remove(token);
+                await context.RemoveAsync(token);
                 logger.LogInformation($"Token {token.Token} ({token.Meaning.ToString()}) was deleted");
             }
             await context.SaveChangesAsync();

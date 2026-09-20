@@ -1,5 +1,6 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
@@ -19,6 +20,8 @@ namespace PrimumCore.Services.Utilities
         public async Task<AdminProfile> GetIteratingUser(int id)
         {
             return await dbIterator.Admins()
+                .Include(x => x.Permissions)
+                .Include(x => x.IncidentLogs)
                 .One(x => x.User.Id == id);
         }
 

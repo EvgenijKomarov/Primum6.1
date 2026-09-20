@@ -1,6 +1,7 @@
 ﻿using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedCoreBusinessLogic;
 
@@ -21,10 +22,10 @@ namespace CoreDBIterator.Workers
         public async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<DatabaseIterator>();
             var lessonBuilder = scope.ServiceProvider.GetRequiredService<LessonBuilder>();
 
-            var availableForProlongation = await context.Set<AbonementShedule>()
+            var availableForProlongation = await context.AbonementShedules()
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Course)
                 .Include(x => x.Abonement)
@@ -47,7 +48,7 @@ namespace CoreDBIterator.Workers
                 if (AvailabilityExpressions.IsAbonementAlive.Compile()(s.Abonement))
                 {
                     var lesson = await lessonBuilder.Build(s, SlotPickPolicy.NextWeek, SlotConflictPolicy.SkipWeek);
-                    context.Set<Lesson>().Add(lesson);
+                    await context.AddAsync(lesson);
                     logger?.LogInformation($"Created lesson for {lesson.AbonementId} at {lesson.DateTime}");
                 }
                 else

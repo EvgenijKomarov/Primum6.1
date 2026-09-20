@@ -1,6 +1,7 @@
 ﻿using Common.Utilities;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
+using CoreDBModel.Services;
 using PaymentServiceConnection;
 using PrimumCore.Constants;
 using PrimumCore.Controllers;
@@ -41,7 +42,6 @@ namespace PrimumCore.Extentions
             builder.Services.AddScoped<IncidentCollector>();
             builder.Services.AddScoped<IncidentSolver>();
             builder.Services.AddScoped<AdminProfileHelper>();
-            builder.Services.AddScoped<DatabaseIterator>();
             builder.Services.AddScoped<RanksIterator>();
             builder.Services.AddScoped<MathFormulas>();
             builder.Services.AddScoped<EarningCalculationService>();

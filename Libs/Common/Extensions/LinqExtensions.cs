@@ -1,8 +1,6 @@
-﻿using CoreDBModel.Extensions;
-using System.Collections.Concurrent;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace PrimumCore.Extentions
+namespace Common.Extensions
 {
     public static class LinqExtensions
     {

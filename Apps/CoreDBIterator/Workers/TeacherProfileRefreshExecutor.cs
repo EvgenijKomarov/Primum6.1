@@ -1,5 +1,6 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,9 @@ namespace CoreDBIterator.Workers
         public async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<DatabaseIterator>();
 
-            var teacherProfiles = await context.Set<TeacherProfile>()
+            var teacherProfiles = await context.Teachers(false)
                 .Include(x => x.User)
                 .Where(x => !x.User.IsBanned)
                 .Include(x => x.Courses)

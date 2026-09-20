@@ -1,12 +1,12 @@
 ﻿using CoreConnection.DTOs;
 using CoreConnection.DTOs.Inputs;
 using PrimumCore.Entities;
-using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
-using Microsoft.EntityFrameworkCore;
-using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
+using CoreDBModel.Services;
+using Common.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -25,6 +25,7 @@ namespace PrimumCore.Services.Iterators
 
             return await dbIterator
                 .IncidentLogs(OnlyUnrevisioned)
+                .Include(x => x.AdminProfile)
                 .WhereIf(adminUserId is not null, e => e.AdminProfile.UserId == adminUserId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);

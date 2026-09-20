@@ -3,6 +3,7 @@ using CoreDBModel.Extensions;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Attributes;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
 using PrimumCore.Exceptions;
@@ -50,6 +51,7 @@ namespace PrimumCore.Services.Utilities
                     var teacher = await dbIterator.Teachers(false)
                         .Include(x => x.TeacherShedules)
                         .Include(x => x.Courses)
+                        .Include(x => x.User)
                         .One(x => x.User.Id == id);
 
                     switch(decision) 
@@ -81,6 +83,11 @@ namespace PrimumCore.Services.Utilities
                 async (id, decision) =>
                 {
                     var student = await dbIterator.Students()
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.AbonementShedules)
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.Lessons)
+                        .Include(x => x.User)
                         .One(x => x.User.Id == id);
 
                     switch(decision)
@@ -106,6 +113,10 @@ namespace PrimumCore.Services.Utilities
                 async (id, decision) =>
                 {
                     var course = await dbIterator.Courses(false)
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.AbonementShedules)
+                        .Include(x => x.Abonements)
+                        .ThenInclude(x => x.Lessons)
                         .One(x => x.Id == id);
 
                     switch(decision)
@@ -134,6 +145,16 @@ namespace PrimumCore.Services.Utilities
                 async (id, decision) =>
                 {
                     var lesson = await dbIterator.Lessons()
+                        .Include(x => x.Abonement)
+                        .ThenInclude(a => a.Student)
+                        .ThenInclude(s => s.User)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(a => a.Student)
+                        .ThenInclude(s => s.Abonements)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(a => a.Lessons)
+                        .Include(x => x.Abonement)
+                        .ThenInclude(a => a.AbonementShedules)
                         .One(x => x.Id == id);
 
                     switch(decision)
@@ -265,7 +286,15 @@ namespace PrimumCore.Services.Utilities
                     };
 
                     var lesson = await dbIterator.Lessons()
-                        .One(x => x.Id == id);
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Course)
+                    .ThenInclude(c => c.Teacher)
+                    .ThenInclude(t => t.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(a => a.Student)
+                    .ThenInclude(s => s.User)
+                    .One(x => x.Id == id);
+
                     if(penalties.TryGetValue(lesson.ReportStatus, out var penalty))
                     {
                         switch(decision)

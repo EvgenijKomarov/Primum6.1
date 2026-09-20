@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
+using CoreDBModel.Services;
+using Common.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -15,6 +17,7 @@ namespace PrimumCore.Services.Iterators
         {
             return await dbIterator
                 .Admins()
+                .Include(x => x.User)
                 .WhereIf(!string.IsNullOrEmpty(displayName), e => EF.Functions.Like(
                     (
                          (e.User.Surname ?? "") + " " +
@@ -36,6 +39,8 @@ namespace PrimumCore.Services.Iterators
             var iteratingAdmin = await helper.CheckIteratingUser(userId, Permission.EditPermissions);
 
             var admin = await dbIterator.Admins()
+                .Include(x => x.User)
+                .Include(x => x.Permissions)
                 .One(x => x.User.Id == objUserId);
 
             var adminPermissions = helper.GetAllPermissions(admin);
@@ -109,6 +114,8 @@ namespace PrimumCore.Services.Iterators
             var iteratingAdmin = await helper.CheckIteratingUser(userId, Permission.CreateAdminProfiles);
 
             var user = await dbIterator.Users(false)
+                .Include(x => x.AdminProfile)
+                .ThenInclude(x => x.Permissions)
                 .One(x => x.Id == objUserId);
             if (user.AdminProfile is null) { throw new BusinessLogicException("AdminProfile not exists"); }
 

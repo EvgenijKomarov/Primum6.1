@@ -1,5 +1,6 @@
 ﻿using Common.Utilities;
 using CoreConnection.DTOs;
+using CoreDBModel.Services;
 using PrimumCore.Extentions;
 
 namespace PrimumCore.Services.Iterators

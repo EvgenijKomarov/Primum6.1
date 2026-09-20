@@ -8,6 +8,8 @@ using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.ComponentModel.DataAnnotations;
 using PaymentServiceConnection;
+using CoreDBModel.Services;
+using Common.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -54,6 +56,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateTeacherProfile(int userId, TeacherRegistrationInputDto dto)
         {
             var user = await dbIterator.Users(false)
+                .Include(x => x.TeacherProfile)
                 .One(x => x.Id == userId);
             if (user.TeacherProfile is not null) { throw new BusinessLogicException("User is already teacher"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }
@@ -76,6 +79,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateStudentProfile(int userId)
         {
             var user = await dbIterator.Users(false)
+                .Include(x => x.StudentProfile)
                 .One(x => x.Id == userId);
             if (user.StudentProfile is not null) { throw new BusinessLogicException("User is already student"); }
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new NotAvailableException("User"); }

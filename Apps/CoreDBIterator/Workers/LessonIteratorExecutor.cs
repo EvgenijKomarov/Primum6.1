@@ -2,6 +2,7 @@
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
 using PublishServiceConnection;
@@ -24,13 +25,13 @@ namespace CoreDBIterator.Workers
         public async Task Action()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<PrimumContext>();
+            var context = scope.ServiceProvider.GetRequiredService<DatabaseIterator>();
             var publisher = scope.ServiceProvider.GetRequiredService<PublisherService>();
             var paymentClient = scope.ServiceProvider.GetRequiredService<PaymentServiceClient>();
             var earningService = scope.ServiceProvider.GetRequiredService<EarningCalculationService>();
             var jitsiService = new JitsiLinkCreationService();
 
-            var lessonsForIteration = context.Set<Lesson>()
+            var lessonsForIteration = context.Lessons()
                 .Include(x => x.Abonement)
                 .ThenInclude(x => x.Student)
                 .ThenInclude(x => x.User)

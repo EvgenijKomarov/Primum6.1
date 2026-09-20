@@ -1,4 +1,5 @@
 ﻿using CoreDBModel.Constants;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Entities;
 using PrimumCore.Exceptions;
@@ -12,8 +13,7 @@ namespace PrimumCore.Services.Iterators
     {
         public async Task<int> AddChat(int userId, string token)
         {
-            var user = await dbIterator.Users(true)
-                .IgnoreQueryFilters()
+            var user = await dbIterator.Users(false)
                 .One(x => x.Id == userId);
             if (!AvailabilityExpressions.IsUserAvailable.Compile()(user)) { throw new BusinessLogicException("User should be available"); }
 

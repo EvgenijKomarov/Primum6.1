@@ -1,5 +1,6 @@
 ﻿using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Services.Iterators;
 
@@ -11,6 +12,7 @@ namespace PrimumCore.Services.Utilities
         {
             return await dbIterator
                 .Admins()
+                .Include(x => x.Permissions)
                 .Where(x => x.Permissions.Select(p => p.Permission).Any(p => permissions.Contains(p)))
                 .ToListAsync();
         }

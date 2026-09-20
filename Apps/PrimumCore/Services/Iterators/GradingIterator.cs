@@ -1,6 +1,7 @@
 ﻿using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Constants;
 using PrimumCore.Exceptions;
@@ -15,6 +16,13 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> GradeLesson(int teacherId, int lessonId, GradingInputDto dto)
         {
             var lesson = await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .Include(x => x.Grading)
                 .One(x => x.Id == lessonId);
             if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
             if (lesson.Grading is not null) { throw new BusinessLogicException("Lesson already gradet"); }

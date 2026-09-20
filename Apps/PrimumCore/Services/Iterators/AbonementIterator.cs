@@ -7,7 +7,7 @@ using PublishServiceConnection.Events;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using CoreDBModel.Models;
-using LinqKit;
+using CoreDBModel.Services;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -15,7 +15,10 @@ namespace PrimumCore.Services.Iterators
     {
         public async Task<PageResult<AbonementDto>> GetTeacherAbonements(int teacherId, int _page, int _pageSize)
         {
-            return await dbIterator.Abonements(true)
+            return await dbIterator.Abonements(false)
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Course.Teacher.User.Id == teacherId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
@@ -23,7 +26,10 @@ namespace PrimumCore.Services.Iterators
 
         public async Task<AbonementDto> GetTeacherAbonement(int teacherId, int abonementId)
         {
-            return await dbIterator.Abonements(true)
+            return await dbIterator.Abonements(false)
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Course.Teacher.User.Id == teacherId)
                 .ToDto()
                 .One(x => x.Id == abonementId);
@@ -32,6 +38,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<AbonementDto>> GetStudentAbonements(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.Abonements(false)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Student.User.Id == studentId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
@@ -40,6 +48,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<AbonementDto> GetStudentAbonement(int studentId, int abonementId)
         {
             return await dbIterator.Abonements(false)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Student.User.Id == studentId)
                 .ToDto()
                 .One(x => x.Id == abonementId);
@@ -49,6 +59,8 @@ namespace PrimumCore.Services.Iterators
         {
             var abonement = await dbIterator.Abonements(false)
                 .Include(x => x.AbonementShedules)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Student.User.Id == studentId)
                 .One(x => x.Id == abonementId);
 
@@ -79,6 +91,7 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.ReferalToken == token);
             var student = await dbIterator.Students()
                 .Include(x => x.Abonements)
+                .Include(x => x.User)
                 .One(x => x.User.Id == studentId);
 
             if (student.Abonements.Any(x => x.CourseId == course.Id))

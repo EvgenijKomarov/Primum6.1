@@ -4,6 +4,7 @@ using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Entities;
 using PrimumCore.Exceptions;
@@ -27,6 +28,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
                 .Where(x => x.Abonement.Id == abonementId)
                 .ToDto(isStudentLink)
                 .ToPageResult(_page, _pageSize);
@@ -35,6 +37,10 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<LessonDto>> GetTeacherLastLessons(int teacherId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
                 .Where(x => x.DateTime < DateTime.UtcNow)
                 .ToDto(false)
@@ -44,6 +50,10 @@ namespace PrimumCore.Services.Iterators
         public async Task<LessonDto> GetTeacherLesson(int teacherId, int lessonId)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
                 .ToDto(false)
                 .One(x => x.Id == lessonId);
@@ -52,6 +62,10 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<LessonsByDateDto>> GetTeacherFutureLessons(int teacherId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Course.Teacher.User.Id == teacherId)
                 .Where(x => x.DateTime > DateTime.UtcNow)
                 .ToByDateDto(false, calculationService)
@@ -61,6 +75,9 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<LessonDto>> GetStudentLastLessons(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .Where(x => x.DateTime < DateTime.UtcNow)
                 .ToDto(true)
@@ -70,6 +87,9 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<LessonsByDateDto>> GetStudentFutureLessons(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .Where(x => x.DateTime > DateTime.UtcNow)
                 .ToByDateDto(true, calculationService)
@@ -79,6 +99,9 @@ namespace PrimumCore.Services.Iterators
         public async Task<LessonDto> GetStudentLesson(int studentId, int lessonId)
         {
             return await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .ToDto(true)
                 .One(x => x.Id == lessonId);
@@ -87,6 +110,13 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CancelLesson(int studentId, int lessonId)
         {
             var lesson = await dbIterator.Lessons()
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Abonement)
+                .ThenInclude(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Abonement.Student.User.Id == studentId)
                 .One(x => x.Id == lessonId);
 
@@ -118,14 +148,28 @@ namespace PrimumCore.Services.Iterators
             if (isStudentReporting)
             {
                 lesson = await dbIterator.Lessons()
-                   .Where(x => x.Abonement.Student.User.Id == userId)
-                   .One(x => x.Id == lessonId);
+                    .Include(x => x.Abonement)
+                    .ThenInclude(x => x.Student)
+                    .ThenInclude(x => x.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(x => x.Course)
+                    .ThenInclude(x => x.Teacher)
+                    .ThenInclude(x => x.User)
+                    .Where(x => x.Abonement.Student.User.Id == userId)
+                    .One(x => x.Id == lessonId);
             }
             else
             {
-                lesson = lesson = await dbIterator.Lessons()
-                   .Where(x => x.Abonement.Course.Teacher.User.Id == userId)
-                   .One(x => x.Id == lessonId);
+                lesson = await dbIterator.Lessons()
+                    .Include(x => x.Abonement)
+                    .ThenInclude(x => x.Student)
+                    .ThenInclude(x => x.User)
+                    .Include(x => x.Abonement)
+                    .ThenInclude(x => x.Course)
+                    .ThenInclude(x => x.Teacher)
+                    .ThenInclude(x => x.User)
+                    .Where(x => x.Abonement.Course.Teacher.User.Id == userId)
+                    .One(x => x.Id == lessonId);
             }
 
             if (lesson.ReportStatus != LessonReportStatus.Ok) throw new BusinessLogicException("Lesson already reported");

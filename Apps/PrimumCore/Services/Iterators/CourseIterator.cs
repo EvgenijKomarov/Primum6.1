@@ -2,6 +2,8 @@
 using CoreConnection.DTOs.Inputs;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Entities;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
@@ -15,6 +17,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<CourseDto>> GetCoursesByTeacher(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.Courses(isOnlyAvailable)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .ToDto(_gatewayUrl)
                 .ToPageResult(_page, _pageSize);
@@ -23,6 +27,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<CourseDto> GetCourseByTeacher(int teacherId, int courseId, bool isOnlyAvailable)
         {
             return await dbIterator.Courses(isOnlyAvailable)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .ToDto(_gatewayUrl)
                 .One(x => x.Id == courseId);
@@ -41,6 +47,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<CourseDtoLite>> GetCoursesByTheme(int themeId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.Courses(isOnlyAvailable)
+                .Include(x => x.CourseTheme)
                 .Where(x => x.CourseTheme.Id == themeId)
                 .ToDtoLite()
                 .ToPageResult(_page, _pageSize);
@@ -49,6 +56,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> EditCourse(int teacherId, int courseId, CourseInputDto courseDto)
         {   
             var course = await dbIterator.Courses(false)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
 
@@ -73,6 +82,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateCourse(int teacherId, CourseInputDto courseDto)
         {
             var teacher = await dbIterator.Teachers(true)
+                .Include(x => x.Courses)
                 .One(x => x.User.Id == teacherId);
 
             var course = new Course
@@ -94,6 +104,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> SwitchCourseActivity(int teacherId, int courseId, bool activity)
         {
             var course = await dbIterator.Courses(false)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .One(x => x.Id == courseId);
 

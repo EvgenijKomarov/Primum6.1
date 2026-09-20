@@ -9,6 +9,8 @@ using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
 using PrimumCore.Services.Utilities;
 using System.Linq.Expressions;
+using CoreDBModel.Services;
+using Common.Extensions;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -36,6 +38,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PromocodeDto> BuyPromocode(int studentId, int promocodeId)
         {
             var code = await dbIterator.Promocodes(true)
+                .Include(x => x.Student)
                 .One(x => x.Id == promocodeId);
 
             var student = await dbIterator.Students()
@@ -61,6 +64,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<PromocodeDto>> GetStudentPromocodes(int studentId, int _page, int _pageSize)
         {
             return await dbIterator.Promocodes(false)
+                .Include(x => x.Student)
                 .Where(x => x.Student != null && x.Student.UserId == studentId)
                 .ToDto(false)
                 .ToPageResult(_page, _pageSize);

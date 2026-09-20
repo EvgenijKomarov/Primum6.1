@@ -3,54 +3,79 @@ using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using PrimumCore.Services.Utilities;
 
 namespace PrimumCore.Extentions
 {
     internal static class ModelExtensions
     {
-        public static IQueryable<AbonementDto> ToDto(this IQueryable<Abonement> queryable) => queryable.Select(x => 
-            new AbonementDto
-            {
-                MaxLessons = x.Course.MaxLessons,
-                FreeLessons = x.FreeLessons,
-                StudentId = x.Student.User.Id,
-                StudentDisplayName = x.Student.User.DisplayName,
-                TeacherId = x.Course.Teacher.User.Id,
-                TeacherDisplayName = x.Course.Teacher.User.DisplayName,
-                Id = x.Id,
-                CourseName = x.Course.Name,
-                CourseId = x.Course.Id,
-                CancelledLessons = x.CancelledLessons,
-                CourseThemeName = x.Course.CourseTheme.ThemeName,
-                CourseThemeId = x.Course.CourseTheme.Id,
-                PricePerLesson = x.PricePerLesson,
-                AbonementStatus = x.AbonementStatus,
-                Rating = x.Rating,
-                IsReferal = x.IsReferal,
-            });
+        public static IQueryable<AbonementDto> ToDto(this IQueryable<Abonement> queryable) =>
+            queryable
+            .Include(x => x.Course)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Student)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Lessons)
+            .Include(x => x.Course)
+            .ThenInclude(x => x.CourseTheme)
+            .Select(x => 
+                new AbonementDto
+                {
+                    MaxLessons = x.Course.MaxLessons,
+                    FreeLessons = x.FreeLessons,
+                    StudentId = x.Student.User.Id,
+                    StudentDisplayName = x.Student.User.DisplayName,
+                    TeacherId = x.Course.Teacher.User.Id,
+                    TeacherDisplayName = x.Course.Teacher.User.DisplayName,
+                    Id = x.Id,
+                    CourseName = x.Course.Name,
+                    CourseId = x.Course.Id,
+                    CancelledLessons = x.CancelledLessons,
+                    CourseThemeName = x.Course.CourseTheme.ThemeName,
+                    CourseThemeId = x.Course.CourseTheme.Id,
+                    PricePerLesson = x.PricePerLesson,
+                    AbonementStatus = x.AbonementStatus,
+                    Rating = x.Rating,
+                    IsReferal = x.IsReferal,
+                }
+            );
 
-        public static IQueryable<CourseDtoLite> ToDtoLite(this IQueryable<Course> queryable) => queryable.Select(x =>
-            new CourseDtoLite
-            {
-                Id = x.Id,
-                Name = x.Name,
-                TeacherName = x.Teacher.User.DisplayName,
-                CourseThemeName = x.CourseTheme.ThemeName,
-                About = x.About,
-                CourseThemeId = x.CourseTheme.Id,
-                TeacherId = x.Teacher.User.Id,
-                Price = x.Price,
-                MaxLessons = x.MaxLessons,
-                FreeLessons = x.FreeLessons,
-                TeacherAbout = x.Teacher.About,
-                IsActive = x.IsActive,
-                IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
-                Rank = x.Rank.Rank,
-                Level = x.Rank.Level
-            });
+        public static IQueryable<CourseDtoLite> ToDtoLite(this IQueryable<Course> queryable) =>
+            queryable
+            .Include(x => x.CourseTheme)
+            .Include(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Rank)
+            .Select(x =>
+                new CourseDtoLite
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    TeacherName = x.Teacher.User.DisplayName,
+                    CourseThemeName = x.CourseTheme.ThemeName,
+                    About = x.About,
+                    CourseThemeId = x.CourseTheme.Id,
+                    TeacherId = x.Teacher.User.Id,
+                    Price = x.Price,
+                    MaxLessons = x.MaxLessons,
+                    FreeLessons = x.FreeLessons,
+                    TeacherAbout = x.Teacher.About,
+                    IsActive = x.IsActive,
+                    IsAvailable = AvailabilityExpressions.IsCourseAvailable.Compile()(x),
+                    Rank = x.Rank.Rank,
+                    Level = x.Rank.Level
+                }
+            );
 
-        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable, string gatewayUrl) => queryable.Select(x =>
+        public static IQueryable<CourseDto> ToDto(this IQueryable<Course> queryable, string gatewayUrl) =>
+            queryable
+            .Include(x => x.CourseTheme)
+            .Include(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Rank)
+            .Select(x =>
             new CourseDto
             {
                 Id = x.Id,
@@ -73,24 +98,36 @@ namespace PrimumCore.Extentions
                 ReferalLink = $"{gatewayUrl}/referal?token={x.ReferalToken}",
             });
 
-        public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) => queryable.Select(x => 
-            new AdminProfileDto
-            {
-                DisplayName = x.User.DisplayName,
-                UserId = x.User.Id,
-                Status = x.Status ?? string.Empty,
-                Permissions = helper.GetAllPermissions(x)
-            });
+        public static IQueryable<AdminProfileDto> ToDto(this IQueryable<AdminProfile> queryable, AdminProfileHelper helper) =>
+            queryable
+            .Include(x => x.User)
+            .Include(x => x.Permissions)
+            .Select(x => 
+                new AdminProfileDto
+                {
+                    DisplayName = x.User.DisplayName,
+                    UserId = x.User.Id,
+                    Status = x.Status ?? string.Empty,
+                    Permissions = helper.GetAllPermissions(x)
+                }
+            );
 
-        public static IQueryable<CourseThemeDto> ToDto(this IQueryable<CourseTheme> queryable) => queryable.Select(x => 
-            new CourseThemeDto
-            {
-                Id = x.Id,
-                ThemeName = x.ThemeName,
-                IsActive = x.IsActive
-            });
+        public static IQueryable<CourseThemeDto> ToDto(this IQueryable<CourseTheme> queryable) => 
+            queryable
+            .Select(x => 
+                new CourseThemeDto
+                {
+                    Id = x.Id,
+                    ThemeName = x.ThemeName,
+                    IsActive = x.IsActive
+                }
+            );
 
-        public static IQueryable<IncidentLogDto> ToDto(this IQueryable<IncidentLog> queryable) => queryable.Select(x => 
+        public static IQueryable<IncidentLogDto> ToDto(this IQueryable<IncidentLog> queryable) => 
+            queryable
+            .Include(x => x.AdminProfile)
+            .ThenInclude(x => x.User)
+            .Select(x => 
             new IncidentLogDto
             {
                 Id = x.Id,
@@ -101,33 +138,48 @@ namespace PrimumCore.Extentions
                 IsRevisioned = x.IsRevisioned
             });
 
-        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) => queryable
+        public static IQueryable<LessonDto> ToDto(this IQueryable<Lesson> queryable, bool isStudentLink) =>
+            queryable
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Course)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Student)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(a => a.Course)
+            .Include(x => x.Grading)
             .Select(x => new LessonDto
-            {
-                DateTime = x.DateTime,
-                CourseName = x.Abonement.Course.Name,
-                CourseId = x.Abonement.Course.Id,
-                IsWorkoff = x.IsWorkoff,
-                TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
-                TeacherId = x.Abonement.Course.Teacher.User.Id,
-                StudentDisplayName = x.Abonement.Student.User.DisplayName,
-                StudentId = x.Abonement.Student.User.Id,
-                LessonLink = isStudentLink ? (x.StudentLink ?? string.Empty) : (x.TeacherLink ?? string.Empty),
-                AbonementId = x.Abonement.Id,
-                Price = x.Price,
-                Id = x.Id,
-                IsReferal = x.IsReferal,
-                LessonStatus = x.Status,
-                HomeworkGrade = x.Grading == null ? null : (int?)x.Grading.HomeworkGrade,
-                LessonActivityGrade = x.Grading == null ? null : (int?)x.Grading.LessonActivityGrade,
-                RepetitionOfMaterialGrade = x.Grading == null ? null : (int?)x.Grading.RepetitionOfMaterialGrade,
-                StudyInitiativeGrade = x.Grading == null ? null : (int?)x.Grading.StudyInitiativeGrade,
-                FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade(),
-                TeacherEarning = isStudentLink ? null : x.TeacherEarning,
-                IsReported = x.ReportStatus != LessonReportStatus.Ok
-            });
+                {
+                    DateTime = x.DateTime,
+                    CourseName = x.Abonement.Course.Name,
+                    CourseId = x.Abonement.Course.Id,
+                    IsWorkoff = x.IsWorkoff,
+                    TeacherDisplayName = x.Abonement.Course.Teacher.User.DisplayName,
+                    TeacherId = x.Abonement.Course.Teacher.User.Id,
+                    StudentDisplayName = x.Abonement.Student.User.DisplayName,
+                    StudentId = x.Abonement.Student.User.Id,
+                    LessonLink = isStudentLink ? (x.StudentLink ?? string.Empty) : (x.TeacherLink ?? string.Empty),
+                    AbonementId = x.Abonement.Id,
+                    Price = x.Price,
+                    Id = x.Id,
+                    IsReferal = x.IsReferal,
+                    LessonStatus = x.Status,
+                    HomeworkGrade = x.Grading == null ? null : (int?)x.Grading.HomeworkGrade,
+                    LessonActivityGrade = x.Grading == null ? null : (int?)x.Grading.LessonActivityGrade,
+                    RepetitionOfMaterialGrade = x.Grading == null ? null : (int?)x.Grading.RepetitionOfMaterialGrade,
+                    StudyInitiativeGrade = x.Grading == null ? null : (int?)x.Grading.StudyInitiativeGrade,
+                    FinalGrade = x.Grading == null ? null : x.Grading.GetFinalGrade(),
+                    TeacherEarning = isStudentLink ? null : x.TeacherEarning,
+                    IsReported = x.ReportStatus != LessonReportStatus.Ok
+                });
 
-        public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => queryable.Select(x => 
+        public static IQueryable<PromocodeDto> ToDto(this IQueryable<Promocode> queryable, bool isCodeSecured) => 
+            queryable
+            .Include(x => x.Student)
+            .ThenInclude(x => x.User)
+            .Select(x => 
             new PromocodeDto
             {
                 Id = x.Id,
@@ -141,7 +193,11 @@ namespace PrimumCore.Extentions
 
         public static IQueryable<TeacherProfileDto> ToDto(this IQueryable<TeacherProfile> queryable,
             bool isConfidential
-            ) => queryable.Select(x =>
+            ) =>
+            queryable
+            .Include(x => x.User)
+            .Include(x => x.Rank)
+            .Select(x =>
             new TeacherProfileDto
             {
                 DisplayName = x.User.DisplayName,
@@ -154,7 +210,11 @@ namespace PrimumCore.Extentions
                 ConvertionIndex = isConfidential ? null : x.ConvertionIndex
             });
 
-        public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) => queryable.Select(x => 
+        public static IQueryable<StudentProfileDto> ToDto(this IQueryable<StudentProfile> queryable) =>
+            queryable
+            .Include(x => x.User)
+            .Include(x => x.Rank)
+            .Select(x => 
             new StudentProfileDto
             {
                 DisplayName = x.User.DisplayName,
@@ -166,7 +226,14 @@ namespace PrimumCore.Extentions
                 Experience = x.Experience,
             });
 
-        public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) => queryable.Select(x => 
+        public static IQueryable<AbonementSheduleDto> ToDto(this IQueryable<AbonementShedule> queryable) =>
+            queryable
+            .Include(x => x.TeacherShedule)
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Course)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Select(x => 
             new AbonementSheduleDto
             {
                 DayOfWeek = x.TeacherShedule.DayOfWeek,
@@ -178,7 +245,18 @@ namespace PrimumCore.Extentions
                 Id = x.Id
             });
 
-        public static IQueryable<TeacherSheduleDto> ToDto(this IQueryable<TeacherShedule> queryable) => queryable.Select(x => 
+        public static IQueryable<TeacherSheduleDto> ToDto(this IQueryable<TeacherShedule> queryable) =>
+            queryable
+            .Include(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.AbonementShedule)
+            .ThenInclude(x => x.Abonement)
+            .ThenInclude(x => x.Student)
+            .ThenInclude(x => x.User)
+            .Include(x => x.AbonementShedule)
+            .ThenInclude(x => x.Abonement)
+            .ThenInclude(x => x.Course)
+            .Select(x => 
             new TeacherSheduleDto
             {
                 Id = x.Id,
@@ -193,7 +271,12 @@ namespace PrimumCore.Extentions
                 AbonementId = x.AbonementShedule == null ? null : x.AbonementShedule.Abonement.Id
             });
 
-        public static IQueryable<UserDto> ToDto(this IQueryable<User> queryable) => queryable.Select(x => 
+        public static IQueryable<UserDto> ToDto(this IQueryable<User> queryable) =>
+            queryable
+            .Include(u => u.TeacherProfile)
+            .Include(u => u.StudentProfile)
+            .Include(u => u.AdminProfile)
+            .Select(x => 
             new UserDto
             {
                 Id = x.Id,
@@ -213,7 +296,12 @@ namespace PrimumCore.Extentions
                 IsAvailable = AvailabilityExpressions.IsUserAvailable.Compile()(x)
             });
 
-        public static IQueryable<UserDtoLite> ToDtoLite(this IQueryable<User> queryable) => queryable.Select(x => 
+        public static IQueryable<UserDtoLite> ToDtoLite(this IQueryable<User> queryable) =>
+            queryable
+            .Include(u => u.TeacherProfile)
+            .Include(u => u.StudentProfile)
+            .Include(u => u.AdminProfile)
+            .Select(x => 
             new UserDtoLite
             {
                 Id = x.Id,
@@ -258,7 +346,18 @@ namespace PrimumCore.Extentions
                 EarningMultiplier = x.EarningMultiplier,
             });
 
-        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink, EarningCalculationService service) => queryable
+        public static IQueryable<LessonsByDateDto> ToByDateDto(this IQueryable<Lesson> queryable, bool isStudentLink, EarningCalculationService service) =>
+            queryable
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Course)
+            .ThenInclude(x => x.Teacher)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(x => x.Student)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Abonement)
+            .ThenInclude(a => a.Course)
+            .Include(x => x.Grading)
             .OrderBy(x => x.DateTime)
             .GroupBy(x => x.DateTime)
             .Select(x => new LessonsByDateDto

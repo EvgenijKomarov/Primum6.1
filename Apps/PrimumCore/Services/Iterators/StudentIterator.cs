@@ -3,6 +3,7 @@ using CoreConnection.DTOs;
 using CoreDBModel.Constants;
 using CoreDBModel.Models;
 using CoreDBModel.Models.Enums;
+using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using PrimumCore.Extentions;
@@ -21,6 +22,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<StudentProfileDto> GetStudentProfile(int studentId)
         {
             var student = await dbIterator.Students()
+                .Include(x => x.User)
+                .Include(x => x.Rank)
                 .One(x => x.User.Id == studentId);
 
             return new StudentProfileDto 
@@ -52,6 +55,8 @@ namespace PrimumCore.Services.Iterators
             if (!AvailabilityExpressions.IsCourseAvailable.Compile()(course)) { throw new NotFoundException("Course"); }
 
             var teacherShedule = await dbIterator.TeacherShedules(true)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .One(x => x.Id == teacherSheduleId);
             if (teacherShedule.Teacher.ApproveStatus != ApproveStatus.Approved) { throw new NotAvailableException("Teacher is not approved"); }
             if (!AvailabilityExpressions.IsTeacherSheduleAvailable.Compile()(teacherShedule)) { throw new BusinessLogicException("Shedule is busy"); }

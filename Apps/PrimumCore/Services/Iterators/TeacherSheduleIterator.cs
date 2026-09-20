@@ -10,6 +10,7 @@ using PrimumCore.Extentions;
 using PublishServiceConnection;
 using PublishServiceConnection.Events;
 using System.Linq.Expressions;
+using CoreDBModel.Services;
 
 namespace PrimumCore.Services.Iterators
 {
@@ -18,6 +19,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<PageResult<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
         {
             return await dbIterator.TeacherShedules(isOnlyAvailable)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
@@ -26,6 +29,8 @@ namespace PrimumCore.Services.Iterators
         public async Task<TeacherSheduleDto> GetTeacherShedule(int teacherId, int sheduleId, bool isOnlyAvailable)
         {
             return await dbIterator.TeacherShedules(isOnlyAvailable)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
                 .ToDto()
                 .One(x => x.Id == sheduleId);
@@ -34,6 +39,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateTeacherShedule(int teacherId, TeacherSheduleInputDto sheduleDto)
         {
             var teacher = await dbIterator.Teachers(true)
+                .Include(x => x.User)
                 .Include(x => x.TeacherShedules)
                 .One(x => x.User.Id == teacherId);
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }
@@ -55,6 +61,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> DeleteTeacherShedule(int teacherId, int sheduleId)
         {
             var teacher = await dbIterator.Teachers(true)
+                .Include(x => x.User)
                 .Include(x => x.TeacherShedules)
                 .One(x => x.User.Id == teacherId);
             if (!AvailabilityExpressions.IsTeacherAvailable.Compile()(teacher)) { throw new NotAvailableException("Teacher"); }

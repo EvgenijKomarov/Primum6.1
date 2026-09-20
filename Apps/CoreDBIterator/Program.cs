@@ -2,6 +2,7 @@ using Common.Utilities;
 using CoreDBIterator.Workers;
 using CoreDBModel.Extensions;
 using CoreDBModel.Models;
+using CoreDBModel.Services;
 using PaymentServiceConnection;
 using PublishServiceConnection;
 using Serilog;
@@ -20,7 +21,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddScoped<EarningCalculationService>();
-        services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<PrimumContext>().Set<Lesson>());
+        services.AddScoped<IQueryable<Lesson>>(sp => sp.GetRequiredService<DatabaseIterator>().Lessons());
         services.AddScoped<ConverterToDateTimeService>();
         services.AddScoped<LessonBuilder>();
 
@@ -34,6 +35,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHostedService<LessonWarningExecutor>();
         services.AddHostedService<LessonIteratorExecutor>();
         services.AddHostedService<ExpiredTokenDeleteExecutor>();
+        services.AddHostedService<TeacherProfileRefreshExecutor>();
 
         services.AddCoreContext();
     });
