@@ -59,14 +59,14 @@ namespace CoreDBIterator.Workers
                     TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                     StudentEmail = lesson.Abonement.Student.User.MailAdress,
                     TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                    TeacherUserId = lesson.Abonement.Course.TeacherId,
+                    TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                     TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
                     CourseName = lesson.Abonement.Course.Name,
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
                     IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price,
-                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.TeacherId)
+                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.Teacher.User.Id)
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }
