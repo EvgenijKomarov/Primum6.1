@@ -20,9 +20,15 @@ namespace PrimumCore.Middlewares
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(ex.Message);
             }
+            catch (InvalidCredentialsException ex)
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsync(ex.Message);
+            }
             catch (BusinessLogicException ex)
             {
-                context.Response.StatusCode = 500;
+                // Нарушение бизнес-правила — ошибка запроса, а не сбой сервера
+                context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(ex.Message);
             }
             catch (NoPermissionException ex)

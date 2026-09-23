@@ -25,12 +25,14 @@ namespace PrimumCore.Services.Iterators
                 .One(x => x.Id == userId);
             //if (user.IsMailChecked) { throw new BusinessLogicException("User already verified email"); }
 
+            if (correctiveMail is not null) { correctiveMail = EmailNormalizer.Normalize(correctiveMail); }
+
             if (!new EmailAddressAttribute().IsValid(correctiveMail))
-            { throw new BusinessLogicException("Adress not valid"); }
+            { throw new BusinessLogicException("Address not valid"); }
 
             if (await dbIterator.Users(false)
                 .Where(x => x.Id != userId)
-                .AnyAsync(x => x.MailAdress == correctiveMail))
+                .AnyAsync(x => x.MailAdress.ToLower() == correctiveMail))
             { throw new BusinessLogicException("User with the same adress already exists"); }
 
             if (correctiveMail is not null && user.MailAdress != correctiveMail) { user.MailAdress = correctiveMail; }
