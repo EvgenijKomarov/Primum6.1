@@ -12,7 +12,7 @@ namespace CoreDBIterator.Workers
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInformation("Lesson creation running at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("Expired token cleanup running at: {time}", DateTimeOffset.Now);
                 await Action();
                 await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
@@ -29,17 +29,18 @@ namespace CoreDBIterator.Workers
 
             if (expiredVerificationTokens.Length == 0)
             {
-                logger.LogInformation($"Found {expiredVerificationTokens.Length} expired tokens for delete");
+                logger.LogInformation("No expired tokens found at: {time}", DateTimeOffset.Now);
             }
             else
             {
-                logger.LogInformation("No expired tokens found at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("Found {Count} expired tokens for delete", expiredVerificationTokens.Length);
             }
 
             foreach(var token in expiredVerificationTokens)
             {
                 await context.RemoveAsync(token);
-                logger.LogInformation($"Token {token.Token} ({token.Meaning.ToString()}) was deleted");
+                // Значение токена — код подтверждения, в лог пишем только id
+                logger.LogInformation("Token {TokenId} ({Meaning}) was deleted", token.Id, token.Meaning);
             }
             await context.SaveChangesAsync();
         }
