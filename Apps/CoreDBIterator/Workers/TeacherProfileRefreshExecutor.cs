@@ -48,7 +48,7 @@ namespace CoreDBIterator.Workers
                 if (freePeriodCompleteAbonements.Length < requiredAbonements) //если нет нужного количества - неопределен
                 {
                     profile.ConvertionIndex = null;
-                    break;
+                    continue;
                 }
 
                 int allAbons = freePeriodCompleteAbonements.Length;
