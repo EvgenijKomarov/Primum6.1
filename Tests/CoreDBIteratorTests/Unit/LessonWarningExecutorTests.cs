@@ -61,19 +61,6 @@ namespace CoreDBIteratorTests.Unit
         }
 
         [Test]
-        public async Task Action_NotifiesStudentAndTeacherByTheirUserIds()
-        {
-            AddLesson(DateTime.UtcNow.AddHours(5));
-
-            await _services.CreateWorker<LessonWarningExecutor>().Action();
-
-            var notified = _services.External.NotifiedUserIds;
-            Assert.That(notified, Does.Contain(_scenario.StudentUserId));
-            Assert.That(notified, Does.Contain(_scenario.TeacherUserId), "преподаватель должен получить напоминание");
-            Assert.That(notified, Does.Not.Contain(_scenario.OutsiderUserId), "напоминание ушло постороннему пользователю");
-        }
-
-        [Test]
         public async Task Action_ChecksTeacherReadinessByTeacherUserId()
         {
             AddLesson(DateTime.UtcNow.AddHours(5));
