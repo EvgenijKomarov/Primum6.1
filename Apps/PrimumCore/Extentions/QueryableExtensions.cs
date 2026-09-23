@@ -1,4 +1,5 @@
 ﻿using PrimumCore.Entities;
+using CoreDBModel.Models;
 using Microsoft.EntityFrameworkCore;
 using PrimumCore.Exceptions;
 using System.Linq.Expressions;
@@ -8,6 +9,12 @@ namespace PrimumCore.Extentions
 {
     public static class QueryableExtensions
     {
+        // Абонементы, доступные пользователю: свои (для ученика) или по своим курсам (для преподавателя)
+        public static IQueryable<Abonement> OwnedBy(this IQueryable<Abonement> abonements, int userId, bool isStudent) =>
+            isStudent
+                ? abonements.Where(x => x.Student.User.Id == userId)
+                : abonements.Where(x => x.Course.Teacher.User.Id == userId);
+
         public static async Task<TEntity> One<TEntity>(
             this IQueryable<TEntity> queryable,
             Expression<Func<TEntity, bool>>? predicate = null,

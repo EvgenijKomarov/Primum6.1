@@ -13,8 +13,11 @@ namespace PrimumCore.Services.Iterators
 {
     public class StudentSheduleIterator(DatabaseIterator dbIterator, PublisherService publisher)
     {
-        public async Task<PageResult<AbonementSheduleDto>> GetAbonementShedules(int abonementId, int _page, int _pageSize)
+        public async Task<PageResult<AbonementSheduleDto>> GetAbonementShedules(int userId, bool isStudent, int abonementId, int _page, int _pageSize)
         {
+            // Чужой абонемент -> 404, а не чужое расписание
+            await dbIterator.Abonements(false).OwnedBy(userId, isStudent).One(x => x.Id == abonementId);
+
             return await dbIterator.AbonementShedules()
                 .Include(x => x.Abonement)
                 .Where(x => x.Abonement.Id == abonementId)

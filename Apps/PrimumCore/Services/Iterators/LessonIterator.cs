@@ -25,12 +25,15 @@ namespace PrimumCore.Services.Iterators
         TeacherIterator teacherIterator,
         LessonBuilder lessonBuilder)
     {
-        public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
+        public async Task<PageResult<LessonDto>> GetAbonementLessons(int userId, bool isStudent, int abonementId, int _page, int _pageSize)
         {
+            // Чужой абонемент -> 404: иначе по id отдавались чужие уроки со ссылками на занятия
+            await dbIterator.Abonements(false).OwnedBy(userId, isStudent).One(x => x.Id == abonementId);
+
             return await dbIterator.Lessons()
                 .Include(x => x.Abonement)
                 .Where(x => x.Abonement.Id == abonementId)
-                .ToDto(isStudentLink)
+                .ToDto(isStudent)
                 .ToPageResult(_page, _pageSize);
         }
 
