@@ -8,7 +8,6 @@ import React, {
   type ReactElement,
   forwardRef,
   useEffect,
-  useId,
   useImperativeHandle,
   useRef,
 } from 'react';
@@ -45,7 +44,6 @@ interface InputProps extends Omit<
   isValid?: boolean;
   onBeforeInput?: (event: FormEvent<HTMLInputElement>) => void;
   dataAutomationId?: string;
-  error?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -74,15 +72,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       onPaste,
       onBeforeInput,
       dataAutomationId,
-      error,
       ...restProps
     }: InputProps,
     ref,
   ) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const generatedId = useId();
-    const inputId = id ?? generatedId;
-    const errorId = `${inputId}-error`;
 
     useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
@@ -107,7 +101,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <div
         style={{ width: `${width}` }}
       >
-        {label && <label htmlFor={inputId}>{label}</label>}
+        {label && <span>{label}</span>}
         {/*{label && <Label text={label} required={required} />}*/}
         {icon && <div>{icon}</div>}
         {constantText && (
@@ -116,7 +110,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={inputRef}
           name={name}
-          id={inputId}
+          id={id}
           height={height}
           value={value}
           type={type}
@@ -133,15 +127,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           onPaste={onPaste}
           onBeforeInput={onBeforeInput}
           data-automationid={dataAutomationId}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? errorId : undefined}
           {...restProps}
         />
-        {error && (
-          <span id={errorId} role="alert" style={{ color: 'var(--color-functional-error)' }}>
-            {error}
-          </span>
-        )}
       </div>
     );
   },

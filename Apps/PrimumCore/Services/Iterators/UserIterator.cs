@@ -15,51 +15,35 @@ namespace PrimumCore.Services.Iterators
 {
     public class UserIterator(DatabaseIterator dbIterator, PasswordHasher passwordHasher, PaymentServiceClient paymentServiceClient)
     {
-        public const int MinPasswordLength = 8;
-        public const int MaxPasswordLength = 64;
-
-        // Хэш для сравнения, когда пользователь не найден: время ответа не должно выдавать, есть ли такой email
-        private static readonly string DummyPasswordHash = new PasswordHasher().HashPassword(Guid.NewGuid().ToString());
-
         public async Task<int> Login(string mailAdress, string password)
         {
-            var mail = EmailNormalizer.Normalize(mailAdress);
             var user = await dbIterator.Users(false)
-                .FirstOrDefaultAsync(x => x.MailAdress.ToLower() == mail);
-
-            // Одинаковый ответ на неизвестный email и неверный пароль, чтобы нельзя было перебирать аккаунты
-            var isPasswordValid = passwordHasher.VerifyPassword(password, user?.Password ?? DummyPasswordHash);
-            if (user is null || !isPasswordValid) { throw new InvalidCredentialsException(); }
+                .One(x => x.MailAdress == mailAdress);
 
             if (user.IsBanned) { throw new BusinessLogicException("User is banned"); }
+
+            if (!passwordHasher.VerifyPassword(password, user.Password)) { throw new BusinessLogicException("Wrong password"); }
             return user.Id;
         }
 
         public async Task<int> RegUser(RegistrationInputDto dto)
         {
-            var mail = EmailNormalizer.Normalize(dto.MailAdress);
-
-            if (string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Surname))
-            { throw new BusinessLogicException("Name and surname are required"); }
-
-            if (!new EmailAddressAttribute().IsValid(mail))
-            { throw new BusinessLogicException("Address not valid"); }
+            if (!new EmailAddressAttribute().IsValid(dto.MailAdress))
+            { throw new BusinessLogicException("Adress not valid"); }
 
             if (await dbIterator.Users(false)
-                .AnyAsync(x => x.MailAdress.ToLower() == mail))
+                .AnyAsync(x => x.MailAdress == dto.MailAdress))
             { throw new BusinessLogicException("User with the same adress already exists"); }
 
-            if (string.IsNullOrEmpty(dto.Password) || dto.Password.Length < MinPasswordLength)
-            { throw new BusinessLogicException($"Password too short. Minimum {MinPasswordLength} chars"); }
-            if (dto.Password.Length > MaxPasswordLength)
-            { throw new BusinessLogicException($"Password too long. Maximum {MaxPasswordLength} chars"); }
+            if (dto.Password.Length <= 5) { throw new BusinessLogicException("Password too short. Minimum 5 chars"); }
+            if (dto.Password.Length > 20) { throw new BusinessLogicException("Password too long. Maximum 20 chars"); }
 
             var user = new User
             {
-                Name = dto.Name.Trim(),
-                Surname = dto.Surname.Trim(),
-                Patronymic = dto.Patronymic?.Trim() ?? string.Empty,
-                MailAdress = mail,
+                Name = dto.Name,
+                Surname = dto.Surname,
+                Patronymic = dto.Patronymic,
+                MailAdress = dto.MailAdress,
                 TimeZoneOffset = TimeSpan.FromMinutes(dto.TimeZoneOffset),
                 Password = passwordHasher.HashPassword(dto.Password)
             };

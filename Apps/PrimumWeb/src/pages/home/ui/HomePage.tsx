@@ -22,7 +22,7 @@ export const HomePage = () => {
   return (
     <div className={styles.homePage}>
       <div style={{ position: "relative" }} id="main">
-        <TerminalHeroBackground height={'100%'}/>
+        <TerminalHeroBackground height={'110vh'}/>
         <GeneralBlock />
       </div>
       <>

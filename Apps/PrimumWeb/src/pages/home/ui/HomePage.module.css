@@ -3,9 +3,6 @@
   flex-direction: column;
   justify-content: center;
   width: 100vw;
-  /* Декоративные элементы секций выходят за край: без этого на телефоне страница
-     шире экрана и «ездит» вбок при свайпе */
-  overflow-x: clip;
 }
 
 .blocks {

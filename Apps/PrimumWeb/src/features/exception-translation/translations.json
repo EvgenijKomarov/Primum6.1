@@ -9,11 +9,5 @@
     "Password too long. Maximum 20 chars": "Пароль слишком длинный. Максимум 20 символов",
     "Can't create more shedules than course's maximum shedules per week": "Достигнуто максимальное количество занятий в неделю для данного курса",
     "Student can't subscribe on himself": "Вы не можете подписаться на свой же курс",
-    "Same shedule already exists": "Уже существует занятие в это время",
-    "Wrong email or password": "Неверная почта или пароль",
-    "Invalid input": "Проверьте, что все поля заполнены правильно",
-    "Address not valid": "Некорректный адрес почты",
-    "Name and surname are required": "Укажите имя и фамилию",
-    "Password too short. Minimum 8 chars": "Пароль слишком короткий. Минимум 8 символов",
-    "Password too long. Maximum 64 chars": "Пароль слишком длинный. Максимум 64 символа"
+    "Same shedule already exists": "Уже существует занятие в это время"
 }

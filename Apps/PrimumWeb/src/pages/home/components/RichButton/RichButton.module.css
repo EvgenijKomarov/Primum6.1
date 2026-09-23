@@ -13,6 +13,7 @@
   transition: .15s;
   touch-action: manipulation; /* убирает задержку 300мс на тап и двойной тап-зум */
   -webkit-tap-highlight-color: transparent;
+  z-index: 999;
 }
 
 .btn {

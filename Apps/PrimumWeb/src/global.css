@@ -50,9 +50,8 @@
   src: url('/fonts/PressStart2P-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
-  /* grayscale — невалидное значение. block + preload в index.html: текст не перестраивается
-     при подмене запасного шрифта на пиксельный, который намного шире */
-  font-display: block;
+  font-size: 12px;
+  font-display: grayscale;
 }
 
 @layer base {
@@ -93,8 +92,7 @@
   }
 
   input::placeholder {
-    /* secondary-base на фоне поля давал контраст 1.57:1, secondary-light — около 4.5:1 */
-    color: var(--color-secondary-light);
+    color: var(--color-secondary-base);
   }
 
   input:disabled {

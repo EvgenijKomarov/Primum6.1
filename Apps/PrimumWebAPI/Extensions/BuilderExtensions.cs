@@ -1,13 +1,11 @@
 ﻿using CommonNotificationServiceClient;
 using CoreConnection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using PaymentServiceConnection;
-using PrimumCore.Middlewares;
 using PrimumWebAPI.Controllers;
 using PrimumWebAPI.Entities;
 using PrimumWebAPI.Services;
@@ -23,11 +21,7 @@ namespace PrimumWebAPI.Extensions
         public static WebApplicationBuilder AddControllers(this WebApplicationBuilder builder)
         {
             builder.Services.AddControllers(options =>
-                options.Conventions.Add(new DefaultControllerConvention()))
-                // Ошибки валидации отдаём в том же формате { error }, что и остальные ошибки API
-                .ConfigureApiBehaviorOptions(options =>
-                    options.InvalidModelStateResponseFactory = _ =>
-                        new BadRequestObjectResult(new { error = ExceptionMiddleware.InvalidInputMessage }));
+                options.Conventions.Add(new DefaultControllerConvention()));
             return builder;
         }
 
