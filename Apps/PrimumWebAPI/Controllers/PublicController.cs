@@ -21,6 +21,9 @@ namespace PrimumWebAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login([FromBody] LoggingInputDto input)
         {
+            if (string.IsNullOrWhiteSpace(input.Email) || string.IsNullOrEmpty(input.Password))
+            { return BadRequest(new { error = "Wrong email or password" }); }
+
             var id = await client.LoginAsync(input.Email, input.Password);
             var user = await userClient.ProfileAsync(id);
 

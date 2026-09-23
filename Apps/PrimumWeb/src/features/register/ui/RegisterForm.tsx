@@ -7,6 +7,11 @@ import { sendEmailVerification, useUserStore } from "@/entity/user";
 import Button from "@/shared/ui/Button/Button.tsx";
 import { ButtonTypeEnum } from "@/shared/enums";
 import { translateException } from "@/features/exception-translation/translate-exception";
+import { EMAIL_PATTERN, emailInputProps, normalizeEmail } from "@/shared/lib/email/email";
+
+// Совпадает с UserIterator.MinPasswordLength / MaxPasswordLength на бэкенде
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
 
 interface RegisterFormProps {
   onSwitch: () => void;
@@ -17,14 +22,23 @@ interface RegisterFormProps {
 type RegisterForm = RegisterDto & {confirmPassword: string};
 
 export const RegisterForm = ({ onSwitch, onSuccess, onMutate }: RegisterFormProps) => {
-  const form = useForm<RegisterForm>();
+  const form = useForm<RegisterForm>({
+    defaultValues: { name: '', surname: '', patronymic: '', mailAdress: '', password: '', confirmPassword: '' },
+  });
   const setToken = useUserStore((s) => s.setToken);
 
   const { fetch: fetchRegister, isLoading } = useFetch(register);
 
 const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
   try {
-    const response = await fetchRegister({ ...data, timeZoneOffset: -(new Date().getTimezoneOffset()) });
+    const response = await fetchRegister({
+      ...data,
+      name: data.name.trim(),
+      surname: data.surname.trim(),
+      patronymic: data.patronymic.trim(),
+      mailAdress: normalizeEmail(data.mailAdress),
+      timeZoneOffset: -(new Date().getTimezoneOffset()),
+    });
     setToken(response.data);
     onSuccess?.();
     await onMutate?.();
@@ -43,15 +57,14 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
     onSwitch();
   };
 
-  const rootError = form.formState.errors.root?.message;
-  const confirmPasswordError = form.formState.errors.confirmPassword?.message;
-  const topError = rootError ?? confirmPasswordError;
+  const { errors } = form.formState;
+  const topError = errors.root?.message;
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} noValidate>
         {topError && (
-          <div className={styles.formError}>
+          <div className={styles.formError} role="alert">
             {translateException(topError)}
           </div>
         )}
@@ -61,11 +74,14 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
               <Controller
                 name={"name"}
                 control={form.control}
+                rules={{ validate: (value) => value.trim() !== '' || 'Введите имя' }}
                 render={({ field }) => (
                   <Input
                     {...field}
+                    autoComplete="given-name"
                     label={"Имя"}
                     placeholder={"Введите ваше имя"}
+                    error={errors.name?.message}
                   />
                 )}
               />
@@ -76,11 +92,14 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
               <Controller
                 name={"surname"}
                 control={form.control}
+                rules={{ validate: (value) => value.trim() !== '' || 'Введите фамилию' }}
                 render={({ field }) => (
                   <Input
                     {...field}
+                    autoComplete="family-name"
                     label={"Фамилия"}
                     placeholder={"Введите вашу фамилию"}
+                    error={errors.surname?.message}
                   />
                 )}
               />
@@ -94,7 +113,8 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
                 render={({ field }) => (
                   <Input
                     {...field}
-                    label={"Отчество"}
+                    autoComplete="additional-name"
+                    label={"Отчество (если есть)"}
                     placeholder={"Введите ваше отчество"}
                   />
                 )}
@@ -106,11 +126,18 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
               <Controller
                 name={"mailAdress"}
                 control={form.control}
+                rules={{
+                  required: 'Введите адрес электронной почты',
+                  validate: (value) => EMAIL_PATTERN.test(normalizeEmail(value)) || 'Некорректный адрес почты',
+                }}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    label={"Email"}
+                    {...emailInputProps}
+                    autoComplete="email"
+                    label={"Электронная почта"}
                     placeholder={"Введите адрес электронной почты"}
+                    error={errors.mailAdress?.message}
                   />
                 )}
               />
@@ -121,12 +148,19 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
               <Controller
                 name={"password"}
                 control={form.control}
+                rules={{
+                  required: 'Введите пароль',
+                  minLength: { value: MIN_PASSWORD_LENGTH, message: `Минимум ${MIN_PASSWORD_LENGTH} символов` },
+                  maxLength: { value: MAX_PASSWORD_LENGTH, message: `Максимум ${MAX_PASSWORD_LENGTH} символа` },
+                }}
                 render={({ field }) => (
                   <Input
                     {...field}
                     type={"password"}
+                    autoComplete="new-password"
                     label={"Пароль"}
-                    placeholder={"Введите пароль"}
+                    placeholder={`Не короче ${MIN_PASSWORD_LENGTH} символов`}
+                    error={errors.password?.message}
                   />
                 )}
               />
@@ -145,8 +179,10 @@ const onSubmit = form.handleSubmit(async (data: RegisterForm) => {
                   <Input
                     {...field}
                     type={"password"}
+                    autoComplete="new-password"
                     label={"Подтверждение пароля"}
                     placeholder={"Введите пароль еще раз"}
+                    error={errors.confirmPassword?.message}
                   />
                 )}
               />

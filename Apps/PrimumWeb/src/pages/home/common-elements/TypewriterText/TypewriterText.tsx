@@ -27,10 +27,15 @@ function TypewriterText({ text, speed = 50, onComplete, className }: TypewriterT
     return () => clearInterval(timer);
   }, [text, speed]);
 
+  // Полный текст невидимо занимает итоговое место, набираемый текст рисуется поверх.
+  // Так размер блока не меняется во время печати и вёрстка вокруг не прыгает.
   return (
-    <span className={className}>
-      {displayed}
-      {!complete && <span className={`${styles.cursor} ${className ?? ''}`}>|</span>}
+    <span className={`${styles.wrapper} ${className ?? ''}`}>
+      <span className={styles.placeholder}>{text}</span>
+      <span className={styles.typed} aria-hidden="true">
+        {displayed}
+        {!complete && <span className={`${styles.cursor} ${className ?? ''}`}>|</span>}
+      </span>
     </span>
   );
 }

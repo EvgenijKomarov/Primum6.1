@@ -3,6 +3,7 @@ import Container from '../Container/Container'
 import HomepageButton from '../Button/HomepageButton'
 import { useNavigate } from 'react-router'
 import { RichButton } from '../RichButton/RichButton'
+import { useCurrentUser } from '@/entity/user'
 
 export interface FinalCtaAction {
   href: string
@@ -29,6 +30,7 @@ export default function FinalCta({
   actions = defaultActions,
 }: FinalCtaProps) {
   const navigate = useNavigate();
+  const { user } = useCurrentUser();
 
   return (
     <section className={styles.section}>
@@ -38,10 +40,17 @@ export default function FinalCta({
         <p className={styles.description}>{description}</p>
 
         <div className={styles.buttons}>
-          <RichButton
-            label='ЗАРЕГИСТРИРОВАТЬСЯ'
-            onClick={() => navigate('/auth')}
-          />
+          {user ? (
+            <RichButton
+              label='В ЛИЧНЫЙ КАБИНЕТ'
+              onClick={() => navigate('/profile')}
+            />
+          ) : (
+            <RichButton
+              label='ЗАРЕГИСТРИРОВАТЬСЯ'
+              onClick={() => navigate('/auth?mode=register')}
+            />
+          )}
           {actions.map((action) => (
             <HomepageButton key={action.href + action.label} href={action.href} variant={action.variant}>
               {action.label}
