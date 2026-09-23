@@ -109,10 +109,11 @@ namespace CoreDBIteratorTests.Integration
             int scheduleAbonementId, upcomingLessonId, dueLessonId;
             using (var db = CreateContext())
             {
+                // Сценарий создаётся первым: он рассчитывает на раскладку id с чистой базы
+                var scenario = LessonScenario.Create(db);
                 var seed = new Seed(db);
                 seed.Token(seed.User(), DateTime.UtcNow.AddHours(-1), "expired");
 
-                var scenario = LessonScenario.Create(db);
                 var abonement = db.Abonements.Single(a => a.Id == scenario.AbonementId);
                 upcomingLessonId = seed.Lesson(abonement, DateTime.UtcNow.AddHours(5)).Id;
                 dueLessonId = seed.Lesson(abonement, DateTime.UtcNow.AddMinutes(15), LessonStatus.Warned).Id;

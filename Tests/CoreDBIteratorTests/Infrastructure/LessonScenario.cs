@@ -23,8 +23,9 @@ namespace CoreDBIteratorTests.Infrastructure
             var course = seed.Course(teacher, price);
             var abonement = seed.Abonement(course, student);
 
+            // Падение, а не Inconclusive: пропущенный тест в CI легко не заметить
             if (teacher.Id != outsider.Id || teacher.Id == teacher.UserId)
-                Assert.Inconclusive("Раскладка id не позволяет отличить id профиля преподавателя от id пользователя");
+                Assert.Fail("LessonScenario нужно создавать первым на чистой базе: иначе id профиля преподавателя не отличить от id пользователя");
 
             return new LessonScenario(outsider.Id, student.UserId, teacher.UserId, teacher.Id, abonement.Id);
         }
