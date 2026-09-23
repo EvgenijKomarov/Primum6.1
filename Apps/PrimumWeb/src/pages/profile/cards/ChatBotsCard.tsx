@@ -12,6 +12,7 @@ import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePop
 import { useChatSigns } from '@/entity/chat-sign/model/useUserChatSigns';
 import type { UserDto } from '@/entity/user';
 import { useToast } from '@/shared/ui/Toast/useToast';
+import { botLinks } from '@/shared/config/runtime';
 
 const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
@@ -36,12 +37,15 @@ const Sign = ({ sign, onDelete }: { sign: ChatSign; onDelete: () => void }) => {
   </>);
 }
 
+// Кнопку без ссылки не показываем: иначе она выглядит рабочей, но никуда не ведёт
 const SocialLinks = () => {
   const socials = [
-    { name: 'Telegram', url: import.meta.env.VITE_TELEGRAM_URL, color: '#26A5E4' },
-    { name: 'MAX', url: import.meta.env.VITE_MAX_URL, color: '#7C3AED' },
-    { name: 'VK', url: import.meta.env.VITE_VK_URL, color: '#0077FF' },
-  ];
+    { name: 'Telegram', url: botLinks.telegram, color: '#26A5E4' },
+    { name: 'MAX', url: botLinks.max, color: '#7C3AED' },
+    { name: 'VK', url: botLinks.vk, color: '#0077FF' },
+  ].filter(({ url }) => url);
+
+  if (socials.length === 0) return null;
 
   return (<div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
       {socials.map(({ name, url, color }) => (
