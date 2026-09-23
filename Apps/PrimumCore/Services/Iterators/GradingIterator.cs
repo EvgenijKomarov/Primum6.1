@@ -27,6 +27,10 @@ namespace PrimumCore.Services.Iterators
             if (lesson.Abonement.Student.User.Id == teacherId) { throw new BusinessLogicException("Teacher can't grade this lesson"); }
             if (lesson.Grading is not null) { throw new BusinessLogicException("Lesson already gradet"); }
             if (lesson.Status != LessonStatus.Happened) { throw new BusinessLogicException("Lesson doesn't happened"); }
+            if (dto.HomeworkGrade == Grading.None && 
+                dto.StudyInitiativeGrade == Grading.None &&
+                dto.LessonActivityGrade == Grading.None && 
+                dto.RepetitionOfMaterialGrade == Grading.None) { throw new BusinessLogicException("Need at least one grade"); }
 
             var lessonGrading = new StudentGrading
             {

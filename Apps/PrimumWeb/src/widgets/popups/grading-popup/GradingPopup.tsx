@@ -14,26 +14,38 @@ interface GradingPopupProps{
     lessonId: number,
     onSubmit: () => void
 }
-export const GradingPopup = ({ lessonId }: GradingPopupProps) => {
+export const GradingPopup = ({ lessonId, onSubmit: onSubmitted }: GradingPopupProps) => {
     const [popupOpen, setPopupOpen] = useState(false);
     const { showToast } = useToast();
 
-    const gradingHints = GRADES_TRANSLATION.map((grade)=>{
+    const gradingHints = GRADES_TRANSLATION.map((grade) => {
         return { hint: grade.hint, value: grade.value };
-    })
+    });
 
     const {
         register,
         handleSubmit,
-      } = useForm<GradingInputDto>({
+        watch,
+    } = useForm<GradingInputDto>({
         defaultValues: {
-          homeworkGrade: 0,
-          lessonActivityGrade: 0,
-          repetitionOfMaterialGrade: 0,
-          studyInitiativeGrade: 0,
+            homeworkGrade: 0,
+            lessonActivityGrade: 0,
+            repetitionOfMaterialGrade: 0,
+            studyInitiativeGrade: 0,
         },
-      });
-    
+    });
+
+    const hasAnyGrade = (grades: Array<number | string | undefined>) =>
+        grades.some((g) => Number(g) !== 0);
+
+    const watched = watch([
+        'homeworkGrade',
+        'lessonActivityGrade',
+        'repetitionOfMaterialGrade',
+        'studyInitiativeGrade',
+    ]);
+    const canSubmit = hasAnyGrade(watched);
+
     const onSubmit = handleSubmit(async (values) => {
         const dto: GradingInputDto = {
             homeworkGrade: Number(values.homeworkGrade) || 0,
@@ -41,11 +53,17 @@ export const GradingPopup = ({ lessonId }: GradingPopupProps) => {
             repetitionOfMaterialGrade: Number(values.repetitionOfMaterialGrade) || 0,
             studyInitiativeGrade: Number(values.studyInitiativeGrade) || 0,
         };
+
+        if (!hasAnyGrade(Object.values(dto))) {
+            showToast("Оцените хотя бы одну категорию", 'error');
+            return;
+        }
+
         await gradeLesson(lessonId, dto);
-        showToast("Успешно оценено", 'success')
+        showToast("Успешно оценено", 'success');
         setPopupOpen(false);
-        onSubmit();
-      });
+        onSubmitted();
+    });
 
     return(
         <div>
@@ -120,6 +138,7 @@ export const GradingPopup = ({ lessonId }: GradingPopupProps) => {
                                 type="submit"
                                 variant={ButtonTypeEnum.PRIMARY}
                                 size={ButtonSizeEnum.NORMAL}
+                                disabled={!canSubmit}
                             >
                                 Оценить
                             </Button>
