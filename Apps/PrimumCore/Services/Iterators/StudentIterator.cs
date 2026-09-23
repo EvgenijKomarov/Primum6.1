@@ -41,6 +41,7 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> SubscribeToCourse(int studentId, int courseId, int teacherSheduleId)
         {
             var student = await dbIterator.Students()
+                .Include(x => x.User)
                 .Include(x => x.Abonements)
                 .ThenInclude(x => x.AbonementShedules)
                 .ThenInclude(x => x.TeacherShedule)

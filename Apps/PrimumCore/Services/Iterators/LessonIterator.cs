@@ -202,17 +202,17 @@ namespace PrimumCore.Services.Iterators
         {
             var dateTime = dto.DateTime.ToUniversalTime();
 
+            // Запрос строится от абонементов: Include, навешанные на Students() перед SelectMany,
+            // EF Core игнорирует, и Course/Student оставались незагруженными
             var abonement = await dbIterator
-                .Students()
-                .Include(x => x.Abonements)
-                .ThenInclude(x => x.Course)
+                .Abonements(false)
+                .Include(x => x.Course)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .Include(x => x.Abonements)
-                .ThenInclude(x => x.Lessons)
-                .Include(x => x.User)
-                .Where(x => x.User.Id == userId)
-                .SelectMany(x => x.Abonements)
+                .Include(x => x.Lessons)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Where(x => x.Student.User.Id == userId)
                 .One(x => x.Id == dto.AbonementId);
 
             if (abonement.CancelledLessons == 0) throw new BusinessLogicException("No cancelled lessons to workoff");
