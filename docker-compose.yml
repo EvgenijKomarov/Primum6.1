@@ -12,7 +12,7 @@ services:
     networks:
       - primum-network
     ports:
-      - "4100:5432"
+      - "127.0.0.1:4100:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d core_db"]
       interval: 5s
@@ -44,7 +44,7 @@ services:
       - primum-network
     restart: unless-stopped
     ports:
-      - "4110:27017"
+      - "127.0.0.1:4110:27017"
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -64,7 +64,7 @@ services:
       - primum-network
     restart: unless-stopped
     ports:
-      - "4210:5672"
+      - "127.0.0.1:4210:5672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
