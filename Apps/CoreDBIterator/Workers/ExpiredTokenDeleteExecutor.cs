@@ -13,7 +13,16 @@ namespace CoreDBIterator.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("Expired token cleanup running at: {time}", DateTimeOffset.Now);
-                await Action();
+                // Сбой одной итерации (недоступна платёжка, база и т.п.) не должен останавливать хост:
+                // исключение из ExecuteAsync по умолчанию гасит все воркеры сервиса
+                try
+                {
+                    await Action();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "{Worker} iteration failed", nameof(ExpiredTokenDeleteExecutor));
+                }
                 await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
