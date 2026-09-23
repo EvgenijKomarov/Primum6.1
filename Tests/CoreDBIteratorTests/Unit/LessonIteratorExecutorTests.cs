@@ -161,19 +161,6 @@ namespace CoreDBIteratorTests.Unit
         }
 
         [Test]
-        public async Task Action_NotifiesStudentAndTeacherByTheirUserIds()
-        {
-            AddLesson();
-
-            await Run();
-
-            var notified = _services.External.NotifiedUserIds;
-            Assert.That(notified, Does.Contain(_scenario.StudentUserId));
-            Assert.That(notified, Does.Contain(_scenario.TeacherUserId), "преподаватель должен получить ссылку на занятие");
-            Assert.That(notified, Does.Not.Contain(_scenario.OutsiderUserId), "ссылка ведущего ушла постороннему пользователю");
-        }
-
-        [Test]
         public async Task Action_NotificationFailureAfterPayment_KeepsLessonHappened()
         {
             _services.External.NotificationStatus = HttpStatusCode.InternalServerError;

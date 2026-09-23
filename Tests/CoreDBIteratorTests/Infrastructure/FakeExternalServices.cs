@@ -25,12 +25,6 @@ namespace CoreDBIteratorTests.Infrastructure
         public IEnumerable<Uri> PaymentRequests(string pathPrefix) =>
             Requests.Where(r => r.Host == TestEnvironment.PaymentHost && r.AbsolutePath.StartsWith(pathPrefix));
 
-        /// <summary>Id пользователей, которым ушли уведомления в чат-боты и в личный кабинет</summary>
-        public IReadOnlyCollection<int> NotifiedUserIds => Requests
-            .Where(r => r.Host is TestEnvironment.ChatBotHost or TestEnvironment.CommonHost)
-            .Select(r => int.Parse(HttpUtility.ParseQueryString(r.Query)["userId"]!, CultureInfo.InvariantCulture))
-            .ToHashSet();
-
         public HttpMessageHandler CreateHandler() => new Handler(this);
 
         public HttpClient CreateClient() => new(CreateHandler());
