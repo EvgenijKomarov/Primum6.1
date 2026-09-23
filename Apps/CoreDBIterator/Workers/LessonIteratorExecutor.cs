@@ -6,6 +6,7 @@ using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
 using PublishServiceConnection;
+using PublishServiceConnection.Abstractions;
 using PublishServiceConnection.Events;
 
 namespace CoreDBIterator.Workers
@@ -91,7 +92,7 @@ namespace CoreDBIterator.Workers
                         lesson.StudentLink = tuple.guestLink;
                         lesson.TeacherLink = tuple.adminLink;
                         lesson.TeacherEarning = teacherCash;
-                        await publisher.Push(new LessonReadyEvent()
+                        await NotifySafely(publisher, lesson.Id, new LessonReadyEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,
                             StudentUserId = lesson.Abonement.Student.User.Id,
@@ -111,7 +112,7 @@ namespace CoreDBIterator.Workers
                     else//Занятие не оплачено и удаляется
                     {
                         lesson.Status = LessonStatus.Missed;
-                        await publisher.Push(new LessonFailureEvent()
+                        await NotifySafely(publisher, lesson.Id, new LessonFailureEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,
                             StudentUserId = lesson.Abonement.Student.User.Id,
@@ -132,11 +133,25 @@ namespace CoreDBIterator.Workers
                 {
                     lesson.Status = LessonStatus.MissedDueToException;
                     if (lesson.IsWorkoff) lesson.Abonement.CancelledLessons += 1;
-                    logger?.LogInformation($"Lesson {lesson.Id} iteration failed", ex);
+                    logger.LogError(ex, "Lesson {LessonId} iteration failed", lesson.Id);
                 }
             }
 
             await context.SaveChangesAsync();
+        }
+
+        // Уведомление не входит в проведение урока: если сервис уведомлений недоступен,
+        // уже проведённая оплата и статус урока всё равно должны сохраниться
+        private async Task NotifySafely(PublisherService publisher, int lessonId, IPushable message)
+        {
+            try
+            {
+                await publisher.Push(message);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send notifications for lesson {LessonId}", lessonId);
+            }
         }
     }
 }
