@@ -6,6 +6,7 @@ from fastapi import BackgroundTasks, FastAPI
 import uvicorn
 
 from TemplateRender import EmailTemplate, render_email
+from pydantic import BaseModel
 
 EMAIL = os.getenv("EMAIL")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
@@ -45,18 +46,18 @@ def send_email(
     except smtplib.SMTPException as e:
         print(f"❌ Ошибка SMTP: {e}")
 
-
+class PublishRequest(BaseModel):
+    address: str
+    subject: str
+    message: str
+    template: EmailTemplate = EmailTemplate.INFO
 @app.post("/publish", status_code=202)
-def publish(
-    background_tasks: BackgroundTasks,
-    address: str,
-    subject: str,
-    message: str,
-    template: EmailTemplate = EmailTemplate.INFO,
-):
-    background_tasks.add_task(send_email, address, subject, message, template)
-    print(f"Queued email to {address}: {message}")
-    return {"status": "accepted", "address": address}
+def publish(request: PublishRequest, background_tasks: BackgroundTasks):
+    background_tasks.add_task(
+        send_email, request.address, request.subject, request.message, request.template
+    )
+    print(f"Queued email to {request.address}: {request.message}")
+    return {"status": "accepted", "address": request.address}
 
 
 # хелсчек
