@@ -61,6 +61,9 @@ namespace PrimumCore.Services.Iterators
                 .Include(x => x.AbonementShedules)
                 .Include(x => x.Student)
                 .ThenInclude(x => x.User)
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .Where(x => x.Student.User.Id == studentId)
                 .One(x => x.Id == abonementId);
 

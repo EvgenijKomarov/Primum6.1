@@ -56,7 +56,7 @@ namespace PrimumCore.Controllers
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await sheduleIterator.GetAbonementShedules(abonementId, page, pageSize));
+            => Ok(await sheduleIterator.GetAbonementShedules(userId, true, abonementId, page, pageSize));
 
         [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<PageResult<LessonDto>>> GetAbonementLessons(
@@ -64,7 +64,7 @@ namespace PrimumCore.Controllers
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await lessonIterator.GetAbonementLessons(userId, true, page, pageSize));
+            => Ok(await lessonIterator.GetAbonementLessons(userId, true, abonementId, page, pageSize));
 
         [HttpGet("promocodes")]
         public async Task<ActionResult<PageResult<PromocodeDto>>> GetStudentPromocodes(

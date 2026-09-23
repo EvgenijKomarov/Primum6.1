@@ -25,12 +25,15 @@ namespace PrimumCore.Services.Iterators
         TeacherIterator teacherIterator,
         LessonBuilder lessonBuilder)
     {
-        public async Task<PageResult<LessonDto>> GetAbonementLessons(int abonementId, bool isStudentLink, int _page, int _pageSize)
+        public async Task<PageResult<LessonDto>> GetAbonementLessons(int userId, bool isStudent, int abonementId, int _page, int _pageSize)
         {
+            // Чужой абонемент -> 404: иначе по id отдавались чужие уроки со ссылками на занятия
+            await dbIterator.Abonements(false).OwnedBy(userId, isStudent).One(x => x.Id == abonementId);
+
             return await dbIterator.Lessons()
                 .Include(x => x.Abonement)
                 .Where(x => x.Abonement.Id == abonementId)
-                .ToDto(isStudentLink)
+                .ToDto(isStudent)
                 .ToPageResult(_page, _pageSize);
         }
 
@@ -124,12 +127,14 @@ namespace PrimumCore.Services.Iterators
 
             lesson.Status = LessonStatus.Cancelled;
             lesson.Abonement.CancelledLessons += 1;
+            await dbIterator.SaveChangesAsync();
+
             await publisher.Push(new LessonCancelEvent
             {
                 StudentName = lesson.Abonement.Student.User.DisplayName,
                 StudentUserId = lesson.Abonement.Student.User.Id,
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                TeacherUserId = lesson.Abonement.Course.TeacherId,
+                TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                 TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                 CourseName = lesson.Abonement.Course.Name,
                 AbonementId = lesson.Abonement.Id,
@@ -138,7 +143,6 @@ namespace PrimumCore.Services.Iterators
                 TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
             });
 
-            await dbIterator.SaveChangesAsync();
             return lesson.Id;
         }
 
@@ -177,6 +181,7 @@ namespace PrimumCore.Services.Iterators
             if (!reportStatus.ToString().StartsWith(isStudentReporting ? "Teacher" : "Student")) throw new BusinessLogicException("Wrong report status");
 
             lesson.ReportStatus = reportStatus;
+            await dbIterator.SaveChangesAsync();
 
             await publisher.Push(new LessonReportEvent
             {
@@ -185,7 +190,7 @@ namespace PrimumCore.Services.Iterators
                 StudentName = lesson.Abonement.Student.User.DisplayName,
                 StudentUserId = lesson.Abonement.Student.User.Id,
                 TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                TeacherUserId = lesson.Abonement.Course.TeacherId,
+                TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                 CourseName = lesson.Abonement.Course.Name,
                 AbonementId = lesson.Abonement.Id,
                 LessonId = lesson.Id,
@@ -193,7 +198,6 @@ namespace PrimumCore.Services.Iterators
                 ReportStatus = reportStatus.ToString(),
             });
 
-            await dbIterator.SaveChangesAsync();
             return lesson.Id;
         }
 
@@ -201,17 +205,17 @@ namespace PrimumCore.Services.Iterators
         {
             var dateTime = dto.DateTime.ToUniversalTime();
 
+            // Запрос строится от абонементов: Include, навешанные на Students() перед SelectMany,
+            // EF Core игнорирует, и Course/Student оставались незагруженными
             var abonement = await dbIterator
-                .Students()
-                .Include(x => x.Abonements)
-                .ThenInclude(x => x.Course)
+                .Abonements(false)
+                .Include(x => x.Course)
                 .ThenInclude(x => x.Teacher)
                 .ThenInclude(x => x.User)
-                .Include(x => x.Abonements)
-                .ThenInclude(x => x.Lessons)
-                .Include(x => x.User)
-                .Where(x => x.User.Id == userId)
-                .SelectMany(x => x.Abonements)
+                .Include(x => x.Lessons)
+                .Include(x => x.Student)
+                .ThenInclude(x => x.User)
+                .Where(x => x.Student.User.Id == userId)
                 .One(x => x.Id == dto.AbonementId);
 
             if (abonement.CancelledLessons == 0) throw new BusinessLogicException("No cancelled lessons to workoff");

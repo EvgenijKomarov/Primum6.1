@@ -38,26 +38,38 @@ namespace PrimumCore.Services.Iterators
         public async Task<PromocodeDto> BuyPromocode(int studentId, int promocodeId)
         {
             var code = await dbIterator.Promocodes(true)
-                .Include(x => x.Student)
                 .One(x => x.Id == promocodeId);
 
             var student = await dbIterator.Students()
                 .One(x => x.User.Id == studentId);
             if (student.Coins < code.CoinsPrice) { throw new BusinessLogicException("Not enough coins"); }
 
-            student.Coins -= code.CoinsPrice;
-            code.Student = student;
-            await dbIterator.SaveChangesAsync();
+            // Проверки выше дают быстрый ответ, но при одновременных покупках решают условные UPDATE:
+            // код закрепляется, только если он ещё свободен, монеты списываются, только если их хватает
+            await dbIterator.InTransactionAsync(async () =>
+            {
+                var claimed = await dbIterator.Promocodes(true)
+                    .Where(x => x.Id == promocodeId)
+                    .ExecuteUpdateAsync(s => s.SetProperty(x => x.StudentId, student.Id));
+                if (claimed == 0) { throw new BusinessLogicException("Promocode already bought"); }
+
+                var charged = await dbIterator.Students()
+                    .Where(x => x.Id == student.Id && x.Coins >= code.CoinsPrice)
+                    .ExecuteUpdateAsync(s => s.SetProperty(x => x.Coins, x => x.Coins - code.CoinsPrice));
+                if (charged == 0) { throw new BusinessLogicException("Not enough coins"); }
+
+                return true;
+            });
 
             return new PromocodeDto
             {
                 Id = code.Id,
-                StudentId = code.Student.UserId,
+                StudentId = studentId,
                 Code = code.Code,
                 CoinsPrice = code.CoinsPrice,
                 Title = code.Title,
                 Description = code.Description,
-                IsAvailable = AvailabilityExpressions.IsPromocodeAvailable.Compile()(code)
+                IsAvailable = false
             };
         }
 
