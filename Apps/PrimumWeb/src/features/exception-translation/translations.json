@@ -15,5 +15,6 @@
     "Address not valid": "Некорректный адрес почты",
     "Name and surname are required": "Укажите имя и фамилию",
     "Password too short. Minimum 8 chars": "Пароль слишком короткий. Минимум 8 символов",
-    "Password too long. Maximum 64 chars": "Пароль слишком длинный. Максимум 64 символа"
+    "Password too long. Maximum 64 chars": "Пароль слишком длинный. Максимум 64 символа",
+    "Amount must be positive": "Сумма должна быть больше нуля"
 }
