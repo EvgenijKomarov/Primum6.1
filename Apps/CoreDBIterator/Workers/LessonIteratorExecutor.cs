@@ -78,13 +78,14 @@ namespace CoreDBIterator.Workers
                             lesson.IsReferal
                             );
 
-                        await paymentClient.ProcessLessonPaymentAsync(
+                        var isPaid = await paymentClient.ProcessLessonPaymentAsync(
                             lesson.Id,
                             lesson.Abonement.Student.User.Id,
                             teacher.User.Id,
                             teacherCash,
                             lesson.Price - teacherCash
                             );
+                        if (!isPaid) throw new Exception("Lesson payment was rejected by payment service");
                         lesson.Status = LessonStatus.Happened;
 
                         (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
