@@ -6,6 +6,7 @@ using CoreDBModel.Services;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceConnection;
 using PublishServiceConnection;
+using PublishServiceConnection.Abstractions;
 using PublishServiceConnection.Events;
 
 namespace CoreDBIterator.Workers
@@ -17,7 +18,16 @@ namespace CoreDBIterator.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("Lesson iteration running at: {time}", DateTimeOffset.Now);
-                await Action();
+                // Сбой одной итерации (недоступна платёжка, база и т.п.) не должен останавливать хост:
+                // исключение из ExecuteAsync по умолчанию гасит все воркеры сервиса
+                try
+                {
+                    await Action();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "{Worker} iteration failed", nameof(LessonIteratorExecutor));
+                }
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
@@ -77,13 +87,14 @@ namespace CoreDBIterator.Workers
                             lesson.IsReferal
                             );
 
-                        await paymentClient.ProcessLessonPaymentAsync(
+                        var isPaid = await paymentClient.ProcessLessonPaymentAsync(
                             lesson.Id,
                             lesson.Abonement.Student.User.Id,
                             teacher.User.Id,
                             teacherCash,
                             lesson.Price - teacherCash
                             );
+                        if (!isPaid) throw new Exception("Lesson payment was rejected by payment service");
                         lesson.Status = LessonStatus.Happened;
 
                         (string adminLink, string guestLink) tuple = jitsiService.CreateJitsiMeeting(
@@ -91,12 +102,12 @@ namespace CoreDBIterator.Workers
                         lesson.StudentLink = tuple.guestLink;
                         lesson.TeacherLink = tuple.adminLink;
                         lesson.TeacherEarning = teacherCash;
-                        await publisher.Push(new LessonReadyEvent()
+                        await NotifySafely(publisher, lesson.Id, new LessonReadyEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,
                             StudentUserId = lesson.Abonement.Student.User.Id,
                             TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                            TeacherUserId = lesson.Abonement.Course.TeacherId,
+                            TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                             TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                             StudentEmail = lesson.Abonement.Student.User.MailAdress,
                             CourseName = lesson.Abonement.Course.Name,
@@ -111,14 +122,14 @@ namespace CoreDBIterator.Workers
                     else//Занятие не оплачено и удаляется
                     {
                         lesson.Status = LessonStatus.Missed;
-                        await publisher.Push(new LessonFailureEvent()
+                        await NotifySafely(publisher, lesson.Id, new LessonFailureEvent()
                         {
                             StudentName = lesson.Abonement.Student.User.DisplayName,
                             StudentUserId = lesson.Abonement.Student.User.Id,
                             TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
                             TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                             StudentEmail = lesson.Abonement.Student.User.MailAdress,
-                            TeacherUserId = lesson.Abonement.Course.TeacherId,
+                            TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                             CourseName = lesson.Abonement.Course.Name,
                             AbonementId = lesson.Abonement.Id,
                             LessonId = lesson.Id,
@@ -132,11 +143,25 @@ namespace CoreDBIterator.Workers
                 {
                     lesson.Status = LessonStatus.MissedDueToException;
                     if (lesson.IsWorkoff) lesson.Abonement.CancelledLessons += 1;
-                    logger?.LogInformation($"Lesson {lesson.Id} iteration failed", ex);
+                    logger.LogError(ex, "Lesson {LessonId} iteration failed", lesson.Id);
                 }
             }
 
             await context.SaveChangesAsync();
+        }
+
+        // Уведомление не входит в проведение урока: если сервис уведомлений недоступен,
+        // уже проведённая оплата и статус урока всё равно должны сохраниться
+        private async Task NotifySafely(PublisherService publisher, int lessonId, IPushable message)
+        {
+            try
+            {
+                await publisher.Push(message);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send notifications for lesson {LessonId}", lessonId);
+            }
         }
     }
 }

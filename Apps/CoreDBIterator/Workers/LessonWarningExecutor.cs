@@ -15,7 +15,16 @@ namespace CoreDBIterator.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("Lesson warning running at: {time}", DateTimeOffset.Now);
-                await Action();
+                // Сбой одной итерации (недоступна платёжка, база и т.п.) не должен останавливать хост:
+                // исключение из ExecuteAsync по умолчанию гасит все воркеры сервиса
+                try
+                {
+                    await Action();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "{Worker} iteration failed", nameof(LessonWarningExecutor));
+                }
                 await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
@@ -59,14 +68,14 @@ namespace CoreDBIterator.Workers
                     TeacherEmail = lesson.Abonement.Course.Teacher.User.MailAdress,
                     StudentEmail = lesson.Abonement.Student.User.MailAdress,
                     TeacherName = lesson.Abonement.Course.Teacher.User.DisplayName,
-                    TeacherUserId = lesson.Abonement.Course.TeacherId,
+                    TeacherUserId = lesson.Abonement.Course.Teacher.User.Id,
                     TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
                     CourseName = lesson.Abonement.Course.Name,
                     AbonementId = lesson.Abonement.Id,
                     LessonId = lesson.Id,
                     DateTime = lesson.DateTime,
                     IsEnoughMoney = await paymentClient.GetStudentBalanceAsync(lesson.Abonement.Student.User.Id) >= lesson.Price,
-                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.TeacherId)
+                    IsTeacherReady = await paymentClient.IsTeacherReadyAsync(lesson.Abonement.Course.Teacher.User.Id)
                 });
                 logger.LogInformation($"Lesson {lesson.Id} warned");
             }

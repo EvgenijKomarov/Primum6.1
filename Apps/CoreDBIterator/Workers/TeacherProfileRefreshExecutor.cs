@@ -15,7 +15,16 @@ namespace CoreDBIterator.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("Teacher profiles refresh running at: {time}", DateTimeOffset.Now);
-                await Action();
+                // Сбой одной итерации (недоступна платёжка, база и т.п.) не должен останавливать хост:
+                // исключение из ExecuteAsync по умолчанию гасит все воркеры сервиса
+                try
+                {
+                    await Action();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "{Worker} iteration failed", nameof(TeacherProfileRefreshExecutor));
+                }
                 await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
         }
@@ -48,7 +57,7 @@ namespace CoreDBIterator.Workers
                 if (freePeriodCompleteAbonements.Length < requiredAbonements) //если нет нужного количества - неопределен
                 {
                     profile.ConvertionIndex = null;
-                    break;
+                    continue;
                 }
 
                 int allAbons = freePeriodCompleteAbonements.Length;
