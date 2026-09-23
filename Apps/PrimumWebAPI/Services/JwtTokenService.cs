@@ -3,11 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using PrimumWebAPI.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace PrimumWebAPI.Services
 {
-    public class JwtTokenService(IConfiguration _configuration, JwtSettings settings)
+    public class JwtTokenService(JwtSettings settings)
     {
 
         public string GenerateToken(UserDto user)
@@ -22,8 +21,6 @@ namespace PrimumWebAPI.Services
                 new Claim(ClaimTypes.Surname, user.Surname)
             };
 
-            var expiryMinutes = int.Parse(Environment.GetEnvironmentVariable("WEBAPI_JWT_LIFETIME_MINUTES") ?? "60");
-
             var token = new JwtSecurityToken(
                 issuer: settings.Issuer,
                 audience: settings.Audience,
@@ -33,32 +30,6 @@ namespace PrimumWebAPI.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public ClaimsPrincipal? ValidateToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
-
-            try
-            {
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                }, out SecurityToken validatedToken);
-
-                return principal;
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }

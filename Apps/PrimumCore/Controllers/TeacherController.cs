@@ -71,7 +71,7 @@ namespace PrimumCore.Controllers
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await studentSheduleIterator.GetAbonementShedules(abonementId, page, pageSize));
+            => Ok(await studentSheduleIterator.GetAbonementShedules(userId, false, abonementId, page, pageSize));
 
         [HttpGet("abonement-lessons/{abonementId}")]
         public async Task<ActionResult<PageResult<LessonDto>>> GetAbonementLessons(
@@ -79,7 +79,7 @@ namespace PrimumCore.Controllers
             [FromRoute] int abonementId, 
             [FromQuery] int page = 0, 
             [FromQuery] int pageSize = 10)
-            => Ok(await lessonIterator.GetAbonementLessons(abonementId, false, page, pageSize));
+            => Ok(await lessonIterator.GetAbonementLessons(userId, false, abonementId, page, pageSize));
 
         [HttpPut("course-edit/{courseId}")]
         public async Task<ActionResult<int>> EditCourse([FromRoute] int userId, [FromRoute] int courseId, [FromBody] CourseInputDto courseDto = null!) 

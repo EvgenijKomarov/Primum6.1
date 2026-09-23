@@ -3,7 +3,7 @@ import json
 import logging
 import threading
 from typing import List, Dict
-
+from pydantic import BaseModel
 import pika
 import requests
 import uvicorn
@@ -131,19 +131,12 @@ def _process_publish(user_id: int, message: str) -> None:
                 _connection = None
                 _channel = None
 
-
+class PublishRequest(BaseModel):
+    userId: int
+    message: str
 @app.post("/publish", status_code=202)
-def publish(user_id: int, message: str, background_tasks: BackgroundTasks):
-    """Сразу подтверждает приём запроса и выполняет реальную рассылку в фоне.
-
-    Раньше эндпоинт делал всю работу синхронно и отвечал клиенту только
-    в конце — при медленном SignService или RabbitMQ это могло занимать
-    больше таймаута HttpClient на стороне вызывающего сервиса, из-за чего
-    клиент считал вызов проваленным и повторял его, хотя уведомление уже
-    было отправлено. Теперь ответ уходит немедленно, а публикация
-    происходит асинхронно после него.
-    """
-    background_tasks.add_task(_process_publish, user_id, message)
+def publish(request: PublishRequest, background_tasks: BackgroundTasks):
+    background_tasks.add_task(_process_publish, request.userId, request.message)
     return {"status": "accepted"}
 
 

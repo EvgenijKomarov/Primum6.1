@@ -8,6 +8,7 @@ from pymongo.errors import DuplicateKeyError
 from bson import ObjectId
 from bson.errors import InvalidId
 from datetime import datetime, timezone
+from pydantic import BaseModel
 
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "commonnotifications"
@@ -33,20 +34,22 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, title="CommonNotificationService")
 
+class PublishRequest(BaseModel):
+    userId: int
+    message: str
 # ----------- POST /publish -----------
 @app.post("/publish")
-async def add_notification(userId: int, message: str):
+async def add_notification(request: PublishRequest):
     try:
         await app.state.notifications.insert_one({
-            "userId": userId,
-            "text": message,
+            "userId": request.userId,
+            "text": request.message,
             "seen": False,
             "datetime": datetime.now(timezone.utc)
         })
 
-        # Удаление старых записей сверх лимита 20
         cursor = app.state.notifications.find(
-            {"userId": userId}
+            {"userId": request.userId}
         ).sort("datetime", -1).skip(20)
 
         old_ids = [doc["_id"] async for doc in cursor]

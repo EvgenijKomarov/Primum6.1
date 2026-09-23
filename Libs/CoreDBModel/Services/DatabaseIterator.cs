@@ -10,6 +10,20 @@ namespace CoreDBModel.Services
     {
         public async Task SaveChangesAsync() => await context.SaveChangesAsync();
 
+        // При EnableRetryOnFailure ручную транзакцию можно открыть только внутри стратегии повторов.
+        // Исключение внутри action откатывает транзакцию.
+        public async Task<T> InTransactionAsync<T>(Func<Task<T>> action)
+        {
+            var strategy = context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                await using var transaction = await context.Database.BeginTransactionAsync();
+                var result = await action();
+                await transaction.CommitAsync();
+                return result;
+            });
+        }
+
         public async Task AddAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
             => await context.Set<TEntity>().AddAsync(entity);
 

@@ -1,0 +1,26 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  coredbiterator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      # Юнит-тесты воркеров и автотесты хоста CoreDBIterator: InMemory-база и заглушки
+      # внешних сервисов, поэтому ни Postgres, ни секреты не нужны
+      - name: Test CoreDBIterator
+        run: dotnet test Tests/CoreDBIteratorTests/CoreDBIteratorTests.csproj --logger "console;verbosity=normal"
