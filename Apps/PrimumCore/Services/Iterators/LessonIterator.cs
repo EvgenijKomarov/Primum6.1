@@ -124,6 +124,8 @@ namespace PrimumCore.Services.Iterators
 
             lesson.Status = LessonStatus.Cancelled;
             lesson.Abonement.CancelledLessons += 1;
+            await dbIterator.SaveChangesAsync();
+
             await publisher.Push(new LessonCancelEvent
             {
                 StudentName = lesson.Abonement.Student.User.DisplayName,
@@ -138,7 +140,6 @@ namespace PrimumCore.Services.Iterators
                 TeacherTimezoneOffset = lesson.Abonement.Course.Teacher.User.TimeZoneOffset,
             });
 
-            await dbIterator.SaveChangesAsync();
             return lesson.Id;
         }
 
@@ -177,6 +178,7 @@ namespace PrimumCore.Services.Iterators
             if (!reportStatus.ToString().StartsWith(isStudentReporting ? "Teacher" : "Student")) throw new BusinessLogicException("Wrong report status");
 
             lesson.ReportStatus = reportStatus;
+            await dbIterator.SaveChangesAsync();
 
             await publisher.Push(new LessonReportEvent
             {
@@ -193,7 +195,6 @@ namespace PrimumCore.Services.Iterators
                 ReportStatus = reportStatus.ToString(),
             });
 
-            await dbIterator.SaveChangesAsync();
             return lesson.Id;
         }
 
