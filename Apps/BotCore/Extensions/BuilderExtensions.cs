@@ -105,8 +105,8 @@ namespace BotCore.Extensions
             builder.Services.AddScoped<BotIterator>();
             builder.Services.AddScoped<InOutConverter>();
 
-            builder.Services.AddScoped<ConverterToDateTimeService>();
-            builder.Services.AddTransient<ChatSignTokenWorker>();
+            builder.Services.AddSingleton<ConverterToDateTimeService>();
+            builder.Services.AddSingleton<ChatSignTokenWorker>();
 
             return builder;
         }

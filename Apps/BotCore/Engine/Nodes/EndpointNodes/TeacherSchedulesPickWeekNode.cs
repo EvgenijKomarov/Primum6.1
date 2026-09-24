@@ -19,7 +19,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     Text = $"{Emoticons.Shedule}{x.Item2}",
                     EndpointNode=typeof(TeacherShedulesNode),
-                    Args = [x.Item1.ToString()]
+                    Args = [((int)x.Item1).ToString()]
                 })
                 .ToList();
 
