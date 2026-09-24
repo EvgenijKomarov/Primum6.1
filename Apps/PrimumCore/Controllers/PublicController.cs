@@ -59,7 +59,7 @@ namespace PrimumCore.Controllers
 
         [HttpGet("teacher-shedules/{teacherId}")]
         public async Task<ActionResult<PageResult<TeacherSheduleDto>>> GetTeacherShedules([FromRoute] int teacherId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
-            => Ok(await sheduleIterator.GetTeacherShedules(teacherId, true, page, pageSize));
+            => Ok(await sheduleIterator.GetTeacherShedules(teacherId, true, page, pageSize, null));
 
         [HttpGet("themes")]
         public async Task<ActionResult<PageResult<CourseThemeDto>>> GetThemes([FromQuery] int page = 0, [FromQuery] int pageSize = 10)

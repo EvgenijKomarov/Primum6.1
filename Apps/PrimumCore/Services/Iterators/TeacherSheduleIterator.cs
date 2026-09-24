@@ -16,12 +16,13 @@ namespace PrimumCore.Services.Iterators
 {
     public class TeacherSheduleIterator(DatabaseIterator dbIterator)
     {
-        public async Task<PageResult<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable, int _page, int _pageSize)
+        public async Task<PageResult<TeacherSheduleDto>> GetTeacherShedules(int teacherId, bool isOnlyAvailable, int _page, int _pageSize, DayOfWeek? dayOfWeek)
         {
             return await dbIterator.TeacherShedules(isOnlyAvailable)
                 .Include(x => x.Teacher)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Teacher.User.Id == teacherId)
+                .WhereIf(dayOfWeek != null, x => x.DayOfWeek == dayOfWeek)
                 .ToDto()
                 .ToPageResult(_page, _pageSize);
         }

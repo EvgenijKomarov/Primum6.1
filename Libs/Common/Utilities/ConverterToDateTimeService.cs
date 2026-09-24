@@ -46,6 +46,11 @@ namespace Common.Utilities
 
         protected virtual DateTime GetCurrentTime() => DateTime.UtcNow;
 
+        public virtual (DayOfWeek, string)[] GetRusDaysOfWeek()
+        {
+            return rusOrder.Select(x => (x.Key, GetRusTranslation(x.Key))).ToArray();
+        }
+
         public virtual DateTime GetNextSuitableDateNextWeek(DayOfWeek dayOfWeek, int hours)
         {
             DateTime now = GetCurrentTime();
