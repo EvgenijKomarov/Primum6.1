@@ -40,7 +40,7 @@ const defaultDefinitions: DefinitionItem[] = [
 ]
 
 export default function Monetization({
-  label = '// 09 — МОНЕТИЗАЦИЯ',
+  label = '// 10 — МОНЕТИЗАЦИЯ',
   title = 'Сколько вы будете получать?',
   description = 'Цены за уроки вы назначаете сами. Ваш процент зависит от уровня профиля, конверсии и оплаченных занятий.',
   cards = defaultCards,

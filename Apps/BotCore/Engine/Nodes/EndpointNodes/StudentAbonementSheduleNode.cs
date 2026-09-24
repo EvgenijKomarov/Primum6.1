@@ -35,12 +35,6 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 {
                     new EngineOutputButton
                     {
-                        Text = $"{Emoticons.Trash}Удалить",
-                        EndpointNode = typeof(StudentSheduleDeleteNode),
-                        Args = new List<string> { abonId, sheduleId }
-                    },
-                    new EngineOutputButton
-                    {
                         Text = $"{Emoticons.Back}Назад",
                         EndpointNode = typeof(StudentAbonementShedulesNode),
                         Args = new List<string> { abonId }

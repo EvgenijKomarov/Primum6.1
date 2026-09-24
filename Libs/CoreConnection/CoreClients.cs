@@ -6531,7 +6531,7 @@ namespace CoreConnection
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TeacherSheduleDtoPageResult> ShedulesAsync(int userId, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TeacherSheduleDtoPageResult> ShedulesAsync(int userId, int? page = null, int? pageSize = null, DayOfWeek? dayOfWeek = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -6559,6 +6559,10 @@ namespace CoreConnection
                     if (pageSize != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("pageSize")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (dayOfWeek != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("dayOfWeek")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(dayOfWeek, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     urlBuilder_.Length--;
 

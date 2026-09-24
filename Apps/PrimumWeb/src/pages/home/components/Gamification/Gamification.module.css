@@ -49,9 +49,9 @@
   object-fit: cover;
 
   filter:
-    grayscale(.8)
-    contrast(1.1)
-    brightness(.82);
+    grayscale(.3)
+    contrast(1.12)
+    brightness(.9);
 
   border: 3px solid var(--color-primary-base);
 }

@@ -50,8 +50,8 @@ namespace PrimumCore.Controllers
             => Ok(await courseIterator.GetCourseByTeacher(userId, courseId, false));
 
         [HttpGet("shedules")]
-        public async Task<ActionResult<PageResult<TeacherSheduleDto>>> GetShedules([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10) 
-            => Ok(await sheduleIterator.GetTeacherShedules(userId, false, page, pageSize));
+        public async Task<ActionResult<PageResult<TeacherSheduleDto>>> GetShedules([FromRoute] int userId, [FromQuery] int page = 0, [FromQuery] int pageSize = 10, [FromQuery] DayOfWeek? dayOfWeek = null) 
+            => Ok(await sheduleIterator.GetTeacherShedules(userId, false, page, pageSize, dayOfWeek));
 
         [HttpGet("shedule/{sheduleId}")]
         public async Task<ActionResult<TeacherSheduleDto>> GetShedule([FromRoute] int userId, [FromRoute] int sheduleId)

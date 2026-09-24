@@ -2,6 +2,7 @@ import styles from './TeacherPlatform.module.css'
 import Container from '../Container/Container'
 import type { BenefitItem } from '../Benefit/Benefit'
 import Benefit from '../Benefit/Benefit'
+import teacherPlatformPic from './teacherPlatformPic.png'
 
 interface TeacherPlatformProps {
   label?: string
@@ -20,10 +21,9 @@ const defaultBenefits: BenefitItem[] = [
 ]
 
 export default function TeacherPlatform({
-  label = '// 06 — ПРЕПОДАВАТЕЛЯМ',
+  label = '// 07 — ПРЕПОДАВАТЕЛЯМ',
   title = 'Что мы предлагаем?',
   description = 'Удобную платформу для создания и проведения онлайн-занятий.',
-  photoSrc = 'https://media.istockphoto.com/id/1160926571/ru/photo/portrait-of-a-teacher-in-an-elementary-school-male-standing-in-a-classroom.jpg',
   photoAlt = 'Преподаватель',
   benefits = defaultBenefits,
 }: TeacherPlatformProps) {
@@ -37,7 +37,7 @@ export default function TeacherPlatform({
             <p className={styles.description}>{description}</p>
           </div>
 
-          <img src={photoSrc} alt={photoAlt} className={styles.photo} />
+          <img src={teacherPlatformPic} alt={photoAlt} className={styles.photo} />
         </div>
 
         <div className={styles.benefits}>

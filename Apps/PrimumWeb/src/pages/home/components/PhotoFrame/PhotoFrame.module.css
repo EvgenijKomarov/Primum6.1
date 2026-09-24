@@ -7,11 +7,6 @@
 
   object-fit: cover;
 
-  filter:
-    grayscale(.75)
-    contrast(1.08)
-    brightness(.83);
-
   border: 2px solid var(--color-secondary-base);
 }
 
@@ -25,6 +20,13 @@
   border: 3px solid var(--color-primary-base);
 
   z-index: -1;
+}
+
+.photo {
+  filter:
+    grayscale(.3)
+    contrast(1.12)
+    brightness(.9);
 }
 
 @media (max-width: 620px) {

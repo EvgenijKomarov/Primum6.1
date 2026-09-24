@@ -2,6 +2,7 @@ import styles from './Gamification.module.css'
 import Container from '../Container/Container'
 import type { GameCardItem } from '../GameCard/GameCard'
 import GameCard from '../GameCard/GameCard'
+import gamificationPic from './gamificationPic.png'
 
 interface GamificationProps {
   label?: string
@@ -26,7 +27,6 @@ export default function Gamification({
   titleHighlight = 'как и играть.',
   description = 'Каждое занятие влияет на прогресс ученика. Чем выше результат — тем больше опыта и монет получает ученик.',
   cards = defaultCards,
-  photoSrc = 'https://media.istockphoto.com/id/2170616209/ru/photo/portrait-of-asian-japanese-korean-multiracial-junior-high-elementary-school-student-boy.jpg',
   photoAlt = 'Ученик',
 }: GamificationProps) {
   return (
@@ -50,7 +50,7 @@ export default function Gamification({
           </div>
 
           <div className={styles.photo}>
-            <img src={photoSrc} alt={photoAlt} />
+            <img src={gamificationPic} alt={photoAlt} />
           </div>
         </div>
       </Container>

@@ -22,7 +22,8 @@ namespace BotCore.Engine.Nodes.EndpointNodes
         }
         public override async Task Initialize(int index, DataBuffer input)
         {
-            var res = await client.ShedulesAsync(input.UserId!.Value, index, 1);
+            DayOfWeek dayOfWeek = (DayOfWeek)int.Parse(input.Arguments[0]);
+            var res = await client.ShedulesAsync(input.UserId!.Value, index, 1, dayOfWeek);
             TotalCount = res.TotalPages;
             Item = res.Items?.FirstOrDefault();
         }
@@ -35,7 +36,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
             return new EngineOutputButton
             {
                 Text = $"{Emoticons.Back}Назад",
-                EndpointNode = typeof(TeacherProfileNode)
+                EndpointNode = typeof(TeacherSchedulesPickWeekNode)
             };
         }
         public override async Task<string> IfItemsEmptyText(DataBuffer input)

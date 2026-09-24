@@ -1,6 +1,7 @@
 import styles from './About.module.css'
 import Container from '../Container/Container'
 import PhotoFrame from '../PhotoFrame/PhotoFrame'
+import aboutPic from './aboutPic.png'
 
 interface AboutProps {
   label?: string
@@ -19,7 +20,6 @@ export default function About({
   label = '// 01 — О ПРОЕКТЕ',
   title = 'Кто мы?',
   paragraphs = defaultParagraphs,
-  photoSrc = 'https://avatars.mds.yandex.net/i?id=2c3419e80bde0a58ea78c0b3b4f08bc7_l-4577698-images-thumbs&n=13',
   photoAlt = 'Обучение программированию',
 }: AboutProps) {
   return (
@@ -37,7 +37,7 @@ export default function About({
             ))}
           </div>
 
-          <PhotoFrame src={photoSrc} alt={photoAlt} />
+          <PhotoFrame src={aboutPic} alt={photoAlt} />
         </div>
       </Container>
     </section>

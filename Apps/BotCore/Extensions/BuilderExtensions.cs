@@ -64,10 +64,10 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<TeacherProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherFutureLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentFutureLessonsNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<StudentCancelLessonNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAllLessonsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementsNode, DataBuffer, EngineOutputMessage>();
-            builder.Services.AddEngineEndpointNode<StudentSheduleDeleteNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementSheduleNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementShedulesNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<StudentAbonementDeleteNode, DataBuffer, EngineOutputMessage>();
@@ -77,6 +77,7 @@ namespace BotCore.Extensions
             builder.Services.AddEngineEndpointNode<TeacherAbonementsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherCoursesNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<TeacherShedulesNode, DataBuffer, EngineOutputMessage>();
+            builder.Services.AddEngineEndpointNode<TeacherSchedulesPickWeekNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<AdminProfileNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<AdminIncidentsNode, DataBuffer, EngineOutputMessage>();
             builder.Services.AddEngineEndpointNode<AdminSolveIncidentNode, DataBuffer, EngineOutputMessage>();
