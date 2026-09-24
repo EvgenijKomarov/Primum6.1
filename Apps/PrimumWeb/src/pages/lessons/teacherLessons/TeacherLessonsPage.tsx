@@ -23,8 +23,8 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
         <div className={styles.cardMeta}>
-          <AbonementInfo abonementId={lesson.abonementId} />
           <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
+          <AbonementInfo abonementId={lesson.abonementId} />
         </div>
       </div>
       <div className={styles.cardCenter}>
@@ -39,7 +39,7 @@ const UpcomingCard = ({ lesson }: { lesson: FutureLessonDto }) => (
           <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceValueFree : ''}`}>
             {lesson.price === 0 ? 'Бесплатно' : `Цена: ${Number(lesson.price).toFixed(0)} ₽`}
           </span>
-          {lesson?.teacherEarning !== 0 &&
+          {(lesson.teacherEarning ?? 0) > 0 &&
             <span className={styles.cardEarning}>
               {`Возможный доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
             </span>}
@@ -60,8 +60,8 @@ const HistoryCard = ({ lesson, onSubmit, onMutate }: { lesson: LessonDto, onSubm
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
         <div className={styles.cardMeta}>
-          <AbonementInfo abonementId={lesson.abonementId} />
           <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
+          <AbonementInfo abonementId={lesson.abonementId} />
         </div>
       </div>
       <div className={styles.cardCenter}>
@@ -150,7 +150,7 @@ const UpcomingTab = () => {
     </div>
   );
 
-  return <>{groups.map((g) => <div className={styles.lesson}><DateGroup key={g.date} group={g} /></div>)}</>;
+  return <>{groups.map((g) => <DateGroup key={g.date} group={g} />)}</>;
 };
 
 const HistoryTab = () => {
@@ -171,7 +171,7 @@ const HistoryTab = () => {
 
   return (
     <div className={styles.lessonList}>
-      {lessons.map((l) => <div className={styles.lesson}><HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} } onMutate={mutate}/></div>)}
+      {lessons.map((l) => <HistoryCard key={l.id} lesson={l} onSubmit={ ()=>{mutate();} } onMutate={mutate}/>)}
     </div>
   );
 };

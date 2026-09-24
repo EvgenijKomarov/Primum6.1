@@ -34,8 +34,8 @@ const UpcomingCard = ({ lesson, onMutate }: { lesson: FutureLessonDto, onMutate:
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
         <div className={styles.cardMeta}>
-          <TeacherInfo teacherId={lesson.teacherId} />
           <span className={styles.cardTime}>{formatTimeSlot(lesson.time)}</span>
+          <TeacherInfo teacherId={lesson.teacherId} />
         </div>
       </div>
       <div className={styles.cardCenter}>
@@ -81,8 +81,8 @@ const HistoryCard = ({ lesson, onMutate }: { lesson: LessonDto, onMutate: () => 
       <div className={styles.cardLeft}>
         <span className={styles.cardCourseName}>{lesson.courseName}</span>
         <div className={styles.cardMeta}>
-          <TeacherInfo teacherId={lesson.teacherId} />
           <span className={styles.historyDate}>{formatDateTime(lesson.dateTime)}</span>
+          <TeacherInfo teacherId={lesson.teacherId} />
         </div>
       </div>
       <div className={styles.cardCenter}>
@@ -169,9 +169,7 @@ const UpcomingTab = () => {
   );
 
   return <>{groups.map((g) => 
-      <div className={styles.lesson}>
-        <DateGroup key={g.date} group={g} onMutate={mutate}/>
-      </div>)}
+      <DateGroup key={g.date} group={g} onMutate={mutate}/>)}
     </>;
 };
 
@@ -194,9 +192,7 @@ const HistoryTab = () => {
   return (
     <div className={styles.lessonList}>
       {lessons.map((l) => 
-        <div className={styles.lesson}>
-          <HistoryCard key={l.id} lesson={l} onMutate={() => mutate()}/>
-        </div>)}
+        <HistoryCard key={l.id} lesson={l} onMutate={() => mutate()}/>)}
     </div>
   );
 };
