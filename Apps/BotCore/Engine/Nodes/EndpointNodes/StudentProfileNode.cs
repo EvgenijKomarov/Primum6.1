@@ -29,7 +29,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                     },
                     new EngineOutputButton
                     {
-                        Text = $"{Emoticons.Lesson}Все занятия",
+                        Text = $"{Emoticons.Lesson}Прошедшие занятия",
                         EndpointNode = typeof(StudentAllLessonsNode)
                     },
                     new EngineOutputButton

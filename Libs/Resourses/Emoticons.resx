@@ -129,6 +129,9 @@
   <data name="Bot" xml:space="preserve">
     <value>🤖</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>❌</value>
+  </data>
   <data name="Cash" xml:space="preserve">
     <value>💵</value>
   </data>

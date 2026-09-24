@@ -97,6 +97,15 @@ namespace Resourses {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на ❌.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на 💵.
         /// </summary>
         public static string Cash {
