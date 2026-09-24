@@ -20,7 +20,7 @@ namespace BotCore.Services
         private string GenerateCallbackData(string endpointNodeId, List<string> args, int? pageindex = null)
         {
             if (args.Count == 0 && pageindex is null) { return endpointNodeId; }
-            return $"{endpointNodeId}_{string.Join("_", args)}" + (pageindex is not null ? $"&{pageindex}" : string.Empty);
+            return $"{endpointNodeId}_{string.Join("_", args)}_" + (pageindex is not null ? $"&{pageindex}" : string.Empty);
         }
     }
 }

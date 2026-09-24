@@ -42,7 +42,7 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                     new EngineOutputButton
                     {
                         Text = $"{Emoticons.Shedule}Расписания",
-                        EndpointNode = typeof(TeacherShedulesNode)
+                        EndpointNode = typeof(TeacherSchedulesPickWeekNode)
                     },
                     new EngineOutputButton
                     {

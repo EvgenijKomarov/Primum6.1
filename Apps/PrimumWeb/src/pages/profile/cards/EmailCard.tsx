@@ -21,6 +21,7 @@ export const EmailCard = ({ user, mutateUser }: Props) => {
   const [emailToken, setEmailToken] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -34,12 +35,19 @@ export const EmailCard = ({ user, mutateUser }: Props) => {
       setIsSending(true);
       try {
         await sendEmailVerification({ correctiveMail: email || undefined });
+        setCooldown(60);
         showToast('Письмо отправлено', 'success')
       } finally {
         setIsSending(false);
         await mutateUser();
       }
     };
+
+    useEffect(() => {
+      if (cooldown <= 0) return;
+      const timerId = setTimeout(() => setCooldown((c) => c - 1), 1000);
+      return () => clearTimeout(timerId);
+    }, [cooldown]);
   
     const handleConfirmEmail = async () => {
       await confirmEmail({ token: emailToken });
@@ -89,9 +97,9 @@ export const EmailCard = ({ user, mutateUser }: Props) => {
                   else {handleSendVerification();}
                 }}
                 isLoading={isSending}
-                disabled={!email.trim()}
+                disabled={!email.trim() || cooldown > 0}
               >
-                Отправить код
+                {cooldown > 0 ? `Отправить (${cooldown} с)` : 'Отправить код'}
               </Button>
               {ensurancePopupOpen && <EnsurancePopup
                       setPopupOpen={setEnsurancePopupOpen}
