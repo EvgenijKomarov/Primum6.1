@@ -12,7 +12,7 @@ interface ReferralProps {
 }
 
 export default function Referral({
-  label = '// 08 — ВАШИ УЧЕНИКИ',
+  label = '// 09 — ВАШИ УЧЕНИКИ',
   bigNumber = '80%',
   smallText = 'фиксированная доля от стоимости урока с вашими учениками',
   title = 'У вас уже есть ученики?',

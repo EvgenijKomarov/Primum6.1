@@ -8,7 +8,7 @@ interface PhotoFrameProps {
 export default function PhotoFrame({ src, alt }: PhotoFrameProps) {
   return (
     <div className={styles.frame}>
-      <img src={src} alt={alt} />
+      <img src={src} alt={alt} className={styles.photo}/>
     </div>
   )
 }

@@ -8,7 +8,7 @@ interface Props {
 // <button>, а не <a> без href: работает с клавиатуры и корректно ловит тап на мобильных
 export const RichButton = ({label, onClick}: Props) => {
     return (
-        <button type="button" className={styles.btn} onClick={onClick}>
+        <button type="button" className={styles.btn} onClick={onClick} style={{marginBottom: '8px'}}>
             {label}
         </button>
     );

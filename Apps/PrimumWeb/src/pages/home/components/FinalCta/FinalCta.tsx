@@ -19,8 +19,8 @@ interface FinalCtaProps {
 }
 
 const defaultActions: FinalCtaAction[] = [
-  { href: '#teachers', label: 'ПРЕПОДАВАТЕЛЯМ', variant: 'outline' },
-  { href: '#students', label: 'БУДУЩИМ УЧЕНИКАМ', variant: 'outline' },
+  { href: '#becomeTeacher', label: 'СТАТЬ ПРЕПОДАВАТЕЛЕМ', variant: 'outline' },
+  { href: '#becomeStudent', label: 'СТАТЬ УЧЕНИКОМ', variant: 'outline' },
 ]
 
 export default function FinalCta({

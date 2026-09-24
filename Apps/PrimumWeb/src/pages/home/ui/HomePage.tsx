@@ -16,6 +16,7 @@ import TeacherStart from '../components/TeacherStart/TeacherStart';
 import FinalCta from '../components/FinalCta/FinalCta';
 import Faq from '../components/Faq/Faq';
 import Footer from '../components/Footer/Footer';
+import StudentStart from '../components/StudentStart/StudentStart';
 
 export const HomePage = () => {
 
@@ -34,6 +35,7 @@ export const HomePage = () => {
           <Courses />
           <Platform />
           <Gamification />
+          <div id="becomeStudent"><StudentStart /></div>
           <Consultation />
         </div>
       
@@ -44,7 +46,7 @@ export const HomePage = () => {
           <Routine />
           <Referral />
           <Monetization />
-          <TeacherStart />
+          <div id="becomeTeacher"><TeacherStart /></div>
         </div>
       
         <FinalCta />

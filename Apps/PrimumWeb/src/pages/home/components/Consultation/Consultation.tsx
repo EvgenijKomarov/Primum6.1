@@ -11,7 +11,7 @@ interface ConsultationProps {
 }
 
 export default function Consultation({
-  label = '// 05 — КОНСУЛЬТАЦИЯ',
+  label = '// 06 — КОНСУЛЬТАЦИЯ',
   title = 'Остались вопросы?',
   description = 'Оставьте свои контакты — мы свяжемся с вами и расскажем всё необходимое об обучении и платформе.'
 }: ConsultationProps) {

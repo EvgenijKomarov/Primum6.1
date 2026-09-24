@@ -24,11 +24,11 @@ const defaultSteps: StepItem[] = [
     title: 'ПРОВЕРКА',
     description: 'После создания профиля администрация свяжется с вами.',
   },
-  { number: '04', title: 'НАЧАЛО', description: 'Создавайте курсы и начинайте проводить занятия.' },
+  { number: '04', title: 'НАЧАЛО', description: 'Создавайте курсы и назначайте свободное время' },
 ]
 
 export default function TeacherStart({
-  label = '// 10 — СТАРТ',
+  label = '// 11 — СТАРТ',
   title = 'Как начать преподавать?',
   description = 'Зарегистрируйтесь, создайте профиль и дождитесь связи с администрацией.',
   steps = defaultSteps,

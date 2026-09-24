@@ -1,6 +1,7 @@
 import styles from './Hero.module.css'
 import Container from '../Container/Container'
 import AudienceCard from '../AudienceCard/AudienceCard'
+import heroPic from './heroPic.png'
 
 export interface AudienceOption {
   href: string
@@ -13,14 +14,13 @@ interface HeroProps {
   description?: string
   audienceTitle?: string
   audienceOptions?: AudienceOption[]
-  photoSrc?: string
   photoAlt?: string
   terminalLines?: string[]
 }
 
 const defaultOptions: AudienceOption[] = [
-  { href: '#students', label: 'Я УЧЕНИК / РОДИТЕЛЬ' },
-  { href: '#teachers', label: 'Я ПРЕПОДАВАТЕЛЬ' },
+  { href: '#students', label: 'БУДУ УЧЕНИКОМ' },
+  { href: '#teachers', label: 'БУДУ ПРЕПОДАВАТЕЛЕМ' },
 ]
 
 const defaultTerminalLines = ['> start_learning()', '> level_up()', '> █']
@@ -31,7 +31,6 @@ export default function Hero({
   description = 'Платформа для обучения детей программированию и для преподавателей, которые хотят заниматься обучением, а не рутиной.',
   audienceTitle = 'ВЫБЕРИТЕ СВОЙ ПУТЬ',
   audienceOptions = defaultOptions,
-  photoSrc = 'https://img.freepik.com/premium-photo/young-girl-coding-laptop_14117-749835.jpg',
   photoAlt = 'Ребёнок занимается программированием',
   terminalLines = defaultTerminalLines,
 }: HeroProps) {
@@ -59,7 +58,7 @@ export default function Hero({
         <div className={styles.photo}>
           <div className={styles.square} />
 
-          <img src={photoSrc} alt={photoAlt} />
+          <img src={heroPic} alt={photoAlt} />
 
           <div className={styles.terminal}>
             {terminalLines.map((line, i) => (

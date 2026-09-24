@@ -3,6 +3,7 @@ import Container from '../Container/Container'
 import PhotoFrame from '../PhotoFrame/PhotoFrame'
 import type { FeatureItem } from '../Feature/Feature'
 import Feature from '../Feature/Feature'
+import platformPic from './platformPic.png'
 
 interface PlatformProps {
   label?: string
@@ -38,13 +39,14 @@ export default function Platform({
   titleHighlight = 'нового уровня.',
   description = 'Мы предоставляем гибкие и удобные возможности для обучения детей. Всё необходимое находится в одном месте.',
   features = defaultFeatures,
-  photoSrc = 'https://i.pinimg.com/originals/cf/13/af/cf13af931d710b3392cdbee4758785e1.jpg',
   photoAlt = 'Онлайн обучение',
 }: PlatformProps) {
   return (
     <section className={styles.section}>
       <Container>
         <div className={styles.grid}>
+          <PhotoFrame src={platformPic} alt={photoAlt} />
+
           <div>
             <div className={styles.label}>{label}</div>
 
@@ -60,8 +62,6 @@ export default function Platform({
               ))}
             </div>
           </div>
-
-          <PhotoFrame src={photoSrc} alt={photoAlt} />
         </div>
       </Container>
     </section>
