@@ -65,7 +65,7 @@
   flex-direction: row;
   gap: 0.5rem;
   flex-wrap: wrap;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .userName {
@@ -222,6 +222,7 @@
 .logDescription {
   overflow-y: auto;
   width: 60%;
+  height: 100%;
   white-space: pre-line;
   font-size: 0.65rem;
   color: var(--color-secondary-light);
