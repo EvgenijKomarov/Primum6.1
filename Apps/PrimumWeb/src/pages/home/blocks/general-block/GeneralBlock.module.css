@@ -71,7 +71,7 @@
   }
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 54rem) {
   .title {
     /* «PrimumCode» — 10 знаков шириной 1em: заголовок должен влезать в экран без горизонтальной прокрутки */
     font-size: min(2.3rem, calc((100vw - 4rem) / 10.5));

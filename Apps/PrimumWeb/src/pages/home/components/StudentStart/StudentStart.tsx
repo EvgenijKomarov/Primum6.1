@@ -29,7 +29,7 @@ const defaultSteps: StepItem[] = [
 export default function TeacherStart({
   label = '// 5 — СТАРТ',
   title = 'Как начать заниматься?',
-  description = 'Зарегистрируйтесь, создайте профиль и запишитесь на понравившийся',
+  description = 'Зарегистрируйтесь, создайте профиль и запишитесь на понравившийся курс',
   steps = defaultSteps,
 }: StudentStartProps) {
   return (

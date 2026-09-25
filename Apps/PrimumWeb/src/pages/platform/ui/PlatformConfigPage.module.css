@@ -29,6 +29,11 @@
   height: 8rem;
 }
 
+.warningMes{
+  color: var(--color-functional-error);
+  text-align: center;
+}
+
 .rowSmall {
   background-color: var(--color-secondary-base);
   padding: 1rem;
@@ -42,6 +47,8 @@
 
 .rowInformation {
   width: 70%;
+  overflow: hidden;
+
 }
 
 .rowDescription {
@@ -55,7 +62,7 @@
   align-items: center;
   justify-content: center;
   width: 30%;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .rowPrice {
@@ -106,13 +113,17 @@
   gap: 1rem;
 }
 
+.rowTitle {
+  overflow-x: hidden;
+}
+
 .error {
   font-size: 0.75rem;
   color: var(--color-functional-error);
   margin-top: 0.125rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 840px) {
   .themesList {
     overflow-x: auto;
     padding-bottom: 1rem;
@@ -133,12 +144,17 @@
     overflow-y: auto;
   }
 
+  .rowTitle{
+    white-space: nowrap;
+    width: 25rem;
+  }
+
   .row {
     width: 55rem;
   }
 
   .rowSmall {
-    width: 35rem;
+    width: 45rem;
   }
 
   .listHeader {

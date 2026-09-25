@@ -28,7 +28,7 @@ export const Notifications = () => {
     <div className={styles.userMenu} ref={rootRef} style = {{zIndex: '1'}}>
       <Button
         variant={ButtonTypeEnum.PRIMARY}
-        size={ButtonSizeEnum.SMALL}
+        size={ButtonSizeEnum.NORMAL}
         icon={<BellIcon />}
         onClick={() => setIsOpen((v) => !v)}
         isLoading={isLoading}

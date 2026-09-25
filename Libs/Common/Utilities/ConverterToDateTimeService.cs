@@ -89,5 +89,21 @@ namespace Common.Utilities
 
             return (resultDay, resultHour);
         }
+
+        public virtual (DateOnly Date, int Hour) ApplyTimeZoneOffset(DateOnly day, int hour, TimeSpan offset)
+        {
+            if (hour < 0 || hour > 23)
+                throw new ArgumentOutOfRangeException(nameof(hour), "Час должен быть в диапазоне 0-23");
+
+            // Добавляем смещение. Math.Floor гарантирует корректное округление
+            // в меньшую сторону даже для отрицательных и дробных (например, +5:30) смещений.
+            int offsetHours = (int)Math.Floor(offset.TotalHours);
+            var totalHours = hour + offsetHours;
+
+            if (totalHours >= 24) { day = day.AddDays(1); totalHours -= 24; }
+            else if (totalHours < 0) { day = day.AddDays(-1); totalHours += 24; }
+
+            return (day, totalHours);
+        }
     }
 }
