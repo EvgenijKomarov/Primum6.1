@@ -82,7 +82,7 @@ const HistoryCard = ({ lesson, onSubmit, onMutate }: { lesson: LessonDto, onSubm
           <span className={`${styles.cardPriceValue} ${lesson.price === 0 ? styles.cardPriceValueFree : ''}`}>
             {lesson.price === 0 ? 'Бесплатно' : `Цена: ${Number(lesson.price).toFixed(0)} ₽`}
           </span>
-          {(lesson.teacherEarning && lesson.teacherEarning !== 0) &&
+          {!!lesson.teacherEarning &&
             <span className={styles.cardEarning}>
               {`Ваш доход: ${Number(lesson.teacherEarning).toFixed(0)} ₽`}
             </span>}
