@@ -58,11 +58,11 @@ namespace BotCore.Engine.Nodes.EndpointNodes
                 Message = lessonsByDate.Count() == 0 ? $"{Emoticons.Lesson}Занятий в ближайшее время не запланировано" : sb.ToString(),
                 Buttons = new EngineOutputButton[]
                 {
-                new EngineOutputButton
-                {
-                    Text = $"{Emoticons.Back}Назад",
-                    EndpointNode = typeof(TeacherProfileNode)
-                }
+                    new EngineOutputButton
+                    {
+                        Text = $"{Emoticons.Back}Назад",
+                        EndpointNode = typeof(TeacherProfileNode)
+                    }
                 }
             });
         }

@@ -243,34 +243,52 @@
 }
 
 @media (max-width: 640px) {
-  .lessonList {
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    min-height: 0;
+  }
+
+  .page {
     overflow-x: auto;
   }
-  .lessonList::-webkit-scrollbar {
-    height: 0;
-  }
 
-  .cardItem {
-    flex: 0 0 60rem;
-    width: 60rem;
-    scroll-snap-align: start;
-  }
-
-  .lesson {
-    width: 80rem;
-  }
-
-  .card {
-    flex-wrap: nowrap;
-  }
-
-  .cardMeta {
-    flex-wrap: nowrap;
+  .cardLeft,
+  .cardCenter,
+  .cardRight,
+  .buttons {
+    width: 100%;
+    min-width: 0;
   }
 
   .cardInfo {
+    justify-content: flex-start;
+  }
+
+  .cardPrice {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+  }
+
+  .cardPriceValue,
+  .cardEarning {
+    text-align: left;
+  }
+
+  .buttons {
     flex-direction: column;
-    gap:0.5rem;
+    gap: 0.5rem;
+  }
+  .buttons > * {
+    flex: 1;
+  }
+
+  .lessonList {
+    overflow-x: visible;
   }
 }
 

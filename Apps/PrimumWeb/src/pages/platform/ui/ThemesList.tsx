@@ -108,7 +108,6 @@ const ThemeCard = ({courseTheme, admin, onMutate} : {courseTheme: CourseThemeDto
             variant={ButtonTypeEnum.PRIMARY}
             icon={<EditIcon/>}
             onClick={async () => {setEditPopupOpen(true)}}>
-            Реадктировать
         </Button>
         {editPopupOpen && <ThemeInteractionPopup 
                     onClose={() => setEditPopupOpen(false)}

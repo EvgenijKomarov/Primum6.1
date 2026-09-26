@@ -42,11 +42,12 @@
   flex-direction: row;
   gap: 1rem;
   height: 6rem;
-  width: 49%
+  width: 49%;
+  justify-content: space-between;
 }
 
 .rowInformation {
-  width: 70%;
+  width: 90%;
   overflow: hidden;
 
 }
@@ -115,6 +116,7 @@
 
 .rowTitle {
   overflow-x: hidden;
+  white-space: nowrap;
 }
 
 .error {
