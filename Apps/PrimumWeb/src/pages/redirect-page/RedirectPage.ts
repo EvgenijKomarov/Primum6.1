@@ -48,7 +48,16 @@ export const RedirectPage = ({ apiUrl, onSuccessMessage,  redirectTo = '/profile
         if (e instanceof FetchError && e.status === 401) {
           showToast('Пожалуйста, войдите в профиль и перейдите по ссылке еще раз', 'error', 5000);
           navigate('/auth', { replace: true });
-        } else {
+        } 
+        else if (e instanceof FetchError && e.status === 404 && apiUrl == '/student/abonements/referal') {
+          showToast('Для создания реферального абонемента необходимо создать профиль ученика', 'error', 8000);
+          navigate('/profile', { replace: true });
+        }
+        else if (e instanceof FetchError && e.status === 500 && apiUrl == '/student/abonements/referal') {
+          showToast('Нельзя подписаться на собственный курс', 'error', 5000);
+          navigate('/profile', { replace: true });
+        }
+        else {
           showToast('Произошла ошибка', 'error', 5000);
           navigate(defaultRedirect, { replace: true });
         }
