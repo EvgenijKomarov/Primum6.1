@@ -14,29 +14,71 @@ from pydantic import BaseModel, Field
 from TemplateRender import EmailTemplate, TemplateDataError, render_email
 
 logging.basicConfig(
-    level=logging.INFO,
+    level="INFO",
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
 log = logging.getLogger("mailer")
 
+
 # ---------- Конфигурация ----------
 
+def _env_str(name: str, default: str) -> str:
+    return os.getenv(name) or default
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        raise RuntimeError(f"{name} должен быть целым числом, получено: {raw!r}")
+
+
+def _env_float(name: str, default: float) -> float:
+    raw = os.getenv(name)
+    if not raw:
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        raise RuntimeError(f"{name} должен быть числом, получено: {raw!r}")
+
+
+# Учётные данные (обязательные)
 EMAIL = os.getenv("EMAIL")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-CORE_URL = os.getenv("CORE_URL")
+EMAIL_FROM = os.getenv("EMAIL_FROM") or EMAIL
 
-SMTP_HOST = "smtp.yandex.ru"
-SMTP_PORT = 465
-SMTP_TIMEOUT = 10          # сек, чтобы зависший SMTP не блокировал воркер
+# SMTP
+SMTP_HOST = _env_str("SMTP_HOST", "smtp.yandex.ru")
+SMTP_PORT = _env_int("SMTP_PORT", 465)
+SMTP_TIMEOUT = _env_float("SMTP_TIMEOUT", 10.0)
+# ssl (implicit TLS, обычно 465) | starttls (обычно 587) | plain (без шифрования, только для тестов)
+SMTP_SECURITY = _env_str("SMTP_SECURITY", "ssl" if SMTP_PORT == 465 else "starttls").lower()
 
-SEND_INTERVAL = 2.0        # пауза между письмами, сек (~30 писем/мин)
-MAX_QUEUE = 1000           # при переполнении /publish отвечает 503
-MAX_ATTEMPTS = 3           # всего попыток на письмо
-RETRY_BASE_DELAY = 10.0    # 10 -> 20 -> 40 ... сек между попытками
-MESSAGE_TTL = 600          # письма старше 10 минут не отправляем
+# Очередь и ретраи
+SEND_INTERVAL = _env_float("SEND_INTERVAL", 2.0)          # пауза между письмами, сек
+MAX_QUEUE = _env_int("MAX_QUEUE", 1000)                   # при переполнении /publish отвечает 503
+MAX_ATTEMPTS = _env_int("MAX_ATTEMPTS", 3)                # всего попыток на письмо
+RETRY_BASE_DELAY = _env_float("RETRY_BASE_DELAY", 10.0)   # 10 -> 20 -> 40 ... сек
+MESSAGE_TTL = _env_float("MESSAGE_TTL", 600.0)            # письма старше N сек не отправляем
 
+# Приоритеты -- внутренняя логика, не настройка
 PRIORITY_HIGH = 0          # коды подтверждения и т.п.
 PRIORITY_NORMAL = 1        # всё остальное
+
+
+def validate_config() -> None:
+    if not EMAIL or not EMAIL_PASSWORD:
+        raise RuntimeError("EMAIL и EMAIL_PASSWORD должны быть заданы в переменных окружения")
+    if SMTP_SECURITY not in ("ssl", "starttls", "plain"):
+        raise RuntimeError(f"SMTP_SECURITY должен быть ssl, starttls или plain, получено: {SMTP_SECURITY!r}")
+    if MAX_ATTEMPTS < 1:
+        raise RuntimeError("MAX_ATTEMPTS должен быть >= 1")
+    if MAX_QUEUE < 1:
+        raise RuntimeError("MAX_QUEUE должен быть >= 1")
 
 
 # ---------- Модель задачи ----------
@@ -57,12 +99,19 @@ class Job:
 def send_email(address: str, subject: str, text: str, html: str) -> None:
     msg = EmailMessage()
     msg["Subject"] = subject
-    msg["From"] = EMAIL
+    msg["From"] = EMAIL_FROM
     msg["To"] = address
     msg.set_content(text)
     msg.add_alternative(html, subtype="html")
 
-    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT) as server:
+    if SMTP_SECURITY == "ssl":
+        server = smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT)
+    else:
+        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT)
+
+    with server:
+        if SMTP_SECURITY == "starttls":
+            server.starttls()
         server.login(EMAIL, EMAIL_PASSWORD)
         server.send_message(msg)
 
@@ -114,13 +163,13 @@ async def process(app: FastAPI, job: Job) -> bool:
     except smtplib.SMTPRecipientsRefused as e:
         # Должен идти раньше SMTPException: это его подкласс
         if is_permanent_refusal(e):
-            # Ящика нет / адрес отвергнут навсегда, так и задумано, не ретраим.
+            # Адрес отвергнут навсегда, не ретраим.
             # Пишем полный ответ сервера: 5xx бывает и по политике (спам, репутация).
             log.info("recipient rejected, skipping %s: %s", job.address, e.recipients)
         else:
             schedule_retry(app, job, e.recipients)
     except (smtplib.SMTPException, OSError) as e:
-        # Включая SMTPAuthenticationError: бывает временной (сбой/троттлинг Яндекса)
+        # Включая SMTPAuthenticationError: бывает временной (сбой/троттлинг провайдера)
         schedule_retry(app, job, e)
     return True
 
@@ -143,13 +192,18 @@ async def worker(app: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if not EMAIL or not EMAIL_PASSWORD:
-        raise RuntimeError("EMAIL и EMAIL_PASSWORD должны быть заданы в переменных окружения")
+    validate_config()
 
     app.state.queue = asyncio.PriorityQueue(maxsize=MAX_QUEUE)
     app.state.retry_tasks = set()
     worker_task = asyncio.create_task(worker(app))
-    log.info("mail worker started")
+    # Пароль в лог не пишем
+    log.info(
+        "mail worker started: smtp=%s:%d (%s), from=%s, interval=%.1fs, "
+        "attempts=%d, ttl=%.0fs, queue=%d",
+        SMTP_HOST, SMTP_PORT, SMTP_SECURITY, EMAIL_FROM,
+        SEND_INTERVAL, MAX_ATTEMPTS, MESSAGE_TTL, MAX_QUEUE,
+    )
     try:
         yield
     finally:
@@ -181,13 +235,15 @@ async def publish(request: PublishRequest):
     except TemplateDataError as e:
         raise HTTPException(status_code=422, detail=str(e))
 
+    # Предполагаю, что render_email возвращает объект с полями text и html.
+    # Если у тебя кортеж или другие имена, поправь эти две строки.
     job = Job(
         priority=request.priority,
         created=time.monotonic(),
         address=request.address,
         subject=request.subject,
-        body=request.message,
-        template=request.template,
+        text=rendered.text,
+        html=rendered.html,
     )
     try:
         app.state.queue.put_nowait(job)
@@ -199,7 +255,6 @@ async def publish(request: PublishRequest):
     return {"status": "accepted", "address": request.address, "queued": app.state.queue.qsize()}
 
 
-# хелсчек
 @app.get("/health")
 async def health():
     return {"status": "ok", "queued": app.state.queue.qsize()}
@@ -211,5 +266,5 @@ if __name__ == "__main__":
         "EmailNotificationService:app",
         host="0.0.0.0",
         port=5000,
-        log_level="info",
+        log_level="INFO",
     )
