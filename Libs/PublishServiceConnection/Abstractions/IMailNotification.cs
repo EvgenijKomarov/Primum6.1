@@ -5,10 +5,18 @@ using System.Text;
 
 namespace PublishServiceConnection.Abstractions
 {
+    public class Email
+    {
+        public required Dictionary<string, string> Data { get; set; }
+
+        public required string MailTitle { get; set; }
+
+        public required EmailTemplate EmailTemplate { get; set; }
+
+        public required string Address { get; set; }
+    }
     public interface IMailNotification: IPushable
     {
-        Dictionary<string, string> ToMailNotifications();
-        string MailTitle { get; }
-        EmailTemplate Template { get; }
+        List<Email> ToMailNotifications();
     }
 }

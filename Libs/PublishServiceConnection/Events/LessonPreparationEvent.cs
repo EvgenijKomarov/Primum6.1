@@ -40,9 +40,6 @@ namespace PublishServiceConnection.Events
 
         public required bool IsTeacherReady { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Уведомление о будущем занятии";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -54,15 +51,32 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
-                    + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией"),
-                [StudentEmail] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" +
-                    (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
-            };
+                Address = TeacherEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
+                    + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией")
+                },
+                EmailTemplate = EmailTemplate.InfoEmail
+            });
+            list.Add(new Email
+            {
+                Address = StudentEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" 
+                    + (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
+                },
+                EmailTemplate = EmailTemplate.InfoEmail
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

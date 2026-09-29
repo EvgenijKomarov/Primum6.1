@@ -8,5 +8,6 @@ namespace PublishServiceConnection.Enums
     {
         InfoEmail,
         ConfirmationEmail,
+        LessonReadyEmail
     }
 }

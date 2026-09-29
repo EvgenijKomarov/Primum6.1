@@ -30,10 +30,6 @@ namespace PublishServiceConnection.Events
 
         public required DateTime DateTime { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Урок отменен";
-
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -42,12 +38,20 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником",
-            };
+                Address = TeacherEmail,
+                MailTitle = "Урок отменен",
+                Data = new()
+                {
+                    ["body"] = $"Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

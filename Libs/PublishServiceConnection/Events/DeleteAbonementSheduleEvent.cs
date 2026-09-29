@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PublishServiceConnection.Events
 {
@@ -34,9 +35,6 @@ namespace PublishServiceConnection.Events
 
         public required int Time { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Удаление абонемента одного из учеников";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
@@ -47,14 +45,22 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
+            List<Email> list = new List<Email>();
             var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);
 
-            return new Dictionary<string, string>
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00",
-            };
+                Address = TeacherEmail,
+                MailTitle = "Удаление абонемента одного из учеников",
+                Data = new()
+                {
+                    ["body"] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

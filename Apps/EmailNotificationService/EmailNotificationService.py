@@ -11,7 +11,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from TemplateRender import EmailTemplate, render_email
+from TemplateRender import EmailTemplate, TemplateDataError, render_email
 
 logging.basicConfig(
     level=logging.INFO,
@@ -43,31 +43,24 @@ PRIORITY_NORMAL = 1        # всё остальное
 
 @dataclass(order=True)
 class Job:
-    # Сортировка только по (priority, created): при равном приоритете
-    # раньше созданные письма (в том числе вернувшиеся с ретрая) идут первыми.
     priority: int
     created: float
     address: str = field(compare=False)
     subject: str = field(compare=False)
-    body: str = field(compare=False)
-    template: EmailTemplate = field(compare=False)
+    text: str = field(compare=False)
+    html: str = field(compare=False)
     attempt: int = field(default=0, compare=False)
 
 
 # ---------- Отправка (синхронная, бросает исключения) ----------
 
-def send_email(
-    address: str,
-    subject: str,
-    body: str,
-    template: EmailTemplate = EmailTemplate.INFO,
-) -> None:
+def send_email(address: str, subject: str, text: str, html: str) -> None:
     msg = EmailMessage()
     msg["Subject"] = subject
     msg["From"] = EMAIL
     msg["To"] = address
-    msg.set_content(body)  # текстовый фолбэк для клиентов без HTML
-    msg.add_alternative(render_email(template, subject, body), subtype="html")
+    msg.set_content(text)
+    msg.add_alternative(html, subtype="html")
 
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT) as server:
         server.login(EMAIL, EMAIL_PASSWORD)
@@ -115,7 +108,7 @@ async def process(app: FastAPI, job: Job) -> bool:
     job.attempt += 1
     try:
         await asyncio.to_thread(
-            send_email, job.address, job.subject, job.body, job.template
+            send_email, job.address, job.subject, job.text, job.html
         )
         log.info("sent to %s", job.address)
     except smtplib.SMTPRecipientsRefused as e:
@@ -176,13 +169,18 @@ app = FastAPI(title="FastAPI → SMTP", lifespan=lifespan)
 class PublishRequest(BaseModel):
     address: str
     subject: str
-    message: str
     template: EmailTemplate = EmailTemplate.INFO
+    data: dict[str, str] = Field(default_factory=dict)
     priority: int = Field(default=PRIORITY_NORMAL, ge=PRIORITY_HIGH, le=PRIORITY_NORMAL)
 
 
 @app.post("/publish", status_code=202)
 async def publish(request: PublishRequest):
+    try:
+        rendered = render_email(request.template, request.subject, request.data)
+    except TemplateDataError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
     job = Job(
         priority=request.priority,
         created=time.monotonic(),

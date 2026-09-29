@@ -28,6 +28,7 @@
     <Content Include="requirements.txt" />
     <Content Include="templates\ConfirmationEmail.html" />
     <Content Include="templates\InfoEmail.html" />
+    <Content Include="templates\LessonReadyEmail.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templates\" />

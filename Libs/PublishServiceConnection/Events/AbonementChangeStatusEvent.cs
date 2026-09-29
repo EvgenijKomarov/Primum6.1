@@ -28,9 +28,6 @@ namespace PublishServiceConnection.Events
 
         public required string AbonementStatus { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Изменение статуса абонемента";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -39,12 +36,20 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}",
-            };
+                Address = TeacherEmail,
+                MailTitle = "Изменение статуса абонемента",
+                Data = new()
+                {
+                    ["body"] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()
