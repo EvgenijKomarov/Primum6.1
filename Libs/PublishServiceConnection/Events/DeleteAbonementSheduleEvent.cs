@@ -58,7 +58,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Ученик {StudentName} удалил расписание по курсу {CourseName} на {DayOfWeekRes.ResourceManager.GetString(date.Day.ToString())} {date.Hour}:00"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             return list;
         }

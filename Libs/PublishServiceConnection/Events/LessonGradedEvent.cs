@@ -51,7 +51,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.LOW
             });
             return list;
         }

@@ -51,7 +51,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = mes
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
             });
             return list;
         }

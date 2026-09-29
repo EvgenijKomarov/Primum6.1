@@ -63,7 +63,8 @@ namespace PublishServiceConnection.Events
                     ["body"] = $"Завтра случится занятие в {DateTime.Add(TeacherTimezoneOffset).ToString("HH:mm")} по курсу {CourseName} с учеником {StudentName}"
                     + (IsTeacherReady ? "" : "\n ВНИМАНИЕ! Возникла проблема с эквайрингом, свяжитесь с администрацией")
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             list.Add(new Email
             {
@@ -74,7 +75,8 @@ namespace PublishServiceConnection.Events
                     ["body"] = $"Завтра случится занятие в {DateTime.Add(StudentTimezoneOffset).ToString("HH:mm")} по курсу {CourseName}.\n" 
                     + (IsEnoughMoney ? $"{BoolRes._true}Вам должно хватить средств для оплаты занятия" : $"{BoolRes._false}Внимание! У вас недостаточно средств для оплаты занятия. Пожалуйста, пополните балланс.")
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             return list;
         }

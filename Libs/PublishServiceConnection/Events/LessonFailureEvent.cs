@@ -53,7 +53,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
             });
             list.Add(new Email
             {
@@ -63,7 +64,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
             });
             return list;
         }

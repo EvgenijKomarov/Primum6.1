@@ -63,11 +63,15 @@ SEND_INTERVAL = _env_float("SEND_INTERVAL", 2.0)          # пауза межд�
 MAX_QUEUE = _env_int("MAX_QUEUE", 1000)                   # при переполнении /publish отвечает 503
 MAX_ATTEMPTS = _env_int("MAX_ATTEMPTS", 3)                # всего попыток на письмо
 RETRY_BASE_DELAY = _env_float("RETRY_BASE_DELAY", 10.0)   # 10 -> 20 -> 40 ... сек
-MESSAGE_TTL = _env_float("MESSAGE_TTL", 600.0)            # письма старше N сек не отправляем
+MESSAGE_TTL = _env_float("MESSAGE_TTL", 600.0)            # HIGH/NORMAL: старше N сек не отправляем
+MESSAGE_TTL_LOW = _env_float("MESSAGE_TTL_LOW", 3600.0)   # LOW: ждёт дольше, уходит последним
+# Доля очереди, которую может занять LOW; остальное зарезервировано для HIGH/NORMAL
+LOW_QUEUE_RATIO = _env_float("LOW_QUEUE_RATIO", 0.8)
 
 # Приоритеты -- внутренняя логика, не настройка
 PRIORITY_HIGH = 0          # коды подтверждения и т.п.
 PRIORITY_NORMAL = 1        # всё остальное
+PRIORITY_LOW = 2           # незначительные сообщения, рассылки
 
 
 def validate_config() -> None:
@@ -79,6 +83,8 @@ def validate_config() -> None:
         raise RuntimeError("MAX_ATTEMPTS должен быть >= 1")
     if MAX_QUEUE < 1:
         raise RuntimeError("MAX_QUEUE должен быть >= 1")
+    if not 0.0 < LOW_QUEUE_RATIO <= 1.0:
+        raise RuntimeError("LOW_QUEUE_RATIO должен быть в диапазоне (0, 1]")
 
 
 # ---------- Модель задачи ----------
@@ -123,6 +129,10 @@ def is_permanent_refusal(e: smtplib.SMTPRecipientsRefused) -> bool:
 
 # ---------- Очередь, воркер, ретраи ----------
 
+def ttl_for(job: Job) -> float:
+    return MESSAGE_TTL_LOW if job.priority == PRIORITY_LOW else MESSAGE_TTL
+
+
 async def requeue_later(queue: asyncio.PriorityQueue, job: Job, delay: float) -> None:
     await asyncio.sleep(delay)
     try:
@@ -150,8 +160,8 @@ def schedule_retry(app: FastAPI, job: Job, reason: object) -> None:
 async def process(app: FastAPI, job: Job) -> bool:
     """Обрабатывает одну задачу. Возвращает True, если была попытка отправки."""
     # TTL проверяем перед каждой попыткой, в том числе перед ретраем
-    if time.monotonic() - job.created > MESSAGE_TTL:
-        log.warning("expired, dropped: %s", job.address)
+    if time.monotonic() - job.created > ttl_for(job):
+        log.warning("expired, dropped: %s (priority=%d)", job.address, job.priority)
         return False
 
     job.attempt += 1
@@ -200,9 +210,10 @@ async def lifespan(app: FastAPI):
     # Пароль в лог не пишем
     log.info(
         "mail worker started: smtp=%s:%d (%s), from=%s, interval=%.1fs, "
-        "attempts=%d, ttl=%.0fs, queue=%d",
+        "attempts=%d, ttl=%.0fs, ttl_low=%.0fs, queue=%d, low_ratio=%.2f",
         SMTP_HOST, SMTP_PORT, SMTP_SECURITY, EMAIL_FROM,
-        SEND_INTERVAL, MAX_ATTEMPTS, MESSAGE_TTL, MAX_QUEUE,
+        SEND_INTERVAL, MAX_ATTEMPTS, MESSAGE_TTL, MESSAGE_TTL_LOW,
+        MAX_QUEUE, LOW_QUEUE_RATIO,
     )
     try:
         yield
@@ -225,11 +236,17 @@ class PublishRequest(BaseModel):
     subject: str
     template: EmailTemplate = EmailTemplate.INFO
     data: dict[str, str] = Field(default_factory=dict)
-    priority: int = Field(default=PRIORITY_NORMAL, ge=PRIORITY_HIGH, le=PRIORITY_NORMAL)
+    priority: int = Field(default=PRIORITY_NORMAL, ge=PRIORITY_HIGH, le=PRIORITY_LOW)
 
 
 @app.post("/publish", status_code=202)
 async def publish(request: PublishRequest):
+    queue: asyncio.PriorityQueue = app.state.queue
+
+    # LOW не может занять всю очередь: оставляем запас для HIGH/NORMAL
+    if request.priority == PRIORITY_LOW and queue.qsize() >= MAX_QUEUE * LOW_QUEUE_RATIO:
+        raise HTTPException(status_code=503, detail="Queue is full for low priority")
+
     try:
         rendered = render_email(request.template, request.subject, request.data)
     except TemplateDataError as e:
@@ -246,13 +263,13 @@ async def publish(request: PublishRequest):
         html=rendered.html,
     )
     try:
-        app.state.queue.put_nowait(job)
+        queue.put_nowait(job)
     except asyncio.QueueFull:
         raise HTTPException(status_code=503, detail="Queue is full")
 
     # Тело письма не логируем: в нём могут быть коды подтверждения
     log.info("queued email to %s (priority=%d)", request.address, request.priority)
-    return {"status": "accepted", "address": request.address, "queued": app.state.queue.qsize()}
+    return {"status": "accepted", "address": request.address, "queued": queue.qsize()}
 
 
 @app.get("/health")

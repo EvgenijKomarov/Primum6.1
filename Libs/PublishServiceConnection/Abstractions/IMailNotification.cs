@@ -14,6 +14,8 @@ namespace PublishServiceConnection.Abstractions
         public required EmailTemplate EmailTemplate { get; set; }
 
         public required string Address { get; set; }
+
+        public required EmailPriority Priority { get; set; }
     }
     public interface IMailNotification: IPushable
     {

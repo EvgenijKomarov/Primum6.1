@@ -49,7 +49,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Занятие с {StudentName} в {DateTime.Add(TeacherTimezoneOffset)} отменено учеником"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             return list;
         }

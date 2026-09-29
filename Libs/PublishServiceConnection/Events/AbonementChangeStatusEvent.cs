@@ -47,7 +47,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Абонемент по курсу {CourseName} ученика {StudentName} изменил статус на {AbonementStatusRes.ResourceManager.GetString(AbonementStatus)}"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             return list;
         }

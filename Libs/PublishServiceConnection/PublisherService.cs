@@ -28,7 +28,7 @@ namespace PublishServiceConnection
                           ?? throw new ArgumentNullException("Missing env variable");
                 foreach (var mail in mailNotification.ToMailNotifications())
                 {
-                    await PushNotification(mail.Address, mail.MailTitle, mail.Data, url, mail.EmailTemplate);
+                    await PushNotification(mail.Address, mail.MailTitle, mail.Data, url, mail.EmailTemplate, (int)mail.Priority);
                 }
             }
 
@@ -55,9 +55,10 @@ namespace PublishServiceConnection
             string subject, 
             Dictionary<string, string> data, 
             string route, 
-            EmailTemplate template)
+            EmailTemplate template,
+            int priority)
         {
-            var payload = new { address, subject, template = template.ToString(), data };
+            var payload = new { address, subject, template = template.ToString(), data, priority };
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(route + "/publish", payload, JsonOptions);
             response.EnsureSuccessStatusCode();
         }

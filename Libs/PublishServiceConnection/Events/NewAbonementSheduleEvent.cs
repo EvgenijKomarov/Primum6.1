@@ -31,10 +31,6 @@ namespace PublishServiceConnection.Events
         public required DayOfWeek DayOfWeek { get; set; }
 
         public required int Time {  get; set; }
-
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Новый ученик, подписавшийся на Ваш курс";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             var date = ApplyOffset(DayOfWeek, Time, TeacherTimezoneOffset);

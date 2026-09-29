@@ -48,7 +48,8 @@ namespace PublishServiceConnection.Events
                 {
                     ["body"] = $"Занятие-отработка с {StudentName} было создано на {DateTime.Add(TeacherTimezoneOffset)}"
                 },
-                EmailTemplate = EmailTemplate.InfoEmail
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
             });
             return list;
         }

@@ -33,7 +33,8 @@ namespace PublishServiceConnection.Events
                     ["link"] = link,
                     ["token"] = Token,
                 },
-                EmailTemplate = EmailTemplate.ConfirmationEmail
+                EmailTemplate = EmailTemplate.ConfirmationEmail,
+                Priority = EmailPriority.HIGH
             });
             return list;
         }

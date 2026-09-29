@@ -53,7 +53,8 @@ namespace PublishServiceConnection.Events
                     ["body"] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке:",
                     ["link"] = TeacherLink
                 },
-                EmailTemplate = EmailTemplate.LessonReadyEmail
+                EmailTemplate = EmailTemplate.LessonReadyEmail,
+                Priority = EmailPriority.HIGH
             });
             list.Add(new Email
             {
@@ -64,7 +65,8 @@ namespace PublishServiceConnection.Events
                     ["body"] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке:",
                     ["link"] = StudentLink
                 },
-                EmailTemplate = EmailTemplate.LessonReadyEmail
+                EmailTemplate = EmailTemplate.LessonReadyEmail,
+                Priority = EmailPriority.HIGH
             });
             return list;
         }
