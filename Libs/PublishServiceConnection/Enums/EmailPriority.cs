@@ -4,10 +4,10 @@ using System.Text;
 
 namespace PublishServiceConnection.Enums
 {
-    public enum EmailTemplate
+    public enum EmailPriority
     {
-        InfoEmail,
-        ConfirmationEmail,
-        LessonReadyEmail
+        HIGH = 0,
+        NORMAL = 1,
+        LOW = 2
     }
 }

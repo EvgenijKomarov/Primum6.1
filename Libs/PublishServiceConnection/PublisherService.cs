@@ -26,9 +26,9 @@ namespace PublishServiceConnection
             {
                 var url = Environment.GetEnvironmentVariable("MAILNOTIFICATIONSERVICE_URL")
                           ?? throw new ArgumentNullException("Missing env variable");
-                foreach (var notif in mailNotification.ToMailNotifications())
+                foreach (var mail in mailNotification.ToMailNotifications())
                 {
-                    await PushNotification(notif.Key, mailNotification.MailTitle, notif.Value, url, mailNotification.Template);
+                    await PushNotification(mail.Address, mail.MailTitle, mail.Data, url, mail.EmailTemplate, (int)mail.Priority);
                 }
             }
 
@@ -50,9 +50,15 @@ namespace PublishServiceConnection
             response.EnsureSuccessStatusCode();
         }
 
-        private async Task PushNotification(string address, string subject, string message, string route, EmailTemplate template)
+        private async Task PushNotification(
+            string address, 
+            string subject, 
+            Dictionary<string, string> data, 
+            string route, 
+            EmailTemplate template,
+            int priority)
         {
-            var payload = new { address, subject, message, template = template.ToString() };
+            var payload = new { address, subject, template = template.ToString(), data, priority };
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(route + "/publish", payload, JsonOptions);
             response.EnsureSuccessStatusCode();
         }

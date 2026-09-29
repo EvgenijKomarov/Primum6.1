@@ -31,9 +31,6 @@ namespace PublishServiceConnection.Events
         public required int TeacherExp { get; set; }
         public required int StudentExp { get; set; }
 
-        public string MailTitle => "Оценка занятия";
-
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -43,12 +40,21 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [StudentEmail] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}",
-            };
+                Address = StudentEmail,
+                MailTitle = "Оценка занятия",
+                Data = new()
+                {
+                    ["body"] = $"Занятие по курсу {CourseName} было оценено на {Grade}.  {(EarnedCoins == 0 ? "" : $"Начислено {EarnedCoins} монет!")}"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.LOW
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

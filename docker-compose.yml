@@ -162,15 +162,29 @@ services:
       start_period: 10s
     restart: unless-stopped
 
-  email-notification-service: #на самом деле зависит от ядра, хз че с этим делать
+  email-notification-service:
     build:
       context: Apps/EmailNotificationService
       dockerfile: Dockerfile
     container_name: email-notification-service
     environment:
-      CORE_URL: "http://primumcore:8080"
+      # Секреты и учётка (из .env, без дефолтов)
       EMAIL: ${EMAIL}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+
+      # SMTP-провайдер
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURITY: ${SMTP_SECURITY}        # пусто = выбрать по порту
+      SMTP_TIMEOUT: ${SMTP_TIMEOUT}
+
+      # Очередь и ретраи
+      SEND_INTERVAL: "2.0"
+      MAX_QUEUE: "1000"
+      MAX_ATTEMPTS: "3"
+      RETRY_BASE_DELAY: "10"
+      MESSAGE_TTL: "600"
     networks:
       - primum-network
     healthcheck:

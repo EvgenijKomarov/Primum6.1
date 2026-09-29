@@ -91,12 +91,18 @@ namespace PrimumCore.Services.Iterators
         public async Task<int> CreateReferalAbonement(int studentId, string token)
         {
             var course = await dbIterator.Courses(false)
+                .Include(x => x.Teacher)
+                .ThenInclude(x => x.User)
                 .One(x => x.ReferalToken == token);
             var student = await dbIterator.Students()
                 .Include(x => x.Abonements)
                 .Include(x => x.User)
                 .One(x => x.User.Id == studentId);
 
+            if (course.Teacher.User.Id == student.User.Id)
+            {
+                throw new BusinessLogicException("You can't subscribe on your course");
+            }
             if (student.Abonements.Any(x => x.CourseId == course.Id))
             {
                 throw new BusinessLogicException("Abonement already created");

@@ -54,7 +54,7 @@ export const Header = () => {
             <Button
               size={ButtonSizeEnum.NORMAL}
               icon={<MenuIcon />}
-              onClick={() => setIsMobileNavOpen((v) => !v)}
+              onClick={() => setIsMobileNavOpen(true)}
             />
           </div>
         </div>

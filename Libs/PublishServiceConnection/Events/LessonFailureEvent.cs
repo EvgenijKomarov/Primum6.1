@@ -33,9 +33,6 @@ namespace PublishServiceConnection.Events
 
         public required DateTime DateTime { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Уведомление о будущем занятии";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -45,13 +42,32 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты",
-                [StudentEmail] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
-            };
+                Address = TeacherEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Занятие с {StudentName} не состоится в связи с невозможностью оплаты"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
+            });
+            list.Add(new Email
+            {
+                Address = StudentEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Занятие по {CourseName} не состоится в связи с невозможностью оплаты"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

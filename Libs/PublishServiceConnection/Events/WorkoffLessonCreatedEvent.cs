@@ -29,9 +29,6 @@ namespace PublishServiceConnection.Events
 
         public required DateTime DateTime { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Уведомление о создании занятия-отработки";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -40,12 +37,21 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Занятие-отработка с {StudentName} было создано на {DateTime.Add(TeacherTimezoneOffset)}"
-            };
+                Address = TeacherEmail,
+                MailTitle = "Уведомление о создании занятия-отработки",
+                Data = new()
+                {
+                    ["body"] = $"Занятие-отработка с {StudentName} было создано на {DateTime.Add(TeacherTimezoneOffset)}"
+                },
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.NORMAL
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

@@ -5,7 +5,7 @@ import Button from '@/shared/ui/Button/Button.tsx';
 import { Loader } from '@/shared/ui/Loader';
 
 import styles from './CoursesPage.module.css';
-import { BookIcon, EditIcon, PlusIcon } from '@/shared/icons/types';
+import { BookIcon, EditIcon, ExternalLinkIcon, PlusIcon } from '@/shared/icons/types';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { BadgeTypeEnum } from '@/shared/enums/badge';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ import { Card } from '@/shared/ui/Card/Card';
 import { CourseRankInfo } from '@/widgets/popups/rank-info/course-rank-info/CourseRankInfo';
 import { EnsurancePopup } from '@/widgets/popups/ensurance-popup/ui/EnsurancePopup';
 import { EditCourseForm } from '@/widgets/popups/edit-course/ui/EditCourseForm';
+import { useToast } from '@/shared/ui/Toast/useToast';
 
 interface CourseCardProps {
   course: CourseDto,
@@ -22,10 +23,16 @@ interface CourseCardProps {
 const CourseCard = ({ course, onMutate }: CourseCardProps) => {
   const [changeStatusPopupOpen, setChangeStatusPopupOpen] = useState(false);
   const [editCoursePopupOpen, setEditCoursePopupOpen] = useState(false);
+  const { showToast } = useToast();
 
   const handleChangeStatus = async () => {
     await changeActivityCourse(course.id, !course.isActive); 
     onMutate();
+  }
+
+  const handleCopyingLink = async () => {
+    await navigator.clipboard.writeText(course.referalLink ?? '');
+    showToast('Ссылка скопирована в буфер обмена', 'success');
   }
 
   return (
@@ -125,6 +132,15 @@ const CourseCard = ({ course, onMutate }: CourseCardProps) => {
         <p className={styles.descriptionText}>
           {course.about ?? 'Описание отсутствует'}
         </p>
+      </div>
+      <div className={styles.buttons}>
+        <Button
+          icon={<ExternalLinkIcon/>}
+          onClick={handleCopyingLink}
+          disabled={!course.referalLink}
+          >
+          Реферальная ссылка
+        </Button>
       </div>
     </Card>
   );

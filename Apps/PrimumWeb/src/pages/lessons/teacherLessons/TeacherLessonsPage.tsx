@@ -209,7 +209,7 @@ export const TeacherLessonsPage = () => {
         </button>
       </div>
 
-      {activeTab === 'upcoming' ? <UpcomingTab /> : <HistoryTab />}
+      <div className={styles.content}>{activeTab === 'upcoming' ? <UpcomingTab /> : <HistoryTab />}</div>
     </div>
   );
 };

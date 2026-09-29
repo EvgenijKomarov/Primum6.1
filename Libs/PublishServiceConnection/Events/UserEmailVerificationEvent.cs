@@ -19,18 +19,24 @@ namespace PublishServiceConnection.Events
 
         public required int UserId { get; set; }
 
-        public string MailTitle => "Подтверждение почты";
-
-        public EmailTemplate Template { get; } = EmailTemplate.ConfirmationEmail;
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            var link = $"{AuthUrl.TrimEnd('/')}/confirm-email?token={Uri.EscapeDataString(Token)}";
+
+            list.Add(new Email
             {
-                [EmailAdress] = $"Для полного доступа на площадку, пожалуйста, перейдите по ссылке\n" +
-                $"{AuthUrl}/confirm-email?token={Token}\n" +
-                $"Или введите токен подтверждения на сайте в личном кабинете:\n" +
-                $"{Token}",
-            };
+                Address = EmailAdress,
+                MailTitle = "Подтверждение почты",
+                Data = new()
+                {
+                    ["link"] = link,
+                    ["token"] = Token,
+                },
+                EmailTemplate = EmailTemplate.ConfirmationEmail,
+                Priority = EmailPriority.HIGH
+            });
+            return list;
         }
     }
 }

@@ -3,9 +3,15 @@
 
 
 @media (max-width: 620px) {
-  .content {
-    width: 150vw;
+  .content{
+    width: 150vw !important;
   }
+}
+
+.content {
+  width: 80vw;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 

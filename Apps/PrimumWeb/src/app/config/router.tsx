@@ -92,15 +92,24 @@ const ROUTES_DEF: RouteDef[] = [
   },
   {
     path: '/confirm-email',
-    element: <RedirectPage apiUrl="/user/confirm-email" redirectTo="/profile" />,
+    element: <RedirectPage 
+      apiUrl="/user/confirm-email" 
+      redirectTo="/profile" 
+      onSuccessMessage="Почта подтверждена"/>,
   },
   {
     path: '/confirm-chat',
-    element: <RedirectPage apiUrl="/user/chat-signs" redirectTo="/profile" />,
+    element: <RedirectPage 
+      apiUrl="/user/chat-signs" 
+      redirectTo="/profile" 
+      onSuccessMessage="Чат-бот привязан"/>,
   },
   {
     path: '/referal',
-    element: <RedirectPage apiUrl="/student/abonements/referal" redirectTo="/student-abonements" />
+    element: <RedirectPage 
+      apiUrl="/student/abonements/referal" 
+      redirectTo="/student-abonements" 
+      onSuccessMessage="Реферальный абонемент создан"/>
   }
 ];
 

@@ -32,9 +32,6 @@ namespace PublishServiceConnection.Events
 
         public required string StudentLink { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Уведомление о будущем занятии";
         public Dictionary<int, string> ToChatBotNotifications()
         {
             return new Dictionary<int, string>
@@ -44,13 +41,34 @@ namespace PublishServiceConnection.Events
             };
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            return new Dictionary<string, string>
+            List<Email> list = new List<Email>();
+            list.Add(new Email
             {
-                [TeacherEmail] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке: {TeacherLink}",
-                [StudentEmail] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке: {StudentLink}"
-            };
+                Address = TeacherEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Занятие с {StudentName} состоится через 30 минут!\nОно будет доступно по ссылке:",
+                    ["link"] = TeacherLink
+                },
+                EmailTemplate = EmailTemplate.LessonReadyEmail,
+                Priority = EmailPriority.HIGH
+            });
+            list.Add(new Email
+            {
+                Address = StudentEmail,
+                MailTitle = "Уведомление о будущем занятии",
+                Data = new()
+                {
+                    ["body"] = $"Занятие по {CourseName} состоится через 30 минут!\nОно будет доступно по ссылке:",
+                    ["link"] = StudentLink
+                },
+                EmailTemplate = EmailTemplate.LessonReadyEmail,
+                Priority = EmailPriority.HIGH
+            });
+            return list;
         }
 
         public Dictionary<int, string> ToCommonNotifications()

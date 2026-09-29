@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import clsx from 'clsx';
 
@@ -9,6 +9,7 @@ import type { NavItem } from '@/widgets/header/config/constants';
 import styles from './SideNav.module.css';
 import Button from '@/shared/ui/Button/Button';
 import { ButtonSizeEnum, ButtonTypeEnum } from '@/shared/enums';
+import { useOnClickOutside } from '@/shared/lib/useOnClickOutside/useOnClickOutside';
 
 interface SideNavProps {
   isOpen: boolean;
@@ -19,6 +20,9 @@ interface SideNavProps {
 export const SideNav = ({ isOpen, onClose, navItems }: SideNavProps) => {
   const { role, user, availableRoles, setActiveRole } = useCurrentUser();
   const navigate = useNavigate();
+  const rootRef = useRef<HTMLDivElement>(null);
+  
+  useOnClickOutside(rootRef, onClose, isOpen);
 
   // Блокируем скролл body, пока панель открыта
   useEffect(() => {
@@ -32,7 +36,7 @@ export const SideNav = ({ isOpen, onClose, navItems }: SideNavProps) => {
       <div className={clsx(styles.overlay, isOpen && styles.overlayVisible)} />
 
       <div className={styles.wrapper}>
-        <div className={clsx(styles.panel, isOpen && styles.panelOpen)}>
+        <div className={clsx(styles.panel, isOpen && styles.panelOpen)} ref={rootRef}>
           {user ? (
             <div className={styles.userInfo}>
               <span className={styles.userName}>{resolveDisplayName(user)}</span>

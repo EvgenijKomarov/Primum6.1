@@ -31,10 +31,6 @@ namespace PublishServiceConnection.Events
 
         public required DateTime DateTime { get; set; }
 
-        public EmailTemplate Template { get; } = EmailTemplate.InfoEmail;
-
-        public string MailTitle => "Репорт занятия";
-
         private string mes => $"По занятию в {DateTime.ToString("HH:mm dd.MM.yyyy")}(UTC) между учеником {StudentName} и преподавателем {TeacherName} поступил репорт по теме {ReportStatus}";
 
         public Dictionary<int, string> ToChatBotNotifications()
@@ -44,11 +40,21 @@ namespace PublishServiceConnection.Events
             return dict;
         }
 
-        public Dictionary<string, string> ToMailNotifications()
+        public List<Email> ToMailNotifications()
         {
-            var dict = new Dictionary<string, string>();
-            foreach (var email in AllowedAdminEmails) dict.Add(email, mes);
-            return dict;
+            List<Email> list = new List<Email>();
+            foreach (var email in AllowedAdminEmails) list.Add(new Email
+            {
+                Address = email,
+                MailTitle = "Репорт занятия",
+                Data = new()
+                {
+                    ["body"] = mes
+                },
+                EmailTemplate = EmailTemplate.InfoEmail,
+                Priority = EmailPriority.HIGH
+            });
+            return list;
         }
     }
 }
